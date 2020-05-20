@@ -1,6 +1,6 @@
 package user
 
-type User struct {
+type UserInfo struct {
 	//系统内ID，主键
 	UserID int `db:"user_id"`
 
@@ -25,7 +25,7 @@ type User struct {
 }
 
 var schemaUser = `
-		CREATE TABLE user (
+		CREATE TABLE user_info (
     		user_id SERIAL PRIMARY KEY,
 			user_name varchar(32),
 			chinese_name varchar(256), 
