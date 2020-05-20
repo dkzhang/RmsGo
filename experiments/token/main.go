@@ -316,6 +316,7 @@ func Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, "Successfully logged out")
 }
 
+/////////////////////////////
 // Securing Authenticated Routes
 func TokenAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
