@@ -22,6 +22,8 @@ type PgConfig struct {
 }
 
 type RedisConfig struct {
+	Host     string `yaml:"host"`
+	Password string `yaml:"password"`
 }
 
 var TheDbConfig DbConfig

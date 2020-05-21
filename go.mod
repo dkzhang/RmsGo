@@ -15,4 +15,5 @@ require (
 	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 	google.golang.org/appengine v1.6.6 // indirect
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
+	gopkg.in/yaml.v2 v2.2.8
 )
