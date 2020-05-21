@@ -1,0 +1,11 @@
+PostgreSQL:
+  host:192
+  user:rms
+  password:111
+  dbname: xxx
+  sslmode:disable
+#  "host=ras-pg user=postgres password=%s dbname=ras sslmode=disable"
+
+Redis:
+  address:192
+  password:123
