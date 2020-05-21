@@ -1,5 +1,6 @@
 PostgreSQL:
   host: rms-pg
+  port: 5432
   user: rms
   password: 123456
   dbname: rms_db

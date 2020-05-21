@@ -1,5 +1,6 @@
 PostgreSQL:
   host: 192
+  port: 5432
   user: rms
   password: 111
   dbname: xxx

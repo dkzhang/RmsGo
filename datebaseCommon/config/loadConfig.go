@@ -14,6 +14,7 @@ type DbConfig struct {
 
 type PgConfig struct {
 	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	DbName   string `yaml:"dbname"`
@@ -27,16 +28,15 @@ type RedisConfig struct {
 	Password string `yaml:"password"`
 }
 
-var TheDbConfig DbConfig
-
-func LoadDbConfig(filepath string) (err error) {
+func LoadDbConfig(filepath string) (theDbConfig *DbConfig, err error) {
+	theDbConfig = &DbConfig{}
 	dbConfFile, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return fmt.Errorf("LoadDbConfig ioutil.ReadFile error: %v", err)
+		return nil, fmt.Errorf("LoadDbConfig ioutil.ReadFile error: %v", err)
 	}
-	err = yaml.Unmarshal(dbConfFile, &TheDbConfig)
+	err = yaml.Unmarshal(dbConfFile, theDbConfig)
 	if err != nil {
-		return fmt.Errorf("LoadDbConfig yaml.Unmarshal error: %v", err)
+		return nil, fmt.Errorf("LoadDbConfig yaml.Unmarshal error: %v", err)
 	}
-	return nil
+	return theDbConfig, nil
 }

@@ -2,12 +2,16 @@ package postgreSQL
 
 import (
 	"database/sql"
+	"fmt"
+	"github.com/dkzhang/RmsGo/datebaseCommon/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-func ConnectToDatabase(driverName, dataSourceName string) (db *sqlx.DB, err error) {
-	db, err = sqlx.Open(driverName, dataSourceName)
+func ConnectToDatabase(pg config.PgConfig) (db *sqlx.DB, err error) {
+	dataSourceStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+		pg.Host, pg.Port, pg.User, pg.Password, pg.DbName, pg.Sslmode)
+	db, err = sqlx.Open("postgres", dataSourceStr)
 	return db, err
 }
 
@@ -21,20 +25,3 @@ func DropTable(db *sqlx.DB, tableName string) (result sql.Result, err error) {
 	result, err = db.Exec(exec)
 	return result, err
 }
-
-/*
-func LoadPostgreSource() (driverName, dataSourceName string, err error) {
-	//Load IdKey from file
-	filename := "/IdKey/Database/ras_pg.json"
-	idKey, err := myUtils.LoadIdKey(filename)
-	if err != nil {
-		return "", "", fmt.Errorf("load PostgreSQL source from file error: %v", err)
-	}
-
-	dataSourceName = fmt.Sprintf(idKey.SecretId, idKey.SecretKey)
-	return "postgres", dataSourceName, nil
-	//"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable"
-	//"host=ras-pg user=postgres password=%s dbname=ras sslmode=disable"
-}
-
-*/
