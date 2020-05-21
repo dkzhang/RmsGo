@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 )
@@ -31,11 +32,11 @@ var TheDbConfig DbConfig
 func LoadDbConfig(filepath string) (err error) {
 	dbConfFile, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return err
+		return fmt.Errorf("LoadDbConfig ioutil.ReadFile error: %v", err)
 	}
 	err = yaml.Unmarshal(dbConfFile, &TheDbConfig)
 	if err != nil {
-		return err
+		return fmt.Errorf("LoadDbConfig yaml.Unmarshal error: %v", err)
 	}
 	return nil
 }
