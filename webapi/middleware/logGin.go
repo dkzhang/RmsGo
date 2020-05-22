@@ -51,6 +51,14 @@ func LoggerToFile() gin.HandlerFunc {
 
 		// 设置日志切割时间间隔(1天)
 		rotatelogs.WithRotationTime(24*time.Hour),
+
+		//////////////////////////////////////////////
+		// WithLinkName为最新的日志建立软连接,以方便随着找到当前日志文件
+		// WithRotationTime设置日志分割的时间,这里设置为一小时分割一次
+		// WithMaxAge和WithRotationCount二者只能设置一个
+		// WithMaxAge设置文件清理前的最长保存时间
+		// WithRotationCount设置文件清理前最多保存的个数.
+
 	)
 
 	writeMap := lfshook.WriterMap{

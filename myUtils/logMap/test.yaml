@@ -1,0 +1,4 @@
+logfile:
+  normal: "/log/normal"
+  login: "/log/login"
+  db: "/log/db"
