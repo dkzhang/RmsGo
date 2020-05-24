@@ -28,15 +28,16 @@ type RedisConfig struct {
 	Password string `yaml:"password"`
 }
 
-func LoadDbConfig(filepath string) (theDbConfig *DbConfig, err error) {
-	theDbConfig = &DbConfig{}
+var theDbConfig DbConfig
+
+func LoadDbConfig(filepath string) (err error) {
 	dbConfFile, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return nil, fmt.Errorf("LoadDbConfig ioutil.ReadFile error: %v", err)
+		return fmt.Errorf("LoadDbConfig ioutil.ReadFile error: %v", err)
 	}
-	err = yaml.Unmarshal(dbConfFile, theDbConfig)
+	err = yaml.Unmarshal(dbConfFile, &theDbConfig)
 	if err != nil {
-		return nil, fmt.Errorf("LoadDbConfig yaml.Unmarshal error: %v", err)
+		return fmt.Errorf("LoadDbConfig yaml.Unmarshal error: %v", err)
 	}
-	return theDbConfig, nil
+	return nil
 }

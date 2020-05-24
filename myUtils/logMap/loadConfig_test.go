@@ -5,23 +5,23 @@ import "testing"
 func TestLoadLogConfig(t *testing.T) {
 	filepath := `test.yaml`
 
-	theLogConfig, err := LoadLogConfig(filepath)
+	err := LoadLogConfig(filepath)
 	if err != nil {
 		t.Fatalf("LoadLogConfig error: %v", err)
 	} else {
-		t.Logf("Load LogConfig success = %v", theLogConfig)
+		t.Logf("Load LogConfig success = %v", theLogFileConfig)
 
-		normal, okNormal := theLogConfig.LogFile["normal"]
+		normal, okNormal := theLogFileConfig.LogFile["normal"]
 		if !okNormal || normal != "/log/normal" {
 			t.Errorf("Verify normal LogConfig failed,")
 		}
 
-		login, okLogin := theLogConfig.LogFile["login"]
+		login, okLogin := theLogFileConfig.LogFile["login"]
 		if !okLogin || login != "/log/login" {
 			t.Errorf("Verify login LogConfig failed,")
 		}
 
-		db, okDb := theLogConfig.LogFile["db"]
+		db, okDb := theLogFileConfig.LogFile["db"]
 		if !okDb || db != "/log/db" {
 			t.Errorf("Verify db LogConfig failed,")
 		}
