@@ -15,7 +15,7 @@ import (
 //engine.Use(middleware.LoggerToFile())
 
 // 日志记录到文件
-func LoggerToFile() gin.HandlerFunc {
+func LoggerGinToFile() gin.HandlerFunc {
 
 	logFilePath := "" //config
 	logFileName := "" //config
