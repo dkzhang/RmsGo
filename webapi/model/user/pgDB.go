@@ -30,7 +30,7 @@ func UpdateUser(ui UserInfo, db *sqlx.DB) (err error) {
 }
 
 func InsertUser(ui UserInfo, db *sqlx.DB) (err error) {
-	insertUser := `INSERT INTO user_info (user_name, chinese_name, department, department_code, section, mobile, role, status,remarks) VALUES (:user_name, :chinese_name, :department, :department_code, :section, :mobile, :role, :status, :remarks) returning user_id`
+	insertUser := `INSERT INTO user_info (user_name, chinese_name, department, department_code, section, mobile, role, status,remarks) VALUES (:user_name, :chinese_name, :department, :department_code, :section, :mobile, :role, :status, :remarks)`
 
 	result, err := db.NamedExec(insertUser, ui)
 	if err != nil {
