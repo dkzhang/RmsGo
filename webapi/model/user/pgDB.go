@@ -29,13 +29,20 @@ func UpdateUser(ui UserInfo, db *sqlx.DB) (err error) {
 	return nil
 }
 
-func InsertUser(ui UserInfo, db *sqlx.DB) (err error) {
+func InsertUser(ui UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
+	tempUser := UserInfo{}
+	err = db.QueryRow("SELECT * FROM place WHERE user_name = $1", ui.UserName).Scan(&tempUser)
+	if err == nil {
+		//如果找到了有相同user_name的记录，则说明新记录重名了
+		return false, fmt.Errorf("duplicate UserName: %s", ui.UserName)
+	}
+
 	insertUser := `INSERT INTO user_info (user_name, chinese_name, department, department_code, section, mobile, role, status,remarks) VALUES (:user_name, :chinese_name, :department, :department_code, :section, :mobile, :role, :status, :remarks)`
 
 	result, err := db.NamedExec(insertUser, ui)
 	if err != nil {
-		return fmt.Errorf("db.NamedExec(insertUser, ui), UserName = %s, UserInfo = %v :%v", ui.UserName, ui, err)
+		return true, fmt.Errorf("db.NamedExec(insertUser, ui), UserName = %s, UserInfo = %v :%v", ui.UserName, ui, err)
 	}
 	fmt.Printf("InsertUser success: %v", result)
-	return nil
+	return true, nil
 }
