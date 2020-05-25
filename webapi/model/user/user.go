@@ -24,7 +24,7 @@ type UserInfo struct {
 	Remarks string `db:"remarks"`
 }
 
-var schemaUser = `
+var SchemaUser = `
 		CREATE TABLE user_info (
     		user_id SERIAL PRIMARY KEY,
 			user_name varchar(32),
