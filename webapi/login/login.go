@@ -23,12 +23,10 @@ func ApplyLogin(c *gin.Context) {
 	//验证用户名合法
 	if user.CheckUserName(userName) == false {
 		c.JSON(http.StatusNotFound, gin.H{
-			"msg": "用户名错误",
+			"msg": "无效的用户名",
 		})
 		return
 	}
-
-	//从redis中查询，是否有短信锁，（是否有账户锁）
 
 	//从数据库中查找该用户
 	user, err := user.QueryUserByName(userName, webapi.TheContext.TheDb)
@@ -43,6 +41,27 @@ func ApplyLogin(c *gin.Context) {
 		})
 		return
 	}
+
+	//从redis中查询，是否有短信锁，（是否有账户锁）
+	if webapi.TheContext.TheRedis.IsExist(
+		fmt.Sprintf("user_smslock_%d", user.UserID)) == true {
+
+		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID": user.UserID,
+			"error":  err,
+		}).Errorf("user sms lock exist.")
+
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "检测到短时间内频繁申请登录，请稍后再试",
+		})
+		return
+	}
+
+	//检查该用户是否已被停用
+	//status = 1 可用，-1停用，-9标记删除
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//用户验证全通过
 
 	//将该用户信息置于redis中
 	userJson, err := json.Marshal(user)
@@ -60,7 +79,7 @@ func ApplyLogin(c *gin.Context) {
 	}
 
 	webapi.TheContext.TheRedis.Set(
-		fmt.Sprintf("user_%d", user.UserID),
+		fmt.Sprintf("user_inf_%d", user.UserID),
 		userJson,
 		time.Second,
 	)
