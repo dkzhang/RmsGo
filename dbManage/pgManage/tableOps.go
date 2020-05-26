@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"github.com/dkzhang/RmsGo/allConfig"
 	"github.com/dkzhang/RmsGo/datebaseCommon/config"
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreSQL"
+	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
@@ -32,7 +32,7 @@ func CreateAllTable() {
 		"config.TheDbConfig": config.TheDbConfig,
 	}).Info("allConfig.LoadAllConfig success.")
 
-	db, err := postgreSQL.ConnectToDatabase(config.TheDbConfig.ThePgConfig)
+	db, err := postgreOps.ConnectToDatabase(config.TheDbConfig.ThePgConfig)
 	if err != nil {
 		logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
 			"error": err,

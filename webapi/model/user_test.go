@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/config"
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreSQL"
+	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
 	"github.com/dkzhang/RmsGo/dbManage/pgManage"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"os"
@@ -16,7 +16,7 @@ func TestGetAllUserInfo(t *testing.T) {
 	//allConfig.LoadAllConfig()
 	t.Logf("%v", config.TheDbConfig)
 
-	db, err := postgreSQL.ConnectToDatabase(config.TheDbConfig.ThePgConfig)
+	db, err := postgreOps.ConnectToDatabase(config.TheDbConfig.ThePgConfig)
 	if err != nil {
 		t.Errorf("postgreSQL.ConnectToDatabase error: %v", err)
 	} else {

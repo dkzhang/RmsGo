@@ -1,14 +1,18 @@
-package redis
+package redisOps
 
 import (
+	"github.com/dkzhang/RmsGo/allConfig"
+	dbConfig "github.com/dkzhang/RmsGo/datebaseCommon/config"
+	"os"
 	"testing"
 	"time"
 )
 
 func TestRedis(t *testing.T) {
+	os.Setenv("DbConf", "./../../Configuration/Security/database.yaml")
+	allConfig.LoadAllConfig()
 	opts := &RedisOpts{
-		Host:     "ras-redis:6379",
-		Password: "111111",
+		Host: dbConfig.TheDbConfig.TheRedisConfig.Host,
 	}
 	redis := NewRedis(opts)
 	var err error
