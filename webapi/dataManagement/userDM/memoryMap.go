@@ -45,14 +45,20 @@ func (udm *MemoryMap) QueryUserByID(userID int) (user.UserInfo, error) {
 }
 
 func (udm *MemoryMap) QueryUserByDepartmentCode(dc string) ([]user.UserInfo, error) {
+	return udm.QueryUserByFilter(func(userInfo user.UserInfo) bool {
+		return userInfo.DepartmentCode == dc
+	})
+}
+
+func (udm *MemoryMap) QueryUserByFilter(userFilter func(user.UserInfo) bool) ([]user.UserInfo, error) {
 	uis := make([]user.UserInfo, 0)
 	for _, v := range udm.userInfoByID {
-		if v.DepartmentCode == dc {
+		if userFilter(*v) == true {
 			uis = append(uis, *v)
 		}
 	}
 	if len(uis) == 0 {
-		return nil, fmt.Errorf("no user found with department code <%s>", dc)
+		return nil, fmt.Errorf("no user found with giving filter")
 	} else {
 		return uis, nil
 	}

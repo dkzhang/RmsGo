@@ -27,9 +27,9 @@ func (upg *UserInPostgre) QueryUserByID(userID int) (userInfo user.UserInfo, err
 	return userInfo, nil
 }
 
-func GetAllUserInfo(db *sqlx.DB) (users []user.UserInfo, err error) {
+func (upg *UserInPostgre) GetAllUserInfo() (users []user.UserInfo, err error) {
 	users = []user.UserInfo{}
-	err = db.Select(&users, "SELECT * FROM user_info")
+	err = upg.db.Select(&users, "SELECT * FROM user_info")
 	if err != nil {
 		return nil, fmt.Errorf("get all user info from db error: %v", err)
 	}
