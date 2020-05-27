@@ -1,4 +1,4 @@
-package model
+package userDM
 
 import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/config"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetAllUserInfo(t *testing.T) {
-	os.Setenv("DbConf", "./../../Configuration/Security/database.yaml")
+	os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
 	pgManage.CreateAllTable()
 
 	//allConfig.LoadAllConfig()
@@ -24,7 +24,7 @@ func TestGetAllUserInfo(t *testing.T) {
 	}
 	defer db.Close()
 
-	isd, err := user.InsertUser(user.UserInfo{
+	isd, err := InsertUser(user.UserInfo{
 		UserName:       "zhang001",
 		ChineseName:    "张三1",
 		Department:     "计服中心",
@@ -43,7 +43,7 @@ func TestGetAllUserInfo(t *testing.T) {
 	}
 	t.Logf("InsertUser sucess")
 
-	isd, err = user.InsertUser(user.UserInfo{
+	isd, err = InsertUser(user.UserInfo{
 		UserName:       "zhang002",
 		ChineseName:    "张三2",
 		Department:     "计服中心",
@@ -62,7 +62,7 @@ func TestGetAllUserInfo(t *testing.T) {
 	}
 	t.Logf("InsertUser sucess")
 
-	isd, err = user.UpdateUser(user.UserInfo{
+	isd, err = UpdateUser(user.UserInfo{
 		UserID:      1,
 		UserName:    "zhang",
 		ChineseName: "新张三",
@@ -78,25 +78,25 @@ func TestGetAllUserInfo(t *testing.T) {
 	}
 	t.Logf("UpdateUser sucess")
 
-	user1, err := user.QueryUserByID(1, db)
+	user1, err := QueryUserByID(1, db)
 	if err != nil {
 		t.Errorf("QueryUserByID error: %v", err)
 	}
 	t.Logf("QueryUserByID sucess user = %v", user1)
 
-	user2, err := user.QueryUserByName("zhang", db)
+	user2, err := QueryUserByName("zhang", db)
 	if err != nil {
 		t.Errorf("QueryUserByName error: %v", err)
 	}
 	t.Logf("QueryUserByName sucess user = %v", user2)
 
-	err = user.UpdateUserDepartment("JF", "新计服", db)
+	err = UpdateUserDepartment("JF", "新计服", db)
 	if err != nil {
 		t.Errorf("UpdateUserDepartment error: %v", err)
 	}
 	t.Logf("UpdateUserDepartment sucess")
 
-	users, err := user.GetAllUserInfo(db)
+	users, err := GetAllUserInfo(db)
 	if err != nil {
 		t.Errorf("GetAllUserInfo error: %v", err)
 	}

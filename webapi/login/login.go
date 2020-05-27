@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDM"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -29,7 +30,7 @@ func ApplyLogin(c *gin.Context) {
 	}
 
 	//从数据库中查找该用户
-	user, err := user.QueryUserByName(userName, webapi.TheContext.TheDb)
+	user, err := userDM.QueryUserByName(userName, webapi.TheContext.TheDb)
 	if err != nil {
 		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserName": userName,

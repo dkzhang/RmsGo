@@ -1,29 +1,30 @@
-package user
+package userDM
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-func QueryUserByName(username string, db *sqlx.DB) (user UserInfo, err error) {
-	err = db.Get(&user, "SELECT * FROM user_info WHERE user_name=$1", username)
+func QueryUserByName(username string, db *sqlx.DB) (userInfo user.UserInfo, err error) {
+	err = db.Get(&userInfo, "SELECT * FROM user_info WHERE user_name=$1", username)
 	if err != nil {
-		return UserInfo{}, fmt.Errorf("query user in db error: %v", err)
+		return user.UserInfo{}, fmt.Errorf("query user in db error: %v", err)
 	}
-	return user, nil
+	return userInfo, nil
 }
 
-func QueryUserByID(userID int, db *sqlx.DB) (user UserInfo, err error) {
-	err = db.Get(&user, "SELECT * FROM user_info WHERE user_id=$1", userID)
+func QueryUserByID(userID int, db *sqlx.DB) (userInfo user.UserInfo, err error) {
+	err = db.Get(&userInfo, "SELECT * FROM user_info WHERE user_id=$1", userID)
 	if err != nil {
-		return UserInfo{}, fmt.Errorf("query user in db error: %v", err)
+		return user.UserInfo{}, fmt.Errorf("query userInfo in db error: %v", err)
 	}
-	return user, nil
+	return userInfo, nil
 }
 
-func GetAllUserInfo(db *sqlx.DB) (users []UserInfo, err error) {
-	users = []UserInfo{}
+func GetAllUserInfo(db *sqlx.DB) (users []user.UserInfo, err error) {
+	users = []user.UserInfo{}
 	err = db.Select(&users, "SELECT * FROM user_info")
 	if err != nil {
 		return nil, fmt.Errorf("get all user info from db error: %v", err)
@@ -31,7 +32,7 @@ func GetAllUserInfo(db *sqlx.DB) (users []UserInfo, err error) {
 	return users, nil
 }
 
-func UpdateUser(ui UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
+func UpdateUser(ui user.UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
 	isNoDuplicateName, err = VerifyNoDuplicateName(ui, db)
 	if isNoDuplicateName == false || err != nil {
 		return isNoDuplicateName, err
@@ -65,8 +66,8 @@ func UpdateUserDepartment(depCode string, newDep string, db *sqlx.DB) (err error
 	return nil
 }
 
-func VerifyNoDuplicateName(ui UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
-	tempUser := UserInfo{}
+func VerifyNoDuplicateName(ui user.UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
+	tempUser := user.UserInfo{}
 	err = db.Get(&tempUser, "SELECT * FROM user_info WHERE user_name = $1", ui.UserName)
 	if err == nil {
 		//如果找到了有相同user_name的记录，则说明新记录重名了
@@ -75,7 +76,7 @@ func VerifyNoDuplicateName(ui UserInfo, db *sqlx.DB) (isNoDuplicateName bool, er
 	return true, nil
 }
 
-func InsertUser(ui UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
+func InsertUser(ui user.UserInfo, db *sqlx.DB) (isNoDuplicateName bool, err error) {
 	isNoDuplicateName, err = VerifyNoDuplicateName(ui, db)
 	if isNoDuplicateName == false || err != nil {
 		return isNoDuplicateName, err
