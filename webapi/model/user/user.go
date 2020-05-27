@@ -27,7 +27,7 @@ type UserInfo struct {
 var SchemaUser = `
 		CREATE TABLE user_info (
     		user_id SERIAL PRIMARY KEY,
-			user_name varchar(32),
+			user_name varchar(32) UNIQUE,
 			chinese_name varchar(256), 
 			department varchar(256),
 			department_code varchar(32),

@@ -12,4 +12,5 @@ type UserDB interface {
 	UpdateUserDepartment(oldDepCode string, newDep string, newDepCode string) (err error)
 	InsertUser(ui user.UserInfo) (err error)
 	DeleteUser(userID int) (err error)
+	Close()
 }
