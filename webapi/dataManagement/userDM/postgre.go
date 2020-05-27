@@ -7,16 +7,20 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func QueryUserByName(username string, db *sqlx.DB) (userInfo user.UserInfo, err error) {
-	err = db.Get(&userInfo, "SELECT * FROM user_info WHERE user_name=$1", username)
+type UserInPostgre struct {
+	db *sqlx.DB
+}
+
+func (upg *UserInPostgre) QueryUserByName(username string) (userInfo user.UserInfo, err error) {
+	err = upg.db.Get(&userInfo, "SELECT * FROM user_info WHERE user_name=$1", username)
 	if err != nil {
 		return user.UserInfo{}, fmt.Errorf("query user in db error: %v", err)
 	}
 	return userInfo, nil
 }
 
-func QueryUserByID(userID int, db *sqlx.DB) (userInfo user.UserInfo, err error) {
-	err = db.Get(&userInfo, "SELECT * FROM user_info WHERE user_id=$1", userID)
+func (upg *UserInPostgre) QueryUserByID(userID int) (userInfo user.UserInfo, err error) {
+	err = upg.db.Get(&userInfo, "SELECT * FROM user_info WHERE user_id=$1", userID)
 	if err != nil {
 		return user.UserInfo{}, fmt.Errorf("query userInfo in db error: %v", err)
 	}
