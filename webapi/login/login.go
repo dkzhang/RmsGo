@@ -1,7 +1,6 @@
 package login
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi"
@@ -10,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
-	"time"
 )
 
 func Login(c *gin.Context) {
@@ -29,7 +27,7 @@ func ApplyLogin(c *gin.Context) {
 		return
 	}
 
-	//从数据库中查找该用户
+	//从数据库中查找该用户(TODO 改为通过userDM中检索)
 	user, err := userDM.QueryUserByName(userName, webapi.TheContext.TheDb)
 	if err != nil {
 		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
@@ -64,26 +62,27 @@ func ApplyLogin(c *gin.Context) {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//用户验证全通过
 
-	//将该用户信息置于redis中
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserName":  userName,
-			"User Info": user,
-			"error":     err,
-		}).Errorf("json.Marshal user data error.")
+	//将该用户信息置于redis中(作废：改用内存DataManagement)
 
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "服务器处理用户信息出错",
-		})
-		return
-	}
-
-	webapi.TheContext.TheRedis.Set(
-		fmt.Sprintf("user_inf_%d", user.UserID),
-		userJson,
-		time.Second,
-	)
+	//userJson, err := json.Marshal(user)
+	//if err != nil {
+	//	logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+	//		"UserName":  userName,
+	//		"User Info": user,
+	//		"error":     err,
+	//	}).Errorf("json.Marshal user data error.")
+	//
+	//	c.JSON(http.StatusInternalServerError, gin.H{
+	//		"msg": "服务器处理用户信息出错",
+	//	})
+	//	return
+	//}
+	//
+	//webapi.TheContext.TheRedis.Set(
+	//	fmt.Sprintf("user_inf_%d", user.UserID),
+	//	userJson,
+	//	time.Second,
+	//)
 
 	//生成临时密码，加密后置于redis中并短信发送
 
