@@ -1,4 +1,4 @@
-package userDM
+package userDB
 
 import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/config"
@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestGetAllUserInfo(t *testing.T) {
+func TestUserDB(t *testing.T) {
 	os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
 	pgManage.CreateAllTable()
 
@@ -24,7 +24,9 @@ func TestGetAllUserInfo(t *testing.T) {
 	}
 	defer db.Close()
 
-	isd, err := InsertUser(user.UserInfo{
+	udm := NewUserInPostgre(db)
+
+	err = udm.InsertUser(user.UserInfo{
 		UserName:       "zhang001",
 		ChineseName:    "张三1",
 		Department:     "计服中心",
@@ -34,16 +36,14 @@ func TestGetAllUserInfo(t *testing.T) {
 		Role:           1,
 		Status:         2,
 		Remarks:        "haha",
-	}, db)
+	})
 
-	if isd == false {
-		t.Errorf("Insert new user failed because user with the same UserName already exists : %v", err)
-	} else if err != nil {
+	if err != nil {
 		t.Errorf("InsertUser error: %v", err)
 	}
 	t.Logf("InsertUser sucess")
 
-	isd, err = InsertUser(user.UserInfo{
+	err = udm.InsertUser(user.UserInfo{
 		UserName:       "zhang002",
 		ChineseName:    "张三2",
 		Department:     "计服中心",
@@ -53,16 +53,14 @@ func TestGetAllUserInfo(t *testing.T) {
 		Role:           1,
 		Status:         2,
 		Remarks:        "haha",
-	}, db)
+	})
 
-	if isd == false {
-		t.Errorf("Insert new user failed because user with the same UserName already exists : %v", err)
-	} else if err != nil {
+	if err != nil {
 		t.Errorf("InsertUser error: %v", err)
 	}
 	t.Logf("InsertUser sucess")
 
-	isd, err = UpdateUser(user.UserInfo{
+	err = udm.UpdateUser(user.UserInfo{
 		UserID:      1,
 		UserName:    "zhang",
 		ChineseName: "新张三",
@@ -70,33 +68,32 @@ func TestGetAllUserInfo(t *testing.T) {
 		Mobile:      "123456",
 		Status:      222,
 		Remarks:     "newRemarks",
-	}, db)
-	if isd == false {
-		t.Errorf("Update new user failed because user with the same UserName already exists : %v", err)
-	} else if err != nil {
+	})
+
+	if err != nil {
 		t.Errorf("Update error: %v", err)
 	}
 	t.Logf("UpdateUser sucess")
 
-	user1, err := QueryUserByID(1, db)
+	user1, err := udm.QueryUserByID(1)
 	if err != nil {
 		t.Errorf("QueryUserByID error: %v", err)
 	}
 	t.Logf("QueryUserByID sucess user = %v", user1)
 
-	user2, err := QueryUserByName("zhang", db)
+	user2, err := udm.QueryUserByName("zhang")
 	if err != nil {
 		t.Errorf("QueryUserByName error: %v", err)
 	}
 	t.Logf("QueryUserByName sucess user = %v", user2)
 
-	err = UpdateUserDepartment("JF", "新计服", db)
+	err = udm.UpdateUserDepartment("JF", "新计服", "NJF")
 	if err != nil {
 		t.Errorf("UpdateUserDepartment error: %v", err)
 	}
 	t.Logf("UpdateUserDepartment sucess")
 
-	users, err := GetAllUserInfo(db)
+	users, err := udm.GetAllUserInfo()
 	if err != nil {
 		t.Errorf("GetAllUserInfo error: %v", err)
 	}

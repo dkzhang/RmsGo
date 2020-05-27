@@ -38,3 +38,15 @@ var SchemaUser = `
 			remarks varchar(256)
 		);
 		`
+
+const (
+	RoleProjectChief = 1
+	RoleApprover     = 2
+	RoleController   = 7
+)
+
+const (
+	StatusNormal  = 1
+	StatusDisable = -1
+	StatusDelete  = -9
+)

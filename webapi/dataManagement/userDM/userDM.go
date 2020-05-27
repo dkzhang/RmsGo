@@ -13,4 +13,8 @@ type UserDM interface {
 
 	QueryUserByDepartmentCode(dc string) ([]user.UserInfo, error)
 	QueryUserByFilter(userFilter func(user.UserInfo) bool) ([]user.UserInfo, error)
+
+	IsUserNameExist(userName string) bool
+
+	UpdateUser(userNew user.UserInfo) (err error)
 }
