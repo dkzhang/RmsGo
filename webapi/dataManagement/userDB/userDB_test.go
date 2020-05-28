@@ -2,67 +2,91 @@ package userDB_test
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/datebaseCommon/config"
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
-	"github.com/dkzhang/RmsGo/dbManage/pgManage"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"os"
 )
 
 var _ = Describe("UserDB", func() {
-	Describe("insert new user with no error", func() {
-		Context("", func() {
 
-			os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
-			pgManage.CreateAllTable()
+	var (
+		user1 user.UserInfo
+		user2 user.UserInfo
+		user3 user.UserInfo
+		user4 user.UserInfo
+	)
 
-			//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig)))
-			By(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig))
+	BeforeEach(func() {
+		user1 = user.UserInfo{
+			UserName:       "zhang001",
+			ChineseName:    "张一一",
+			Department:     "部门一",
+			DepartmentCode: "DEP1",
+			Section:        "某科室一",
+			Mobile:         "12300001111",
+			Role:           user.RoleProjectChief,
+			Status:         user.StatusNormal,
+			Remarks:        "user1",
+		}
+		user2 = user.UserInfo{
+			UserName:       "zhang001",
+			ChineseName:    "张二二",
+			Department:     "部门一",
+			DepartmentCode: "DEP1",
+			Section:        "某科室一",
+			Mobile:         "12300002222",
+			Role:           user.RoleProjectChief,
+			Status:         user.StatusNormal,
+			Remarks:        "user2",
+		}
+		user3 = user.UserInfo{
+			UserName:       "zhang003",
+			ChineseName:    "张三三",
+			Department:     "部门一",
+			DepartmentCode: "DEP1",
+			Section:        "某科室三",
+			Mobile:         "12300003333",
+			Role:           user.RoleApprover,
+			Status:         user.StatusNormal,
+			Remarks:        "user3",
+		}
+		user4 = user.UserInfo{
+			UserName:       "zhang004",
+			ChineseName:    "张四四",
+			Department:     "部门四",
+			DepartmentCode: "DEP4",
+			Section:        "某科室四",
+			Mobile:         "12300004444",
+			Role:           user.RoleApprover,
+			Status:         user.StatusNormal,
+			Remarks:        "user4",
+		}
+	})
 
-			var (
-				udb userDB.UserDB
-			)
-
-			BeforeEach(func() {
-				db, _ := postgreOps.ConnectToDatabase(config.TheDbConfig.ThePgConfig)
-				udb = userDB.NewUserInPostgre(db)
+	Describe("insert new user", func() {
+		Context("insert first user", func() {
+			It("should success", func() {
+				err := udb.InsertUser(user1)
+				Expect(err).ShouldNot(HaveOccurred(), "insert first user error", err)
 			})
-
-			AfterEach(func() {
-				udb.Close()
+		})
+		Context("insert 2nd user", func() {
+			It("insert 2nd user with same name of first user should error", func() {
+				err := udb.InsertUser(user2)
+				Expect(err).Should(HaveOccurred())
+				By(fmt.Sprintf("error = %v", err))
 			})
-
-			It("err should be nil", func() {
-				err := udb.InsertUser(user.UserInfo{
-					UserName:       "zhang001",
-					ChineseName:    "张三1",
-					Department:     "计服中心",
-					DepartmentCode: "JF",
-					Section:        "信息技术室",
-					Mobile:         "15383021234",
-					Role:           1,
-					Status:         2,
-					Remarks:        "haha",
-				})
-				Expect(err).Should(BeNil())
+		})
+		Context("insert 3rd user", func() {
+			It("should success", func() {
+				err := udb.InsertUser(user3)
+				Expect(err).ShouldNot(HaveOccurred())
 			})
-
-			It("err should be nil", func() {
-				err := udb.InsertUser(user.UserInfo{
-					UserName:       "zhang001",
-					ChineseName:    "张三1",
-					Department:     "计服中心",
-					DepartmentCode: "JF",
-					Section:        "信息技术室",
-					Mobile:         "15383021234",
-					Role:           1,
-					Status:         2,
-					Remarks:        "haha",
-				})
-				Expect(err != nil).Should(BeTrue())
+		})
+		Context("insert 4th user", func() {
+			It("should success", func() {
+				err := udb.InsertUser(user4)
+				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 	})
