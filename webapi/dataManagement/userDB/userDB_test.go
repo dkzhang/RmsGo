@@ -19,7 +19,8 @@ var _ = Describe("UserDB", func() {
 			os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
 			pgManage.CreateAllTable()
 
-			GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig)))
+			//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig)))
+			By(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig))
 
 			var (
 				udb userDB.UserDB
