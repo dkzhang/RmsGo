@@ -1,4 +1,4 @@
-package pgManage
+package PgManage
 
 import (
 	"database/sql"

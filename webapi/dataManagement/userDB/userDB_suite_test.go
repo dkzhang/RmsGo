@@ -2,9 +2,9 @@ package userDB_test
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/DbManage/PgManage"
 	"github.com/dkzhang/RmsGo/datebaseCommon/config"
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
-	"github.com/dkzhang/RmsGo/dbManage/pgManage"
 	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
 	"os"
 	"testing"
@@ -22,7 +22,7 @@ var udb userDB.UserInPostgre
 
 var _ = BeforeSuite(func() {
 	os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
-	pgManage.CreateAllTable()
+	PgManage.CreateAllTable()
 
 	//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig)))
 	By(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig))
