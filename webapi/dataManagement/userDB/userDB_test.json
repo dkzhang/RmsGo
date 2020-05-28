@@ -1,0 +1,48 @@
+{
+    "users": [
+        {
+            "user_name": "zhang001",
+            "chinese_name": "张一一",
+            "department": "部门一",
+            "department_code": "DEP1",
+            "section": "某科室一",
+            "Mobile": "12300001111",
+            "role": 1,
+            "status": 1,
+            "remarks": "user1"
+        },
+        {
+            "user_name": "zhang002",
+            "chinese_name": "张二二",
+            "department": "部门一",
+            "department_code": "DEP1",
+            "section": "某科室一",
+            "Mobile": "12300002222",
+            "role": 1,
+            "status": 1,
+            "remarks": "user2"
+        },
+        {
+            "user_name": "zhang003",
+            "chinese_name": "张三三",
+            "department": "部门一",
+            "department_code": "DEP1",
+            "section": "某科室三",
+            "Mobile": "12300003333",
+            "role": 2,
+            "status": 1,
+            "remarks": "user3"
+        },
+        {
+            "user_name": "zhang004",
+            "chinese_name": "张四四",
+            "department": "部门四",
+            "department_code": "DEP4",
+            "section": "某科室四",
+            "Mobile": "12300004444",
+            "role": 2,
+            "status": 1,
+            "remarks": "user4"
+        }
+    ]
+}
