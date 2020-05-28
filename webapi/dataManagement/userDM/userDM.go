@@ -17,4 +17,6 @@ type UserDM interface {
 	IsUserNameExist(userName string) bool
 
 	UpdateUser(userNew user.UserInfo) (err error)
+	InsertUser(userNew user.UserInfo) (err error)
+	DeleteUser(userID int) (err error)
 }

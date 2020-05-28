@@ -125,3 +125,44 @@ func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 
 	return nil
 }
+
+func (udm *MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
+	//if user is Approver check department exist
+	if userNew.Role == user.RoleApprover {
+		for _, u := range udm.userInfoByName {
+			if u.Department == userNew.Department || u.DepartmentCode == u.DepartmentCode {
+				return fmt.Errorf("new Approver Department is already exist")
+			}
+		}
+	}
+
+	//Insert to DB
+	err = udm.userDB.InsertUser(userNew)
+	if err != nil {
+		return fmt.Errorf("udm.userDB.InsertUser error: %v", err)
+	}
+
+	//Query user from DB
+	quser, err := udm.QueryUserByName(userNew.UserName)
+	if err != nil {
+		return fmt.Errorf("udm.QueryUserByName error: %v", err)
+	}
+
+	udm.userInfoByName[quser.UserName] = &quser
+	udm.userInfoByID[quser.UserID] = &quser
+
+	return nil
+}
+
+func (udm *MemoryMap) DeleteUser(userID int) (err error) {
+	if _, ok := udm.userInfoByID[userID]; !ok {
+		return fmt.Errorf("user <%d> not exist", userID)
+	}
+
+	err = udm.userDB.DeleteUser(userID)
+	if err != nil {
+		return fmt.Errorf("udm.userDB.DeleteUser error: %v", err)
+	}
+
+	return nil
+}

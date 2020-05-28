@@ -1,20 +1,14 @@
 package login
 
 import (
-	"fmt"
-	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDM"
-	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func Login(c *gin.Context) {
 
 }
 
+/*
 func ApplyLogin(c *gin.Context) {
 	//获取用户名信息
 	userName := ""
@@ -87,3 +81,4 @@ func ApplyLogin(c *gin.Context) {
 	//生成临时密码，加密后置于redis中并短信发送
 
 }
+*/

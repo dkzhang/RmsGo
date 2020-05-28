@@ -1,0 +1,8 @@
+token:
+  expire: "2h"
+password:
+  expire: "10m"
+  pwType: 1
+  pwLen: 8
+sms:
+  locktime: "1m"
