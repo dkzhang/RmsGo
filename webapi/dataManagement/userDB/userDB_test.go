@@ -17,6 +17,7 @@ var _ = Describe("UserDB", func() {
 
 	var (
 		testData = TestDataFile{}
+		users    []user.UserInfo
 	)
 
 	BeforeEach(func() {
@@ -25,15 +26,17 @@ var _ = Describe("UserDB", func() {
 
 		err = json.Unmarshal(filedata, &testData)
 		Expect(err).ShouldNot(HaveOccurred())
-
-		By(fmt.Sprintf("users = %v", testData.Users))
 	})
 
 	Describe("insert new user", func() {
 		Context("insert user with no name duplicate", func() {
+			It("show users load from dateset file", func() {
+				By(fmt.Sprintf("users load from datefile = %v", testData.Users))
+			})
+
 			It("should success", func() {
 				err := udb.InsertUser(testData.Users[0])
-				Expect(err).ShouldNot(HaveOccurred(), "insert first user error", err)
+				Expect(err).ShouldNot(HaveOccurred(), "insert user <%v> error %v", testData.Users[0], err)
 			})
 			It("should success", func() {
 				err := udb.InsertUser(testData.Users[1])
@@ -68,16 +71,25 @@ var _ = Describe("UserDB", func() {
 		Context("query user exist", func() {
 			It("should success", func() {
 				user, err := udb.QueryUserByName(testData.Users[0].UserName)
-				Expect(err).ShouldNot(HaveOccurred(), "insert first user error", err)
+				Expect(err).ShouldNot(HaveOccurred(), "query user exist error: %v", err)
 				Expect(user.Mobile).Should(Equal(testData.Users[0].Mobile))
 			})
 		})
 		Context("query user not exist", func() {
 			It("should err", func() {
-				_, err := udb.QueryUserByName(testData.Users[3].UserName)
-				Expect(err).Should(HaveOccurred(), "insert first user error", err)
+				_, err := udb.QueryUserByName("Non-existent User")
+				Expect(err).Should(HaveOccurred())
 				By(fmt.Sprintf("error = %v", err))
 			})
+		})
+	})
+	Describe("get all user info", func() {
+		It("should success", func() {
+			var err error
+			users, err = udb.GetAllUserInfo()
+			Expect(err).ShouldNot(HaveOccurred(), "get all user info error: %v", err)
+			Expect(len(users)).Should(Equal(len(testData.Users) - 1))
+			By(fmt.Sprintf("users = %v", users))
 		})
 	})
 })
