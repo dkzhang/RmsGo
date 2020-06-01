@@ -21,6 +21,7 @@ require (
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/sirupsen/logrus v1.6.0
 	github.com/tebeka/strftime v0.1.4 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go v3.0.180+incompatible
 	github.com/twinj/uuid v1.0.0
 	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 	google.golang.org/appengine v1.6.6 // indirect
