@@ -41,3 +41,32 @@ Use `go get -t` to retrieve the packages referenced in your test code:
 $ cd /path/to/my/app
 $ go get -t ./...
 ```
+
+# Getting Started: Writing Your First Test
+Ginkgo hooks into Go’s existing `testing` infrastructure. 
+This allows you to run a Ginkgo suite using `go test`.
+
+> This also means that Ginkgo tests can live alongside traditional Go testing tests. Both go test and ginkgo will run all the tests in your suite.
+
+## Bootstrapping a Suite
+To write Ginkgo tests for a package you must first bootstrap a Ginkgo test suite. 
+Say you have a package named books:
+```shell script
+$ cd path/to/books
+$ ginkgo bootstrap
+```
+This will generate a file named `books_suite_test.go` containing:
+```go
+package books_test
+
+import (
+    . "github.com/onsi/ginkgo"
+    . "github.com/onsi/gomega"
+    "testing"
+)
+
+func TestBooks(t *testing.T) {
+    RegisterFailHandler(Fail)
+    RunSpecs(t, "Books Suite")
+}
+```
