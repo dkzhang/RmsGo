@@ -1,5 +1,9 @@
 package user
 
+import (
+	"encoding/json"
+)
+
 type UserInfo struct {
 	//系统内ID，主键
 	UserID int `db:"user_id" json:"user_id"`
@@ -50,3 +54,15 @@ const (
 	StatusDisable = -1
 	StatusDelete  = -9
 )
+
+func (ui *UserInfo) ToJsonString() string {
+	b, _ := json.Marshal(ui)
+	return string(b)
+}
+
+func ToJsonString(uis []UserInfo) string {
+	b, _ := json.Marshal(map[string]interface{}{
+		"users": uis,
+	})
+	return string(b)
+}
