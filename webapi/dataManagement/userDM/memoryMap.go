@@ -33,6 +33,11 @@ func NewMemoryMap(udb userDB2.UserDB) (nmm MemoryMap, err error) {
 }
 
 func (udm *MemoryMap) QueryUserByName(userName string) (user.UserInfo, error) {
+	if user.CheckUserName(userName) == false {
+		return user.UserInfo{},
+			fmt.Errorf("QueryUserByName failed: username  <%s> illegal", userName)
+	}
+
 	if v, ok := udm.userInfoByName[userName]; ok {
 		return *v, nil
 	} else {
@@ -73,6 +78,11 @@ func (udm *MemoryMap) IsUserNameExist(userName string) bool {
 	return ok
 }
 func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
+	// check user name
+	if user.CheckUserName(userNew.UserName) == false {
+		return fmt.Errorf("UpdateUser failed: new username  <%s> illegal", userNew.UserName)
+	}
+
 	//check exist
 	userOld, ok := udm.userInfoByID[userNew.UserID]
 	if ok == false {
@@ -84,6 +94,10 @@ func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 		if udm.IsUserNameExist(userNew.UserName) {
 			return fmt.Errorf("UpdateUser failed since userName <%s> is already exist", userNew.UserName)
 		}
+	}
+
+	if userOld.Role == user.RoleApprover && user.CheckDepartmentCode(userNew.DepartmentCode) == false {
+		return fmt.Errorf("UpdateUser failed: user  DepartmentCode <%s> illegal", userNew.DepartmentCode)
 	}
 
 	//update user info
@@ -127,12 +141,21 @@ func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 }
 
 func (udm *MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
+	// Check username
+	if user.CheckUserName(userNew.UserName) == false {
+		return fmt.Errorf("InsertUser failed: username  <%s> illegal", userNew.UserName)
+	}
+
 	//if user is Approver check department exist
 	if userNew.Role == user.RoleApprover {
 		for _, u := range udm.userInfoByName {
 			if u.Department == userNew.Department || u.DepartmentCode == u.DepartmentCode {
-				return fmt.Errorf("new Approver Department is already exist")
+				return fmt.Errorf("InsertUser failed: new Approver Department is already exist")
 			}
+		}
+
+		if user.CheckDepartmentCode(userNew.DepartmentCode) == false {
+			return fmt.Errorf("InsertUser failed: user  DepartmentCode <%s> illegal", userNew.DepartmentCode)
 		}
 	}
 
