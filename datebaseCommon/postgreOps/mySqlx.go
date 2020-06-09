@@ -3,7 +3,7 @@ package postgreOps
 import (
 	"database/sql"
 	"fmt"
-	"github.com/dkzhang/RmsGo/datebaseCommon/config"
+	"github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -11,7 +11,7 @@ import (
 func ConnectToDatabase(pg security.PgSecurity) (db *sqlx.DB, err error) {
 	dataSourceStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		pg.Host, pg.Port, pg.User, pg.Password, pg.DbName, pg.Sslmode)
-	db, err = sqlx.Open("postgres", dataSourceStr)
+	db, err = sqlx.Connect("postgres", dataSourceStr)
 	return db, err
 }
 

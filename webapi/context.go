@@ -1,6 +1,7 @@
 package webapi
 
 import (
+	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
@@ -35,6 +36,15 @@ func InitInfrastructure() {
 				"ENV DbConf": os.Getenv("DbConf"),
 				"error":      err,
 			}).Fatal("dbConfig.LoadDbSecurity error.")
+			return
+		}
+
+		TheContext.TheDb, err = postgreOps.ConnectToDatabase(TheContext.TheDbConfig.ThePgConfig)
+		if err != nil {
+			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+				"ThePgConfig": TheContext.TheDbConfig.ThePgConfig,
+				"error":       err,
+			}).Fatal("postgreOps.ConnectToDatabase error.")
 			return
 		}
 
