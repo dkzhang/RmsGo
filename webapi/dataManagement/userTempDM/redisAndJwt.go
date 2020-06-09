@@ -2,9 +2,12 @@ package userTempDM
 
 import (
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
 	"github.com/dkzhang/RmsGo/myUtils/encryptPassword"
 	"github.com/dkzhang/RmsGo/myUtils/genPasswd"
+	"os"
+	"time"
 )
 
 type RedisAndJwt struct {
@@ -65,13 +68,33 @@ func UserPasswordKey(userID int) string {
 
 /////////////////////////////////////////////////////////////////
 func (rj RedisAndJwt) CreateToken(userID int) (token string, err error) {
+	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
+	atClaims := jwt.MapClaims{}
+	atClaims["authorized"] = true
+	atClaims["user_id"] = userID
+	atClaims["exp"] = time.Now().Add(rj.TheLoginConfig.TheTokenConfig.Expire).Unix()
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	token, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	if err != nil {
+		return "", err
+	}
 
+	err = rj.TheRedis.Set(UserTokenKey(userID), userID, rj.TheLoginConfig.TheTokenConfig.Expire)
+	if err != nil {
+		return "", fmt.Errorf("redis set token error: %v", err)
+	}
+
+	return token, nil
 }
 
 func (rj RedisAndJwt) ValidateToken(token string) (userID int, err error) {
 
 }
 
-func (rj RedisAndJwt) DeleteToken(userID int) (err error) {
+func (rj RedisAndJwt) DeleteToken(userID int) {
+	rj.TheRedis.Delete(UserTokenKey(userID))
+}
 
+func UserTokenKey(userID int) string {
+	return fmt.Sprintf("user_token_%d", userID)
 }
