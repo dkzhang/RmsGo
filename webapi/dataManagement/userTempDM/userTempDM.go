@@ -1,13 +1,15 @@
 package userTempDM
 
+import "net/http"
+
 type UserTempDM interface {
 	IsSmsLock(userID int) bool
 	LockSms(userID int) error
 
-	SetPassword(userID int) error
-	ValidatePassword(userID int) (bool, error)
+	SetPassword(userID int) (passwd string, err error)
+	ValidatePassword(userID int, passwd string) bool
 
 	CreateToken(userID int) (token string, err error)
-	ValidateToken(token string) (userID int, err error)
-	DeleteToken(userID int) (err error)
+	ValidateToken(r *http.Request) (userID int, err error)
+	DeleteToken(userID int)
 }
