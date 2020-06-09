@@ -6,9 +6,10 @@ import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
 	"github.com/dkzhang/RmsGo/myUtils/encryptPassword"
 	"github.com/dkzhang/RmsGo/myUtils/genPasswd"
+	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM/config"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -16,10 +17,10 @@ import (
 
 type RedisAndJwt struct {
 	TheRedis       *redisOps.Redis
-	TheLoginConfig LoginConfig
+	TheLoginConfig config.LoginConfig
 }
 
-func NewRedisAndJwt(redis *redisOps.Redis, cfg LoginConfig) RedisAndJwt {
+func NewRedisAndJwt(redis *redisOps.Redis, cfg config.LoginConfig) RedisAndJwt {
 	return RedisAndJwt{
 		TheRedis:       redis,
 		TheLoginConfig: cfg,
@@ -73,13 +74,12 @@ func userPasswordKey(userID int) string {
 
 /////////////////////////////////////////////////////////////////
 func (rj RedisAndJwt) CreateToken(userID int) (token string, err error) {
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
 	atClaims := jwt.MapClaims{}
 	atClaims["authorized"] = true
 	atClaims["user_id"] = userID
 	atClaims["exp"] = time.Now().Add(rj.TheLoginConfig.TheTokenConfig.Expire).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	token, err = at.SignedString([]byte(webapi.TheContext.TheLoginSecurity.TheTokenSecurity.Key))
 	if err != nil {
 		return "", err
 	}
@@ -131,7 +131,7 @@ func verifyToken(r *http.Request) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(os.Getenv("ACCESS_SECRET")), nil
+		return []byte(webapi.TheContext.TheLoginSecurity.TheTokenSecurity.Key), nil
 	})
 	if err != nil {
 		log.Printf("jwt.Parse token error: %v", err)

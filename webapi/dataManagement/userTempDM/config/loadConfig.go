@@ -1,4 +1,4 @@
-package userTempDM
+package config
 
 import (
 	"fmt"

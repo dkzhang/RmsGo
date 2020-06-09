@@ -2,8 +2,10 @@ package webapi
 
 import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
+	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM"
+	userConfig "github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM/config"
+	userSecurity "github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM/security"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -13,11 +15,12 @@ import (
 var TheContext Context
 
 type Context struct {
-	TheDb    *sqlx.DB
-	TheRedis *redisOps.Redis
+	TheDbConfig databaseSecurity.DbSecurity
+	TheDb       *sqlx.DB
+	TheRedis    *redisOps.Redis
 
-	TheLoginConfig   userTempDM.LoginConfig
-	TheLoginSecurity userTempDM.LoginSecurity
+	TheLoginConfig   userConfig.LoginConfig
+	TheLoginSecurity userSecurity.LoginSecurity
 }
 
 var initOnce sync.Once
@@ -26,19 +29,28 @@ func InitInfrastructure() {
 	initOnce.Do(func() {
 		var err error
 
-		TheContext.TheLoginConfig, err = userTempDM.LoadLoginConfig(os.Getenv("LoginConf"))
+		TheContext.TheDbConfig, err = databaseSecurity.LoadDbSecurity(os.Getenv("DbConf"))
+		if err != nil {
+			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+				"ENV DbConf": os.Getenv("DbConf"),
+				"error":      err,
+			}).Fatal("dbConfig.LoadDbSecurity error.")
+			return
+		}
+
+		TheContext.TheLoginConfig, err = userConfig.LoadLoginConfig(os.Getenv("LoginConf"))
 		if err != nil {
 			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
 				"ENV LoginConf": os.Getenv("LogMapConf"),
 				"error":         err,
-			}).Fatalf("userTempDM.LoadLoginSecurity error.")
+			}).Fatalf("userConfig.LoadLoginSecurity error.")
 		}
 
-		TheContext.TheLoginSecurity, err = userTempDM.LoadLoginSecurity()
+		TheContext.TheLoginSecurity, err = userSecurity.LoadLoginSecurity()
 		if err != nil {
 			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
 				"error": err,
-			}).Fatalf("userTempDM.LoadLoginSecurity error.")
+			}).Fatalf("userConfig.LoadLoginSecurity error.")
 		}
 	})
 }

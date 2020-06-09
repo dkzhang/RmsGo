@@ -1,4 +1,4 @@
-package userTempDM
+package security
 
 import "github.com/dkzhang/RmsGo/myUtils/genPasswd"
 

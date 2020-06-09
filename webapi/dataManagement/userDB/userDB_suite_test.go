@@ -25,9 +25,9 @@ var _ = BeforeSuite(func() {
 	PgManage.CreateAllTable()
 
 	//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig)))
-	By(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig))
+	By(fmt.Sprintf("config.TheDbConfig = %v \n", security.TheDbConfig))
 
-	db, err := postgreOps.ConnectToDatabase(config.TheDbConfig.ThePgConfig)
+	db, err := postgreOps.ConnectToDatabase(security.TheDbConfig.ThePgConfig)
 	Expect(err).ShouldNot(HaveOccurred(), "postgreOps.ConnectToDatabase error: %v", err)
 	udb = userDB.NewUserInPostgre(db)
 })
