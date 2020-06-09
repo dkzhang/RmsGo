@@ -2,7 +2,7 @@ package redisOps
 
 import (
 	"github.com/dkzhang/RmsGo/allConfig"
-	dbConfig "github.com/dkzhang/RmsGo/datebaseCommon/config"
+	dbConfig "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"os"
 	"testing"
 	"time"

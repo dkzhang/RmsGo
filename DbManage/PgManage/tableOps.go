@@ -29,7 +29,7 @@ func dropTable(db *sqlx.DB, tableName string) (result sql.Result, err error) {
 func CreateAllTable() {
 	allConfig.LoadAllConfig()
 	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-		"config.TheDbConfig": security.TheDbConfig,
+		"config.TheDbSecurity": security.TheDbConfig,
 	}).Info("allConfig.LoadAllConfig success.")
 
 	db, err := postgreOps.ConnectToDatabase(security.TheDbConfig.ThePgConfig)

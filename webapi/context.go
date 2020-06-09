@@ -5,6 +5,8 @@ import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDM"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM"
 	userConfig "github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM/config"
 	userSecurity "github.com/dkzhang/RmsGo/webapi/dataManagement/userTempDM/security"
 	"github.com/jmoiron/sqlx"
@@ -16,12 +18,15 @@ import (
 var TheContext Context
 
 type Context struct {
-	TheDbConfig databaseSecurity.DbSecurity
-	TheDb       *sqlx.DB
-	TheRedis    *redisOps.Redis
+	TheDbSecurity databaseSecurity.DbSecurity
+	TheDb         *sqlx.DB
+	TheRedis      *redisOps.Redis
 
 	TheLoginConfig   userConfig.LoginConfig
 	TheLoginSecurity userSecurity.LoginSecurity
+
+	TheUserDM     userDM.UserDM
+	TheUserTempDM userTempDM.UserTempDM
 }
 
 var initOnce sync.Once
@@ -30,7 +35,7 @@ func InitInfrastructure() {
 	initOnce.Do(func() {
 		var err error
 
-		TheContext.TheDbConfig, err = databaseSecurity.LoadDbSecurity(os.Getenv("DbConf"))
+		TheContext.TheDbSecurity, err = databaseSecurity.LoadDbSecurity(os.Getenv("DbConf"))
 		if err != nil {
 			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
 				"ENV DbConf": os.Getenv("DbConf"),
@@ -39,14 +44,19 @@ func InitInfrastructure() {
 			return
 		}
 
-		TheContext.TheDb, err = postgreOps.ConnectToDatabase(TheContext.TheDbConfig.ThePgConfig)
+		TheContext.TheDb, err = postgreOps.ConnectToDatabase(TheContext.TheDbSecurity.ThePgConfig)
 		if err != nil {
 			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-				"ThePgConfig": TheContext.TheDbConfig.ThePgConfig,
+				"ThePgConfig": TheContext.TheDbSecurity.ThePgConfig,
 				"error":       err,
 			}).Fatal("postgreOps.ConnectToDatabase error.")
 			return
 		}
+
+		opts := &redisOps.RedisOpts{
+			Host: TheContext.TheDbSecurity.TheRedisConfig.Host,
+		}
+		TheContext.TheRedis = redisOps.NewRedis(opts)
 
 		TheContext.TheLoginConfig, err = userConfig.LoadLoginConfig(os.Getenv("LoginConf"))
 		if err != nil {
@@ -62,5 +72,7 @@ func InitInfrastructure() {
 				"error": err,
 			}).Fatalf("userConfig.LoadLoginSecurity error.")
 		}
+
+		TheContext.TheUserTempDM = userTempDM.NewRedisAndJwt(TheContext.TheRedis, TheContext.TheLoginConfig)
 	})
 }

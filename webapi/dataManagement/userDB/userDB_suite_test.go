@@ -24,8 +24,8 @@ var _ = BeforeSuite(func() {
 	os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
 	PgManage.CreateAllTable()
 
-	//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbConfig = %v \n", config.TheDbConfig)))
-	By(fmt.Sprintf("config.TheDbConfig = %v \n", security.TheDbConfig))
+	//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbSecurity = %v \n", config.TheDbSecurity)))
+	By(fmt.Sprintf("config.TheDbSecurity = %v \n", security.TheDbConfig))
 
 	db, err := postgreOps.ConnectToDatabase(security.TheDbConfig.ThePgConfig)
 	Expect(err).ShouldNot(HaveOccurred(), "postgreOps.ConnectToDatabase error: %v", err)
