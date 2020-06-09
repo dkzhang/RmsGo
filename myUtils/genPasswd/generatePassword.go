@@ -20,7 +20,7 @@ const (
 	FlagSpecialChar = 0b1000
 )
 
-func GeneratePasswd(pwLen int, pwType uint) string {
+func GeneratePasswd(pwLen int, pwType int) string {
 	//初始化密码切片
 	var passwd []byte = make([]byte, pwLen, pwLen)
 
