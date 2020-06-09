@@ -1,20 +1,43 @@
 package login
 
 import (
+	"fmt"
+	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDM"
+	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"net/http"
 )
 
 func Login(c *gin.Context) {
 
 }
 
-/*
 func ApplyLogin(c *gin.Context) {
 	//获取用户名信息
-	userName := ""
+	userName := c.Query("username")
 
 	//验证用户名合法
 	if user.CheckUserName(userName) == false {
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "无效的用户名",
+		})
+		return
+	}
+
+	//
+	udm, err := userDM.GetInstance()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
+		})
+		return
+	}
+
+	user, err := udm.QueryUserByName(userName)
+	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "无效的用户名",
 		})
@@ -81,4 +104,3 @@ func ApplyLogin(c *gin.Context) {
 	//生成临时密码，加密后置于redis中并短信发送
 
 }
-*/
