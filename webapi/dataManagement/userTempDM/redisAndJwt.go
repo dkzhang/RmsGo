@@ -40,6 +40,7 @@ func UserSmsKey(userID int) string {
 
 /////////////////////////////////////////////////////////////////
 func (rj RedisAndJwt) SetPassword(userID int) (passwd string, err error) {
+	genPasswd.RandomSeed()
 	passwd = genPasswd.GeneratePasswd(rj.TheLoginConfig.ThePasswordConfig.PwLen,
 		rj.TheLoginConfig.ThePasswordConfig.PwType)
 
