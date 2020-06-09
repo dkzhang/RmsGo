@@ -15,9 +15,9 @@ type RedisAndJwt struct {
 	TheLoginConfig LoginConfig
 }
 
-func NewRedisAndJwt(r *redisOps.Redis, cfg LoginConfig) RedisAndJwt {
+func NewRedisAndJwt(redis *redisOps.Redis, cfg LoginConfig) RedisAndJwt {
 	return RedisAndJwt{
-		TheRedis:       r,
+		TheRedis:       redis,
 		TheLoginConfig: cfg,
 	}
 }
