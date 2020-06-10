@@ -2,13 +2,9 @@ package PgManage
 
 import (
 	"database/sql"
-	"github.com/dkzhang/RmsGo/allConfig"
-	"github.com/dkzhang/RmsGo/datebaseCommon/config"
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
-	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
-	"github.com/sirupsen/logrus"
 )
 
 var tableList = map[string]string{
@@ -26,26 +22,28 @@ func dropTable(db *sqlx.DB, tableName string) (result sql.Result, err error) {
 	return result, err
 }
 
-func CreateAllTable() {
-	allConfig.LoadAllConfig()
-	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-		"config.TheDbSecurity": security.TheDbConfig,
-	}).Info("allConfig.LoadAllConfig success.")
-
-	db, err := postgreOps.ConnectToDatabase(security.TheDbConfig.ThePgConfig)
-	if err != nil {
-		logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-			"error": err,
-		}).Info("postgreSQL.ConnectToDatabase error.")
-	} else {
-		logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-			"db": db,
-		}).Info("postgreSQL.ConnectToDatabase success.")
-	}
-	defer db.Close()
-
+func CreateAllTable(db *sqlx.DB) {
 	for name, scheme := range tableList {
 		dropTable(db, name)
 		createTable(db, scheme)
 	}
+}
+
+func SeedAllTable(db *sqlx.DB) {
+	seedUserTable(db)
+}
+
+func seedUserTable(db *sqlx.DB) {
+	theUserDB := userDB.NewUserInPostgre(db)
+	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "ctrl-zhj001",
+		ChineseName:    "张俊001",
+		Department:     "调度小组",
+		DepartmentCode: "ctrl",
+		Section:        "测试",
+		Mobile:         "15383026353",
+		Role:           user.RoleController,
+		Status:         user.StatusNormal,
+		Remarks:        "测试用账号",
+	})
 }

@@ -86,7 +86,7 @@ func ApplyLogin(c *gin.Context) {
 
 	// Send temporary password to user's mobile phone by SMS
 	resp, err := webapi.TheInfras.TheSmsService.SendSMS(shortMessageService.MessageContent{
-		PhoneNumberSet: []string{userInfo.Mobile},
+		PhoneNumberSet: []string{shortMessageService.ChineseMobile(userInfo.Mobile)},
 		TemplateParamSet: []string{userInfo.ChineseName, passwd,
 			fmt.Sprintf("%.1f", webapi.TheInfras.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
 	})
@@ -102,11 +102,11 @@ func ApplyLogin(c *gin.Context) {
 		})
 		return
 	}
-	logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
 		"UserID": userInfo.UserID,
 		"Mobile": userInfo.Mobile,
 		"resp":   resp,
-	}).Errorf("TheSmsService.SendSMS success.")
+	}).Info("TheSmsService.SendSMS success.")
 
 	// Set SMS lock
 	webapi.TheInfras.TheUserTempDM.LockSms(userInfo.UserID)

@@ -2,8 +2,10 @@ package userDM
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
+	"github.com/sirupsen/logrus"
 )
 
 type MemoryMap struct {
@@ -21,6 +23,10 @@ func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
 			fmt.Errorf("generate new MemoryMap failed since GetAllUserInf error: %v", err)
 	}
 
+	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+		"AllUserInfo": users,
+	}).Info("NewMemoryMap theUserDB.GetAllUserInfo success.")
+
 	nmm.userInfoByID = make(map[int]*user.UserInfo, len(users))
 	nmm.userInfoByName = make(map[string]*user.UserInfo, len(users))
 
@@ -29,6 +35,12 @@ func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
 		nmm.userInfoByID[v.UserID] = &user
 		nmm.userInfoByName[v.UserName] = &user
 	}
+
+	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+		"userInfoByID":   nmm.userInfoByID,
+		"userInfoByName": nmm.userInfoByName,
+	}).Info("NewMemoryMap load data to map success.")
+
 	return nmm, nil
 }
 

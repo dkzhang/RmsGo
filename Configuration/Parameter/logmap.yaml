@@ -1,4 +1,6 @@
 logfile:
-  normal: "/log/normal/"
+  normal: "D:\\test\\"
+#  normal: "/log/normal/"
   login: "/log/login/"
   db: "/log/db/"
+

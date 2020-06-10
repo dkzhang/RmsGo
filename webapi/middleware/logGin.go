@@ -17,14 +17,14 @@ import (
 // 日志记录到文件
 func LoggerGinToFile() gin.HandlerFunc {
 
-	logFilePath := "" //config
-	logFileName := "" //config
+	logFilePath := "./"        //config
+	logFileName := "myGin.log" //config
 
 	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
 
 	// 写入文件
-	src, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	src, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
 	if err != nil {
 		fmt.Println("err", err)
 	}
