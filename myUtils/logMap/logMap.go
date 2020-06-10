@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func Log(types ...string) []*logrus.Logger {
+func GetLogArray(types ...string) []*logrus.Logger {
 	theLoggers := make([]*logrus.Logger, len(types))
 
 	for i, t := range types {
@@ -19,7 +19,7 @@ func Log(types ...string) []*logrus.Logger {
 		} else {
 			theLogMap[DEFAULT].WithFields(logrus.Fields{
 				"log name": t,
-			}).Info("Request a log name that has not been configured and returns the default Log.")
+			}).Info("Request a log name that has not been configured and returns the default GetLog.")
 			theLoggers[i] = theLogMap[DEFAULT]
 		}
 	}

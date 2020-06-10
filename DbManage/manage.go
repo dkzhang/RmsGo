@@ -20,7 +20,7 @@ func main() {
 	// Database: PostgreSQL
 	theDbSecurity, err := databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
 	if err != nil {
-		logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ENV DbSE": os.Getenv("DbConf"),
 			"error":    err,
 		}).Fatal("dbConfig.LoadDbSecurity error.")
@@ -29,11 +29,11 @@ func main() {
 
 	db, err := postgreOps.ConnectToDatabase(theDbSecurity.ThePgSecurity)
 	if err != nil {
-		logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"error": err,
 		}).Info("postgreSQL.ConnectToDatabase error.")
 	} else {
-		logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"db": db,
 		}).Info("postgreSQL.ConnectToDatabase success.")
 	}

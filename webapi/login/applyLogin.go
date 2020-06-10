@@ -30,10 +30,10 @@ func ApplyLogin(c *gin.Context) {
 	// Query User from the UserDM
 	userInfo, err := webapi.TheInfras.TheUserDM.QueryUserByName(userName)
 	if err != nil {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserName": userName,
 			"error":    err,
-		}).Errorf("Query userInfo from database error.")
+		}).Error("Query userInfo from database error.")
 
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "该用户不存在",
@@ -43,10 +43,10 @@ func ApplyLogin(c *gin.Context) {
 
 	// Check if the account status is normal
 	if userInfo.Status != user.StatusNormal {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
-		}).Errorf("userInfo account status is not normal.")
+		}).Error("userInfo account status is not normal.")
 
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "该用户账号已被停用或删除",
@@ -56,10 +56,10 @@ func ApplyLogin(c *gin.Context) {
 
 	// Check if the account is in sms-locked status
 	if webapi.TheInfras.TheUserTempDM.IsSmsLock(userInfo.UserID) == true {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
-		}).Errorf("userInfo account is in sms-locked status.")
+		}).Error("userInfo account is in sms-locked status.")
 
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "检测到短时间内频繁申请登录，请稍后再试",
@@ -73,10 +73,10 @@ func ApplyLogin(c *gin.Context) {
 	//Generate temporary password
 	passwd, err := webapi.TheInfras.TheUserTempDM.SetPassword(userInfo.UserID)
 	if err != nil {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
-		}).Errorf("TheUserTempDM.CreateToken error.")
+		}).Error("TheUserTempDM.CreateToken error.")
 
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
@@ -91,18 +91,18 @@ func ApplyLogin(c *gin.Context) {
 			fmt.Sprintf("%.1f", webapi.TheInfras.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
 	})
 	if err != nil {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"Mobile": userInfo.Mobile,
 			"error":  err,
-		}).Errorf("TheSmsService.SendSMS error.")
+		}).Error("TheSmsService.SendSMS error.")
 
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
 		})
 		return
 	}
-	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+	logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 		"UserID": userInfo.UserID,
 		"Mobile": userInfo.Mobile,
 		"resp":   resp,
@@ -111,10 +111,10 @@ func ApplyLogin(c *gin.Context) {
 	// Set SMS lock
 	webapi.TheInfras.TheUserTempDM.LockSms(userInfo.UserID)
 	if err != nil {
-		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
-		}).Errorf("TheUserTempDM.LockSms error.")
+		}).Error("TheUserTempDM.LockSms error.")
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////

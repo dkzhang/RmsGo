@@ -44,19 +44,17 @@ func InitInfrastructure() {
 		// LOG
 		err = logMap.LoadLogConfig(os.Getenv("LogMapConf"))
 		if err != nil {
-			for _, l := range logMap.Log(logMap.DEFAULT, logMap.NORMAL) {
-				l.WithFields(logrus.Fields{
-					"ENV LogMapConf": os.Getenv("LogMapConf"),
-					"error":          err,
-				}).Error("logMap.LoadLogConfig error.")
-			}
+			logMap.Log(logMap.DEFAULT, logMap.NORMAL).WithFields(logrus.Fields{
+				"ENV LogMapConf": os.Getenv("LogMapConf"),
+				"error":          err,
+			}).Error("logMap.LoadLogConfig error.")
 		}
 
 		/////////////////////////////////////////////////////////
 		// SMS
 		theSmsSecurity, err := shortMessageService.LoadSmsSecurity(os.Getenv("SmsSE"))
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 				"ENV SmsSE": os.Getenv("SmsSE"),
 				"error":     err,
 			}).Error("shortMessageService.LoadSmsSecurity error.")
@@ -67,7 +65,7 @@ func InitInfrastructure() {
 		// Database: PostgreSQL and Redis
 		TheInfras.TheDbSecurity, err = databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 				"ENV DbSE": os.Getenv("DbConf"),
 				"error":    err,
 			}).Fatal("dbConfig.LoadDbSecurity error.")
@@ -76,7 +74,7 @@ func InitInfrastructure() {
 
 		TheInfras.TheDb, err = postgreOps.ConnectToDatabase(TheInfras.TheDbSecurity.ThePgSecurity)
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 				"ThePgSecurity": TheInfras.TheDbSecurity.ThePgSecurity,
 				"error":         err,
 			}).Fatal("postgreOps.ConnectToDatabase error.")
@@ -92,17 +90,17 @@ func InitInfrastructure() {
 		// Login and UserTempDM
 		TheInfras.TheLoginConfig, err = userConfig.LoadLoginConfig(os.Getenv("LoginConf"))
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 				"ENV LoginConf": os.Getenv("LogMapConf"),
 				"error":         err,
-			}).Fatalf("userConfig.LoadLoginSecurity error.")
+			}).Fatal("userConfig.LoadLoginSecurity error.")
 		}
 
 		TheInfras.TheLoginSecurity, err = userSecurity.LoadLoginSecurity()
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 				"error": err,
-			}).Fatalf("userConfig.LoadLoginSecurity error.")
+			}).Fatal("userConfig.LoadLoginSecurity error.")
 		}
 
 		TheInfras.TheUserTempDM = userTempDM.NewRedisAndJwt(TheInfras.TheRedis,
@@ -113,9 +111,9 @@ func InitInfrastructure() {
 		TheInfras.TheUserDB = userDB.NewUserInPostgre(TheInfras.TheDb)
 		TheInfras.TheUserDM, err = userDM.NewMemoryMap(TheInfras.TheUserDB)
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
+			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 				"error": err,
-			}).Fatalf("userDM.NewMemoryMap error.")
+			}).Fatal("userDM.NewMemoryMap error.")
 		}
 
 	})
