@@ -1,0 +1,6 @@
+LogMapConf   C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml
+SmsSE   D:\test\sms.yaml
+DbSE   C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\database.yaml
+LoginConf   C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\login.yaml
+
+
