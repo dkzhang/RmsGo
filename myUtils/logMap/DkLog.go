@@ -13,18 +13,19 @@ func Log(types ...string) (dl DkLog) {
 		fields:  nil,
 	}
 
-	for i, t := range types {
-		if l, ok := theLogMap[t]; ok {
-			dl.loggers[i] = l
-		} else {
-			theLogMap[DEFAULT].WithFields(logrus.Fields{
-				"log name": t,
-			}).Info("Request a log name that has not been configured and returns the default GetLog.")
-			dl.loggers[i] = theLogMap[DEFAULT]
-		}
-	}
 	if len(types) == 0 {
-		dl.loggers = append(dl.loggers, theLogMap[DEFAULT])
+		dl.loggers = []*logrus.Logger{theLogMap[DEFAULT]}
+	} else {
+		for i, t := range types {
+			if l, ok := theLogMap[t]; ok {
+				dl.loggers[i] = l
+			} else {
+				theLogMap[DEFAULT].WithFields(logrus.Fields{
+					"log name": t,
+				}).Info("Request a log name that has not been configured and returns the default GetLog.")
+				dl.loggers[i] = theLogMap[DEFAULT]
+			}
+		}
 	}
 
 	return dl
