@@ -23,9 +23,11 @@ func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
 			fmt.Errorf("generate new MemoryMap failed since GetAllUserInf error: %v", err)
 	}
 
-	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-		"AllUserInfo": users,
-	}).Info("NewMemoryMap theUserDB.GetAllUserInfo success.")
+	for _, l := range logMap.Log(logMap.DEFAULT) {
+		l.WithFields(logrus.Fields{
+			"AllUserInfo": users,
+		}).Info("NewMemoryMap theUserDB.GetAllUserInfo success.")
+	}
 
 	nmm.userInfoByID = make(map[int]*user.UserInfo, len(users))
 	nmm.userInfoByName = make(map[string]*user.UserInfo, len(users))
@@ -36,10 +38,12 @@ func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
 		nmm.userInfoByName[v.UserName] = &user
 	}
 
-	logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-		"userInfoByID":   nmm.userInfoByID,
-		"userInfoByName": nmm.userInfoByName,
-	}).Info("NewMemoryMap load data to map success.")
+	for _, l := range logMap.Log(logMap.DEFAULT) {
+		l.WithFields(logrus.Fields{
+			"userInfoByID":   nmm.userInfoByID,
+			"userInfoByName": nmm.userInfoByName,
+		}).Info("NewMemoryMap load data to map success.")
+	}
 
 	return nmm, nil
 }

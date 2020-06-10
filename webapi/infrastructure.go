@@ -44,10 +44,12 @@ func InitInfrastructure() {
 		// LOG
 		err = logMap.LoadLogConfig(os.Getenv("LogMapConf"))
 		if err != nil {
-			logMap.GetLog(logMap.DEFAULT).WithFields(logrus.Fields{
-				"ENV LogMapConf": os.Getenv("LogMapConf"),
-				"error":          err,
-			}).Error("logMap.LoadLogConfig error.")
+			for _, l := range logMap.Log(logMap.DEFAULT, logMap.NORMAL) {
+				l.WithFields(logrus.Fields{
+					"ENV LogMapConf": os.Getenv("LogMapConf"),
+					"error":          err,
+				}).Error("logMap.LoadLogConfig error.")
+			}
 		}
 
 		/////////////////////////////////////////////////////////

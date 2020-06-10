@@ -7,49 +7,47 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"path"
-	"sync"
 	"time"
 )
 
+func Log(types ...string) []*logrus.Logger {
+	theLoggers := make([]*logrus.Logger, len(types))
+
+	for i, t := range types {
+		if l, ok := theLogMap[t]; ok {
+			theLoggers[i] = l
+		} else {
+			theLogMap[DEFAULT].WithFields(logrus.Fields{
+				"log name": t,
+			}).Info("Request a log name that has not been configured and returns the default Log.")
+			theLoggers[i] = theLogMap[DEFAULT]
+		}
+	}
+	return theLoggers
+}
+
 const NORMAL = "normal"
+const LOGIN = "login"
 const DEFAULT = "default"
 
-var theLogMap = map[string]func() *logrus.Logger{
-	NORMAL:  getNormalLog,
-	DEFAULT: getDefaultLog,
+var theLogMap map[string](*logrus.Logger)
+
+func init() {
+	theLogMap = make(map[string](*logrus.Logger), 2)
+	theLogMap[NORMAL] = getLog(NORMAL)
+	theLogMap[LOGIN] = getLog(LOGIN)
+	theLogMap[DEFAULT] = logrus.New()
 }
 
-var defaultLog = logrus.New()
-
-func GetLog(name string) *logrus.Logger {
-	if l, ok := theLogMap[name]; ok {
-		return l()
-	} else {
-		defaultLog.WithFields(logrus.Fields{
-			"log name": name,
-		}).Info("Request a log name that has not been configured and returns the default Log.")
-		return getDefaultLog()
+func getLog(name string) *logrus.Logger {
+	filePath := ""
+	fileName := name + ".log"
+	if v, ok := theLogFileConfig.LogFile[name]; ok {
+		filePath = v
 	}
-}
+	normalLog := loggerToFile(filePath, fileName)
 
-var normalLog *logrus.Logger
-var normalOnce sync.Once
-
-func getNormalLog() *logrus.Logger {
-	normalOnce.Do(func() {
-		filePath := ""
-		fileName := NORMAL + ".log"
-		if v, ok := theLogFileConfig.LogFile[NORMAL]; ok {
-			filePath = v
-		}
-		normalLog = loggerToFile(filePath, fileName)
-
-	})
 	return normalLog
-}
-
-func getDefaultLog() *logrus.Logger {
-	return defaultLog
 }
 
 func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
