@@ -103,7 +103,8 @@ func InitInfrastructure() {
 			}).Fatalf("userConfig.LoadLoginSecurity error.")
 		}
 
-		TheInfras.TheUserTempDM = userTempDM.NewRedisAndJwt(TheInfras.TheRedis, TheInfras.TheLoginConfig)
+		TheInfras.TheUserTempDM = userTempDM.NewRedisAndJwt(TheInfras.TheRedis,
+			TheInfras.TheLoginConfig, TheInfras.TheLoginSecurity)
 
 		/////////////////////////////////////////////////////////
 		// UserDM and UserDB
