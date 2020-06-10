@@ -32,7 +32,7 @@ const DEFAULT = "default"
 
 var theLogMap map[string](*logrus.Logger)
 
-func init() {
+func bak_init() {
 	theLogMap = make(map[string](*logrus.Logger), 2)
 	theLogMap[NORMAL] = getLog(NORMAL)
 	theLogMap[LOGIN] = getLog(LOGIN)
@@ -107,6 +107,45 @@ func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
 
 	// 新增 Hook
 	logger.AddHook(lfHook)
+
+	return logger
+}
+
+func LoggerToFile(logFileName string) *logrus.Logger {
+	// 实例化
+	logger := logrus.New()
+
+	// 设置日志级别
+	logger.SetLevel(logrus.DebugLevel)
+
+	// 设置 rotatelogs
+	logWriter, _ := rotatelogs.New(
+		// 分割后的文件名称
+		logFileName+".%Y%m%d.log",
+
+		// 生成软链，指向最新日志文件
+		rotatelogs.WithLinkName(logFileName),
+
+		// 设置最大保存时间(7天)
+		rotatelogs.WithMaxAge(7*24*time.Hour),
+
+		// 设置日志切割时间间隔(1天)
+		rotatelogs.WithRotationTime(24*time.Hour),
+
+		//////////////////////////////////////////////
+		// WithLinkName为最新的日志建立软连接,以方便随着找到当前日志文件
+		// WithRotationTime设置日志分割的时间,这里设置为一小时分割一次
+		// WithMaxAge和WithRotationCount二者只能设置一个
+		// WithMaxAge设置文件清理前的最长保存时间
+		// WithRotationCount设置文件清理前最多保存的个数.
+
+	)
+
+	logger.Formatter = &logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
+	}
+
+	logger.SetOutput(logWriter)
 
 	return logger
 }
