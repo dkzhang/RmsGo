@@ -2,20 +2,20 @@ package userDM
 
 import (
 	"fmt"
-	userDB2 "github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
+	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 )
 
 type MemoryMap struct {
 	userInfoByID   map[int]*user.UserInfo
 	userInfoByName map[string]*user.UserInfo
-	userDB         userDB2.UserDB
+	theUserDB      userDB.UserDB
 }
 
-func NewMemoryMap(udb userDB2.UserDB) (nmm MemoryMap, err error) {
-	nmm.userDB = udb
+func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
+	nmm.theUserDB = udb
 
-	users, err := nmm.userDB.GetAllUserInfo()
+	users, err := nmm.theUserDB.GetAllUserInfo()
 	if err != nil {
 		return MemoryMap{},
 			fmt.Errorf("generate new MemoryMap failed since GetAllUserInf error: %v", err)
@@ -32,7 +32,7 @@ func NewMemoryMap(udb userDB2.UserDB) (nmm MemoryMap, err error) {
 	return nmm, nil
 }
 
-func (udm *MemoryMap) QueryUserByName(userName string) (user.UserInfo, error) {
+func (udm MemoryMap) QueryUserByName(userName string) (user.UserInfo, error) {
 	if user.CheckUserName(userName) == false {
 		return user.UserInfo{},
 			fmt.Errorf("QueryUserByName failed: username  <%s> illegal", userName)
@@ -45,7 +45,7 @@ func (udm *MemoryMap) QueryUserByName(userName string) (user.UserInfo, error) {
 	}
 }
 
-func (udm *MemoryMap) QueryUserByID(userID int) (user.UserInfo, error) {
+func (udm MemoryMap) QueryUserByID(userID int) (user.UserInfo, error) {
 	if v, ok := udm.userInfoByID[userID]; ok {
 		return *v, nil
 	} else {
@@ -53,13 +53,13 @@ func (udm *MemoryMap) QueryUserByID(userID int) (user.UserInfo, error) {
 	}
 }
 
-func (udm *MemoryMap) QueryUserByDepartmentCode(dc string) ([]user.UserInfo, error) {
+func (udm MemoryMap) QueryUserByDepartmentCode(dc string) ([]user.UserInfo, error) {
 	return udm.QueryUserByFilter(func(userInfo user.UserInfo) bool {
 		return userInfo.DepartmentCode == dc
 	})
 }
 
-func (udm *MemoryMap) QueryUserByFilter(userFilter func(user.UserInfo) bool) ([]user.UserInfo, error) {
+func (udm MemoryMap) QueryUserByFilter(userFilter func(user.UserInfo) bool) ([]user.UserInfo, error) {
 	uis := make([]user.UserInfo, 0)
 	for _, v := range udm.userInfoByID {
 		if userFilter(*v) == true {
@@ -73,11 +73,11 @@ func (udm *MemoryMap) QueryUserByFilter(userFilter func(user.UserInfo) bool) ([]
 	}
 }
 
-func (udm *MemoryMap) IsUserNameExist(userName string) bool {
+func (udm MemoryMap) IsUserNameExist(userName string) bool {
 	_, ok := udm.userInfoByName[userName]
 	return ok
 }
-func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
+func (udm MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 	// check user name
 	if user.CheckUserName(userNew.UserName) == false {
 		return fmt.Errorf("UpdateUser failed: new username  <%s> illegal", userNew.UserName)
@@ -102,9 +102,9 @@ func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 
 	//update user info
 	//general, only 6 property could be update
-	err = udm.userDB.UpdateUser(userNew)
+	err = udm.theUserDB.UpdateUser(userNew)
 	if err != nil {
-		return fmt.Errorf("udm.userDB.UpdateUser error: %v", err)
+		return fmt.Errorf("udm.theUserDB.UpdateUser error: %v", err)
 	} else {
 		//update user info in memory map
 		userOld.UserName = userNew.UserName
@@ -122,10 +122,10 @@ func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 			return nil
 		} else {
 			//update all user in the same department
-			err = udm.userDB.UpdateUserDepartment(userOld.DepartmentCode,
+			err = udm.theUserDB.UpdateUserDepartment(userOld.DepartmentCode,
 				userNew.Department, userNew.DepartmentCode)
 			if err != nil {
-				return fmt.Errorf("udm.userDB.UpdateUserDepartment error: %v", err)
+				return fmt.Errorf("udm.theUserDB.UpdateUserDepartment error: %v", err)
 			}
 
 			for _, u := range udm.userInfoByID {
@@ -140,7 +140,7 @@ func (udm *MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 	return nil
 }
 
-func (udm *MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
+func (udm MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 	// Check username
 	if user.CheckUserName(userNew.UserName) == false {
 		return fmt.Errorf("InsertUser failed: username  <%s> illegal", userNew.UserName)
@@ -160,9 +160,9 @@ func (udm *MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 	}
 
 	//Insert to DB
-	err = udm.userDB.InsertUser(userNew)
+	err = udm.theUserDB.InsertUser(userNew)
 	if err != nil {
-		return fmt.Errorf("udm.userDB.InsertUser error: %v", err)
+		return fmt.Errorf("udm.theUserDB.InsertUser error: %v", err)
 	}
 
 	//Query user from DB
@@ -177,14 +177,14 @@ func (udm *MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 	return nil
 }
 
-func (udm *MemoryMap) DeleteUser(userID int) (err error) {
+func (udm MemoryMap) DeleteUser(userID int) (err error) {
 	if _, ok := udm.userInfoByID[userID]; !ok {
 		return fmt.Errorf("user <%d> not exist", userID)
 	}
 
-	err = udm.userDB.DeleteUser(userID)
+	err = udm.theUserDB.DeleteUser(userID)
 	if err != nil {
-		return fmt.Errorf("udm.userDB.DeleteUser error: %v", err)
+		return fmt.Errorf("udm.theUserDB.DeleteUser error: %v", err)
 	}
 
 	return nil

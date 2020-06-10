@@ -3,8 +3,8 @@ package login
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/dkzhang/RmsGo/myUtils/shortMessageService"
 	"github.com/dkzhang/RmsGo/webapi"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDM"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -16,10 +16,10 @@ func Login(c *gin.Context) {
 }
 
 func ApplyLogin(c *gin.Context) {
-	//获取用户名信息
+	// Get UserName from gin.Context
 	userName := c.Query("username")
 
-	//验证用户名合法
+	// Validate UserName
 	if user.CheckUserName(userName) == false {
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "无效的用户名",
@@ -27,45 +27,39 @@ func ApplyLogin(c *gin.Context) {
 		return
 	}
 
-	//
-	udm, err := userDM.GetInstance()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "服务器内部错误",
-		})
-		return
-	}
-
-	user, err := udm.QueryUserByName(userName)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"msg": "无效的用户名",
-		})
-		return
-	}
-
-	//从数据库中查找该用户(TODO 改为通过userDM中检索)
-	user, err := userDM.QueryUserByName(userName, webapi.TheContext.TheDb)
+	// Query User from the UserDM
+	userInfo, err := webapi.TheInfras.TheUserDM.QueryUserByName(userName)
 	if err != nil {
 		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserName": userName,
 			"error":    err,
-		}).Errorf("Query user from database error.")
+		}).Errorf("Query userInfo from database error.")
 
 		c.JSON(http.StatusNotFound, gin.H{
-			"msg": "无法找到该用户",
+			"msg": "该用户不存在",
 		})
 		return
 	}
 
-	//从redis中查询，是否有短信锁，（是否有账户锁）
-	if webapi.TheContext.TheRedis.IsExist(
-		fmt.Sprintf("user_smslock_%d", user.UserID)) == true {
-
+	// Check if the account status is normal
+	if userInfo.Status != user.StatusNormal {
 		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserID": user.UserID,
+			"UserID": userInfo.UserID,
 			"error":  err,
-		}).Errorf("user sms lock exist.")
+		}).Errorf("userInfo account status is not normal.")
+
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "该用户账号已被停用或删除",
+		})
+		return
+	}
+
+	// Check if the account is in sms-locked status
+	if webapi.TheInfras.TheUserTempDM.IsSmsLock(userInfo.UserID) == true {
+		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID": userInfo.UserID,
+			"error":  err,
+		}).Errorf("userInfo account is in sms-locked status.")
 
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "检测到短时间内频繁申请登录，请稍后再试",
@@ -73,34 +67,61 @@ func ApplyLogin(c *gin.Context) {
 		return
 	}
 
-	//检查该用户是否已被停用
-	//status = 1 可用，-1停用，-9标记删除
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// All verifications pass
+
+	//Generate temporary password
+	passwd, err := webapi.TheInfras.TheUserTempDM.SetPassword(userInfo.UserID)
+	if err != nil {
+		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID": userInfo.UserID,
+			"error":  err,
+		}).Errorf("TheUserTempDM.CreateToken error.")
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
+		})
+		return
+	}
+
+	// Send temporary password to user's mobile phone by SMS
+	resp, err := webapi.TheInfras.TheSmsService.SendSMS(shortMessageService.MessageContent{
+		PhoneNumberSet: []string{userInfo.Mobile},
+		TemplateParamSet: []string{userInfo.ChineseName, passwd,
+			fmt.Sprintf("%.1f", webapi.TheInfras.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
+	})
+	if err != nil {
+		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID": userInfo.UserID,
+			"Mobile": userInfo.Mobile,
+			"error":  err,
+		}).Errorf("TheSmsService.SendSMS error.")
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
+		})
+		return
+	}
+	logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+		"UserID": userInfo.UserID,
+		"Mobile": userInfo.Mobile,
+		"resp":   resp,
+	}).Errorf("TheSmsService.SendSMS success.")
+
+	// Set SMS lock
+	webapi.TheInfras.TheUserTempDM.LockSms(userInfo.UserID)
+	if err != nil {
+		logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID": userInfo.UserID,
+			"error":  err,
+		}).Errorf("TheUserTempDM.LockSms error.")
+	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	//用户验证全通过
-
-	//将该用户信息置于redis中(作废：改用内存DataManagement)
-
-	//userJson, err := json.Marshal(user)
-	//if err != nil {
-	//	logMap.GetLog(logMap.NORMAL).WithFields(logrus.Fields{
-	//		"UserName":  userName,
-	//		"User Info": user,
-	//		"error":     err,
-	//	}).Errorf("json.Marshal user data error.")
-	//
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"msg": "服务器处理用户信息出错",
-	//	})
-	//	return
-	//}
-	//
-	//webapi.TheContext.TheRedis.Set(
-	//	fmt.Sprintf("user_inf_%d", user.UserID),
-	//	userJson,
-	//	time.Second,
-	//)
-
-	//生成临时密码，加密后置于redis中并短信发送
+	// All pass
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "用户名验证成功，密码已短信发送",
+	})
+	return
 
 }

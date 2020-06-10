@@ -1,18 +1,22 @@
 package main
 
 import (
+	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/login"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	webapi.InitInfrastructure()
+
 	r := gin.Default()
 	r.Use(middleware.LoggerGinToFile())
-	r.GET("/user/*action", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"name":   "hello",
-			"action": c.Param("action"),
-		})
-	})
+
+	/////////////////////////////////////////////////////////////
+
+	r.POST("/ApplyLogin", login.ApplyLogin)
+
+	/////////////////////////////////////////////////////////////
 	r.Run()
 }

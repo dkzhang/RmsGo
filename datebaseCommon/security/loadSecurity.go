@@ -8,8 +8,8 @@ import (
 
 //load database configuration from file. Including PostgreSQL and Redis.
 type DbSecurity struct {
-	ThePgConfig    PgSecurity    `yaml:"PostgreSQL"`
-	TheRedisConfig RedisSecurity `yaml:"Redis"`
+	ThePgSecurity    PgSecurity    `yaml:"PostgreSQL"`
+	TheRedisSecurity RedisSecurity `yaml:"Redis"`
 }
 
 type PgSecurity struct {

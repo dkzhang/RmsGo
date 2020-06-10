@@ -4,7 +4,7 @@ import "testing"
 
 func TestSendSMS(t *testing.T) {
 	filepath := `D:\test\sms.yaml`
-	LoadSmsConfig(filepath)
+	LoadSmsSecurity(filepath)
 
 	content := MessageContent{
 		PhoneNumberSet:   []string{ChineseMobile("15383026353")},

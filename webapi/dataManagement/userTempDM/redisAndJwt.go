@@ -79,7 +79,7 @@ func (rj RedisAndJwt) CreateToken(userID int) (token string, err error) {
 	atClaims["user_id"] = userID
 	atClaims["exp"] = time.Now().Add(rj.TheLoginConfig.TheTokenConfig.Expire).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err = at.SignedString([]byte(webapi.TheContext.TheLoginSecurity.TheTokenSecurity.Key))
+	token, err = at.SignedString([]byte(webapi.TheInfras.TheLoginSecurity.TheTokenSecurity.Key))
 	if err != nil {
 		return "", err
 	}
@@ -131,7 +131,7 @@ func verifyToken(r *http.Request) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(webapi.TheContext.TheLoginSecurity.TheTokenSecurity.Key), nil
+		return []byte(webapi.TheInfras.TheLoginSecurity.TheTokenSecurity.Key), nil
 	})
 	if err != nil {
 		log.Printf("jwt.Parse token error: %v", err)

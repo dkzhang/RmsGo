@@ -9,12 +9,22 @@ import (
 	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20190711"
 )
 
-func SendSMS(msg MessageContent) (resp string, err error) {
+type SmsService struct {
+	theSmsSecurity SmsSecurity
+}
+
+func NewSmsService(ss SmsSecurity) SmsService {
+	return SmsService{
+		theSmsSecurity: ss,
+	}
+}
+
+func (smsService SmsService) SendSMS(msg MessageContent) (resp string, err error) {
 	credential := common.NewCredential(
 		// os.Getenv("TENCENTCLOUD_SECRET_ID"),
 		// os.Getenv("TENCENTCLOUD_SECRET_KEY"),
-		TheSMSConfig.ID,
-		TheSMSConfig.Key,
+		smsService.theSmsSecurity.ID,
+		smsService.theSmsSecurity.Key,
 	)
 	/* 非必要步骤:
 	 * 实例化一个客户端配置对象，可以指定超时时间等配置 */
@@ -54,9 +64,9 @@ func SendSMS(msg MessageContent) (resp string, err error) {
 	 * sms helper：https://cloud.tencent.com/document/product/382/3773 */
 
 	/* 短信应用 ID: 在 [短信控制台] 添加应用后生成的实际 SDKAppID，例如1400006666 */
-	request.SmsSdkAppid = common.StringPtr(TheSMSConfig.AppID)
+	request.SmsSdkAppid = common.StringPtr(smsService.theSmsSecurity.AppID)
 	/* 短信签名内容: 使用 UTF-8 编码，必须填写已审核通过的签名，可登录 [短信控制台] 查看签名信息 */
-	request.Sign = common.StringPtr(TheSMSConfig.Sign)
+	request.Sign = common.StringPtr(smsService.theSmsSecurity.Sign)
 
 	/* 国际/港澳台短信 senderid: 国内短信填空，默认未开通，如需开通请联系 [sms helper] */
 	//request.SenderId = common.StringPtr("")
@@ -71,7 +81,7 @@ func SendSMS(msg MessageContent) (resp string, err error) {
 	request.TemplateParamSet = common.StringPtrs(msg.TemplateParamSet)
 
 	/* 模板 ID: 必须填写已审核通过的模板 ID，可登录 [短信控制台] 查看模板 ID */
-	request.TemplateID = common.StringPtr(TheSMSConfig.TemplateID)
+	request.TemplateID = common.StringPtr(smsService.theSmsSecurity.TemplateID)
 
 	/* 下发手机号码，采用 e.164 标准，+[国家或地区码][手机号]
 	 * 例如+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号*/
