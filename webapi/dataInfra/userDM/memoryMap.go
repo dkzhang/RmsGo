@@ -186,14 +186,21 @@ func (udm MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 }
 
 func (udm MemoryMap) DeleteUser(userID int) (err error) {
-	if _, ok := udm.userInfoByID[userID]; !ok {
+	userInfo, ok := udm.userInfoByID[userID]
+	if !ok {
 		return fmt.Errorf("user <%d> not exist", userID)
 	}
+	userName := userInfo.UserName
 
+	// delete user from database
 	err = udm.theUserDB.DeleteUser(userID)
 	if err != nil {
 		return fmt.Errorf("udm.theUserDB.DeleteUser error: %v", err)
 	}
+
+	// delete user from memory map
+	udm.userInfoByID[userID] = nil
+	udm.userInfoByName[userName] = nil
 
 	return nil
 }

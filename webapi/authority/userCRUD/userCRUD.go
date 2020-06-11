@@ -1,4 +1,4 @@
-package authority
+package userCRUD
 
 import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
@@ -71,20 +71,26 @@ func UserAuthorityCheck(userLoginInfo, userAccessedInfo user.UserInfo, ops int) 
 	for _, rule := range theUserAuthorityTable {
 		if (ops&rule.Operation != 0) && rule.RelationShipBetween(userLoginInfo, userAccessedInfo) == true {
 			// There are two priority options: allow priority, do not allow priority
-			// We choose do allow priority
 			if rule.Permission == true {
 				logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 					"UserLoginInfo":    userLoginInfo,
 					"UserAccessedInfo": userAccessedInfo,
 					"Description":      rule.Description,
-				}).Info("UserAuthorityCheck match permission.")
+				}).Info("UserAuthorityCheck match permission allow.")
 				return true
+			} else {
+				logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+					"UserLoginInfo":    userLoginInfo,
+					"UserAccessedInfo": userAccessedInfo,
+					"Description":      rule.Description,
+				}).Info("UserAuthorityCheck match permission  not allowed.")
+				return false
 			}
 		}
 	}
 
 	// There are two default options here: default allowed, default not allowed
-	// We choose default not allowed, since we choose do allow priority
+	// We choose default not allowed
 	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"UserLoginInfo":    userLoginInfo,
 		"UserAccessedInfo": userAccessedInfo,

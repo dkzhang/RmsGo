@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi"
-	"github.com/dkzhang/RmsGo/webapi/authority"
+	"github.com/dkzhang/RmsGo/webapi/authority/userCRUD"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -27,14 +27,13 @@ func Retrieve(c *gin.Context) {
 		return
 	}
 
-	permission := authority.UserAuthorityCheck(userLoginInfo, userAccessedInfo, authority.OPS_RETRIEVE)
+	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userAccessedInfo, userCRUD.OPS_RETRIEVE)
 
 	if permission == false {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
-			"error":          err,
-		}).Error("get userInfo failed.")
+		}).Error("Retrieve userInfo failed, since UserAuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "此用户无权访问该数据",
 		})
@@ -44,7 +43,7 @@ func Retrieve(c *gin.Context) {
 	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":    userLoginInfo,
 		"userAccessedInfo": userAccessedInfo,
-	}).Info("get userAccessedID from gin.Context failed.")
+	}).Info("Retrieve userInfo success.")
 	c.JSON(http.StatusOK, gin.H{
 		"msg":  fmt.Sprintf("查询用户(id=%d)信息成功", userAccessedInfo.UserID),
 		"user": userAccessedInfo,
@@ -109,131 +108,86 @@ func extractAccessedUserInfo(c *gin.Context) (userAccessedInfo user.UserInfo, er
 }
 
 func Update(c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo(c)
+	if err != nil {
+		return
+	}
 
+	userAccessedInfo, err := extractAccessedUserInfo(c)
+	if err != nil {
+		return
+	}
+
+	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userAccessedInfo, userCRUD.OPS_UPDATE)
+
+	if permission == false {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginID":    userLoginInfo.UserID,
+			"userAccessedID": userAccessedInfo.UserID,
+		}).Error("Update userInfo failed, since UserAuthorityCheck permission not allowed.")
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "此用户无权访问该数据",
+		})
+		return
+	}
+
+	//userUpdatedInfo
+
+	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		"userLoginInfo":    userLoginInfo,
+		"userAccessedInfo": userAccessedInfo,
+	}).Info("Delete user success.")
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  fmt.Sprintf("更新用户(id=%d)信息成功", userAccessedInfo.UserID),
+		"user": userAccessedInfo,
+	})
+	return
 }
 
 func Delete(c *gin.Context) {
-	idStr := c.Param("id")
-	userDeleteID, err := strconv.Atoi(idStr)
+	userLoginInfo, err := extractLoginUserInfo(c)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"idStr": idStr,
-			"error": err,
-		}).Error("get userID from gin.Context failed.")
-		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": "错误的Request：拟删除的userID无效",
-		})
 		return
 	}
 
-	userDeleteInfo, err := webapi.TheInfras.TheUserDM.QueryUserByID(userDeleteID)
+	userAccessedInfo, err := extractAccessedUserInfo(c)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserID": userDeleteID,
-		}).Error("TheUserDM.QueryUserByID (using userID from gin.Context) failed.")
-
-		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": "错误的Request：拟删除的userID不存在",
-		})
 		return
 	}
 
-	///////////////////////////////////////////////////////
+	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userAccessedInfo, userCRUD.OPS_DELETE)
 
-	userID := c.GetInt("userID")
-	if userID < 0 {
+	if permission == false {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserID": userID,
-		}).Error("get userID from gin.Context failed.")
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "服务器内部错误",
-		})
-		return
-	}
-
-	userInfo, err := webapi.TheInfras.TheUserDM.QueryUserByID(userID)
-	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserID": userID,
-		}).Error("TheUserDM.QueryUserByID (using userID from gin.Context) failed.")
-
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "服务器内部错误",
-		})
-		return
-	}
-
-	///////////////////////////////////////////////////////
-
-	switch userInfo.Role {
-	case user.RoleProjectChief:
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserID": userID,
-		}).Error("RoleProjectChief has no right to access interface <Delete User>.")
-
+			"userLoginID":    userLoginInfo.UserID,
+			"userAccessedID": userAccessedInfo.UserID,
+		}).Error("Delete user failed, since UserAuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
-			"msg": "当前用户无权访问该接口",
+			"msg": "此用户无权访问该数据",
 		})
 		return
-	case user.RoleController:
-		err = webapi.TheInfras.TheUserDM.DeleteUser(userDeleteID)
-		if err != nil {
-			logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-				"UserInfo":       userInfo,
-				"UserDeleteInfo": userDeleteInfo,
-			}).Error("TheUserDM.DeleteUser failed.")
-
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"msg": "服务器内部错误",
-			})
-			return
-		} else {
-			logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-				"UserInfo":       userInfo,
-				"UserDeleteInfo": userDeleteInfo,
-			}).Info("Delete user success.")
-
-			c.JSON(http.StatusOK, gin.H{
-				"msg": fmt.Sprintf("成功删除用户:<%s>", userDeleteInfo.UserName),
-			})
-			return
-		}
-	case user.RoleApprover:
-		if userInfo.DepartmentCode != userDeleteInfo.DepartmentCode {
-			logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-				"UserInfo":       userInfo,
-				"UserDeleteInfo": userDeleteInfo,
-			}).Error("delete user failed: RoleApprover cannot delete users from other departments.")
-
-			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "错误的Request：RoleApprover不能删除其他部门的用户",
-			})
-			return
-		} else {
-			err = webapi.TheInfras.TheUserDM.DeleteUser(userDeleteID)
-			if err != nil {
-				logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-					"UserInfo":       userInfo,
-					"UserDeleteInfo": userDeleteInfo,
-				}).Error("TheUserDM.DeleteUser failed.")
-
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"msg": "服务器内部错误",
-				})
-				return
-			} else {
-				logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-					"UserInfo":       userInfo,
-					"UserDeleteInfo": userDeleteInfo,
-				}).Info("Delete user success.")
-
-				c.JSON(http.StatusOK, gin.H{
-					"msg": fmt.Sprintf("成功删除用户:<%s>", userDeleteInfo.UserName),
-				})
-				return
-			}
-		}
 	}
 
+	err = webapi.TheInfras.TheUserDM.DeleteUser(userAccessedInfo.UserID)
+	if err != nil {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginID":    userLoginInfo.UserID,
+			"userAccessedID": userAccessedInfo.UserID,
+			"error":          err,
+		}).Error("TheUserDM.DeleteUser error.")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
+		})
+		return
+	}
+
+	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		"userLoginInfo":    userLoginInfo,
+		"userAccessedInfo": userAccessedInfo,
+	}).Info("Delete user success.")
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  fmt.Sprintf("删除用户(id=%d)信息成功", userAccessedInfo.UserID),
+		"user": userAccessedInfo,
+	})
+	return
 }
