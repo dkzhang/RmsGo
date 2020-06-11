@@ -3,7 +3,7 @@ package userDM
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/sirupsen/logrus"
 )
