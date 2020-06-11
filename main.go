@@ -21,9 +21,9 @@ func main() {
 
 	r.GET("/AllUsers", middleware.TokenAuth(), handleUser.AllUsers)
 
-	r.PUT("/User", middleware.TokenAuth(), handleUser.Create)
+	r.POST("/User", middleware.TokenAuth(), handleUser.Create)
 	r.GET("/User/:id", middleware.TokenAuth(), handleUser.Retrieve)
-	r.POST("/User/:id", middleware.TokenAuth(), handleUser.Update)
+	r.PUT("/User/:id", middleware.TokenAuth(), handleUser.Update)
 	r.DELETE("/User/:id", middleware.TokenAuth(), handleUser.Delete)
 
 	/////////////////////////////////////////////////////////////
