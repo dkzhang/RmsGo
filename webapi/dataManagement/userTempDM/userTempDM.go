@@ -7,6 +7,7 @@ type UserTempDM interface {
 	LockSms(userID int) error
 
 	SetPassword(userID int) (passwd string, err error)
+	DelPassword(userID int)
 	ValidatePassword(userID int, passwd string) bool
 
 	CreateToken(userID int) (token string, err error)

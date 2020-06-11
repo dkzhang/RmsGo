@@ -69,6 +69,11 @@ func (rj RedisAndJwt) ValidatePassword(userID int, passwd string) bool {
 	return encryptPassword.CompareHashAndPassword(hPasswd, passwd)
 }
 
+func (rj RedisAndJwt) DelPassword(userID int) {
+	rj.TheRedis.Delete(userPasswordKey(userID))
+	return
+}
+
 func userPasswordKey(userID int) string {
 	return fmt.Sprintf("user_passwd_%d", userID)
 }

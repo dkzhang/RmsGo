@@ -12,6 +12,86 @@ import (
 )
 
 func Login(c *gin.Context) {
+	// Get UserName from gin.Context
+	userName := c.Query("username")
+	passwd := c.Query("passwd")
+
+	// Validate UserName
+	if user.CheckUserName(userName) == false {
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "无效的用户名",
+		})
+		return
+	}
+
+	// Query User from the UserDM
+	userInfo, err := webapi.TheInfras.TheUserDM.QueryUserByName(userName)
+	if err != nil {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserName": userName,
+			"error":    err,
+		}).Error("Query userInfo from database error.")
+
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "该用户不存在",
+		})
+		return
+	}
+
+	// Check if the account status is normal
+	if userInfo.Status != user.StatusNormal {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID":   userInfo.UserID,
+			"UserName": userName,
+			"error":    err,
+		}).Error("userInfo account status is not normal.")
+
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "该用户账号已被停用或删除",
+		})
+		return
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// ValidatePassword
+	if webapi.TheInfras.TheUserTempDM.ValidatePassword(userInfo.UserID, passwd) == false {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID":   userInfo.UserID,
+			"UserName": userName,
+			"error":    err,
+		}).Error("user ValidatePassword return false.")
+
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "密码错误或密码已过期",
+		})
+		return
+	}
+
+	// Delete Password
+	webapi.TheInfras.TheUserTempDM.DelPassword(userInfo.UserID)
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// CreateToken
+	token, err := webapi.TheInfras.TheUserTempDM.CreateToken(userInfo.UserID)
+	if err != nil {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserID": userInfo.UserID,
+			"error":  err,
+		}).Error("TheUserTempDM.CreateToken error.")
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
+		})
+		return
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// All pass
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+		"msg":   "用户名密码验证通过，用户登录成功",
+	})
+	return
 
 }
 
@@ -76,7 +156,7 @@ func ApplyLogin(c *gin.Context) {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
-		}).Error("TheUserTempDM.CreateToken error.")
+		}).Error("TheUserTempDM.SetPassword error.")
 
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
