@@ -142,6 +142,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	// load userUpdatedInfo from request json
 	userUpdatedInfo := user.UserInfo{}
 	err = c.BindJSON(&userUpdatedInfo)
 	if err != nil {
@@ -153,7 +154,26 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	// set updated user's userID, role
 	userUpdatedInfo.UserID = userAccessedInfo.UserID
+	userUpdatedInfo.Role = userAccessedInfo.Role
+
+	// update pre-check
+	msg, err := webapi.TheInfras.TheUserDM.UpdateUserPreCheck(userUpdatedInfo)
+	if err != nil {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginID":     userLoginInfo.UserID,
+			"userAccessedID":  userAccessedInfo.UserID,
+			"userUpdatedInfo": userUpdatedInfo,
+			"error":           err,
+		}).Error("TheUserDM.UpdateUser error.")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": msg,
+		})
+		return
+	}
+
+	// update in userDM
 	err = webapi.TheInfras.TheUserDM.UpdateUser(userUpdatedInfo)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -162,12 +182,13 @@ func Update(c *gin.Context) {
 			"userUpdatedInfo": userUpdatedInfo,
 			"error":           err,
 		}).Error("TheUserDM.UpdateUser error.")
-		c.JSON(http.StatusNotFound, gin.H{
-			"msg": "无法更新该用户",
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
 		})
 		return
 	}
 
+	// all success
 	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":    userLoginInfo,
 		"userAccessedInfo": userAccessedInfo,

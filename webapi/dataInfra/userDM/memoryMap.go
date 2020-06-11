@@ -85,6 +85,54 @@ func (udm MemoryMap) IsUserNameExist(userName string) bool {
 	_, ok := udm.userInfoByName[userName]
 	return ok
 }
+
+func (udm MemoryMap) UpdateUserPreCheck(userNew user.UserInfo) (string, error) {
+	// check user name
+	if user.CheckUserName(userNew.UserName) == false {
+		return "新用户登录名不符合命名规则", fmt.Errorf("UpdateUserPreCheck failed: new username  <%s> illegal", userNew.UserName)
+	}
+
+	//check exist
+	userOld, ok := udm.userInfoByID[userNew.UserID]
+	if ok == false {
+		return "被更新的用户不存在", fmt.Errorf("UpdateUserPreCheck failed since user (userId = %d) not found", userNew.UserID)
+	}
+
+	//check duplicate name
+	if userNew.UserName != userOld.UserName {
+		if udm.IsUserNameExist(userNew.UserName) {
+			return "新用户登录名与其他用户重名", fmt.Errorf("UpdateUserPreCheck failed since userName <%s> is already exist", userNew.UserName)
+		}
+	}
+
+	if userOld.Role == user.RoleApprover {
+		if user.CheckDepartmentCode(userNew.DepartmentCode) == false {
+			return "新用户（审批人）设置的单位代码不符合命名规则",
+				fmt.Errorf("UpdateUserPreCheck failed: user  DepartmentCode <%s> illegal", userNew.DepartmentCode)
+		}
+
+		if userOld.DepartmentCode != userNew.DepartmentCode {
+			for _, u := range udm.userInfoByID {
+				if u.DepartmentCode == userNew.DepartmentCode {
+					return "新用户（审批人）设置的单位代码与其他单位的单位代码重复",
+						fmt.Errorf("UpdateUserPreCheck failed: user  DepartmentCode <%s> duplicate", userNew.DepartmentCode)
+				}
+			}
+		}
+
+		if userOld.Department != userNew.Department {
+			for _, u := range udm.userInfoByID {
+				if u.Department == userNew.Department {
+					return "新用户（审批人）设置的单位名称与其他单位的单位名称重复",
+						fmt.Errorf("UpdateUserPreCheck failed: user  Department <%s> duplicate", userNew.Department)
+				}
+			}
+		}
+	}
+
+	return "", nil
+}
+
 func (udm MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 	// check user name
 	if user.CheckUserName(userNew.UserName) == false {
@@ -95,17 +143,6 @@ func (udm MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 	userOld, ok := udm.userInfoByID[userNew.UserID]
 	if ok == false {
 		return fmt.Errorf("UpdateUser failed since user (userId = %d) not found", userNew.UserID)
-	}
-
-	//check duplicate name
-	if userNew.UserName != userOld.UserName {
-		if udm.IsUserNameExist(userNew.UserName) {
-			return fmt.Errorf("UpdateUser failed since userName <%s> is already exist", userNew.UserName)
-		}
-	}
-
-	if userOld.Role == user.RoleApprover && user.CheckDepartmentCode(userNew.DepartmentCode) == false {
-		return fmt.Errorf("UpdateUser failed: user  DepartmentCode <%s> illegal", userNew.DepartmentCode)
 	}
 
 	//update user info
@@ -146,6 +183,10 @@ func (udm MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 	}
 
 	return nil
+}
+
+func (udm MemoryMap) InsertUserPreCheck(userNew user.UserInfo) (string, error) {
+
 }
 
 func (udm MemoryMap) InsertUser(userNew user.UserInfo) (err error) {

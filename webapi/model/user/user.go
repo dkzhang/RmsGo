@@ -19,10 +19,8 @@ type UserInfo struct {
 
 	Mobile string `db:"mobile" db:"mobile"`
 
-	//项目长=1，审批人=2，调度员=9
 	Role int `db:"role" json:"role"`
 
-	//正常=1，删除=-1，停用=-2
 	Status int `db:"status" json:"status"`
 
 	Remarks string `db:"remarks" json:"remarks"`
