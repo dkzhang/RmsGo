@@ -39,7 +39,7 @@ func AllUsers(c *gin.Context) {
 	case user.RoleProjectChief:
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userID,
-		}).Error("RoleProjectChief has no right to access interface AllUsers.")
+		}).Error("RoleProjectChief has no right to access interface <AllUsers>.")
 
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "当前用户无权访问该接口",
