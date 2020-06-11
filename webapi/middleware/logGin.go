@@ -41,7 +41,7 @@ func LoggerGinToFile() gin.HandlerFunc {
 		// 日志格式
 		logMap.Log(logMap.GIN).WithFields(logrus.Fields{
 			"status_code":  statusCode,
-			"latency_time": latencyTime,
+			"latency_time": latencyTime.String(),
 			"client_ip":    clientIP,
 			"req_method":   reqMethod,
 			"req_uri":      reqUri,
