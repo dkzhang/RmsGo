@@ -1,4 +1,4 @@
-package login
+package handleLogin
 
 import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
