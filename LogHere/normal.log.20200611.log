@@ -1,0 +1,5 @@
+{"UserID":1,"UserName":"ctrl-zhj001","error":null,"level":"error","msg":"user ValidatePassword return false.","time":"2020-06-11 09:13:35"}
+{"UserID":1,"UserName":"ctrl-zhj001","error":null,"level":"error","msg":"user ValidatePassword return false.","time":"2020-06-11 09:17:49"}
+{"UserID":1,"UserName":"ctrl-zhj001","error":null,"level":"error","msg":"user ValidatePassword return false.","time":"2020-06-11 09:26:44"}
+{"UserID":1,"UserName":"ctrl-zhj001","level":"info","msg":"user login success.","time":"2020-06-11 10:42:15"}
+{"UserID":-1,"error":"extractTokenMetadata error: VerifyToken jwt.Parse token error: invalid character '5' after object key:value pair","level":"error","msg":"get userID from gin.Context failed.","time":"2020-06-11 10:49:27"}
