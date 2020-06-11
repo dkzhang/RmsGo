@@ -1,7 +1,6 @@
 package logMap
 
 import (
-	"fmt"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
@@ -28,43 +27,49 @@ func GetLogArray(types ...string) []*logrus.Logger {
 
 const NORMAL = "normal"
 const LOGIN = "login"
+const GIN = "gin"
 const DEFAULT = "default"
 
 var theLogMap map[string](*logrus.Logger)
 
-func bak_init() {
+func init() {
 	theLogMap = make(map[string](*logrus.Logger), 2)
 	theLogMap[NORMAL] = getLog(NORMAL)
 	theLogMap[LOGIN] = getLog(LOGIN)
+	theLogMap[GIN] = getLog(GIN)
 	theLogMap[DEFAULT] = logrus.New()
 }
 
 func getLog(name string) *logrus.Logger {
-	filePath := "./LogHere/"
+	filePath := "./LogHere"
 	fileName := name + ".log"
 	if v, ok := theLogFileConfig.LogFile[name]; ok {
 		filePath = v
 	}
-	normalLog := loggerToFile(filePath, fileName)
-
-	return normalLog
+	return loggerToFile(filePath, fileName)
 }
 
 func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
 	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
 
+	////////////////////
+	// 此处教程有误不应该打开文件，因为后续程序会以fileName作为文件名建立system link，
+	// 如果这里创建打开了同名文件，会提示访问被拒。
+	// 详细用法有待进一步研究
+	// win10 下应该以管理员方式运行，否则提示没有权限创建链接
 	// 写入文件
-	src, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
-	if err != nil {
-		fmt.Println("err", err)
-	}
+	//src, err := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
+	//if err != nil {
+	//	fmt.Println("err", err)
+	//}
+	////////////////////
 
 	// 实例化
 	logger := logrus.New()
 
 	// 设置输出
-	logger.Out = src
+	logger.Out = os.Stdout
 
 	// 设置日志级别
 	logger.SetLevel(logrus.DebugLevel)
@@ -89,8 +94,10 @@ func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
 		// WithMaxAge和WithRotationCount二者只能设置一个
 		// WithMaxAge设置文件清理前的最长保存时间
 		// WithRotationCount设置文件清理前最多保存的个数.
-
 	)
+	if err != nil {
+		logger.Fatalf("rotatelogs.New error: %v", err)
+	}
 
 	writeMap := lfshook.WriterMap{
 		logrus.InfoLevel:  logWriter,
@@ -111,7 +118,7 @@ func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
 	return logger
 }
 
-func LoggerToFile(logFileName string) *logrus.Logger {
+func loggerToFile2(logFileName string) *logrus.Logger {
 	// 实例化
 	logger := logrus.New()
 

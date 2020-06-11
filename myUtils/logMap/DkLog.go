@@ -34,7 +34,7 @@ func Log(types ...string) (dl DkLog) {
 func (dl DkLog) WithFields(fields logrus.Fields) DkLog {
 	return DkLog{
 		loggers: dl.loggers,
-		fields:  dl.fields,
+		fields:  fields,
 	}
 }
 

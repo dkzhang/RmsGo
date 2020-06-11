@@ -1,6 +1,6 @@
 logfile:
-  normal: "D:\\test\\"
-#  normal: "/log/normal/"
-  login: "/log/login/"
+  normal: "./LogHere"
+  login: "./LogHere"
   db: "/log/db/"
+  gin: "./LogHere"
 

@@ -57,8 +57,8 @@ func ApplyLogin(c *gin.Context) {
 	// Check if the account is in sms-locked status
 	if webapi.TheInfras.TheUserTempDM.IsSmsLock(userInfo.UserID) == true {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"UserID": userInfo.UserID,
-			"error":  err,
+			"UserID":   userInfo.UserID,
+			"UserName": userInfo.UserName,
 		}).Error("userInfo account is in sms-locked status.")
 
 		c.JSON(http.StatusForbidden, gin.H{
