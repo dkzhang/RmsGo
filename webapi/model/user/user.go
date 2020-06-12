@@ -2,6 +2,7 @@ package user
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type UserInfo struct {
@@ -63,4 +64,13 @@ func ToJsonString(uis []UserInfo) string {
 		"users": uis,
 	})
 	return string(b)
+}
+
+func StandardizedUserName(name string, departmentCode string) string {
+	if len(name) <= len(departmentCode)+1 ||
+		name[:len(departmentCode)+1] != fmt.Sprintf("%s-", departmentCode) {
+		return fmt.Sprintf("%s-%s", departmentCode, name)
+	} else {
+		return name
+	}
 }

@@ -2,7 +2,7 @@ package PgManage
 
 import (
 	"database/sql"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
 )

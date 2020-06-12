@@ -86,6 +86,8 @@ func (udm MemoryMap) IsUserNameExist(userName string) bool {
 	return ok
 }
 
+// return "",nil if all pre-check pass.
+// if pre-check failed, return msg with Chinese information for the user, return err for program.
 func (udm MemoryMap) UpdateUserPreCheck(userNew user.UserInfo) (string, error) {
 	// check user name
 	if user.CheckUserName(userNew.UserName) == false {
@@ -186,28 +188,34 @@ func (udm MemoryMap) UpdateUser(userNew user.UserInfo) (err error) {
 }
 
 func (udm MemoryMap) InsertUserPreCheck(userNew user.UserInfo) (string, error) {
-
-}
-
-func (udm MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 	// Check username
 	if user.CheckUserName(userNew.UserName) == false {
-		return fmt.Errorf("InsertUser failed: username  <%s> illegal", userNew.UserName)
+		return "新用户登录名不符合命名规则", fmt.Errorf("InsertUserPreCheck failed since userName  <%s> illegal", userNew.UserName)
+	}
+
+	// Check duplicate name
+	if udm.IsUserNameExist(userNew.UserName) {
+		return "新用户登录名与其他用户重名", fmt.Errorf("InsertUserPreCheck failed since userName <%s> is already exist", userNew.UserName)
 	}
 
 	//if user is Approver check department exist
 	if userNew.Role == user.RoleApprover {
+		if user.CheckDepartmentCode(userNew.DepartmentCode) == false {
+			return "新用户（审批人）设置的单位代码不符合命名规则",
+				fmt.Errorf("InsertUserPreCheck failed since user  DepartmentCode <%s> illegal", userNew.DepartmentCode)
+		}
+
 		for _, u := range udm.userInfoByName {
 			if u.Department == userNew.Department || u.DepartmentCode == u.DepartmentCode {
-				return fmt.Errorf("InsertUser failed: new Approver Department is already exist")
+				return "新用户（审批人）设置的单位名称与其他单位的单位名称重复",
+					fmt.Errorf("InsertUserPreCheck failed since new Approver Department is already exist")
 			}
 		}
-
-		if user.CheckDepartmentCode(userNew.DepartmentCode) == false {
-			return fmt.Errorf("InsertUser failed: user  DepartmentCode <%s> illegal", userNew.DepartmentCode)
-		}
 	}
+	return "", nil
+}
 
+func (udm MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 	//Insert to DB
 	err = udm.theUserDB.InsertUser(userNew)
 	if err != nil {

@@ -31,7 +31,6 @@ func Create(c *gin.Context) {
 
 	// Set userCreatedInfo default value in rule
 	userCreatedInfo.UserID = -1
-
 	switch userLoginInfo.Role {
 	case user.RoleApprover:
 		userCreatedInfo.Role = user.RoleProjectChief
@@ -42,6 +41,7 @@ func Create(c *gin.Context) {
 	case user.RoleProjectChief:
 		// Do nothing
 	}
+	userCreatedInfo.UserName = user.StandardizedUserName(userCreatedInfo.UserName, userCreatedInfo.DepartmentCode)
 
 	// Check permission
 	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userCreatedInfo, userCRUD.OPS_CREATE)
@@ -57,6 +57,20 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	// Insert pre-check
+	msg, err := webapi.TheInfras.TheUserDM.InsertUserPreCheck(userCreatedInfo)
+	if err != nil {
+		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginInfo":   userLoginInfo,
+			"userCreatedInfo": userCreatedInfo,
+			"error":           err,
+		}).Error("TheUserDM.InsertUserPreCheck error.")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": msg,
+		})
+		return
+	}
+
 	// Insert into userDM
 	err = webapi.TheInfras.TheUserDM.InsertUser(userCreatedInfo)
 	if err != nil {
@@ -65,8 +79,8 @@ func Create(c *gin.Context) {
 			"userCreatedInfo": userCreatedInfo.UserID,
 			"error":           err,
 		}).Error("TheUserDM.InsertUser error.")
-		c.JSON(http.StatusNotFound, gin.H{
-			"msg": "无法插入该用户",
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
 		})
 		return
 	}
@@ -154,9 +168,10 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	// set updated user's userID, role
+	// set updated user's userID, role, userName
 	userUpdatedInfo.UserID = userAccessedInfo.UserID
 	userUpdatedInfo.Role = userAccessedInfo.Role
+	userUpdatedInfo.UserName = user.StandardizedUserName(userUpdatedInfo.UserName, userUpdatedInfo.DepartmentCode)
 
 	// update pre-check
 	msg, err := webapi.TheInfras.TheUserDM.UpdateUserPreCheck(userUpdatedInfo)
@@ -166,7 +181,7 @@ func Update(c *gin.Context) {
 			"userAccessedID":  userAccessedInfo.UserID,
 			"userUpdatedInfo": userUpdatedInfo,
 			"error":           err,
-		}).Error("TheUserDM.UpdateUser error.")
+		}).Error("TheUserDM.UpdateUserPreCheck error.")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": msg,
 		})

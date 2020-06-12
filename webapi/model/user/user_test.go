@@ -1,6 +1,9 @@
 package user
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestToJsonString(t *testing.T) {
 	user1 := UserInfo{
@@ -30,4 +33,27 @@ func TestToJsonString(t *testing.T) {
 
 	t.Logf("%s \n", ToJsonString([]UserInfo{user1, user2}))
 	t.Logf("%s \n", user1.ToJsonString())
+}
+
+func TestSetUserName(t *testing.T) {
+	var name, dc, sname string
+	dc = "jf"
+
+	name = "zhang"
+	sname = StandardizedUserName(name, dc)
+	if sname != fmt.Sprintf("%s-%s", dc, name) {
+		t.Errorf("test failed: got %s", sname)
+	}
+
+	name = "jf-zh"
+	sname = StandardizedUserName(name, dc)
+	if sname != name {
+		t.Errorf("test failed: got %s", sname)
+	}
+
+	name = "z"
+	sname = StandardizedUserName(name, dc)
+	if sname != fmt.Sprintf("%s-%s", dc, name) {
+		t.Errorf("test failed: got %s", sname)
+	}
 }

@@ -3,9 +3,9 @@ package userDB_test
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/DbManage/PgManage"
-	"github.com/dkzhang/RmsGo/datebaseCommon/config"
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
-	"github.com/dkzhang/RmsGo/webapi/dataManagement/userDB"
+	"github.com/dkzhang/RmsGo/datebaseCommon/security"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"os"
 	"testing"
 
@@ -25,7 +25,7 @@ var _ = BeforeSuite(func() {
 	PgManage.CreateAllTable()
 
 	//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbSecurity = %v \n", config.TheDbSecurity)))
-	By(fmt.Sprintf("config.TheDbSecurity = %v \n", security.TheDbConfig))
+	By(fmt.Sprintf("config.TheDbSecurity = %v \n", security.TheDbSecurity))
 
 	db, err := postgreOps.ConnectToDatabase(security.TheDbConfig.ThePgConfig)
 	Expect(err).ShouldNot(HaveOccurred(), "postgreOps.ConnectToDatabase error: %v", err)
