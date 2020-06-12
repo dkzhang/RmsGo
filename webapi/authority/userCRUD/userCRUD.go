@@ -47,9 +47,24 @@ func init() {
 				return false
 			}
 		},
-		Operation:   OPS_CREATE | OPS_RETRIEVE | OPS_UPDATE | OPS_DELETE,
+		Operation:   OPS_RETRIEVE | OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleRoleApprover to do CRUD ops to all users in the same department",
+		Description: "Allow RoleRoleApprover to do Retrieve & Update ops to all users in the same department",
+	})
+
+	theUserAuthorityTable = append(theUserAuthorityTable, userAuthority{
+		RelationShipBetween: func(userLoginInfo user.UserInfo, userAccessedInfo user.UserInfo) bool {
+			if userLoginInfo.Role == user.RoleApprover &&
+				userAccessedInfo.Role == user.RoleProjectChief &&
+				userLoginInfo.DepartmentCode == userAccessedInfo.DepartmentCode {
+				return true
+			} else {
+				return false
+			}
+		},
+		Operation:   OPS_CREATE | OPS_DELETE,
+		Permission:  true,
+		Description: "Allow RoleRoleApprover to do Create & Delete ops to all RoleProjectChief in the same department",
 	})
 
 	theUserAuthorityTable = append(theUserAuthorityTable, userAuthority{
