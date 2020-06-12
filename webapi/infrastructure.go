@@ -59,7 +59,7 @@ func InitInfrastructure() {
 				"error":     err,
 			}).Error("shortMessageService.LoadSmsSecurity error.")
 		}
-		TheInfras.TheSmsService = shortMessageService.NewSmsService(theSmsSecurity)
+		TheInfras.TheSmsService = shortMessageService.NewSmsTencentCloudService(theSmsSecurity)
 
 		/////////////////////////////////////////////////////////
 		// Database: PostgreSQL and Redis

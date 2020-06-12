@@ -9,17 +9,21 @@ import (
 	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20190711"
 )
 
-type SmsService struct {
+type SmsService interface {
+	SendSMS(msg MessageContent) (resp string, err error)
+}
+
+type SmsTencentCloudService struct {
 	theSmsSecurity SmsSecurity
 }
 
-func NewSmsService(ss SmsSecurity) SmsService {
-	return SmsService{
+func NewSmsTencentCloudService(ss SmsSecurity) SmsService {
+	return SmsTencentCloudService{
 		theSmsSecurity: ss,
 	}
 }
 
-func (smsService SmsService) SendSMS(msg MessageContent) (resp string, err error) {
+func (smsService SmsTencentCloudService) SendSMS(msg MessageContent) (resp string, err error) {
 	credential := common.NewCredential(
 		// os.Getenv("TENCENTCLOUD_SECRET_ID"),
 		// os.Getenv("TENCENTCLOUD_SECRET_KEY"),
