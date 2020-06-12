@@ -206,8 +206,13 @@ func (udm MemoryMap) InsertUserPreCheck(userNew user.UserInfo) (string, error) {
 		}
 
 		for _, u := range udm.userInfoByName {
-			if u.Department == userNew.Department || u.DepartmentCode == u.DepartmentCode {
-				return "新用户（审批人）设置的单位名称与其他单位的单位名称重复",
+			if u.DepartmentCode == userNew.DepartmentCode {
+				return "新用户（审批人）设置的单位代码与其他单位的代码重复",
+					fmt.Errorf("InsertUserPreCheck failed since new Approver Department Code is already exist")
+			}
+
+			if u.Department == userNew.Department {
+				return "新用户（审批人）设置的单位名称与其他单位的名称重复",
 					fmt.Errorf("InsertUserPreCheck failed since new Approver Department is already exist")
 			}
 		}
@@ -222,12 +227,13 @@ func (udm MemoryMap) InsertUser(userNew user.UserInfo) (err error) {
 		return fmt.Errorf("udm.theUserDB.InsertUser error: %v", err)
 	}
 
-	//Query user from DB
-	quser, err := udm.QueryUserByName(userNew.UserName)
+	//Query user from DB to get userID
+	quser, err := udm.theUserDB.QueryUserByName(userNew.UserName)
 	if err != nil {
 		return fmt.Errorf("udm.QueryUserByName error: %v", err)
 	}
 
+	// add user in the memory map
 	udm.userInfoByName[quser.UserName] = &quser
 	udm.userInfoByID[quser.UserID] = &quser
 
