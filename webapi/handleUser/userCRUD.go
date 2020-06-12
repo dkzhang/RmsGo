@@ -208,10 +208,10 @@ func Update(c *gin.Context) {
 		"userLoginInfo":    userLoginInfo,
 		"userAccessedInfo": userAccessedInfo,
 		"userUpdatedInfo":  userUpdatedInfo,
-	}).Info("Delete user success.")
+	}).Info("Update user success.")
 	c.JSON(http.StatusOK, gin.H{
-		"msg":  fmt.Sprintf("更新用户(id=%d)信息成功", userAccessedInfo.UserID),
-		"user": userAccessedInfo,
+		"msg":  fmt.Sprintf("更新用户(id=%d)信息成功", userUpdatedInfo.UserID),
+		"user": userUpdatedInfo,
 	})
 	return
 }

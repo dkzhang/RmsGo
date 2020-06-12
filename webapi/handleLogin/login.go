@@ -95,6 +95,7 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
+		"user":  userInfo,
 		"msg":   "用户名密码验证通过，用户登录成功",
 	})
 	return
