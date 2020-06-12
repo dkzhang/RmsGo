@@ -254,8 +254,8 @@ func (udm MemoryMap) DeleteUser(userID int) (err error) {
 	}
 
 	// delete user from memory map
-	udm.userInfoByID[userID] = nil
-	udm.userInfoByName[userName] = nil
+	delete(udm.userInfoByID, userID)
+	delete(udm.userInfoByName, userName)
 
 	return nil
 }
