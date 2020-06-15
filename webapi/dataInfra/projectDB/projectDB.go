@@ -1,10 +1,10 @@
-package projectDM
+package projectDB
 
 import (
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 )
 
-type ProjectDM interface {
+type ProjectDB interface {
 	QueryProjectByID(projectID int) (project.ProjectInfo, error)
 	QueryProjectByOwner(userID int) []project.ProjectInfo
 	QueryProjectByDepartmentCode(dc string) []project.ProjectInfo
