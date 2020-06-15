@@ -9,7 +9,8 @@ import (
 	"net/http"
 )
 
-func Login(c *gin.Context) {
+func Login(infra *webapi.Infrastructure, c *gin.Context) {
+
 	// Get UserName from gin.Context
 	userName := c.Query("username")
 	passwd := c.Query("passwd")
@@ -27,7 +28,7 @@ func Login(c *gin.Context) {
 	}
 
 	// Query User from the UserDM
-	userInfo, err := webapi.TheInfras.TheUserDM.QueryUserByName(userName)
+	userInfo, err := infra.TheUserDM.QueryUserByName(userName)
 	if err != nil {
 		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserName": userName,
@@ -56,7 +57,7 @@ func Login(c *gin.Context) {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// ValidatePassword
-	if webapi.TheInfras.TheUserTempDM.ValidatePassword(userInfo.UserID, passwd) == false {
+	if infra.TheUserTempDM.ValidatePassword(userInfo.UserID, passwd) == false {
 		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserID":   userInfo.UserID,
 			"UserName": userName,
@@ -69,11 +70,11 @@ func Login(c *gin.Context) {
 	}
 
 	// Delete Password
-	webapi.TheInfras.TheUserTempDM.DelPassword(userInfo.UserID)
+	infra.TheUserTempDM.DelPassword(userInfo.UserID)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// CreateToken
-	token, err := webapi.TheInfras.TheUserTempDM.CreateToken(userInfo.UserID)
+	token, err := infra.TheUserTempDM.CreateToken(userInfo.UserID)
 	if err != nil {
 		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,

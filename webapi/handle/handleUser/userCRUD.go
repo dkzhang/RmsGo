@@ -13,8 +13,8 @@ import (
 	"strconv"
 )
 
-func Create(c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo.Extract(c)
+func Create(infra *webapi.Infrastructure, c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
 	}
@@ -59,7 +59,7 @@ func Create(c *gin.Context) {
 	}
 
 	// Insert pre-check
-	msg, err := webapi.TheInfras.TheUserDM.InsertUserPreCheck(userCreatedInfo)
+	msg, err := infra.TheUserDM.InsertUserPreCheck(userCreatedInfo)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginInfo":   userLoginInfo,
@@ -73,7 +73,7 @@ func Create(c *gin.Context) {
 	}
 
 	// Insert into userDM
-	err = webapi.TheInfras.TheUserDM.InsertUser(userCreatedInfo)
+	err = infra.TheUserDM.InsertUser(userCreatedInfo)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
@@ -98,13 +98,13 @@ func Create(c *gin.Context) {
 
 }
 
-func Retrieve(c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo.Extract(c)
+func Retrieve(infra *webapi.Infrastructure, c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
 	}
 
-	userAccessedInfo, err := extractAccessedUserInfo(c)
+	userAccessedInfo, err := extractAccessedUserInfo(infra, c)
 	if err != nil {
 		return
 	}
@@ -133,13 +133,13 @@ func Retrieve(c *gin.Context) {
 	return
 }
 
-func Update(c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo.Extract(c)
+func Update(infra *webapi.Infrastructure, c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
 	}
 
-	userAccessedInfo, err := extractAccessedUserInfo(c)
+	userAccessedInfo, err := extractAccessedUserInfo(infra, c)
 	if err != nil {
 		return
 	}
@@ -175,7 +175,7 @@ func Update(c *gin.Context) {
 	userUpdatedInfo.UserName = user.StandardizedUserName(userUpdatedInfo.UserName, userUpdatedInfo.DepartmentCode)
 
 	// update pre-check
-	msg, err := webapi.TheInfras.TheUserDM.UpdateUserPreCheck(userUpdatedInfo)
+	msg, err := infra.TheUserDM.UpdateUserPreCheck(userUpdatedInfo)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
@@ -190,7 +190,7 @@ func Update(c *gin.Context) {
 	}
 
 	// update in userDM
-	err = webapi.TheInfras.TheUserDM.UpdateUser(userUpdatedInfo)
+	err = infra.TheUserDM.UpdateUser(userUpdatedInfo)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
@@ -217,13 +217,13 @@ func Update(c *gin.Context) {
 	return
 }
 
-func Delete(c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo.Extract(c)
+func Delete(infra *webapi.Infrastructure, c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
 	}
 
-	userAccessedInfo, err := extractAccessedUserInfo(c)
+	userAccessedInfo, err := extractAccessedUserInfo(infra, c)
 	if err != nil {
 		return
 	}
@@ -241,7 +241,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	err = webapi.TheInfras.TheUserDM.DeleteUser(userAccessedInfo.UserID)
+	err = infra.TheUserDM.DeleteUser(userAccessedInfo.UserID)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
@@ -267,7 +267,7 @@ func Delete(c *gin.Context) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-func extractAccessedUserInfo(c *gin.Context) (userAccessedInfo user.UserInfo, err error) {
+func extractAccessedUserInfo(infra *webapi.Infrastructure, c *gin.Context) (userAccessedInfo user.UserInfo, err error) {
 	idStr := c.Param("id")
 	userAccessedID, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -282,7 +282,7 @@ func extractAccessedUserInfo(c *gin.Context) (userAccessedInfo user.UserInfo, er
 		return user.UserInfo{}, fmt.Errorf("get userAccessedID from gin.Context failed: %v", err)
 	}
 
-	userAccessedInfo, err = webapi.TheInfras.TheUserDM.QueryUserByID(userAccessedID)
+	userAccessedInfo, err = infra.TheUserDM.QueryUserByID(userAccessedID)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userAccessedID": userAccessedID,

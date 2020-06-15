@@ -13,11 +13,7 @@ import (
 	userSecurity "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/security"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"os"
-	"sync"
 )
-
-var TheInfras Infrastructure
 
 type Infrastructure struct {
 	TheSmsService shortMessageService.SmsService
@@ -34,87 +30,91 @@ type Infrastructure struct {
 	TheUserTempDM userTempDM.UserTempDM
 }
 
-var initOnce sync.Once
+type InfraConfigFile struct {
+	LogMapConf string
+	SmsSE      string
+	DbSE       string
+	LoginConf  string
+}
 
-func InitInfrastructure() {
-	initOnce.Do(func() {
-		var err error
+func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
+	theInfras := Infrastructure{}
 
-		/////////////////////////////////////////////////////////
-		// LOG
-		err = logMap.LoadLogConfig(os.Getenv("LogMapConf"))
-		if err != nil {
-			logMap.Log(logMap.DEFAULT, logMap.NORMAL).WithFields(logrus.Fields{
-				"ENV LogMapConf": os.Getenv("LogMapConf"),
-				"error":          err,
-			}).Error("logMap.LoadLogConfig error.")
-		}
+	var err error
 
-		/////////////////////////////////////////////////////////
-		// SMS
-		theSmsSecurity, err := shortMessageService.LoadSmsSecurity(os.Getenv("SmsSE"))
-		if err != nil {
-			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-				"ENV SmsSE": os.Getenv("SmsSE"),
-				"error":     err,
-			}).Error("shortMessageService.LoadSmsSecurity error.")
-		}
-		TheInfras.TheSmsService = shortMessageService.NewSmsTencentCloudService(theSmsSecurity)
+	/////////////////////////////////////////////////////////
+	// LOG
+	err = logMap.LoadLogConfig(icf.LogMapConf)
+	if err != nil {
+		logMap.Log(logMap.DEFAULT, logMap.NORMAL).WithFields(logrus.Fields{
+			"ENV LogMapConf": icf.LogMapConf,
+			"error":          err,
+		}).Error("logMap.LoadLogConfig error.")
+	}
 
-		/////////////////////////////////////////////////////////
-		// Database: PostgreSQL and Redis
-		TheInfras.TheDbSecurity, err = databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
-		if err != nil {
-			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-				"ENV DbSE": os.Getenv("DbConf"),
-				"error":    err,
-			}).Fatal("dbConfig.LoadDbSecurity error.")
-			return
-		}
+	/////////////////////////////////////////////////////////
+	// SMS
+	theSmsSecurity, err := shortMessageService.LoadSmsSecurity(icf.SmsSE)
+	if err != nil {
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"ENV SmsSE": icf.SmsSE,
+			"error":     err,
+		}).Error("shortMessageService.LoadSmsSecurity error.")
+	}
+	theInfras.TheSmsService = shortMessageService.NewSmsTencentCloudService(theSmsSecurity)
 
-		TheInfras.TheDb, err = postgreOps.ConnectToDatabase(TheInfras.TheDbSecurity.ThePgSecurity)
-		if err != nil {
-			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-				"ThePgSecurity": TheInfras.TheDbSecurity.ThePgSecurity,
-				"error":         err,
-			}).Fatal("postgreOps.ConnectToDatabase error.")
-			return
-		}
+	/////////////////////////////////////////////////////////
+	// Database: PostgreSQL and Redis
+	theInfras.TheDbSecurity, err = databaseSecurity.LoadDbSecurity(icf.DbSE)
+	if err != nil {
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"ENV DbSE": icf.DbSE,
+			"error":    err,
+		}).Fatal("dbConfig.LoadDbSecurity error.")
+	}
 
-		opts := &redisOps.RedisOpts{
-			Host: TheInfras.TheDbSecurity.TheRedisSecurity.Host,
-		}
-		TheInfras.TheRedis = redisOps.NewRedis(opts)
+	theInfras.TheDb, err = postgreOps.ConnectToDatabase(theInfras.TheDbSecurity.ThePgSecurity)
+	if err != nil {
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"ThePgSecurity": theInfras.TheDbSecurity.ThePgSecurity,
+			"error":         err,
+		}).Fatal("postgreOps.ConnectToDatabase error.")
+	}
 
-		/////////////////////////////////////////////////////////
-		// Login and UserTempDM
-		TheInfras.TheLoginConfig, err = userConfig.LoadLoginConfig(os.Getenv("LoginConf"))
-		if err != nil {
-			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-				"ENV LoginConf": os.Getenv("LogMapConf"),
-				"error":         err,
-			}).Fatal("userConfig.LoadLoginSecurity error.")
-		}
+	opts := &redisOps.RedisOpts{
+		Host: theInfras.TheDbSecurity.TheRedisSecurity.Host,
+	}
+	theInfras.TheRedis = redisOps.NewRedis(opts)
 
-		TheInfras.TheLoginSecurity, err = userSecurity.LoadLoginSecurity()
-		if err != nil {
-			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-				"error": err,
-			}).Fatal("userConfig.LoadLoginSecurity error.")
-		}
+	/////////////////////////////////////////////////////////
+	// Login and UserTempDM
+	theInfras.TheLoginConfig, err = userConfig.LoadLoginConfig(icf.LoginConf)
+	if err != nil {
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"ENV LoginConf": icf.LoginConf,
+			"error":         err,
+		}).Fatal("userConfig.LoadLoginSecurity error.")
+	}
 
-		TheInfras.TheUserTempDM = userTempDM.NewRedisAndJwt(TheInfras.TheRedis,
-			TheInfras.TheLoginConfig, TheInfras.TheLoginSecurity)
+	theInfras.TheLoginSecurity, err = userSecurity.LoadLoginSecurity()
+	if err != nil {
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"error": err,
+		}).Fatal("userConfig.LoadLoginSecurity error.")
+	}
 
-		/////////////////////////////////////////////////////////
-		// UserDM and UserDB
-		TheInfras.TheUserDB = userDB.NewUserInPostgre(TheInfras.TheDb)
-		TheInfras.TheUserDM, err = userDM.NewMemoryMap(TheInfras.TheUserDB)
-		if err != nil {
-			logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-				"error": err,
-			}).Fatal("userDM.NewMemoryMap error.")
-		}
+	theInfras.TheUserTempDM = userTempDM.NewRedisAndJwt(theInfras.TheRedis,
+		theInfras.TheLoginConfig, theInfras.TheLoginSecurity)
 
-	})
+	/////////////////////////////////////////////////////////
+	// UserDM and UserDB
+	theInfras.TheUserDB = userDB.NewUserInPostgre(theInfras.TheDb)
+	theInfras.TheUserDM, err = userDM.NewMemoryMap(theInfras.TheUserDB)
+	if err != nil {
+		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"error": err,
+		}).Fatal("userDM.NewMemoryMap error.")
+	}
+
+	return &theInfras
 }

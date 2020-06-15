@@ -10,9 +10,9 @@ import (
 
 /////////////////////////////
 // Securing Authenticated Routes
-func TokenAuth() gin.HandlerFunc {
+func TokenAuth(infra *webapi.Infrastructure) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userID, err := webapi.TheInfras.TheUserTempDM.ValidateToken(c.Request)
+		userID, err := infra.TheUserTempDM.ValidateToken(c.Request)
 		if err != nil {
 			logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"error": err,

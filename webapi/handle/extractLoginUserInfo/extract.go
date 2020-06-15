@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func Extract(c *gin.Context) (userLoginInfo user.UserInfo, err error) {
+func Extract(infra *webapi.Infrastructure, c *gin.Context) (userLoginInfo user.UserInfo, err error) {
 	userLoginID := c.GetInt("userID")
 	if userLoginID < 0 {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -23,7 +23,7 @@ func Extract(c *gin.Context) (userLoginInfo user.UserInfo, err error) {
 		return user.UserInfo{}, fmt.Errorf("get userLoginID from gin.Context failed: %v", err)
 	}
 
-	userLoginInfo, err = webapi.TheInfras.TheUserDM.QueryUserByID(userLoginID)
+	userLoginInfo, err = infra.TheUserDM.QueryUserByID(userLoginID)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginID,

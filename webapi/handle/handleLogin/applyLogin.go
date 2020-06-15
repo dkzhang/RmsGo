@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func ApplyLogin(c *gin.Context) {
+func ApplyLogin(infra *webapi.Infrastructure, c *gin.Context) {
 	// Get UserName from gin.Context
 	userName := c.Query("username")
 
@@ -24,7 +24,7 @@ func ApplyLogin(c *gin.Context) {
 	}
 
 	// Query User from the UserDM
-	userInfo, err := webapi.TheInfras.TheUserDM.QueryUserByName(userName)
+	userInfo, err := infra.TheUserDM.QueryUserByName(userName)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserName": userName,
@@ -51,7 +51,7 @@ func ApplyLogin(c *gin.Context) {
 	}
 
 	// Check if the account is in sms-locked status
-	if webapi.TheInfras.TheUserTempDM.IsSmsLock(userInfo.UserID) == true {
+	if infra.TheUserTempDM.IsSmsLock(userInfo.UserID) == true {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID":   userInfo.UserID,
 			"UserName": userInfo.UserName,
@@ -67,7 +67,7 @@ func ApplyLogin(c *gin.Context) {
 	// All verifications pass
 
 	//Generate temporary password
-	passwd, err := webapi.TheInfras.TheUserTempDM.SetPassword(userInfo.UserID)
+	passwd, err := infra.TheUserTempDM.SetPassword(userInfo.UserID)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
@@ -81,10 +81,10 @@ func ApplyLogin(c *gin.Context) {
 	}
 
 	// Send temporary password to user's mobile phone by SMS
-	resp, err := webapi.TheInfras.TheSmsService.SendSMS(shortMessageService.MessageContent{
+	resp, err := infra.TheSmsService.SendSMS(shortMessageService.MessageContent{
 		PhoneNumberSet: []string{shortMessageService.ChineseMobile(userInfo.Mobile)},
 		TemplateParamSet: []string{userInfo.ChineseName, passwd,
-			fmt.Sprintf("%.1f", webapi.TheInfras.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
+			fmt.Sprintf("%.1f", infra.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
 	})
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -105,7 +105,7 @@ func ApplyLogin(c *gin.Context) {
 	}).Info("TheSmsService.SendSMS success.")
 
 	// Set SMS lock
-	webapi.TheInfras.TheUserTempDM.LockSms(userInfo.UserID)
+	infra.TheUserTempDM.LockSms(userInfo.UserID)
 	if err != nil {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
