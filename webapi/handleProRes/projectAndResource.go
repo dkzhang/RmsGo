@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type NewProResWA struct {
+type AppNewProResWA struct {
 	ProjectID     int
 	ApplicationID int
 	ProjectName   string
@@ -16,6 +16,18 @@ type NewProResWA struct {
 
 func ApplyNewProRes(c *gin.Context) {
 
+}
+
+type AppExResWA struct {
+}
+
+type AppReComWA struct {
+}
+
+type AppReStoWA struct {
+}
+
+type AppMeterWA struct {
 }
 
 // Set up a JSON-based Application struct in a unified format
@@ -34,6 +46,7 @@ type AppOpsRecord struct {
 	OpsUserID          int
 	OpsUserChineseName int
 	Action             int
+	ActionStr          string
 	OpsDatetime        time.Time
 	BasicInfo          string
 	ExtraInfo          string
@@ -48,7 +61,7 @@ const (
 
 const (
 	AppTypeNew           = 1
-	AppTypeExpansion     = 2
+	AppTypeChange        = 2
 	AppTypeReturnCompute = 3
 	AppTypeReturnStorage = 4
 	AppTypeMetering      = 5
@@ -63,8 +76,40 @@ type ProjectInfo struct {
 	ChiefID          int
 	ChiefChineseName string
 
+	Status int
+
+	ResourceExpected Resource
+	ResourceAcquired Resource
+
 	CreateDateTime  time.Time
 	ArchiveDateTime time.Time
+}
+
+type Resource struct {
+	CpuNodes    int
+	GpuNodes    int
+	StorageSize int
+}
+
+type ResourceDetails struct {
+	CpuNodes      int
+	CpuNodeBefore string
+	CpuNodeAfter  string
+	GpuNodes      int
+	GpuNodeBefore string
+	GpuNodeAfter  string
+	StorageSize   int
+	StorageBefore int
+	StorageAfter  int
+}
+
+type ResourceAllocationRecord struct {
+	ProjectID       int
+	AllocationID    int
+	AllocResDetails ResourceDetails
+	UserID          int
+	UserChineseName string
+	Datetime        time.Time
 }
 
 type ResourceApplication struct {
@@ -74,18 +119,3 @@ type ResourceApplication struct {
 	StartDate   time.Time
 	EndDate     time.Time
 }
-
-type ResourceExpansionApplication struct {
-	CpuNodes    int
-	GpuNodes    int
-	StorageSize int
-	EndDate     time.Time
-	Type        int
-}
-
-const (
-	ResExTypeCPU = 1 << iota
-	ResExTypeGPU
-	ResExTypeStorage
-	ResExTypeDate
-)
