@@ -14,6 +14,8 @@ WORKDIR /go/release
 ADD . .
 
 RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -installsuffix cgo -o app main.go
+# We can omit the symbol table, debug information and the DWARF table with the following flags: -s -w
+# in order to decrease the size of executable file.
 
 FROM scratch as prod
 
