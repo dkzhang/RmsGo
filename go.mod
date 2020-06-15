@@ -9,6 +9,7 @@ require (
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/gomodule/redigo v1.8.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
+	github.com/jinzhu/gorm v1.9.13
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
@@ -23,7 +24,7 @@ require (
 	github.com/tebeka/strftime v0.1.4 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.180+incompatible
 	github.com/twinj/uuid v1.0.0
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
 	google.golang.org/appengine v1.6.6 // indirect
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
 	gopkg.in/yaml.v2 v2.2.8

@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/dkzhang/RmsGo/webapi"
-	"github.com/dkzhang/RmsGo/webapi/handleLogin"
-	"github.com/dkzhang/RmsGo/webapi/handleUser"
+	"github.com/dkzhang/RmsGo/webapi/handle/handleLogin"
+	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
 	"github.com/gin-gonic/gin"
 )
