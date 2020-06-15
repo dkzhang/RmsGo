@@ -3,13 +3,14 @@ package handleUser
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func RetrieveUserLogin(c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo(c)
+	userLoginInfo, err := extractLoginUserInfo.Extract(c)
 	if err != nil {
 		return
 	}
