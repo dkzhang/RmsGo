@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -10,7 +10,7 @@ import (
 
 /////////////////////////////
 // Securing Authenticated Routes
-func TokenAuth(infra *webapi.Infrastructure) gin.HandlerFunc {
+func TokenAuth(infra *infrastructure.Infrastructure) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID, err := infra.TheUserTempDM.ValidateToken(c.Request)
 		if err != nil {

@@ -2,14 +2,14 @@ package handleLogin
 
 import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
-func Login(infra *webapi.Infrastructure, c *gin.Context) {
+func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// Get UserName from gin.Context
 	userName := c.Query("username")

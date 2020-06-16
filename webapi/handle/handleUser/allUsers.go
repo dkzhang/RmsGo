@@ -3,14 +3,14 @@ package handleUser
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
-func AllUsers(infra *webapi.Infrastructure, c *gin.Context) {
+func AllUsers(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userID := c.GetInt("userID")
 	if userID < 0 {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{

@@ -3,14 +3,14 @@ package extractLoginUserInfo
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi"
+	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
-func Extract(infra *webapi.Infrastructure, c *gin.Context) (userLoginInfo user.UserInfo, err error) {
+func Extract(infra *infrastructure.Infrastructure, c *gin.Context) (userLoginInfo user.UserInfo, err error) {
 	userLoginID := c.GetInt("userID")
 	if userLoginID < 0 {
 		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{

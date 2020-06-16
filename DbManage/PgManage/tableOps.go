@@ -33,6 +33,10 @@ func SeedAllTable(db *sqlx.DB) {
 	seedUserTable(db)
 }
 
+func ImportFromFile(db *sqlx.DB) {
+
+}
+
 func seedUserTable(db *sqlx.DB) {
 	theUserDB := userDB.NewUserInPostgre(db)
 	theUserDB.InsertUser(user.UserInfo{

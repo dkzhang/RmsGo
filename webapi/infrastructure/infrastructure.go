@@ -1,4 +1,4 @@
-package webapi
+package infrastructure
 
 import (
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"

@@ -1,4 +1,4 @@
-package main
+package DbManage
 
 import (
 	"fmt"
@@ -6,18 +6,32 @@ import (
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/dbManage/pgManage"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"os"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Printf("parameter input error. Expected at least 1 patameter.")
-		return
-	}
+func CreateAllTable() {
+	fmt.Printf("删除所有表格并重建 \n")
+	db := connectToDatabase()
+	PgManage.CreateAllTable(db)
+}
 
-	/////////////////////////////////////////////////////////
-	// Database: PostgreSQL
+func SeedAllTable() {
+	fmt.Printf("用测试数据初始化所有数据库表")
+	db := connectToDatabase()
+	PgManage.CreateAllTable(db)
+	PgManage.SeedAllTable(db)
+}
+
+func ImportFromFile(tableName, fileName string) {
+	fmt.Printf("表名，文件名：读取指定csv文件并将数据导入至指定数据表")
+	db := connectToDatabase()
+	PgManage.CreateAllTable(db)
+	PgManage.ImportFromFile(db)
+}
+
+func connectToDatabase() (db *sqlx.DB) {
 	theDbSecurity, err := databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
 	if err != nil {
 		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
@@ -27,29 +41,15 @@ func main() {
 		return
 	}
 
-	db, err := postgreOps.ConnectToDatabase(theDbSecurity.ThePgSecurity)
+	db, err = postgreOps.ConnectToDatabase(theDbSecurity.ThePgSecurity)
 	if err != nil {
 		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"error": err,
-		}).Info("postgreSQL.ConnectToDatabase error.")
+		}).Fatal("postgreSQL.ConnectToDatabase error.")
 	} else {
 		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"db": db,
 		}).Info("postgreSQL.ConnectToDatabase success.")
 	}
-	defer db.Close()
-
-	/////////////////////////////////////////////////////////
-
-	switch os.Args[1] {
-	case "create_all":
-		fmt.Printf("删除所有表格并重建 \n")
-		PgManage.CreateAllTable(db)
-	case "seed_all":
-		fmt.Printf("无参：用测试数据初始化所有数据库表")
-		PgManage.CreateAllTable(db)
-		PgManage.SeedAllTable(db)
-	case "import_from_file":
-		fmt.Printf("表名，文件名：读取指定csv文件并将数据导入至指定数据表")
-	}
+	return db
 }

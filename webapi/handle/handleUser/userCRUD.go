@@ -3,9 +3,9 @@ package handleUser
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi"
 	"github.com/dkzhang/RmsGo/webapi/authority/userCRUD"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
+	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,7 +13,7 @@ import (
 	"strconv"
 )
 
-func Create(infra *webapi.Infrastructure, c *gin.Context) {
+func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
@@ -98,7 +98,7 @@ func Create(infra *webapi.Infrastructure, c *gin.Context) {
 
 }
 
-func Retrieve(infra *webapi.Infrastructure, c *gin.Context) {
+func Retrieve(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
@@ -133,7 +133,7 @@ func Retrieve(infra *webapi.Infrastructure, c *gin.Context) {
 	return
 }
 
-func Update(infra *webapi.Infrastructure, c *gin.Context) {
+func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
@@ -217,7 +217,7 @@ func Update(infra *webapi.Infrastructure, c *gin.Context) {
 	return
 }
 
-func Delete(infra *webapi.Infrastructure, c *gin.Context) {
+func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
@@ -267,7 +267,7 @@ func Delete(infra *webapi.Infrastructure, c *gin.Context) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-func extractAccessedUserInfo(infra *webapi.Infrastructure, c *gin.Context) (userAccessedInfo user.UserInfo, err error) {
+func extractAccessedUserInfo(infra *infrastructure.Infrastructure, c *gin.Context) (userAccessedInfo user.UserInfo, err error) {
 	idStr := c.Param("id")
 	userAccessedID, err := strconv.Atoi(idStr)
 	if err != nil {

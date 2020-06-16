@@ -11,6 +11,6 @@ then
     echo "PostgreSQL started"
 fi
 
-go run ./DbManage/manage.go seed_all
+./rms seed_all
 
 exec "$@"
