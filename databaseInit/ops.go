@@ -5,9 +5,8 @@ import (
 	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
-	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/jmoiron/sqlx"
-	"github.com/sirupsen/logrus"
+	"log"
 	"os"
 )
 
@@ -34,23 +33,16 @@ func ImportFromFile(tableName, fileName string) {
 func connectToDatabase() (db *sqlx.DB) {
 	theDbSecurity, err := databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
 	if err != nil {
-		//log.
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-			"ENV DbSE": os.Getenv("DbSE"),
-			"error":    err,
-		}).Fatal("dbConfig.LoadDbSecurity error.")
+		log.Fatalf("dbConfig.LoadDbSecurity error, ENV DbSE = %s, error = %v", os.Getenv("DbSE"), err)
 		return
 	}
 
 	db, err = postgreOps.ConnectToDatabase(theDbSecurity.ThePgSecurity)
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-			"error": err,
-		}).Fatal("postgreSQL.ConnectToDatabase error.")
+		log.Fatalf("postgreSQL.ConnectToDatabase error,error = %v", err)
+		return
 	} else {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-			"db": db,
-		}).Info("postgreSQL.ConnectToDatabase success.")
+		log.Printf("postgreSQL.ConnectToDatabase success, db = %v.", db)
 	}
 	return db
 }

@@ -25,10 +25,12 @@ func GetLogArray(types ...string) []*logrus.Logger {
 	return theLoggers
 }
 
-const NORMAL = "normal"
-const LOGIN = "login"
-const GIN = "gin"
-const DEFAULT = "default"
+const (
+	NORMAL  = "normal"
+	LOGIN   = "login"
+	GIN     = "gin"
+	DEFAULT = "default"
+)
 
 var theLogMap map[string](*logrus.Logger)
 
