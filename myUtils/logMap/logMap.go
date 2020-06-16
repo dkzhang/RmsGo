@@ -44,22 +44,21 @@ func NewLogMap(configFile string) (theLogMap LogMap) {
 		logrus.Fatalf("LoadLogConfig error: %v", err)
 	}
 
-	theLogMap.LoggerMap = make(map[string](*logrus.Logger), 4)
-	theLogMap.LoggerMap[NORMAL] = getLog(theLogMap.LogPathMap, NORMAL)
-	theLogMap.LoggerMap[LOGIN] = getLog(theLogMap.LogPathMap, LOGIN)
-	theLogMap.LoggerMap[GIN] = getLog(theLogMap.LogPathMap, GIN)
+	theLogMap.LoggerMap = make(map[string](*logrus.Logger), len(theLogMap.LogPathMap)+1)
+	for t, p := range theLogMap.LogPathMap {
+		theLogMap.LoggerMap[t] = loggerToFile(p, t+".log")
+	}
 	theLogMap.LoggerMap[DEFAULT] = logrus.New()
 
 	return theLogMap
 }
 
-func getLog(logPathMap map[string]string, name string) *logrus.Logger {
-	filePath := "./LogUnknownType"
-	fileName := name + ".log"
-	if v, ok := logPathMap[name]; ok {
-		filePath = v
+func (theLogMap LogMap) getLog(name string) *logrus.Logger {
+	if v, ok := theLogMap.LoggerMap[name]; ok {
+		return v
+	} else {
+		return loggerToFile("./LogUnknownType"+name, name+".log")
 	}
-	return loggerToFile(filePath, fileName)
 }
 
 func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
