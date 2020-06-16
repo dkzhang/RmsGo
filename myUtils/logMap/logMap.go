@@ -41,7 +41,7 @@ func init() {
 }
 
 func getLog(name string) *logrus.Logger {
-	filePath := "./LogHere"
+	filePath := "./LogDefault"
 	fileName := name + ".log"
 	if v, ok := theLogFileConfig.LogFile[name]; ok {
 		filePath = v

@@ -34,6 +34,7 @@ func ImportFromFile(tableName, fileName string) {
 func connectToDatabase() (db *sqlx.DB) {
 	theDbSecurity, err := databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
 	if err != nil {
+		//log.
 		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ENV DbSE": os.Getenv("DbSE"),
 			"error":    err,

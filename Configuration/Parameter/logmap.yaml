@@ -1,6 +1,6 @@
 logfile:
-  normal: "/LogHere"
-  login: "/LogHere"
-  db: "/LogHere"
-  gin: "/LogHere"
+  normal: "/rmsLog/normal"
+  login: "/rmsLog/login"
+  db: "/rmsLog/db"
+  gin: "/rmsLog/gin"
 
