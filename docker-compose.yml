@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: webapi/Dockerfile
+    command: go run main.go
+    ports:
+      - 8081:8080
+    networks:
+      - backend
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+    configs:
+      - LogMapConf
+      - LoginConf
+    secrets:
+      - SmsSE
+      - DbSE
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=rmsu
+      - POSTGRES_PASSWORD=rmsp
+      - POSTGRES_DB=rms_db
+    networks:
+      - backend
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379"
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+configs:
+  LogMapConf:
+    file: ./Configuration/Parameter/logmap.yaml
+  LoginConf:
+    file: ./Configuration/Parameter/login.yaml
+
+secrets:
+  SmsSE:
+    file: ./Configuration/Security/sms.yaml
+  DbSE:
+    file: ./Configuration/Security/database.yaml
+
+networks:
+#  frontend:
+  backend:

@@ -18,11 +18,10 @@ func main() {
 
 	/////////////////////////////////////////////////////////
 	// Database: PostgreSQL
-	theDbSecurity, err := databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
+	theDbSecurity, err := databaseSecurity.LoadDbSecurity("/run/secrets/DbSE")
 	if err != nil {
 		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-			"ENV DbSE": os.Getenv("DbConf"),
-			"error":    err,
+			"error": err,
 		}).Fatal("dbConfig.LoadDbSecurity error.")
 		return
 	}
@@ -44,7 +43,6 @@ func main() {
 	switch os.Args[1] {
 	case "create_all":
 		fmt.Printf("删除所有表格并重建 \n")
-		os.Setenv("DbConf", "./../Configuration/Security/database.yaml")
 		PgManage.CreateAllTable(db)
 	case "seed_all":
 		fmt.Printf("无参：用测试数据初始化所有数据库表")
