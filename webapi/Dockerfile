@@ -1,20 +1,17 @@
 FROM golang:latest
 
-RUN apt-get update && apt-get install -y netcat
+RUN apt-get update && apt-get install -y netcat git
 
 ENV GO111MODULE on
-ENV GOPROXY GOPROXY=https://goproxy.cn
+ENV GOPROXY https://goproxy.cn
 
-WORKDIR /go/rms
+WORKDIR /go/src
+RUN git clone https://github.com/dkzhang/RmsGo.git
 
-ADD go.mod .
-ADD go.sum .
+WORKDIR /go/src/RmsGo
 RUN go mod download
 
-ADD . .
+RUN mkdir /rmsConfig && \
+    cp ./Configuration/Parameter/* /rmsConfig
 
-WORKDIR /rmsConfig
-ADD . ./Configuration/Parameter/.
-
-WORKDIR /go/rms
-ENTRYPOINT ["/go/rms/webapi/entrypoint.sh"]
+ENTRYPOINT ["/go/src/RmsGo/webapi/entrypoint.sh"]
