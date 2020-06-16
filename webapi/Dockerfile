@@ -4,13 +4,14 @@ RUN apt-get update && apt-get install -y netcat git
 
 ENV GO111MODULE on
 ENV GOPROXY https://goproxy.cn
+ENV DKZ $GOPATH/src/github.com/dkzhang
 
-WORKDIR /go/src
+WORKDIR $DKZ
 RUN git clone https://github.com/dkzhang/RmsGo.git
 
-WORKDIR /go/src/RmsGo
+WORKDIR $DKZ/RmsGo
 RUN go mod download
 
-RUN chmod +x /go/src/RmsGo/webapi/entrypoint.sh
+RUN chmod +x $DKZ/RmsGo/webapi/entrypoint.sh
 
-ENTRYPOINT ["/go/src/RmsGo/webapi/entrypoint.sh"]
+ENTRYPOINT ["$DKZ/RmsGo/webapi/entrypoint.sh"]
