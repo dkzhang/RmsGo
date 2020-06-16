@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/DbManage"
+	"github.com/dkzhang/RmsGo/databaseInit"
 	"github.com/dkzhang/RmsGo/webapi"
 	"os"
 )
@@ -15,11 +15,11 @@ func main() {
 
 	switch os.Args[1] {
 	case "create_all":
-		DbManage.CreateAllTable()
+		databaseInit.CreateAllTable()
 	case "seed_all":
-		DbManage.SeedAllTable()
+		databaseInit.SeedAllTable()
 	case "import_from_file":
-		DbManage.ImportFromFile("", "")
+		databaseInit.ImportFromFile("", "")
 	case "run":
 		webapi.Serve()
 	}

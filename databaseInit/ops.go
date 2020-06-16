@@ -1,10 +1,10 @@
-package DbManage
+package databaseInit
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
-	"github.com/dkzhang/RmsGo/dbManage/pgManage"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -14,21 +14,21 @@ import (
 func CreateAllTable() {
 	fmt.Printf("删除所有表格并重建 \n")
 	db := connectToDatabase()
-	PgManage.CreateAllTable(db)
+	pgOps.CreateAllTable(db)
 }
 
 func SeedAllTable() {
 	fmt.Printf("用测试数据初始化所有数据库表")
 	db := connectToDatabase()
-	PgManage.CreateAllTable(db)
-	PgManage.SeedAllTable(db)
+	pgOps.CreateAllTable(db)
+	pgOps.SeedAllTable(db)
 }
 
 func ImportFromFile(tableName, fileName string) {
 	fmt.Printf("表名，文件名：读取指定csv文件并将数据导入至指定数据表")
 	db := connectToDatabase()
-	PgManage.CreateAllTable(db)
-	PgManage.ImportFromFile(db)
+	pgOps.CreateAllTable(db)
+	pgOps.ImportFromFile(db)
 }
 
 func connectToDatabase() (db *sqlx.DB) {
