@@ -10,10 +10,10 @@ import (
 
 func main() {
 	infra := webapi.NewInfrastructure(webapi.InfraConfigFile{
-		LogMapConf: "",
-		SmsSE:      "",
-		DbSE:       "",
-		LoginConf:  "",
+		LogMapConf: "D:\\rms_config\\logmap.yaml",
+		SmsSE:      "D:\\rms_config\\sms.yaml",
+		DbSE:       "D:\\rms_config\\database.yaml",
+		LoginConf:  "D:\\rms_config\\login.yaml",
 	})
 
 	r := gin.Default()
@@ -34,5 +34,5 @@ func main() {
 	r.DELETE("/User/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Delete(infra, c) })
 
 	/////////////////////////////////////////////////////////////
-	r.Run()
+	r.Run(":8080")
 }
