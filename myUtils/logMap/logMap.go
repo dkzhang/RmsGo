@@ -9,21 +9,21 @@ import (
 	"time"
 )
 
-func GetLogArray(types ...string) []*logrus.Logger {
-	theLoggers := make([]*logrus.Logger, len(types))
-
-	for i, t := range types {
-		if l, ok := theLogMap[t]; ok {
-			theLoggers[i] = l
-		} else {
-			theLogMap[DEFAULT].WithFields(logrus.Fields{
-				"log name": t,
-			}).Info("Request a log name that has not been configured and returns the default GetLog.")
-			theLoggers[i] = theLogMap[DEFAULT]
-		}
-	}
-	return theLoggers
-}
+//func GetLogArray(types ...string) []*logrus.Logger {
+//	theLoggers := make([]*logrus.Logger, len(types))
+//
+//	for i, t := range types {
+//		if l, ok := theLogMap[t]; ok {
+//			theLoggers[i] = l
+//		} else {
+//			theLogMap[DEFAULT].WithFields(logrus.Fields{
+//				"log name": t,
+//			}).Info("Request a log name that has not been configured and returns the default GetLog.")
+//			theLoggers[i] = theLogMap[DEFAULT]
+//		}
+//	}
+//	return theLoggers
+//}
 
 const (
 	NORMAL  = "normal"
@@ -32,20 +32,31 @@ const (
 	DEFAULT = "default"
 )
 
-var theLogMap map[string](*logrus.Logger)
-
-func init() {
-	theLogMap = make(map[string](*logrus.Logger), 2)
-	theLogMap[NORMAL] = getLog(NORMAL)
-	theLogMap[LOGIN] = getLog(LOGIN)
-	theLogMap[GIN] = getLog(GIN)
-	theLogMap[DEFAULT] = logrus.New()
+type LogMap struct {
+	LogPathMap map[string]string           `yaml:"logPath,omitempty"`
+	LoggerMap  map[string](*logrus.Logger) `yaml:"-"`
 }
 
-func getLog(name string) *logrus.Logger {
-	filePath := "./LogDefault"
+func NewLogMap(configFile string) (theLogMap LogMap) {
+	var err error
+	theLogMap, err = LoadLogConfig(configFile)
+	if err != nil {
+		logrus.Fatalf("LoadLogConfig error: %v", err)
+	}
+
+	theLogMap.LoggerMap = make(map[string](*logrus.Logger), 4)
+	theLogMap.LoggerMap[NORMAL] = getLog(theLogMap.LogPathMap, NORMAL)
+	theLogMap.LoggerMap[LOGIN] = getLog(theLogMap.LogPathMap, LOGIN)
+	theLogMap.LoggerMap[GIN] = getLog(theLogMap.LogPathMap, GIN)
+	theLogMap.LoggerMap[DEFAULT] = logrus.New()
+
+	return theLogMap
+}
+
+func getLog(logPathMap map[string]string, name string) *logrus.Logger {
+	filePath := "./LogUnknownType"
 	fileName := name + ".log"
-	if v, ok := theLogFileConfig.LogFile[name]; ok {
+	if v, ok := logPathMap[name]; ok {
 		filePath = v
 	}
 	return loggerToFile(filePath, fileName)

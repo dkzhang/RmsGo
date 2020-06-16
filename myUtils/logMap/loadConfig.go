@@ -7,21 +7,15 @@ import (
 )
 
 // TODO: cancel log variable as global variable.
-var theLogFileConfig LogFileConfig
 
-type LogFileConfig struct {
-	LogFile map[string]string `yaml:"logfile,omitempty"`
-}
-
-func LoadLogConfig(filepath string) (err error) {
-
+func LoadLogConfig(filepath string) (theLogMap LogMap, err error) {
 	logConfFile, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return fmt.Errorf("LoadLogConfig ioutil.ReadFile error: %v", err)
+		return LogMap{}, fmt.Errorf("LoadLogConfig ioutil.ReadFile error: %v", err)
 	}
-	err = yaml.Unmarshal(logConfFile, &theLogFileConfig)
+	err = yaml.Unmarshal(logConfFile, &theLogMap)
 	if err != nil {
-		return fmt.Errorf("LoadLogConfig yaml.Unmarshal error: %v", err)
+		return LogMap{}, fmt.Errorf("LoadLogConfig yaml.Unmarshal error: %v", err)
 	}
-	return nil
+	return theLogMap, nil
 }

@@ -7,23 +7,23 @@ type DkLog struct {
 	fields  logrus.Fields
 }
 
-func Log(types ...string) (dl DkLog) {
+func (theLogMap LogMap) Log(types ...string) (dl DkLog) {
 	dl = DkLog{
 		loggers: make([]*logrus.Logger, len(types)),
 		fields:  nil,
 	}
 
 	if len(types) == 0 {
-		dl.loggers = []*logrus.Logger{theLogMap[DEFAULT]}
+		dl.loggers = []*logrus.Logger{theLogMap.LoggerMap[DEFAULT]}
 	} else {
 		for i, t := range types {
-			if l, ok := theLogMap[t]; ok {
+			if l, ok := theLogMap.LoggerMap[t]; ok {
 				dl.loggers[i] = l
 			} else {
-				theLogMap[DEFAULT].WithFields(logrus.Fields{
+				theLogMap.LoggerMap[DEFAULT].WithFields(logrus.Fields{
 					"log name": t,
 				}).Info("Request a log name that has not been configured and returns the default GetLog.")
-				dl.loggers[i] = theLogMap[DEFAULT]
+				dl.loggers[i] = theLogMap.LoggerMap[DEFAULT]
 			}
 		}
 	}
