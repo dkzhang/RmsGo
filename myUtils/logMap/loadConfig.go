@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 )
 
+// TODO: cancel log variable as global variable.
 var theLogFileConfig LogFileConfig
 
 type LogFileConfig struct {
