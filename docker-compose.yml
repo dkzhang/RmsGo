@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: webapi/Dockerfile
-    command: rms run
+    command: ./rms run
     ports:
       - 8081:8080
     networks:
