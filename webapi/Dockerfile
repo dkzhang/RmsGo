@@ -14,4 +14,4 @@ RUN go mod download
 
 RUN chmod +x $DKZ/RmsGo/webapi/entrypoint.sh
 
-ENTRYPOINT ["$DKZ/RmsGo/webapi/entrypoint.sh"]
+ENTRYPOINT ["/go/src/github.com/dkzhang/RmsGo/webapi/entrypoint.sh"]
