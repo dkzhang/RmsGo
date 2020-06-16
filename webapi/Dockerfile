@@ -11,4 +11,6 @@ RUN git clone https://github.com/dkzhang/RmsGo.git
 WORKDIR /go/src/RmsGo
 RUN go mod download
 
+RUN chmod +x /go/src/RmsGo/webapi/entrypoint.sh
+
 ENTRYPOINT ["/go/src/RmsGo/webapi/entrypoint.sh"]
