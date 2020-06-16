@@ -1,0 +1,3 @@
+{"ENV LogMapConf":"","error":"LoadLogConfig ioutil.ReadFile error: open : The system cannot find the file specified.","level":"error","msg":"logMap.LoadLogConfig error.","time":"2020-06-16 15:03:39"}
+{"ENV LogMapConf":"","error":"LoadLogConfig ioutil.ReadFile error: open : The system cannot find the file specified.","level":"error","msg":"logMap.LoadLogConfig error.","time":"2020-06-16 15:25:20"}
+{"ENV LogMapConf":"","error":"LoadLogConfig ioutil.ReadFile error: open : The system cannot find the file specified.","level":"error","msg":"logMap.LoadLogConfig error.","time":"2020-06-16 15:37:28"}

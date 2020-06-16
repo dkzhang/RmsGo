@@ -13,8 +13,8 @@ services:
     env_file:
       - ./.env.dev
     volumes:
-      - ./Configuration/Parameter:/rmsConfig
-      - webapi_log_data:/LogHere
+      - ./Configuration/Parameter:/rmsConfig:ro
+      - ./LogHere:/LogHere
     secrets:
       - SmsSE
       - DbSE
@@ -40,7 +40,6 @@ services:
 
 volumes:
   postgres_data:
-  webapi_log_data:
 
 secrets:
   SmsSE:
