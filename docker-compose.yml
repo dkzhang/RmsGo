@@ -14,9 +14,6 @@ services:
       - ./.env.dev
     depends_on:
       - db
-    configs:
-      - LogMapConf
-      - LoginConf
     secrets:
       - SmsSE
       - DbSE
@@ -39,12 +36,6 @@ services:
 
 volumes:
   postgres_data:
-
-configs:
-  LogMapConf:
-    file: ./Configuration/Parameter/logmap.yaml
-  LoginConf:
-    file: ./Configuration/Parameter/login.yaml
 
 secrets:
   SmsSE:

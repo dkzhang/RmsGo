@@ -13,4 +13,8 @@ RUN go mod download
 
 ADD . .
 
+WORKDIR /rmsConfig
+ADD . ./Configuration/Parameter/.
+
+WORKDIR /go/rms
 ENTRYPOINT ["/go/rms/webapi/entrypoint.sh"]

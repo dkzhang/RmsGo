@@ -10,10 +10,10 @@ import (
 
 func main() {
 	infra := webapi.NewInfrastructure(webapi.InfraConfigFile{
-		LogMapConf: "D:\\rms_config\\logmap.yaml",
-		SmsSE:      "D:\\rms_config\\sms.yaml",
-		DbSE:       "D:\\rms_config\\database.yaml",
-		LoginConf:  "D:\\rms_config\\login.yaml",
+		LogMapConf: "/rmsConfig/logmap.yaml",
+		SmsSE:      "/run/secrets/SmsSE",
+		DbSE:       "/run/secrets/DbSE",
+		LoginConf:  "/rmsConfig/login.yaml",
 	})
 
 	r := gin.Default()
