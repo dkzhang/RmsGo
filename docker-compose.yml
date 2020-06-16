@@ -12,11 +12,13 @@ services:
       - backend
     env_file:
       - ./.env.dev
-    depends_on:
-      - db
+    volumes:
+      - ./Configuration/Parameter:/rmsConfig
     secrets:
       - SmsSE
       - DbSE
+    depends_on:
+      - db
   db:
     image: postgres:13
     volumes:

@@ -6,14 +6,15 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
 	"github.com/gin-gonic/gin"
+	"os"
 )
 
 func main() {
 	infra := webapi.NewInfrastructure(webapi.InfraConfigFile{
-		LogMapConf: "/rmsConfig/logmap.yaml",
-		SmsSE:      "/run/secrets/SmsSE",
-		DbSE:       "/run/secrets/DbSE",
-		LoginConf:  "/rmsConfig/login.yaml",
+		LogMapConf: os.Getenv("LogMapConf"),
+		SmsSE:      os.Getenv("SmsSE"),
+		DbSE:       os.Getenv("DbSE"),
+		LoginConf:  os.Getenv("LoginConf"),
 	})
 
 	r := gin.Default()

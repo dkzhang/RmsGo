@@ -18,10 +18,11 @@ func main() {
 
 	/////////////////////////////////////////////////////////
 	// Database: PostgreSQL
-	theDbSecurity, err := databaseSecurity.LoadDbSecurity("/run/secrets/DbSE")
+	theDbSecurity, err := databaseSecurity.LoadDbSecurity(os.Getenv("DbSE"))
 	if err != nil {
 		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
-			"error": err,
+			"ENV DbSE": os.Getenv("DbSE"),
+			"error":    err,
 		}).Fatal("dbConfig.LoadDbSecurity error.")
 		return
 	}
