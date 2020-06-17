@@ -4,14 +4,6 @@ import (
 	"time"
 )
 
-type ApplicationWA struct {
-	ProjectID     int    `json:"project_id"`
-	ApplicationID int    `json:"application_id"`
-	Action        int    `json:"action"`
-	BasicContent  string `json:"basic_content"`
-	ExtraContent  string `json:"extra_content"`
-}
-
 // Set up a JSON-based Application struct in a unified format
 // to facilitate the generation of historical record arrays
 type Application struct {

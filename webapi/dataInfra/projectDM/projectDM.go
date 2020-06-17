@@ -9,8 +9,9 @@ type projectDM interface {
 	// 删除项目（如果该项目没有被分配过资源）
 	// 新建、提交&审批变更申请
 
-	InsertProRes(projectInfo project.ProjectInfo) (err error)
+	InsertProRes(projectInfo project.ProjectInfo) (err error) //AppNewProRes
 	UpdateProRes(projectInfo project.ProjectInfo) (err error)
+	OpsProRes(projectInfo project.ProjectInfo) (err error)
 	// InsertApplication 新增一个新申请单
 	// UpdateApplication 更新一个新申请单
 	// InsertApplicationOperation 对申请单的操作：提交
