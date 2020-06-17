@@ -9,7 +9,6 @@ require (
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/gomodule/redigo v1.8.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
-	github.com/jinzhu/gorm v1.9.13
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible

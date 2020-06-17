@@ -1,13 +1,11 @@
 package metering
 
 import (
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type MeteringList struct {
-	gorm.Model
-
+	MeteringID          int
 	CpuAmountInDays     int
 	GpuAmountInDays     int
 	StorageAmountInDays int
@@ -19,6 +17,9 @@ type MeteringList struct {
 	CpuNodeMeteringList []CpuNodeMeteringItem
 	GpuNodeMeteringList []GpuNodeMeteringItem
 	StorageMeteringList []StorageMeteringItem
+
+	CreatedAt time.Time
+	ArchiveAt time.Time
 }
 
 type CpuNodeMeteringItem struct {

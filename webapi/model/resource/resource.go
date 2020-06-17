@@ -1,9 +1,8 @@
 package resource
 
-import "github.com/jinzhu/gorm"
-
 type ResAllocRecord struct {
-	gorm.Model
+	RecordID  int
+	ProjectID int
 
 	AllocResDetails ResourceDetails
 	UserID          int
