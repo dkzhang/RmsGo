@@ -22,7 +22,6 @@ type Application struct {
 	BasicContent  string
 	ExtraContent  string
 	CreatedAt     time.Time
-	TheOpsRecords []AppOpsRecord
 }
 
 type AppOpsRecord struct {
@@ -33,6 +32,7 @@ type AppOpsRecord struct {
 	ActionStr          string
 	BasicInfo          string
 	ExtraInfo          string
+	CreatedAt          time.Time
 }
 
 const (
