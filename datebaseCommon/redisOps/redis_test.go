@@ -1,21 +1,23 @@
 package redisOps
 
 import (
-	"github.com/dkzhang/RmsGo/allConfig"
-	dbConfig "github.com/dkzhang/RmsGo/datebaseCommon/security"
+	"github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"os"
 	"testing"
 	"time"
 )
 
 func TestRedis(t *testing.T) {
-	os.Setenv("DbConf", "./../../Configuration/Security/database.yaml")
-	allConfig.LoadAllConfig()
+	theDbSecurity, err := security.LoadDbSecurity(os.Getenv("DbSE"))
+	if err != nil {
+		t.Fatalf("dbConfig.LoadDbSecurity error, ENV DbSE = %s, error = %v", os.Getenv("DbSE"), err)
+		return
+	}
+
 	opts := &RedisOpts{
-		Host: dbConfig.TheDbConfig.TheRedisConfig.Host,
+		Host: theDbSecurity.TheRedisSecurity.Host,
 	}
 	redis := NewRedis(opts)
-	var err error
 	timeoutDuration := 10 * time.Second
 
 	if err = redis.Set("username", "silenceper", timeoutDuration); err != nil {

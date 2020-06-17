@@ -1,30 +1,33 @@
 package security
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestLoadDbConfig(t *testing.T) {
 	filepath := `./../../Configuration/Security/database.yaml`
 
-	err := LoadDbSecurity(filepath)
+	theDbSecurity, err := LoadDbSecurity(filepath)
 	if err != nil {
 		t.Fatalf("LoadDbSecurity error: %v", err)
+		return
 	} else {
-		t.Logf("Load DbSecurity success = %v", TheDbConfig)
-		if TheDbConfig.ThePgConfig.Host == "rms-pg" &&
-			TheDbConfig.ThePgConfig.User == "rms" &&
-			TheDbConfig.ThePgConfig.Password == "123456" &&
-			TheDbConfig.ThePgConfig.DbName == "rms_db" &&
-			TheDbConfig.ThePgConfig.Sslmode == "disable" {
-			t.Logf("Verify PgSecurity success: %v", TheDbConfig.ThePgConfig)
+		t.Logf("Load DbSecurity success = %v", theDbSecurity)
+		if theDbSecurity.ThePgSecurity.Host == "db" &&
+			theDbSecurity.ThePgSecurity.Port == 5432 &&
+			theDbSecurity.ThePgSecurity.User == "rmsu" &&
+			theDbSecurity.ThePgSecurity.Password == "rmsp" &&
+			theDbSecurity.ThePgSecurity.DbName == "rms_db" &&
+			theDbSecurity.ThePgSecurity.Sslmode == "disable" {
+			t.Logf("Verify PgSecurity success: %v", theDbSecurity.ThePgSecurity)
 		} else {
-			t.Errorf("Verify PgSecurity failed: %v", TheDbConfig.ThePgConfig)
+			t.Errorf("Verify PgSecurity failed: %v", theDbSecurity.ThePgSecurity)
 		}
 
-		if TheDbConfig.TheRedisConfig.Host == "rms-redis:6379" &&
-			TheDbConfig.TheRedisConfig.Password == "234567" {
-			t.Logf("Verify RedisSecurity success: %v", TheDbConfig.TheRedisConfig)
+		if theDbSecurity.TheRedisSecurity.Host == "redis:6379" {
+			t.Logf("Verify RedisSecurity success: %v", theDbSecurity.TheRedisSecurity)
 		} else {
-			t.Errorf("Verify RedisSecurity failed: %v", TheDbConfig.TheRedisConfig)
+			t.Errorf("Verify RedisSecurity failed: %v", theDbSecurity.TheRedisSecurity)
 		}
 	}
 

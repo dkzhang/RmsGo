@@ -1,10 +1,8 @@
 package userDB_test
 
 import (
-	"fmt"
-	"github.com/dkzhang/RmsGo/DbManage/PgManage"
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
-	"github.com/dkzhang/RmsGo/datebaseCommon/security"
+	"github.com/dkzhang/RmsGo/databaseInit"
+	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"os"
 	"testing"
@@ -21,14 +19,10 @@ func TestUserDB(t *testing.T) {
 var udb userDB.UserInPostgre
 
 var _ = BeforeSuite(func() {
-	os.Setenv("DbConf", "./../../../Configuration/Security/database.yaml")
-	PgManage.CreateAllTable()
+	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
+	db := databaseInit.ConnectToDatabase()
+	pgOps.CreateAllTable(db)
 
-	//GinkgoWriter.Write([]byte(fmt.Sprintf("config.TheDbSecurity = %v \n", config.TheDbSecurity)))
-	By(fmt.Sprintf("config.TheDbSecurity = %v \n", security.TheDbSecurity))
-
-	db, err := postgreOps.ConnectToDatabase(security.TheDbConfig.ThePgConfig)
-	Expect(err).ShouldNot(HaveOccurred(), "postgreOps.ConnectToDatabase error: %v", err)
 	udb = userDB.NewUserInPostgre(db)
 })
 

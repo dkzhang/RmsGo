@@ -1,0 +1,163 @@
+Date : 2020-06-17 09:30:50
+Directory : c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo
+Total : 86 files,  4098 codes, 286 comments, 844 blanks, all 5228 lines
+
+Languages
++--------------+------------+------------+------------+------------+------------+
+| language     | files      | code       | comment    | blank      | total      |
++--------------+------------+------------+------------+------------+------------+
+| Go           |         61 |      2,916 |        273 |        630 |      3,819 |
+| Markdown     |          6 |        888 |          2 |        170 |      1,060 |
+| YAML         |          9 |        151 |          9 |         24 |        184 |
+| XML          |          6 |         64 |          0 |          3 |         67 |
+| JSON         |          1 |         48 |          0 |          0 |         48 |
+| Shell Script |          2 |         19 |          2 |         10 |         31 |
+| Dockerfile   |          1 |         12 |          0 |          7 |         19 |
++--------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                   | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                      |         86 |      4,098 |        286 |        844 |      5,228 |
+| .github                                                                                                |          1 |         29 |          0 |          9 |         38 |
+| .github\workflows                                                                                      |          1 |         29 |          0 |          9 |         38 |
+| .idea                                                                                                  |          5 |         35 |          0 |          0 |         35 |
+| Configuration                                                                                          |          7 |         55 |          8 |         13 |         76 |
+| Configuration\Parameter                                                                                |          3 |         19 |          0 |          5 |         24 |
+| Configuration\Security                                                                                 |          4 |         36 |          8 |          8 |         52 |
+| DK_Experiments                                                                                         |          4 |        372 |         19 |         56 |        447 |
+| DK_Experiments\pointer                                                                                 |          1 |         73 |          0 |         15 |         88 |
+| DK_Experiments\timeParse                                                                               |          1 |         15 |          0 |          4 |         19 |
+| DK_Experiments\token                                                                                   |          2 |        284 |         19 |         37 |        340 |
+| MyDoc                                                                                                  |          2 |        865 |          2 |        161 |      1,028 |
+| databaseInit                                                                                           |          2 |         97 |          0 |         18 |        115 |
+| databaseInit\pgOps                                                                                     |          1 |         55 |          0 |         11 |         66 |
+| datebaseCommon                                                                                         |          6 |        201 |         32 |         49 |        282 |
+| datebaseCommon\postgreOps                                                                              |          2 |         27 |          9 |          8 |         44 |
+| datebaseCommon\redisOps                                                                                |          2 |        113 |         20 |         28 |        161 |
+| datebaseCommon\security                                                                                |          2 |         61 |          3 |         13 |         77 |
+| myUtils                                                                                                |         17 |        455 |        106 |        129 |        690 |
+| myUtils\encryptPassword                                                                                |          1 |         20 |          0 |          4 |         24 |
+| myUtils\genPasswd                                                                                      |          2 |         65 |          4 |         14 |         83 |
+| myUtils\logMap                                                                                         |          7 |        212 |         57 |         63 |        332 |
+| myUtils\nodeEncode                                                                                     |          3 |         66 |          5 |         13 |         84 |
+| myUtils\shortMessageService                                                                            |          4 |         92 |         40 |         35 |        167 |
+| webapi                                                                                                 |         37 |      1,854 |        118 |        393 |      2,365 |
+| webapi\authority                                                                                       |          1 |        100 |          3 |         12 |        115 |
+| webapi\authority\userCRUD                                                                              |          1 |        100 |          3 |         12 |        115 |
+| webapi\dataInfra                                                                                       |         14 |        694 |         39 |        143 |        876 |
+| webapi\dataInfra\applicationDB                                                                         |          1 |         11 |          0 |          4 |         15 |
+| webapi\dataInfra\projectDB                                                                             |          1 |         11 |          0 |          4 |         15 |
+| webapi\dataInfra\userDB                                                                                |          5 |        245 |         12 |         35 |        292 |
+| webapi\dataInfra\userDM                                                                                |          2 |        213 |         21 |         50 |        284 |
+| webapi\dataInfra\userTempDM                                                                            |          5 |        214 |          6 |         50 |        270 |
+| webapi\dataInfra\userTempDM\config                                                                     |          2 |         63 |          1 |         13 |         77 |
+| webapi\dataInfra\userTempDM\security                                                                   |          1 |         16 |          0 |          5 |         21 |
+| webapi\handle                                                                                          |          7 |        588 |         44 |        107 |        739 |
+| webapi\handle\extractLoginUserInfo                                                                     |          1 |         33 |          0 |          6 |         39 |
+| webapi\handle\handleLogin                                                                              |          2 |        170 |         23 |         36 |        229 |
+| webapi\handle\handleProRes                                                                             |          1 |         55 |          9 |         17 |         81 |
+| webapi\handle\handleUser                                                                               |          3 |        330 |         12 |         48 |        390 |
+| webapi\infrastructure                                                                                  |          1 |         87 |         10 |         20 |        117 |
+| webapi\middleware                                                                                      |          2 |         51 |         14 |         16 |         81 |
+| webapi\model                                                                                           |          8 |        275 |          4 |         68 |        347 |
+| webapi\model\metering                                                                                  |          1 |         40 |          0 |          9 |         49 |
+| webapi\model\project                                                                                   |          1 |         24 |          0 |          9 |         33 |
+| webapi\model\resource                                                                                  |          1 |         35 |          0 |          9 |         44 |
+| webapi\model\resourceApplication                                                                       |          1 |         44 |          2 |          7 |         53 |
+| webapi\model\user                                                                                      |          4 |        132 |          2 |         34 |        168 |
++--------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+
+| filename                                                                                               | language     | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\.github\workflows\go.yml                              | YAML         |         29 |          0 |          9 |         38 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\.idea\RmsGo.iml                                       | XML          |          8 |          0 |          0 |          8 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\.idea\misc.xml                                        | XML          |          6 |          0 |          0 |          6 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\.idea\modules.xml                                     | XML          |          8 |          0 |          0 |          8 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\.idea\sqldialects.xml                                 | XML          |          7 |          0 |          0 |          7 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\.idea\vcs.xml                                         | XML          |          6 |          0 |          0 |          6 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\login.yaml                    | YAML         |          8 |          0 |          0 |          8 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml                   | YAML         |          5 |          0 |          2 |          7 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\readme.md                     | Markdown     |          6 |          0 |          3 |          9 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\database.yaml                  | YAML         |          9 |          4 |          2 |         15 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml                      | YAML         |          9 |          4 |          2 |         15 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\readme.md                      | Markdown     |         13 |          0 |          3 |         16 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\sms.yaml                       | YAML         |          5 |          0 |          1 |          6 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\DK_Experiments\pointer\main.go                        | Go           |         73 |          0 |         15 |         88 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\DK_Experiments\timeParse\main.go                      | Go           |         15 |          0 |          4 |         19 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\DK_Experiments\token\main.go                          | Go           |        279 |         19 |         34 |        332 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\DK_Experiments\token\main_test.go                     | Go           |          5 |          0 |          3 |          8 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\MyDoc\GinkgoLearningNotes.md                          | Markdown     |        807 |          2 |        146 |        955 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\MyDoc\GinkgoOfficialDoc.md                            | Markdown     |         58 |          0 |         15 |         73 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\README.md                                             | Markdown     |          1 |          0 |          1 |          2 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\databaseInit\ops.go                                   | Go           |         42 |          0 |          7 |         49 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\databaseInit\pgOps\pgOps.go                           | Go           |         55 |          0 |         11 |         66 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\datebaseCommon\postgreOps\mySqlx.go                   | Go           |         23 |          0 |          5 |         28 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\datebaseCommon\postgreOps\mySqlx_test.go              | Go           |          4 |          9 |          3 |         16 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\datebaseCommon\redisOps\redis.go                      | Go           |         81 |         20 |         20 |        121 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\datebaseCommon\redisOps\redis_test.go                 | Go           |         32 |          0 |          8 |         40 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\datebaseCommon\security\loadSecurity.go               | Go           |         32 |          3 |          7 |         42 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\datebaseCommon\security\loadSecurity_test.go          | Go           |         29 |          0 |          6 |         35 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\docker-compose.prod.yml                               | YAML         |         35 |          0 |          3 |         38 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\docker-compose.yml                                    | YAML         |         47 |          1 |          5 |         53 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\go.mod                                                | XML          |         29 |          0 |          3 |         32 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\main.go                                               | Go           |         23 |          0 |          4 |         27 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\encryptPassword\encryptPassword.go            | Go           |         20 |          0 |          4 |         24 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\genPasswd\generatePassword.go                 | Go           |         46 |          4 |          8 |         58 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\genPasswd\generatePassword_test.go            | Go           |         19 |          0 |          6 |         25 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\DkLog.go                               | Go           |         66 |          1 |         11 |         78 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\loadConfig.go                          | Go           |         17 |          1 |          4 |         22 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\loadConfig_test.go                     | Go           |         24 |          0 |          8 |         32 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\logMap.go                              | Go           |         84 |         55 |         34 |        173 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\logMap_test.go                         | Go           |         14 |          0 |          4 |         18 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\readme.md                              | Markdown     |          3 |          0 |          2 |          5 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\logMap\test.yaml                              | YAML         |          4 |          0 |          0 |          4 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\nodeEncode\base64_ByteArray.go                | Go           |          9 |          0 |          4 |         13 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\nodeEncode\base64_IntArray.go                 | Go           |         40 |          0 |          5 |         45 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\nodeEncode\base64_IntArray_test.go            | Go           |         17 |          5 |          4 |         26 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\shortMessageService\loadSecurity.go           | Go           |         24 |          0 |          4 |         28 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\shortMessageService\messageContent.go         | Go           |          5 |          0 |          2 |          7 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\shortMessageService\sendSMS.go                | Go           |         47 |         40 |         24 |        111 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\shortMessageService\sendSMS_test.go           | Go           |         16 |          0 |          5 |         21 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\Dockerfile                                     | Dockerfile   |         12 |          0 |          7 |         19 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\authority\userCRUD\userCRUD.go                 | Go           |        100 |          3 |         12 |        115 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationDB.go       | Go           |         11 |          0 |          4 |         15 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDB\projectDB.go               | Go           |         11 |          0 |          4 |         15 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\postgre.go                    | Go           |         83 |          3 |         13 |         99 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\userDB.go                     | Go           |         14 |          0 |          3 |         17 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\userDB_suite_test.go          | Go           |         24 |          0 |          8 |         32 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\userDB_test.go                | Go           |         76 |          9 |         11 |         96 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\userDB_test.json              | JSON         |         48 |          0 |          0 |         48 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDM\memoryMap.go                  | Go           |        199 |         21 |         42 |        262 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDM\userDM.go                     | Go           |         14 |          0 |          8 |         22 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userTempDM\config\loadConfig.go      | Go           |         52 |          1 |          9 |         62 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userTempDM\config\loadConfig_test.go | Go           |         11 |          0 |          4 |         15 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userTempDM\redisAndJwt.go            | Go           |        123 |          5 |         27 |        155 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userTempDM\security\loadSecurity.go  | Go           |         16 |          0 |          5 |         21 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userTempDM\userTempDM.go             | Go           |         12 |          0 |          5 |         17 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\entrypoint.prod.sh                             | Shell Script |          9 |          1 |          4 |         14 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\entrypoint.sh                                  | Shell Script |         10 |          1 |          6 |         17 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\extractLoginUserInfo\extract.go         | Go           |         33 |          0 |          6 |         39 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleLogin\applyLogin.go               | Go           |         94 |         12 |         18 |        124 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleLogin\login.go                    | Go           |         76 |         11 |         18 |        105 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleProRes\projectAndResource.go      | Go           |         55 |          9 |         17 |         81 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleUser\allUsers.go                  | Go           |         56 |          0 |          8 |         64 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleUser\retrieveUserLogin.go         | Go           |         24 |          0 |          4 |         28 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleUser\userCRUD.go                  | Go           |        250 |         12 |         36 |        298 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\infrastructure\infrastructure.go               | Go           |         87 |         10 |         20 |        117 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\middleware\logGin.go                           | Go           |         26 |         12 |         13 |         51 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\middleware\tokenAuth.go                        | Go           |         25 |          2 |          3 |         30 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\metering\metering.go                     | Go           |         40 |          0 |          9 |         49 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\project\project.go                       | Go           |         24 |          0 |          9 |         33 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\resourceApplication\application.go       | Go           |         44 |          2 |          7 |         53 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\resource\resource.go                     | Go           |         35 |          0 |          9 |         44 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\checkUserName.go                    | Go           |         12 |          0 |          6 |         18 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\checkUserName_test.go               | Go           |          9 |          0 |          4 |         13 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\user.go                             | Go           |         59 |          2 |         16 |         77 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\user_test.go                        | Go           |         52 |          0 |          8 |         60 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\server.go                                      | Go           |         28 |          2 |         10 |         40 |
+| Total                                                                                                  |              |      4,098 |        286 |        844 |      5,228 |
++--------------------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+
