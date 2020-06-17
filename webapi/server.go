@@ -22,17 +22,23 @@ func Serve() {
 
 	/////////////////////////////////////////////////////////////
 
-	r.POST("/ApplyLogin", func(c *gin.Context) { handleLogin.ApplyLogin(infra, c) })
-	r.POST("/Login", func(c *gin.Context) { handleLogin.Login(infra, c) })
+	webAPIv1 := r.Group("/webapi")
+	{
+		webAPIv1.POST("/ApplyLogin", func(c *gin.Context) { handleLogin.ApplyLogin(infra, c) })
+		webAPIv1.POST("/Login", func(c *gin.Context) { handleLogin.Login(infra, c) })
 
-	r.GET("/AllUsers", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.AllUsers(infra, c) })
+		webAPIv1.GET("/AllUsers", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.AllUsers(infra, c) })
 
-	r.GET("/User", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.RetrieveUserLogin(infra, c) })
+		hUser := webAPIv1.Group("/User")
+		{
+			hUser.GET("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.RetrieveUserLogin(infra, c) })
 
-	r.POST("/User", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Create(infra, c) })
-	r.GET("/User/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Retrieve(infra, c) })
-	r.PUT("/User/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Update(infra, c) })
-	r.DELETE("/User/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Delete(infra, c) })
+			hUser.POST("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Create(infra, c) })
+			hUser.GET("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Retrieve(infra, c) })
+			hUser.PUT("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Update(infra, c) })
+			hUser.DELETE("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Delete(infra, c) })
+		}
+	}
 
 	/////////////////////////////////////////////////////////////
 	r.Run(":8080")
