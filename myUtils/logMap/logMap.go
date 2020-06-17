@@ -126,7 +126,7 @@ func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
 	}
 
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
+		TimestampFormat: time.RFC3339, //"2006-01-02 15:04:05",
 	})
 
 	// 新增 Hook
@@ -166,7 +166,7 @@ func loggerToFile2(logFileName string) *logrus.Logger {
 	)
 
 	logger.Formatter = &logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
+		TimestampFormat: time.RFC3339, //"2006-01-02 15:04:05",
 	}
 
 	logger.SetOutput(logWriter)
