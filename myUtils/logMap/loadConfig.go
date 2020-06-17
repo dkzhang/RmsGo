@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 )
 
-// TODO: cancel log variable as global variable.
-
 func LoadLogConfig(filepath string) (theLogMap LogMap, err error) {
 	logConfFile, err := ioutil.ReadFile(filepath)
 	if err != nil {

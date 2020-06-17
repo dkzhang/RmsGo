@@ -14,7 +14,7 @@ services:
       - ./.env.dev
     volumes:
       - ./Configuration/Parameter:/rmsConfig:ro
-      - ./LogHere:/rmsLog
+      - ./RmsLog:/rmsLog
     secrets:
       - SmsSE
       - DbSE

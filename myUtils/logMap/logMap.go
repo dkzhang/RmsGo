@@ -43,12 +43,15 @@ func NewLogMap(configFile string) (theLogMap LogMap) {
 	if err != nil {
 		logrus.Fatalf("LoadLogConfig error: %v", err)
 	}
+	logrus.Infof("NewLogMap LoadLogConfig success, LogPathMap = %v", theLogMap.LogPathMap)
 
 	theLogMap.LoggerMap = make(map[string](*logrus.Logger), len(theLogMap.LogPathMap)+1)
 	for t, p := range theLogMap.LogPathMap {
 		theLogMap.LoggerMap[t] = loggerToFile(p, t+".log")
 	}
 	theLogMap.LoggerMap[DEFAULT] = logrus.New()
+
+	logrus.Infof("NewLogMap make LoggerMap success, LoggerMap = %v", theLogMap.LoggerMap)
 
 	return theLogMap
 }
@@ -110,7 +113,7 @@ func loggerToFile(logFilePath, logFileName string) *logrus.Logger {
 		// WithRotationCount设置文件清理前最多保存的个数.
 	)
 	if err != nil {
-		logger.Fatalf("rotatelogs.New error: %v", err)
+		logrus.Fatalf("rotatelogs.New error: %v", err)
 	}
 
 	writeMap := lfshook.WriterMap{
