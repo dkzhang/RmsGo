@@ -25,7 +25,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.180+incompatible
 	github.com/twinj/uuid v1.0.0
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
-	google.golang.org/appengine v1.6.6 // indirect
+	golang.org/x/net v0.0.0-20190603091049-60506f45cf65 // indirect
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
 	gopkg.in/yaml.v2 v2.2.8
 )
