@@ -33,8 +33,8 @@ const (
 )
 
 type LogMap struct {
-	LogPathMap map[string]string           `yaml:"logPath,omitempty"`
-	LoggerMap  map[string](*logrus.Logger) `yaml:"-"`
+	ThePathMap   map[string]string           `yaml:"logPath,omitempty"`
+	TheLoggerMap map[string](*logrus.Logger) `yaml:"-"`
 }
 
 func NewLogMap(configFile string) (theLogMap LogMap) {
@@ -43,25 +43,25 @@ func NewLogMap(configFile string) (theLogMap LogMap) {
 	if err != nil {
 		logrus.Fatalf("LoadLogConfig error: %v", err)
 	}
-	logrus.Infof("NewLogMap LoadLogConfig success, LogPathMap = %v", theLogMap.LogPathMap)
+	logrus.Infof("NewLogMap LoadLogConfig success, ThePathMap = %v", theLogMap.ThePathMap)
 
-	theLogMap.LoggerMap = make(map[string](*logrus.Logger), len(theLogMap.LogPathMap)+1)
-	for t, p := range theLogMap.LogPathMap {
-		theLogMap.LoggerMap[t] = loggerToFile(p, t+".log")
+	theLogMap.TheLoggerMap = make(map[string](*logrus.Logger), len(theLogMap.ThePathMap)+1)
+	for t, p := range theLogMap.ThePathMap {
+		theLogMap.TheLoggerMap[t] = loggerToFile(p, t+".log")
 	}
-	theLogMap.LoggerMap[DEFAULT] = logrus.New()
+	theLogMap.TheLoggerMap[DEFAULT] = logrus.New()
 
-	logrus.Infof("NewLogMap make LoggerMap success, LoggerMap = %v", theLogMap.LoggerMap)
+	logrus.Infof("NewLogMap make TheLoggerMap success, TheLoggerMap = %v", theLogMap.TheLoggerMap)
 
 	return theLogMap
 }
 
 func (theLogMap LogMap) getLog(name string) *logrus.Logger {
-	if v, ok := theLogMap.LoggerMap[name]; ok {
+	if v, ok := theLogMap.TheLoggerMap[name]; ok {
 		return v
 	} else {
 		l := loggerToFile("./LogUnknownType"+name, name+".log")
-		theLogMap.LoggerMap[name] = l
+		theLogMap.TheLoggerMap[name] = l
 		return l
 	}
 }

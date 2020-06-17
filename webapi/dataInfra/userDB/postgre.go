@@ -82,7 +82,7 @@ func (upg UserInPostgre) InsertUser(ui user.UserInfo) (err error) {
 	if err != nil {
 		return fmt.Errorf("db.NamedExec(insertUser, ui), UserName = %s, UserInfo = %v :%v", ui.UserName, ui, err)
 	}
-	fmt.Printf("InsertUser success: %v", result)
+	fmt.Printf("InsertUser success: %v \n", result)
 	return nil
 }
 
@@ -93,6 +93,6 @@ func (upg UserInPostgre) DeleteUser(userID int) (err error) {
 	if err != nil {
 		return fmt.Errorf("db.Exec(deleteUser, userID), userID = %d", userID)
 	}
-	fmt.Printf("InsertUser success: %v", result)
+	fmt.Printf("DeleteUser success: %v \n", result)
 	return nil
 }

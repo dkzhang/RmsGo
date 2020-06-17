@@ -14,16 +14,16 @@ func (theLogMap LogMap) Log(types ...string) (dl DkLog) {
 	}
 
 	if len(types) == 0 {
-		dl.loggers = []*logrus.Logger{theLogMap.LoggerMap[DEFAULT]}
+		dl.loggers = []*logrus.Logger{theLogMap.TheLoggerMap[DEFAULT]}
 	} else {
 		for i, t := range types {
-			if l, ok := theLogMap.LoggerMap[t]; ok {
+			if l, ok := theLogMap.TheLoggerMap[t]; ok {
 				dl.loggers[i] = l
 			} else {
-				theLogMap.LoggerMap[DEFAULT].WithFields(logrus.Fields{
+				theLogMap.TheLoggerMap[DEFAULT].WithFields(logrus.Fields{
 					"log name": t,
 				}).Info("Request a log name that has not been configured and returns the default GetLog.")
-				dl.loggers[i] = theLogMap.LoggerMap[DEFAULT]
+				dl.loggers[i] = theLogMap.TheLoggerMap[DEFAULT]
 			}
 		}
 	}
