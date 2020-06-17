@@ -23,7 +23,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userCreatedInfo := user.UserInfo{}
 	err = c.BindJSON(&userCreatedInfo)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 			"error":       err,
 		}).Error("c.BindJSON(&userCreatedInfo) error.")
@@ -45,10 +45,10 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userCreatedInfo.UserName = user.StandardizedUserName(userCreatedInfo.UserName, userCreatedInfo.DepartmentCode)
 
 	// Check permission
-	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userCreatedInfo, userCRUD.OPS_CREATE)
+	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userCreatedInfo, userCRUD.OPS_CREATE)
 
 	if permission == false {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
 			"userCreatedInfo": userCreatedInfo.UserID,
 		}).Error("Create user failed, since UserAuthorityCheck permission not allowed.")
@@ -61,7 +61,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Insert pre-check
 	msg, err := infra.TheUserDM.InsertUserPreCheck(userCreatedInfo)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginInfo":   userLoginInfo,
 			"userCreatedInfo": userCreatedInfo,
 			"error":           err,
@@ -75,7 +75,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Insert into userDM
 	err = infra.TheUserDM.InsertUser(userCreatedInfo)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
 			"userCreatedInfo": userCreatedInfo.UserID,
 			"error":           err,
@@ -86,7 +86,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":   userLoginInfo,
 		"userCreatedInfo": userCreatedInfo,
 	}).Info("Delete user success.")
@@ -109,10 +109,10 @@ func Retrieve(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userAccessedInfo, userCRUD.OPS_RETRIEVE)
+	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, userCRUD.OPS_RETRIEVE)
 
 	if permission == false {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
 		}).Error("Retrieve userInfo failed, since UserAuthorityCheck permission not allowed.")
@@ -122,7 +122,7 @@ func Retrieve(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":    userLoginInfo,
 		"userAccessedInfo": userAccessedInfo,
 	}).Info("Retrieve userInfo success.")
@@ -144,10 +144,10 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userAccessedInfo, userCRUD.OPS_UPDATE)
+	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, userCRUD.OPS_UPDATE)
 
 	if permission == false {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
 		}).Error("Update userInfo failed, since UserAuthorityCheck permission not allowed.")
@@ -161,7 +161,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userUpdatedInfo := user.UserInfo{}
 	err = c.BindJSON(&userUpdatedInfo)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
 			"error":          err,
@@ -177,7 +177,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// update pre-check
 	msg, err := infra.TheUserDM.UpdateUserPreCheck(userUpdatedInfo)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
 			"userAccessedID":  userAccessedInfo.UserID,
 			"userUpdatedInfo": userUpdatedInfo,
@@ -192,7 +192,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// update in userDM
 	err = infra.TheUserDM.UpdateUser(userUpdatedInfo)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":     userLoginInfo.UserID,
 			"userAccessedID":  userAccessedInfo.UserID,
 			"userUpdatedInfo": userUpdatedInfo,
@@ -205,7 +205,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	}
 
 	// all success
-	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":    userLoginInfo,
 		"userAccessedInfo": userAccessedInfo,
 		"userUpdatedInfo":  userUpdatedInfo,
@@ -228,10 +228,10 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := userCRUD.UserAuthorityCheck(userLoginInfo, userAccessedInfo, userCRUD.OPS_DELETE)
+	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, userCRUD.OPS_DELETE)
 
 	if permission == false {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
 		}).Error("Delete user failed, since UserAuthorityCheck permission not allowed.")
@@ -243,7 +243,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	err = infra.TheUserDM.DeleteUser(userAccessedInfo.UserID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
 			"error":          err,
@@ -254,7 +254,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":    userLoginInfo,
 		"userAccessedInfo": userAccessedInfo,
 	}).Info("Delete user success.")
@@ -271,7 +271,7 @@ func extractAccessedUserInfo(infra *infrastructure.Infrastructure, c *gin.Contex
 	idStr := c.Param("id")
 	userAccessedID, err := strconv.Atoi(idStr)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"idStr": idStr,
 			"error": err,
 		}).Error("get userAccessedID from gin.Context failed.")
@@ -284,7 +284,7 @@ func extractAccessedUserInfo(infra *infrastructure.Infrastructure, c *gin.Contex
 
 	userAccessedInfo, err = infra.TheUserDM.QueryUserByID(userAccessedID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userAccessedID": userAccessedID,
 		}).Error("TheUserDM.QueryUserByID (using userAccessedID from gin.Context) failed.")
 

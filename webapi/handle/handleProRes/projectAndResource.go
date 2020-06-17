@@ -3,6 +3,7 @@ package handleProRes
 import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
+	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/model/resource"
 	"github.com/dkzhang/RmsGo/webapi/model/resourceApplication"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
@@ -19,11 +20,11 @@ type AppNewProRes struct {
 	EndDate   time.Time `json:"end_date"`
 }
 
-func ApplyNewProRes(c *gin.Context) {
+func ApplyNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// * Parsing request information
 	appWA := resourceApplication.ApplicationWA{}
 	if err := c.ShouldBindJSON(&appWA); err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"error": err,
 		}).Error("ApplicationWA BindJSON error.")
 
@@ -34,7 +35,7 @@ func ApplyNewProRes(c *gin.Context) {
 
 	///////////////////////////////////////////////////////////////////////////
 	// * Check and Use LoginUser info
-	userLoginInfo, err := extractLoginUserInfo.Extract(c)
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
 	if err != nil {
 		return
 	}
@@ -47,11 +48,11 @@ func ApplyNewProRes(c *gin.Context) {
 	// * Perform the appropriate action
 }
 
-func UpdateNewProRes(c *gin.Context) {
+func UpdateNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Parsing request information
 	appWA := resourceApplication.ApplicationWA{}
 	if err := c.ShouldBindJSON(&appWA); err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"error": err,
 		}).Error("ApplicationWA BindJSON error.")
 

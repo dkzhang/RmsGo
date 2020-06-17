@@ -57,7 +57,9 @@ func (theLogMap LogMap) getLog(name string) *logrus.Logger {
 	if v, ok := theLogMap.LoggerMap[name]; ok {
 		return v
 	} else {
-		return loggerToFile("./LogUnknownType"+name, name+".log")
+		l := loggerToFile("./LogUnknownType"+name, name+".log")
+		theLogMap.LoggerMap[name] = l
+		return l
 	}
 }
 

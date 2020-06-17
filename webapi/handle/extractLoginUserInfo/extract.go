@@ -13,7 +13,7 @@ import (
 func Extract(infra *infrastructure.Infrastructure, c *gin.Context) (userLoginInfo user.UserInfo, err error) {
 	userLoginID := c.GetInt("userID")
 	if userLoginID < 0 {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginID,
 		}).Error("get userLoginID from gin.Context failed.")
 
@@ -25,7 +25,7 @@ func Extract(infra *infrastructure.Infrastructure, c *gin.Context) (userLoginInf
 
 	userLoginInfo, err = infra.TheUserDM.QueryUserByID(userLoginID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginID,
 		}).Error("TheUserDM.QueryUserByID (using userLoginID from gin.Context) failed.")
 

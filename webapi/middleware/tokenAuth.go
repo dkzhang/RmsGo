@@ -14,7 +14,7 @@ func TokenAuth(infra *infrastructure.Infrastructure) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID, err := infra.TheUserTempDM.ValidateToken(c.Request)
 		if err != nil {
-			logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"error": err,
 			}).Error("get userID from gin.Context failed.")
 			c.JSON(http.StatusUnauthorized, gin.H{

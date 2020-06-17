@@ -16,7 +16,7 @@ func RetrieveUserLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo": userLoginInfo,
 	}).Info("Retrieve userInfo success.")
 	c.JSON(http.StatusOK, gin.H{

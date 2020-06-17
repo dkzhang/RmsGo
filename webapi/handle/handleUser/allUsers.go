@@ -13,7 +13,7 @@ import (
 func AllUsers(infra *infrastructure.Infrastructure, c *gin.Context) {
 	userID := c.GetInt("userID")
 	if userID < 0 {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userID,
 		}).Error("get userID from gin.Context failed.")
 
@@ -25,7 +25,7 @@ func AllUsers(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	userInfo, err := infra.TheUserDM.QueryUserByID(userID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userID,
 		}).Error("TheUserDM.QueryUserByID (using userID from gin.Context) failed.")
 
@@ -37,7 +37,7 @@ func AllUsers(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	switch userInfo.Role {
 	case user.RoleProjectChief:
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userID,
 		}).Error("RoleProjectChief has no right to access interface <AllUsers>.")
 

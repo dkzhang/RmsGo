@@ -17,7 +17,7 @@ func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// Validate UserName
 	if user.CheckUserName(userName) == false {
-		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserName": userName,
 		}).Error("user login attempt failed.")
 
@@ -30,7 +30,7 @@ func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Query User from the UserDM
 	userInfo, err := infra.TheUserDM.QueryUserByName(userName)
 	if err != nil {
-		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserName": userName,
 			"error":    err,
 		}).Error("user login attempt failed: Query userInfo from database error.")
@@ -43,7 +43,7 @@ func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// Check if the account status is normal
 	if userInfo.Status != user.StatusNormal {
-		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserID":   userInfo.UserID,
 			"UserName": userName,
 			"error":    err,
@@ -58,7 +58,7 @@ func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// ValidatePassword
 	if infra.TheUserTempDM.ValidatePassword(userInfo.UserID, passwd) == false {
-		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserID":   userInfo.UserID,
 			"UserName": userName,
 		}).Error("user login attempt failed: user ValidatePassword return false.")
@@ -76,7 +76,7 @@ func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// CreateToken
 	token, err := infra.TheUserTempDM.CreateToken(userInfo.UserID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
 		}).Error("user login attempt failed: TheUserTempDM.CreateToken error.")
@@ -89,7 +89,7 @@ func Login(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// All pass
-	logMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 		"UserID":   userInfo.UserID,
 		"UserName": userName,
 	}).Info("user login success.")

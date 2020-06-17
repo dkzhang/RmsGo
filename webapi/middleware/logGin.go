@@ -11,7 +11,7 @@ import (
 //engine.Use(middleware.LoggerToFile())
 
 // 日志记录到文件
-func LoggerGinToFile() gin.HandlerFunc {
+func LoggerGinToFile(theLogMap logMap.LogMap) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		// 开始时间
@@ -39,7 +39,7 @@ func LoggerGinToFile() gin.HandlerFunc {
 		clientIP := c.ClientIP()
 
 		// 日志格式
-		logMap.Log(logMap.GIN).WithFields(logrus.Fields{
+		theLogMap.Log(logMap.GIN).WithFields(logrus.Fields{
 			"status_code":  statusCode,
 			"latency_time": latencyTime.String(),
 			"client_ip":    clientIP,

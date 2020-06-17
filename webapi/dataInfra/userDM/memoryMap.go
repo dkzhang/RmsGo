@@ -14,7 +14,7 @@ type MemoryMap struct {
 	theUserDB      userDB.UserDB
 }
 
-func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
+func NewMemoryMap(udb userDB.UserDB, theLogMap logMap.LogMap) (nmm MemoryMap, err error) {
 	nmm.theUserDB = udb
 
 	users, err := nmm.theUserDB.GetAllUserInfo()
@@ -23,7 +23,7 @@ func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
 			fmt.Errorf("generate new MemoryMap failed since GetAllUserInf error: %v", err)
 	}
 
-	logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+	theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"AllUserInfo": users,
 	}).Info("NewMemoryMap theUserDB.GetAllUserInfo success.")
 
@@ -36,7 +36,7 @@ func NewMemoryMap(udb userDB.UserDB) (nmm MemoryMap, err error) {
 		nmm.userInfoByName[v.UserName] = &user
 	}
 
-	logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+	theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userInfoByID":   nmm.userInfoByID,
 		"userInfoByName": nmm.userInfoByName,
 	}).Info("NewMemoryMap load data to map success.")

@@ -26,7 +26,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Query User from the UserDM
 	userInfo, err := infra.TheUserDM.QueryUserByName(userName)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserName": userName,
 			"error":    err,
 		}).Error("Query userInfo from database error.")
@@ -39,7 +39,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// Check if the account status is normal
 	if userInfo.Status != user.StatusNormal {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
 		}).Error("userInfo account status is not normal.")
@@ -52,7 +52,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// Check if the account is in sms-locked status
 	if infra.TheUserTempDM.IsSmsLock(userInfo.UserID) == true {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID":   userInfo.UserID,
 			"UserName": userInfo.UserName,
 		}).Error("userInfo account is in sms-locked status.")
@@ -69,7 +69,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 	//Generate temporary password
 	passwd, err := infra.TheUserTempDM.SetPassword(userInfo.UserID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
 		}).Error("TheUserTempDM.SetPassword error.")
@@ -87,7 +87,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 			fmt.Sprintf("%.1f", infra.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
 	})
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"Mobile": userInfo.Mobile,
 			"error":  err,
@@ -98,7 +98,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 		})
 		return
 	}
-	logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"UserID": userInfo.UserID,
 		"Mobile": userInfo.Mobile,
 		"resp":   resp,
@@ -107,7 +107,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Set SMS lock
 	infra.TheUserTempDM.LockSms(userInfo.UserID)
 	if err != nil {
-		logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userInfo.UserID,
 			"error":  err,
 		}).Error("TheUserTempDM.LockSms error.")

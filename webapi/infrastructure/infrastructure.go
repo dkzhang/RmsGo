@@ -28,6 +28,8 @@ type Infrastructure struct {
 	TheUserDB     userDB.UserDB
 	TheUserDM     userDM.UserDM
 	TheUserTempDM userTempDM.UserTempDM
+
+	TheLogMap logMap.LogMap
 }
 
 type InfraConfigFile struct {
@@ -44,22 +46,16 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	/////////////////////////////////////////////////////////
 	// LOG
-	err = logMap.LoadLogConfig(icf.LogMapConf)
-	if err != nil {
-		logMap.Log(logMap.DEFAULT, logMap.NORMAL).WithFields(logrus.Fields{
-			"ENV LogMapConf": icf.LogMapConf,
-			"error":          err,
-		}).Error("logMap.LoadLogConfig error.")
-	}
+	theInfras.TheLogMap = logMap.NewLogMap(icf.LogMapConf)
 
 	/////////////////////////////////////////////////////////
 	// SMS
 	theSmsSecurity, err := shortMessageService.LoadSmsSecurity(icf.SmsSE)
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ENV SmsSE": icf.SmsSE,
 			"error":     err,
-		}).Error("shortMessageService.LoadSmsSecurity error.")
+		}).Fatal("shortMessageService.LoadSmsSecurity error.")
 	}
 	theInfras.TheSmsService = shortMessageService.NewSmsTencentCloudService(theSmsSecurity)
 
@@ -67,7 +63,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 	// Database: PostgreSQL and Redis
 	theInfras.TheDbSecurity, err = databaseSecurity.LoadDbSecurity(icf.DbSE)
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ENV DbSE": icf.DbSE,
 			"error":    err,
 		}).Fatal("dbConfig.LoadDbSecurity error.")
@@ -75,7 +71,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	theInfras.TheDb, err = postgreOps.ConnectToDatabase(theInfras.TheDbSecurity.ThePgSecurity)
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ThePgSecurity": theInfras.TheDbSecurity.ThePgSecurity,
 			"error":         err,
 		}).Fatal("postgreOps.ConnectToDatabase error.")
@@ -90,7 +86,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 	// Login and UserTempDM
 	theInfras.TheLoginConfig, err = userConfig.LoadLoginConfig(icf.LoginConf)
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ENV LoginConf": icf.LoginConf,
 			"error":         err,
 		}).Fatal("userConfig.LoadLoginSecurity error.")
@@ -98,7 +94,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	theInfras.TheLoginSecurity, err = userSecurity.LoadLoginSecurity()
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"error": err,
 		}).Fatal("userConfig.LoadLoginSecurity error.")
 	}
@@ -109,9 +105,9 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 	/////////////////////////////////////////////////////////
 	// UserDM and UserDB
 	theInfras.TheUserDB = userDB.NewUserInPostgre(theInfras.TheDb)
-	theInfras.TheUserDM, err = userDM.NewMemoryMap(theInfras.TheUserDB)
+	theInfras.TheUserDM, err = userDM.NewMemoryMap(theInfras.TheUserDB, theInfras.TheLogMap)
 	if err != nil {
-		logMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"error": err,
 		}).Fatal("userDM.NewMemoryMap error.")
 	}

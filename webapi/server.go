@@ -18,7 +18,7 @@ func Serve() {
 	})
 
 	r := gin.Default()
-	r.Use(middleware.LoggerGinToFile())
+	r.Use(middleware.LoggerGinToFile(infra.TheLogMap))
 
 	/////////////////////////////////////////////////////////////
 

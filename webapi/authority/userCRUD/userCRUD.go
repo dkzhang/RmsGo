@@ -82,19 +82,19 @@ func init() {
 	})
 }
 
-func UserAuthorityCheck(userLoginInfo, userAccessedInfo user.UserInfo, ops int) (permission bool) {
+func UserAuthorityCheck(theLogMap logMap.LogMap, userLoginInfo, userAccessedInfo user.UserInfo, ops int) (permission bool) {
 	for _, rule := range theUserAuthorityTable {
 		if (ops&rule.Operation != 0) && rule.RelationShipBetween(userLoginInfo, userAccessedInfo) == true {
 			// There are two priority options: allow priority, do not allow priority
 			if rule.Permission == true {
-				logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+				theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 					"UserLoginInfo":    userLoginInfo,
 					"UserAccessedInfo": userAccessedInfo,
 					"Description":      rule.Description,
 				}).Info("UserAuthorityCheck match permission allow.")
 				return true
 			} else {
-				logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+				theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 					"UserLoginInfo":    userLoginInfo,
 					"UserAccessedInfo": userAccessedInfo,
 					"Description":      rule.Description,
@@ -106,7 +106,7 @@ func UserAuthorityCheck(userLoginInfo, userAccessedInfo user.UserInfo, ops int) 
 
 	// There are two default options here: default allowed, default not allowed
 	// We choose default not allowed
-	logMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+	theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"UserLoginInfo":    userLoginInfo,
 		"UserAccessedInfo": userAccessedInfo,
 	}).Info("no permission allow matched")
