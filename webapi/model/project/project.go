@@ -1,9 +1,9 @@
 package project
 
 import (
+	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/metering"
 	"github.com/dkzhang/RmsGo/webapi/model/resource"
-	"github.com/dkzhang/RmsGo/webapi/model/resourceApplication"
 	"time"
 )
 
@@ -22,7 +22,7 @@ type ProjectInfo struct {
 	ResourceExpected resource.Resource
 	ResourceAcquired resource.Resource
 
-	TheApplications    []resourceApplication.Application
+	TheApplications    []application.Application
 	TheResAllocRecords []resource.ResAllocRecord
 	TheMeteringList    []metering.MeteringList
 

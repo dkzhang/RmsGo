@@ -4,7 +4,7 @@ import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
-	"github.com/dkzhang/RmsGo/webapi/model/resourceApplication"
+	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,11 +13,11 @@ import (
 
 func ApplyNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// * Parsing request information
-	appWA := resourceApplication.ApplicationWA{}
+	appWA := application.GeneralApplication{}
 	if err := c.ShouldBindJSON(&appWA); err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"error": err,
-		}).Error("ApplicationWA BindJSON error.")
+		}).Error("GeneralApplication BindJSON error.")
 
 		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": "无法解析json"})
@@ -41,11 +41,11 @@ func ApplyNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 func UpdateNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Parsing request information
-	appWA := resourceApplication.ApplicationWA{}
+	appWA := application.GeneralApplication{}
 	if err := c.ShouldBindJSON(&appWA); err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"error": err,
-		}).Error("ApplicationWA BindJSON error.")
+		}).Error("GeneralApplication BindJSON error.")
 
 		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": "无法解析json"})

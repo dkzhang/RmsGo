@@ -1,11 +1,11 @@
-package resourceApplication
+package application
 
 import (
 	"github.com/dkzhang/RmsGo/webapi/model/resource"
 	"time"
 )
 
-type ApplicationWA struct {
+type GeneralApplication struct {
 	ProjectID     int    `json:"project_id"`
 	ApplicationID int    `json:"application_id"`
 	Action        int    `json:"action"`

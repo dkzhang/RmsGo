@@ -1,17 +1,18 @@
 package projectDM
 
-import "github.com/dkzhang/RmsGo/webapi/model/project"
+import (
+	"github.com/dkzhang/RmsGo/webapi/model/application"
+)
 
-type projectDM interface {
+type ProjectDM interface {
 	// What operations can the user do related to the project?
 
 	// 新建项目，提交&审批新项目
 	// 删除项目（如果该项目没有被分配过资源）
 	// 新建、提交&审批变更申请
 
-	InsertProRes(projectInfo project.ProjectInfo) (err error) //AppNewProRes
-	UpdateProRes(projectInfo project.ProjectInfo) (err error)
-	OpsProRes(projectInfo project.ProjectInfo) (err error)
+	InsertProRes(ga application.GeneralApplication) (err error) //AppNewProRes
+	OpsProRes(ga application.GeneralApplication) (err error)    // operation related to ProRes application
 	// InsertApplication 新增一个新申请单
 	// UpdateApplication 更新一个新申请单
 	// InsertApplicationOperation 对申请单的操作：提交

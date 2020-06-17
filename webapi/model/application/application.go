@@ -1,4 +1,4 @@
-package resourceApplication
+package application
 
 import (
 	"time"
@@ -17,7 +17,10 @@ type Application struct {
 }
 
 type AppOpsRecord struct {
-	RecordID           int
+	RecordID      int
+	ProjectID     int `json:"project_id"`
+	ApplicationID int
+
 	OpsUserID          int
 	OpsUserChineseName int
 	Action             int
