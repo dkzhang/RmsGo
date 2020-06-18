@@ -8,7 +8,7 @@ type AppTemp struct {
 	ExtraContent  string `json:"extra_content" 	db:"extra_content"`
 }
 
-var SchemaUser = `
+var SchemaAppTemp = `
 		CREATE TABLE application_temporary (
     		application_id SERIAL PRIMARY KEY,
 			user_id int,

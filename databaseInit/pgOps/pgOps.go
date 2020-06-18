@@ -3,12 +3,14 @@ package pgOps
 import (
 	"database/sql"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
+	"github.com/dkzhang/RmsGo/webapi/model/appTemp"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
 )
 
 var tableList = map[string]string{
-	"user_info": user.SchemaUser,
+	"user_info":             user.SchemaUser,
+	"application_temporary": appTemp.SchemaAppTemp,
 }
 
 func createTable(db *sqlx.DB, schema string) (result sql.Result, err error) {

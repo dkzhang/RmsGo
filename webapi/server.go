@@ -26,6 +26,7 @@ func Serve() {
 	{
 		webAPIv1.POST("/ApplyLogin", func(c *gin.Context) { handleLogin.ApplyLogin(infra, c) })
 		webAPIv1.POST("/Login", func(c *gin.Context) { handleLogin.Login(infra, c) })
+		webAPIv1.GET("/Logout", middleware.TokenAuth(infra), func(c *gin.Context) { handleLogin.Logout(infra, c) })
 
 		webAPIv1.GET("/AllUsers", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.AllUsers(infra, c) })
 
