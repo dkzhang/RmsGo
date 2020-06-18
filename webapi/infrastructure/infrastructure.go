@@ -6,6 +6,7 @@ import (
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/myUtils/shortMessageService"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/appTempDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM"
@@ -28,6 +29,8 @@ type Infrastructure struct {
 	TheUserDB     userDB.UserDB
 	TheUserDM     userDM.UserDM
 	TheUserTempDM userTempDM.UserTempDM
+
+	TheAppTempDB appTempDB.AppTempDB
 
 	TheLogMap logMap.LogMap
 }
@@ -111,6 +114,10 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 			"error": err,
 		}).Fatal("userDM.NewMemoryMap error.")
 	}
+
+	/////////////////////////////////////////////////////////
+	// AppTempDB
+	theInfras.TheAppTempDB = appTempDB.NewAppTempPg(theInfras.TheDb)
 
 	return &theInfras
 }
