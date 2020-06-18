@@ -18,7 +18,7 @@ func (atpg AppTempPg) QueryAppTempByOwner(userID int) (apptemps []appTemp.AppTem
 	queryByOwner := `SELECT * FROM application_temporary WHERE user_id=$1`
 	err = atpg.db.Select(&apptemps, queryByOwner, userID)
 	if err != nil {
-		return nil, fmt.Errorf("get all user info from db error: %v", err)
+		return nil, fmt.Errorf("QueryAppTempByOwner from db error: %v", err)
 	}
 	return apptemps, nil
 }
@@ -43,7 +43,7 @@ func (atpg AppTempPg) InsertAppTemp(app appTemp.AppTemp) (id int, err error) {
 func (atpg AppTempPg) UpdateAppTemp(app appTemp.AppTemp) error {
 	_, err := atpg.db.NamedExec("UPDATE application_temporary "+
 		"SET user_id=:user_id, app_type=:app_type, "+
-		"basic_content=:basic_content, extra_content=:extra_content, "+
+		"basic_content=:basic_content, extra_content=:extra_content "+
 		"WHERE application_id=:application_id", app)
 	if err != nil {
 		return fmt.Errorf("db.NamedExec UPDATE application_temporary: %v", err)
