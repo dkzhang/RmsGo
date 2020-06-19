@@ -73,8 +73,75 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	return
 }
 
-func Retrieve(infra *infrastructure.Infrastructure, c *gin.Context) {
+func RetrieveByOwner(infra *infrastructure.Infrastructure, c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
+	if err != nil {
+		return
+	}
 
+	// skip authentication
+
+	theAppTemps, err := infra.TheAppTempDB.QueryAppTempByOwner(userLoginInfo.UserID)
+	if err != nil {
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginInfo": userLoginInfo,
+			"error":         err,
+		}).Error("TheAppTempDB.QueryAppTempByOwner error.")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "服务器内部错误",
+		})
+		return
+	}
+
+	// all success
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		"userLoginInfo": userLoginInfo,
+		"theAppTemps":   theAppTemps,
+	}).Info("Retrieve AppTemp by Owner success.")
+	c.JSON(http.StatusOK, gin.H{
+		"msg": fmt.Sprintf("查询到当前登录用户(id = %d)的所有申请表草稿信息成功，共计%d份",
+			userLoginInfo.UserID, len(theAppTemps)),
+		"AppTemp": theAppTemps,
+	})
+	return
+}
+
+func RetrieveByID(infra *infrastructure.Infrastructure, c *gin.Context) {
+	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
+	if err != nil {
+		return
+	}
+
+	appTempAccessed, err := extractAccessedAppTempInfo(infra, c)
+	if err != nil {
+		return
+	}
+
+	// authentication
+	permission := authAppTemp.AppTempAuthorityCheck(infra.TheLogMap,
+		userLoginInfo, appTempAccessed, authAppTemp.OPS_UPDATE)
+
+	if permission == false {
+		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginID":     userLoginInfo.UserID,
+			"appTempAccessed": appTempAccessed,
+		}).Error("Update AppTemp failed, since AppTempAuthorityCheck permission not allowed.")
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "此用户无权访问该数据",
+		})
+		return
+	}
+
+	// all success
+	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		"userLoginInfo":   userLoginInfo,
+		"appTempAccessed": appTempAccessed,
+	}).Info("Retrieve AppTemp by ID success.")
+	c.JSON(http.StatusOK, gin.H{
+		"msg":             fmt.Sprintf("查询申请表草稿(id=%d)信息成功", appTempAccessed.ApplicationID),
+		"appTempAccessed": appTempAccessed,
+	})
+	return
 }
 
 func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
@@ -83,7 +150,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	appTempAccessedInfo, err := extractAccessedAppTempInfo(infra, c)
+	appTempAccessed, err := extractAccessedAppTempInfo(infra, c)
 	if err != nil {
 		return
 	}
@@ -101,16 +168,16 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// fill attribute
 	appTempUpdated.UserID = userLoginInfo.UserID
-	appTempUpdated.ApplicationID = appTempAccessedInfo.ApplicationID
+	appTempUpdated.ApplicationID = appTempAccessed.ApplicationID
 
 	// authentication
 	permission := authAppTemp.AppTempAuthorityCheck(infra.TheLogMap,
-		userLoginInfo, appTempUpdated, authAppTemp.OPS_UPDATE)
+		userLoginInfo, appTempAccessed, authAppTemp.OPS_UPDATE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"userLoginID":    userLoginInfo.UserID,
-			"appTempUpdated": appTempUpdated,
+			"userLoginID":     userLoginInfo.UserID,
+			"appTempAccessed": appTempAccessed,
 		}).Error("Update AppTemp failed, since AppTempAuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "此用户无权访问该数据",
@@ -150,18 +217,18 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	appTempAccessedInfo, err := extractAccessedAppTempInfo(infra, c)
+	appTempAccessed, err := extractAccessedAppTempInfo(infra, c)
 	if err != nil {
 		return
 	}
 
 	permission := authAppTemp.AppTempAuthorityCheck(infra.TheLogMap,
-		userLoginInfo, appTempAccessedInfo, authAppTemp.OPS_DELETE)
+		userLoginInfo, appTempAccessed, authAppTemp.OPS_DELETE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"userLoginID":         userLoginInfo.UserID,
-			"appTempAccessedInfo": appTempAccessedInfo,
+			"userLoginID":     userLoginInfo.UserID,
+			"appTempAccessed": appTempAccessed,
 		}).Error("Delete AppTemp failed, since AppTemp AuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "此用户无权访问该数据",
@@ -169,12 +236,12 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	err = infra.TheAppTempDB.DeleteAppTemp(appTempAccessedInfo.ApplicationID)
+	err = infra.TheAppTempDB.DeleteAppTemp(appTempAccessed.ApplicationID)
 	if err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-			"userLoginID":         userLoginInfo.UserID,
-			"appTempAccessedInfo": appTempAccessedInfo,
-			"error":               err,
+			"userLoginID":     userLoginInfo.UserID,
+			"appTempAccessed": appTempAccessed,
+			"error":           err,
 		}).Error("TheAppTempDB.DeleteAppTemp error.")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
@@ -183,19 +250,19 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 	}
 
 	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-		"userLoginInfo":       userLoginInfo,
-		"appTempAccessedInfo": appTempAccessedInfo,
+		"userLoginInfo":   userLoginInfo,
+		"appTempAccessed": appTempAccessed,
 	}).Info("Delete appTemp success.")
 	c.JSON(http.StatusOK, gin.H{
-		"msg":     fmt.Sprintf("删除申请表草稿(id=%d)信息成功", appTempAccessedInfo.ApplicationID),
-		"appTemp": appTempAccessedInfo,
+		"msg":     fmt.Sprintf("删除申请表草稿(id=%d)信息成功", appTempAccessed.ApplicationID),
+		"appTemp": appTempAccessed,
 	})
 	return
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-func extractAccessedAppTempInfo(infra *infrastructure.Infrastructure, c *gin.Context) (appTempAccessedInfo appTemp.AppTemp, err error) {
+func extractAccessedAppTempInfo(infra *infrastructure.Infrastructure, c *gin.Context) (appTempAccessed appTemp.AppTemp, err error) {
 	idStr := c.Param("id")
 	appTempAccessedID, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -210,7 +277,7 @@ func extractAccessedAppTempInfo(infra *infrastructure.Infrastructure, c *gin.Con
 		return appTemp.AppTemp{}, fmt.Errorf("get appTemp ID from gin.Context failed: %v", err)
 	}
 
-	appTempAccessedInfo, err = infra.TheAppTempDB.QueryAppTempByID(appTempAccessedID)
+	appTempAccessed, err = infra.TheAppTempDB.QueryAppTempByID(appTempAccessedID)
 	if err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"appTempAccessedID": appTempAccessedID,
@@ -221,5 +288,5 @@ func extractAccessedAppTempInfo(infra *infrastructure.Infrastructure, c *gin.Con
 		})
 		return appTemp.AppTemp{}, fmt.Errorf("TheUserDM.QueryUserByID (using userAccessedID from gin.Context) error: %v", err)
 	}
-	return appTempAccessedInfo, nil
+	return appTempAccessed, nil
 }

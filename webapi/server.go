@@ -1,6 +1,7 @@
 package webapi
 
 import (
+	"github.com/dkzhang/RmsGo/webapi/handle/handleAppTemp"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleLogin"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
@@ -38,6 +39,16 @@ func Serve() {
 			hUser.GET("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Retrieve(infra, c) })
 			hUser.PUT("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Update(infra, c) })
 			hUser.DELETE("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleUser.Delete(infra, c) })
+		}
+
+		hAppTemp := webAPIv1.Group("/AppTemp")
+		{
+			hAppTemp.GET("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleAppTemp.RetrieveByOwner(infra, c) })
+
+			hAppTemp.POST("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleAppTemp.Create(infra, c) })
+			hAppTemp.GET("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleAppTemp.RetrieveByID(infra, c) })
+			hAppTemp.PUT("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleAppTemp.Update(infra, c) })
+			hAppTemp.DELETE("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleAppTemp.Delete(infra, c) })
 		}
 	}
 
