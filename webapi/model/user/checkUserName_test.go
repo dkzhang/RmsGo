@@ -1,12 +1,30 @@
 package user
 
-import "testing"
+import (
+	. "github.com/smartystreets/goconvey/convey"
+	"testing"
+)
 
 func TestCheckUserName(t *testing.T) {
-	nameList := []string{"jf-zhang", "az-a1", "12345bb", "sadfa-xxxyx", "z12-xx-qq8"}
-	for _, n := range nameList {
-		r := CheckUserName(n)
-		t.Logf("name <%s> result = <%v>", n, r)
+	type NameTable struct {
+		Name    string
+		IsLegal bool
+	}
+	nameTable := []NameTable{
+		{"jf-zhang", true},
+		{"z12-xx-qq8", true},
+		{"z11_xx-qq8", true},
+		{"x", false},
+		{"1x", false},
+		{"abcdefghijklmnopqrstuvwxyz", false},
+		{"zhang@jf", false},
+		{"x=abs", false},
 	}
 
+	Convey("Test Name Table", t, func() {
+		for _, nt := range nameTable {
+			r := CheckUserName(nt.Name)
+			So(r, ShouldEqual, nt.IsLegal)
+		}
+	})
 }

@@ -42,7 +42,8 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	case user.RoleProjectChief:
 		// Do nothing
 	}
-	userCreatedInfo.UserName = user.StandardizedUserName(userCreatedInfo.UserName, userCreatedInfo.DepartmentCode)
+
+	//userCreatedInfo.UserName = user.StandardizedUserName(userCreatedInfo.UserName, userCreatedInfo.DepartmentCode)
 
 	// Check permission
 	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userCreatedInfo, userCRUD.OPS_CREATE)
@@ -172,7 +173,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// set updated user's userID, role, userName
 	userUpdatedInfo.UserID = userAccessedInfo.UserID
 	userUpdatedInfo.Role = userAccessedInfo.Role
-	userUpdatedInfo.UserName = user.StandardizedUserName(userUpdatedInfo.UserName, userUpdatedInfo.DepartmentCode)
+	//userUpdatedInfo.UserName = user.StandardizedUserName(userUpdatedInfo.UserName, userUpdatedInfo.DepartmentCode)
 
 	// update pre-check
 	msg, err := infra.TheUserDM.UpdateUserPreCheck(userUpdatedInfo)
