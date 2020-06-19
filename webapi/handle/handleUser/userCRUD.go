@@ -89,7 +89,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":   userLoginInfo,
 		"userCreatedInfo": userCreatedInfo,
-	}).Info("Delete user success.")
+	}).Info("Create user success.")
 	c.JSON(http.StatusOK, gin.H{
 		"msg":  fmt.Sprintf("创建用户(name=%s)信息成功", userCreatedInfo.UserName),
 		"user": userCreatedInfo,
