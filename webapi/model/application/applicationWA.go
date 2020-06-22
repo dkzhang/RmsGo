@@ -5,16 +5,6 @@ import (
 	"time"
 )
 
-type GeneralApplication struct {
-	ProjectID     int    `json:"project_id"`
-	ApplicationID int    `json:"application_id"`
-	Action        int    `json:"action"`
-	BasicContent  string `json:"basic_content"`
-	ExtraContent  string `json:"extra_content"`
-}
-
-/////////////////////////////////////////////////////////////////
-
 type AppNewProRes struct {
 	ProjectName string `json:"project_name"`
 	resource.Resource
