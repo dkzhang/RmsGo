@@ -80,5 +80,16 @@ You can, of course, opt out of this – just change package `books_test` to pack
 - We import the `ginkgo` and `gomega` packages into the test’s top-level namespace by performing a dot-import. 
 If you’d rather not do this, check out the [Avoiding Dot Imports](#Avoiding Dot Imports) section below.
 
-#The Ginkgo CLI
-##Avoiding Dot Imports
+# The Ginkgo CLI
+
+## Avoiding Dot Imports
+
+Ginkgo and Gomega provide a DSL and, by default, the `ginkgo bootstrap` and `ginkgo generate` commands 
+import both packages into the top-level namespace using dot imports.
+
+There are certain, rare, cases where you need to avoid this. 
+For example, your code may define methods with names that conflict with the methods defined in Ginkgo and/or Gomega. 
+In such cases you can either import your code into its own namespace (i.e. drop the . in front of your package import). 
+Or, you can drop the `.` in front of Ginkgo and/or Gomega. 
+The latter comes at the cost of constantly having to 
+preface your `Describes` and `Its` with `ginkgo.` and your `Expects` and `ContainSubstrings` with `gomega.`.
