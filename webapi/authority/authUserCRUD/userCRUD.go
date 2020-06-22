@@ -1,4 +1,4 @@
-package userCRUD
+package authUserCRUD
 
 import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"

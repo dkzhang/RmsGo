@@ -3,7 +3,7 @@ package handleUser
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi/authority/userCRUD"
+	"github.com/dkzhang/RmsGo/webapi/authority/authUserCRUD"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
@@ -46,7 +46,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	//userCreatedInfo.UserName = user.StandardizedUserName(userCreatedInfo.UserName, userCreatedInfo.DepartmentCode)
 
 	// Check permission
-	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userCreatedInfo, userCRUD.OPS_CREATE)
+	permission := authUserCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userCreatedInfo, authUserCRUD.OPS_CREATE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -110,7 +110,7 @@ func Retrieve(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, userCRUD.OPS_RETRIEVE)
+	permission := authUserCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, authUserCRUD.OPS_RETRIEVE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -145,7 +145,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, userCRUD.OPS_UPDATE)
+	permission := authUserCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, authUserCRUD.OPS_UPDATE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -229,7 +229,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := userCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, userCRUD.OPS_DELETE)
+	permission := authUserCRUD.UserAuthorityCheck(infra.TheLogMap, userLoginInfo, userAccessedInfo, authUserCRUD.OPS_DELETE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{

@@ -1,6 +1,6 @@
-package appTemp
+package generalFormDraft
 
-type AppTemp struct {
+type GeneralFormDraft struct {
 	ApplicationID int    `json:"application_id" db:"application_id"`
 	UserID        int    `json:"user_id" db:"user_id"`
 	AppType       int    `json:"app_type" db:"app_type"`
@@ -8,8 +8,8 @@ type AppTemp struct {
 	ExtraContent  string `json:"extra_content" db:"extra_content"`
 }
 
-var SchemaAppTemp = `
-		CREATE TABLE application_temporary (
+var SchemaGeneralFormDraft = `
+		CREATE TABLE general_form_draft (
     		application_id SERIAL PRIMARY KEY,
 			user_id int,
 			app_type int, 
