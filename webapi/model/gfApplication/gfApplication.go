@@ -1,4 +1,4 @@
-package application
+package gfApplication
 
 import (
 	"github.com/dkzhang/RmsGo/webapi/model/resource"

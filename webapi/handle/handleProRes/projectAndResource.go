@@ -4,7 +4,7 @@ import (
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
-	"github.com/dkzhang/RmsGo/webapi/model/application"
+	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,8 +13,8 @@ import (
 
 func ApplyNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// * Parsing request information
-	appWA := application.GeneralApplication{}
-	if err := c.ShouldBindJSON(&appWA); err != nil {
+	gf := generalForm.GeneralForm{}
+	if err := c.ShouldBindJSON(&gf); err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"error": err,
 		}).Error("GeneralApplication BindJSON error.")
@@ -41,8 +41,8 @@ func ApplyNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 func UpdateNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 	// Parsing request information
-	appWA := application.GeneralApplication{}
-	if err := c.ShouldBindJSON(&appWA); err != nil {
+	gf := generalForm.GeneralForm{}
+	if err := c.ShouldBindJSON(&gf); err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"error": err,
 		}).Error("GeneralApplication BindJSON error.")
@@ -56,16 +56,4 @@ func UpdateNewProRes(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// Perform the appropriate action
 
-}
-
-type AppExResWA struct {
-}
-
-type AppReComWA struct {
-}
-
-type AppReStoWA struct {
-}
-
-type AppMeterWA struct {
 }

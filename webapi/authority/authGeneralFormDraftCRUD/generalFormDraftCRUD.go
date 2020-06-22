@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type GeneralFormDraftAuthority struct {
+type generalFormDraftAuthority struct {
 	RelationShipBetween func(user.UserInfo, generalFormDraft.GeneralFormDraft) bool
 	Operation           int
 	Permission          bool
@@ -22,12 +22,12 @@ const (
 	OPS_DELETE
 )
 
-var theGeneralFormDraftAuthorityTable []GeneralFormDraftAuthority
+var theGeneralFormDraftAuthorityTable []generalFormDraftAuthority
 
 func init() {
-	theGeneralFormDraftAuthorityTable = make([]GeneralFormDraftAuthority, 0)
+	theGeneralFormDraftAuthorityTable = make([]generalFormDraftAuthority, 0)
 
-	theGeneralFormDraftAuthorityTable = append(theGeneralFormDraftAuthorityTable, GeneralFormDraftAuthority{
+	theGeneralFormDraftAuthorityTable = append(theGeneralFormDraftAuthorityTable, generalFormDraftAuthority{
 		RelationShipBetween: func(userLoginInfo user.UserInfo, GeneralFormDraftAccessed generalFormDraft.GeneralFormDraft) bool {
 			if userLoginInfo.Role == user.RoleProjectChief &&
 				GeneralFormDraftAccessed.UserID == userLoginInfo.UserID {
