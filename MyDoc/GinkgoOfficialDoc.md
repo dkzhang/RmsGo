@@ -70,3 +70,15 @@ func TestBooks(t *testing.T) {
     RunSpecs(t, "Books Suite")
 }
 ```
+Let’s break this down:
+
+- Go allows us to specify the `books_test` package alongside the `books` package. 
+Using `books_test` instead of `books` allows us to respect the encapsulation of the `books` package: 
+your tests will need to import `books` and access it from the outside, like any other package. 
+This is preferred to reaching into the package and testing its internals and leads to more behavioral tests. 
+You can, of course, opt out of this – just change package `books_test` to package `books`
+- We import the `ginkgo` and `gomega` packages into the test’s top-level namespace by performing a dot-import. 
+If you’d rather not do this, check out the [Avoiding Dot Imports](#Avoiding Dot Imports) section below.
+
+#The Ginkgo CLI
+##Avoiding Dot Imports
