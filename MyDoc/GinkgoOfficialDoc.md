@@ -119,6 +119,55 @@ var _ = Describe("Book", func() {
 
 Let’s break this down:
 
+- We import the `ginkgo` and `gomega` packages into the top-level namespace. While incredibly convenient, this is not - strictly speaking - necessary. If you'd like to avoid this check out the  [Avoiding Dot Imports](#Avoiding Dot Imports)  section below.
+- Similarly, we import the `books` package since we are using the special `books_test` package to isolate our tests from our code. For convenience we import the `books` package into the namespace. You can opt out of either these decisions by editing the generated test file.
+- We add a *top-level* describe container using Ginkgo’s `Describe(text string, body func()) bool` function. The `var _ = ...` trick allows us to evaluate the Describe at the top level without having to wrap it in a `func init() {}`
+
+The function in the `Describe` will contain our specs. Let’s add a few now to test loading books from JSON:
+
+```go
+var _ = Describe("Book", func() {
+    var (
+        longBook  Book
+        shortBook Book
+    )
+
+    BeforeEach(func() {
+        longBook = Book{
+            Title:  "Les Miserables",
+            Author: "Victor Hugo",
+            Pages:  1488,
+        }
+
+        shortBook = Book{
+            Title:  "Fox In Socks",
+            Author: "Dr. Seuss",
+            Pages:  24,
+        }
+    })
+
+    Describe("Categorizing book length", func() {
+        Context("With more than 300 pages", func() {
+            It("should be a novel", func() {
+                Expect(longBook.CategoryByLength()).To(Equal("NOVEL"))
+            })
+        })
+
+        Context("With fewer than 300 pages", func() {
+            It("should be a short story", func() {
+                Expect(shortBook.CategoryByLength()).To(Equal("SHORT STORY"))
+            })
+        })
+    })
+})
+```
+
+
+
+
+
+
+
 
 
 # The Ginkgo CLI
