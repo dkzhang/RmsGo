@@ -17,17 +17,16 @@ type Application struct {
 }
 
 type AppOpsRecord struct {
-	RecordID      int
-	ProjectID     int `json:"project_id"`
-	ApplicationID int
-
-	OpsUserID          int
-	OpsUserChineseName int
-	Action             int
-	ActionStr          string
-	BasicInfo          string
-	ExtraInfo          string
-	CreatedAt          time.Time
+	RecordID           int       `db:"record_id" json:"record_id"`
+	ProjectID          int       `db:"project_id" json:"project_id"`
+	ApplicationID      int       `db:"application_id" json:"application_id"`
+	OpsUserID          int       `db:"ops_user_id" json:"ops_user_id"`
+	OpsUserChineseName int       `db:"ops_user_cn_name" json:"ops_user_cn_name"`
+	Action             int       `db:"action" json:"action"`
+	ActionStr          string    `db:"action_str" json:"action_str"`
+	BasicInfo          string    `db:"project_id" json:"project_id"` //TODO
+	ExtraInfo          string    `db:"project_id" json:"project_id"`
+	CreatedAt          time.Time `db:"project_id" json:"project_id"`
 }
 
 const (

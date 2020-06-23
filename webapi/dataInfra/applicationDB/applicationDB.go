@@ -11,4 +11,6 @@ type ApplicationDB interface {
 	QueryApplicationByFilter(userFilter func(application.Application) bool) []application.Application
 
 	InsertApplication(applicationInfo application.Application) (err error)
+
+	//InsertAppOps
 }
