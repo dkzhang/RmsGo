@@ -10,7 +10,7 @@ type ApplicationDB interface {
 	QueryApplicationByDepartmentCode(dc string) []application.Application
 	QueryApplicationByFilter(userFilter func(application.Application) bool) []application.Application
 
-	InsertApplication(applicationInfo application.Application) (err error)
-
-	//InsertAppOps
+	InsertApplication(applicationInfo application.Application) (appID int, err error)
+	UpdateApplication(applicationInfo application.Application) (err error)
+	InsertAppOps(appOps application.AppOpsRecord) (err error)
 }

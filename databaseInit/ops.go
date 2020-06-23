@@ -46,3 +46,7 @@ func ConnectToDatabase() (db *sqlx.DB) {
 	}
 	return db
 }
+
+func CloseDatabase(db *sqlx.DB) error {
+	return db.Close()
+}

@@ -25,3 +25,7 @@ func DropTable(db *sqlx.DB, tableName string) (result sql.Result, err error) {
 	result, err = db.Exec(exec)
 	return result, err
 }
+
+func CloseDatabase(db *sqlx.DB) (err error) {
+	return db.Close()
+}

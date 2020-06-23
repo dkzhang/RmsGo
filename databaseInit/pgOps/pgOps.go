@@ -1,33 +1,39 @@
 package pgOps
 
 import (
-	"database/sql"
+	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
+	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalFormDraft"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 )
 
 var tableList = map[string]string{
-	"user_info":          user.SchemaUser,
-	"general_form_draft": generalFormDraft.SchemaGeneralFormDraft,
-}
-
-func createTable(db *sqlx.DB, schema string) (result sql.Result, err error) {
-	result, err = db.Exec(schema)
-	return result, err
-}
-
-func dropTable(db *sqlx.DB, tableName string) (result sql.Result, err error) {
-	exec := `DROP Table ` + tableName
-	result, err = db.Exec(exec)
-	return result, err
+	"user_info":              user.SchemaUser,
+	"general_form_draft":     generalFormDraft.SchemaGeneralFormDraft,
+	"application":            application.GetSchemaApplication("application"),
+	"history_application":    application.GetSchemaApplication("history_application"),
+	"app_ops_record":         application.GetSchemaAppOpsRecord("app_ops_record"),
+	"history_app_ops_record": application.GetSchemaAppOpsRecord("history_app_ops_record"),
 }
 
 func CreateAllTable(db *sqlx.DB) {
 	for name, scheme := range tableList {
-		dropTable(db, name)
-		createTable(db, scheme)
+		_, err := postgreOps.DropTable(db, name)
+		if err != nil {
+			logrus.Errorf("Drop table <%s> error: %v", name, err)
+		} else {
+			logrus.Infof("Drop table <%s> success", name)
+		}
+
+		_, err = postgreOps.CreateTable(db, scheme)
+		if err != nil {
+			logrus.Errorf("Create table <%s> error: %v", name, err)
+		} else {
+			logrus.Infof("Create table <%s> success", name)
+		}
 	}
 }
 
