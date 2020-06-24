@@ -12,5 +12,7 @@ type ApplicationDB interface {
 
 	InsertApplication(applicationInfo application.Application) (appID int, err error)
 	UpdateApplication(applicationInfo application.Application) (err error)
+
 	InsertAppOps(record application.AppOpsRecord) (recordID int, err error)
+	QueryAppOpsByAppId(applicationID int) (records []application.AppOpsRecord, err error)
 }

@@ -95,3 +95,12 @@ func (apg ApplicationPg) InsertAppOps(record application.AppOpsRecord) (recordID
 	}
 	return recordID, nil
 }
+
+func (apg ApplicationPg) QueryAppOpsByAppId(applicationID int) (records []application.AppOpsRecord, err error) {
+	queryByAppId := fmt.Sprintf(`SELECT * FROM %s WHERE application_id=$1`, apg.tableName)
+	err = apg.db.Select(&records, queryByAppId, applicationID)
+	if err != nil {
+		return nil, fmt.Errorf("query application operations By application id from db error: %v", err)
+	}
+	return records, nil
+}
