@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type ProjectInfo struct {
+type StaticInfo struct {
 	ProjectID   int
 	ProjectName string
 
