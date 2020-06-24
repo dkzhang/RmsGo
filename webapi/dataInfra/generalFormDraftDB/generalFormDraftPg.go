@@ -14,21 +14,21 @@ func NewGeneralFormDraftPg(db *sqlx.DB) GeneralFormDraftPg {
 	return GeneralFormDraftPg{db: db}
 }
 
-func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByOwner(userID int) (GeneralFormDrafts []generalFormDraft.GeneralFormDraft, err error) {
+func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByOwner(userID int) (gfds []generalFormDraft.GeneralFormDraft, err error) {
 	queryByOwner := `SELECT * FROM general_form_draft WHERE user_id=$1`
-	err = atpg.db.Select(&GeneralFormDrafts, queryByOwner, userID)
+	err = atpg.db.Select(&gfds, queryByOwner, userID)
 	if err != nil {
 		return nil, fmt.Errorf("QueryGeneralFormDraftByOwner from db error: %v", err)
 	}
-	return GeneralFormDrafts, nil
+	return gfds, nil
 }
 
-func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByID(appID int) (GeneralFormDraft generalFormDraft.GeneralFormDraft, err error) {
-	err = atpg.db.Get(&GeneralFormDraft, `SELECT * FROM general_form_draft WHERE application_id=$1`, appID)
+func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByID(appID int) (gfd generalFormDraft.GeneralFormDraft, err error) {
+	err = atpg.db.Get(&gfd, `SELECT * FROM general_form_draft WHERE application_id=$1`, appID)
 	if err != nil {
 		return generalFormDraft.GeneralFormDraft{}, fmt.Errorf("QueryGeneralFormDraftByID in db error: %v", err)
 	}
-	return GeneralFormDraft, nil
+	return gfd, nil
 }
 
 func (atpg GeneralFormDraftPg) InsertGeneralFormDraft(app generalFormDraft.GeneralFormDraft) (id int, err error) {
@@ -46,7 +46,7 @@ func (atpg GeneralFormDraftPg) UpdateGeneralFormDraft(app generalFormDraft.Gener
 		"basic_content=:basic_content, extra_content=:extra_content "+
 		"WHERE application_id=:application_id", app)
 	if err != nil {
-		return fmt.Errorf("db.NamedExec UPDATE general_form_draft: %v", err)
+		return fmt.Errorf("db.NamedExec UPDATE general_form_draft error: %v", err)
 	}
 	return nil
 }

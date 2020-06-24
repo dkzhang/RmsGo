@@ -6,11 +6,11 @@ import (
 
 type ApplicationDB interface {
 	QueryApplicationByID(applicationID int) (application.Application, error)
-	QueryApplicationByOwner(userID int) []application.Application
-	QueryApplicationByDepartmentCode(dc string) []application.Application
-	QueryApplicationByFilter(userFilter func(application.Application) bool) []application.Application
+	QueryApplicationByOwner(userID int) ([]application.Application, error)
+	QueryApplicationByDepartmentCode(dc string) ([]application.Application, error)
+	QueryApplicationByFilter(appFilter func(application.Application) bool) ([]application.Application, error)
 
 	InsertApplication(applicationInfo application.Application) (appID int, err error)
 	UpdateApplication(applicationInfo application.Application) (err error)
-	InsertAppOps(appOps application.AppOpsRecord) (err error)
+	InsertAppOps(record application.AppOpsRecord) (recordID int, err error)
 }
