@@ -7,6 +7,7 @@ import (
 type StaticInfo struct {
 	ProjectID   int
 	ProjectName string
+	ProjectCode string
 
 	DepartmentCode   string
 	Department       string
