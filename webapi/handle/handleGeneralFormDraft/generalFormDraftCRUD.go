@@ -32,7 +32,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// fill attribute
 	GeneralFormDraftCreated.UserID = userLoginInfo.UserID
-	GeneralFormDraftCreated.ApplicationID = -1
+	GeneralFormDraftCreated.FormID = -1
 
 	// authentication
 	permission := authGeneralFormDraftCRUD.GeneralFormDraftAuthorityCheck(infra.TheLogMap,
@@ -61,7 +61,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	}
 
 	// success
-	GeneralFormDraftCreated.ApplicationID = id
+	GeneralFormDraftCreated.FormID = id
 	infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"userLoginInfo":           userLoginInfo,
 		"GeneralFormDraftCreated": GeneralFormDraftCreated,
@@ -138,7 +138,7 @@ func RetrieveByID(infra *infrastructure.Infrastructure, c *gin.Context) {
 		"GeneralFormDraftAccessed": GeneralFormDraftAccessed,
 	}).Info("Retrieve GeneralFormDraft by ID success.")
 	c.JSON(http.StatusOK, gin.H{
-		"msg":                      fmt.Sprintf("查询申请表草稿(id=%d)信息成功", GeneralFormDraftAccessed.ApplicationID),
+		"msg":                      fmt.Sprintf("查询申请表草稿(id=%d)信息成功", GeneralFormDraftAccessed.FormID),
 		"GeneralFormDraftAccessed": GeneralFormDraftAccessed,
 	})
 	return
@@ -168,7 +168,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 
 	// fill attribute
 	GeneralFormDraftUpdated.UserID = userLoginInfo.UserID
-	GeneralFormDraftUpdated.ApplicationID = GeneralFormDraftAccessed.ApplicationID
+	GeneralFormDraftUpdated.FormID = GeneralFormDraftAccessed.FormID
 
 	// authentication
 	permission := authGeneralFormDraftCRUD.GeneralFormDraftAuthorityCheck(infra.TheLogMap,
@@ -205,7 +205,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 		"GeneralFormDraftUpdated": GeneralFormDraftUpdated,
 	}).Info("Update GeneralFormDraft success.")
 	c.JSON(http.StatusOK, gin.H{
-		"msg":                     fmt.Sprintf("更新申请表草稿(id=%d)信息成功", GeneralFormDraftUpdated.ApplicationID),
+		"msg":                     fmt.Sprintf("更新申请表草稿(id=%d)信息成功", GeneralFormDraftUpdated.FormID),
 		"GeneralFormDraftUpdated": GeneralFormDraftUpdated,
 	})
 	return
@@ -236,7 +236,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	err = infra.TheGeneralFormDraftDB.DeleteGeneralFormDraft(GeneralFormDraftAccessed.ApplicationID)
+	err = infra.TheGeneralFormDraftDB.DeleteGeneralFormDraft(GeneralFormDraftAccessed.FormID)
 	if err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":              userLoginInfo.UserID,
@@ -254,7 +254,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		"GeneralFormDraftAccessed": GeneralFormDraftAccessed,
 	}).Info("Delete GeneralFormDraft success.")
 	c.JSON(http.StatusOK, gin.H{
-		"msg":              fmt.Sprintf("删除申请表草稿(id=%d)信息成功", GeneralFormDraftAccessed.ApplicationID),
+		"msg":              fmt.Sprintf("删除申请表草稿(id=%d)信息成功", GeneralFormDraftAccessed.FormID),
 		"GeneralFormDraft": GeneralFormDraftAccessed,
 	})
 	return

@@ -6,9 +6,9 @@ import (
 
 type GeneralFormDraftDB interface {
 	QueryGeneralFormDraftByOwner(userID int) ([]generalFormDraft.GeneralFormDraft, error)
-	QueryGeneralFormDraftByID(appID int) (generalFormDraft.GeneralFormDraft, error)
+	QueryGeneralFormDraftByID(formID int) (generalFormDraft.GeneralFormDraft, error)
 
-	InsertGeneralFormDraft(app generalFormDraft.GeneralFormDraft) (int, error)
-	UpdateGeneralFormDraft(app generalFormDraft.GeneralFormDraft) error
-	DeleteGeneralFormDraft(appID int) error
+	InsertGeneralFormDraft(gfd generalFormDraft.GeneralFormDraft) (int, error)
+	UpdateGeneralFormDraft(gfd generalFormDraft.GeneralFormDraft) error
+	DeleteGeneralFormDraft(formID int) error
 }

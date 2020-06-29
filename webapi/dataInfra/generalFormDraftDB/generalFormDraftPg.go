@@ -23,40 +23,40 @@ func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByOwner(userID int) (gfds []
 	return gfds, nil
 }
 
-func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByID(appID int) (gfd generalFormDraft.GeneralFormDraft, err error) {
-	err = atpg.db.Get(&gfd, `SELECT * FROM general_form_draft WHERE application_id=$1`, appID)
+func (atpg GeneralFormDraftPg) QueryGeneralFormDraftByID(formID int) (gfd generalFormDraft.GeneralFormDraft, err error) {
+	err = atpg.db.Get(&gfd, `SELECT * FROM general_form_draft WHERE form_id=$1`, formID)
 	if err != nil {
 		return generalFormDraft.GeneralFormDraft{}, fmt.Errorf("QueryGeneralFormDraftByID in db error: %v", err)
 	}
 	return gfd, nil
 }
 
-func (atpg GeneralFormDraftPg) InsertGeneralFormDraft(app generalFormDraft.GeneralFormDraft) (id int, err error) {
-	err = atpg.db.Get(&id, `INSERT INTO general_form_draft (user_id, app_type, basic_content, extra_content) VALUES ($1, $2, $3, $4) RETURNING application_id`,
-		app.UserID, app.AppType, app.BasicContent, app.ExtraContent)
+func (atpg GeneralFormDraftPg) InsertGeneralFormDraft(gfd generalFormDraft.GeneralFormDraft) (id int, err error) {
+	err = atpg.db.Get(&id, `INSERT INTO general_form_draft (user_id, form_type, basic_content, extra_content) VALUES ($1, $2, $3, $4) RETURNING form_id`,
+		gfd.UserID, gfd.FormType, gfd.BasicContent, gfd.ExtraContent)
 	if err != nil {
 		return -1, fmt.Errorf("InsertGeneralFormDraft in db error: %v", err)
 	}
 	return id, nil
 }
 
-func (atpg GeneralFormDraftPg) UpdateGeneralFormDraft(app generalFormDraft.GeneralFormDraft) error {
+func (atpg GeneralFormDraftPg) UpdateGeneralFormDraft(gfd generalFormDraft.GeneralFormDraft) error {
 	_, err := atpg.db.NamedExec("UPDATE general_form_draft "+
-		"SET user_id=:user_id, app_type=:app_type, "+
+		"SET user_id=:user_id, form_type=:form_type, "+
 		"basic_content=:basic_content, extra_content=:extra_content "+
-		"WHERE application_id=:application_id", app)
+		"WHERE form_id=:form_id", gfd)
 	if err != nil {
 		return fmt.Errorf("db.NamedExec UPDATE general_form_draft error: %v", err)
 	}
 	return nil
 }
 
-func (atpg GeneralFormDraftPg) DeleteGeneralFormDraft(appID int) error {
-	deleteGeneralFormDraft := `DELETE FROM general_form_draft WHERE application_id=$1`
+func (atpg GeneralFormDraftPg) DeleteGeneralFormDraft(formID int) error {
+	deleteGeneralFormDraft := `DELETE FROM general_form_draft WHERE form_id=$1`
 
-	result, err := atpg.db.Exec(deleteGeneralFormDraft, appID)
+	result, err := atpg.db.Exec(deleteGeneralFormDraft, formID)
 	if err != nil {
-		return fmt.Errorf("db.Exec(deleteGeneralFormDraft, appID), userID = %d", appID)
+		return fmt.Errorf("db.Exec(deleteGeneralFormDraft, formID), userID = %d", formID)
 	}
 	fmt.Printf("DeleteGeneralFormDraft success: %v \n", result)
 	return nil

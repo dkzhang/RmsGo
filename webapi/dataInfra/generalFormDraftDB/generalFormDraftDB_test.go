@@ -20,7 +20,7 @@ func TestGeneralFormDraftPg_InsertGeneralFormDraft(t *testing.T) {
 		Convey("Insert one GeneralFormDraft", func() {
 			id, err := atdm.InsertGeneralFormDraft(generalFormDraft.GeneralFormDraft{
 				UserID:       1,
-				AppType:      1,
+				FormType:     1,
 				BasicContent: "BasicContent1",
 				ExtraContent: "ExtraContent1",
 			})
@@ -30,7 +30,7 @@ func TestGeneralFormDraftPg_InsertGeneralFormDraft(t *testing.T) {
 		Convey("Insert another GeneralFormDraft", func() {
 			id, err := atdm.InsertGeneralFormDraft(generalFormDraft.GeneralFormDraft{
 				UserID:       1,
-				AppType:      1,
+				FormType:     1,
 				BasicContent: "BasicContent1",
 				ExtraContent: "ExtraContent1",
 			})
@@ -56,11 +56,11 @@ func TestGeneralFormDraftPg_InsertGeneralFormDraft(t *testing.T) {
 
 		Convey("UpdateGeneralFormDraft", func() {
 			err := atdm.UpdateGeneralFormDraft(generalFormDraft.GeneralFormDraft{
-				ApplicationID: 1,
-				UserID:        5,
-				AppType:       5,
-				BasicContent:  "BasicContent5",
-				ExtraContent:  "ExtraContent5",
+				FormID:       1,
+				UserID:       5,
+				FormType:     5,
+				BasicContent: "BasicContent5",
+				ExtraContent: "ExtraContent5",
 			})
 			So(err, ShouldBeNil)
 			Printf("UpdateGeneralFormDraft 1 success \n")
