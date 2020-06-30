@@ -8,18 +8,25 @@ import (
 )
 
 type ApplicationPg struct {
-	db        *sqlx.DB
-	tableName string
+	db           *sqlx.DB
+	appTableName string
+	opsTableName string
 }
 
-func NewApplicationPg(sqlxdb *sqlx.DB, tname string) ApplicationPg {
+func NewApplicationPg(sqlxdb *sqlx.DB, appname, opsname string) ApplicationPg {
 	return ApplicationPg{
-		db:        sqlxdb,
-		tableName: tname}
+		db:           sqlxdb,
+		appTableName: appname,
+		opsTableName: opsname,
+	}
+}
+
+func (apg ApplicationPg) Close() {
+	apg.db.Close()
 }
 
 func (apg ApplicationPg) QueryApplicationByID(applicationID int) (app application.Application, err error) {
-	queryByID := fmt.Sprintf(`SELECT * FROM %s WHERE application_id=$1`, apg.tableName)
+	queryByID := fmt.Sprintf(`SELECT * FROM %s WHERE application_id=$1`, apg.appTableName)
 	err = apg.db.Get(&app, queryByID, applicationID)
 	if err != nil {
 		return application.Application{},
@@ -29,7 +36,7 @@ func (apg ApplicationPg) QueryApplicationByID(applicationID int) (app applicatio
 }
 
 func (apg ApplicationPg) QueryApplicationByOwner(userID int) (apps []application.Application, err error) {
-	queryByOwner := fmt.Sprintf(`SELECT * FROM %s WHERE app_user_id=$1`, apg.tableName)
+	queryByOwner := fmt.Sprintf(`SELECT * FROM %s WHERE app_user_id=$1`, apg.appTableName)
 	err = apg.db.Select(&apps, queryByOwner, userID)
 	if err != nil {
 		return nil, fmt.Errorf("QueryGeneralFormDraftByOwner from db error: %v", err)
@@ -38,7 +45,7 @@ func (apg ApplicationPg) QueryApplicationByOwner(userID int) (apps []application
 }
 
 func (apg ApplicationPg) QueryApplicationByDepartmentCode(dc string) (apps []application.Application, err error) {
-	queryByOwner := fmt.Sprintf(`SELECT * FROM %s WHERE department_code=$1 AND status=$2 `, apg.tableName)
+	queryByOwner := fmt.Sprintf(`SELECT * FROM %s WHERE department_code=$1 AND status=$2 `, apg.appTableName)
 	err = apg.db.Select(&apps, queryByOwner, dc)
 	if err != nil {
 		return nil, fmt.Errorf("QueryApplicationByDepartmentCode from db error: %v", err)
@@ -47,7 +54,7 @@ func (apg ApplicationPg) QueryApplicationByDepartmentCode(dc string) (apps []app
 }
 
 func (apg ApplicationPg) QueryApplicationByFilter(appFilter func(application.Application) bool) (apps []application.Application, err error) {
-	queryAll := fmt.Sprintf(`SELECT * FROM %s`, apg.tableName)
+	queryAll := fmt.Sprintf(`SELECT * FROM %s`, apg.appTableName)
 	var appAll []application.Application
 	err = apg.db.Select(&appAll, queryAll)
 	if err != nil {
@@ -76,7 +83,7 @@ func (apg ApplicationPg) InsertApplication(app application.Application) (appID i
 }
 
 func (apg ApplicationPg) UpdateApplication(app application.Application) (err error) {
-	execUpdate := fmt.Sprintf(`UPDATE %s SET status=:status, basic_content=:basic_content, extra_content=:extra_content WHERE application_id=:application_id`, apg.tableName)
+	execUpdate := fmt.Sprintf(`UPDATE %s SET status=:status, basic_content=:basic_content, extra_content=:extra_content WHERE application_id=:application_id`, apg.appTableName)
 
 	_, err = apg.db.NamedExec(execUpdate, app)
 	if err != nil {
@@ -86,7 +93,7 @@ func (apg ApplicationPg) UpdateApplication(app application.Application) (err err
 }
 
 func (apg ApplicationPg) InsertAppOps(record application.AppOpsRecord) (recordID int, err error) {
-	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_id, ops_user_id, ops_user_cn_name, action, action_str, basic_info, extra_info, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING application_id`, apg.tableName)
+	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_id, ops_user_id, ops_user_cn_name, action, action_str, basic_info, extra_info, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING application_id`, apg.opsTableName)
 	err = apg.db.Get(&recordID, execInsert,
 		record.ProjectID, record.ApplicationID, record.OpsUserID, record.OpsUserChineseName,
 		record.Action, record.ActionStr, record.BasicInfo, record.ExtraInfo, time.Now())
@@ -97,7 +104,7 @@ func (apg ApplicationPg) InsertAppOps(record application.AppOpsRecord) (recordID
 }
 
 func (apg ApplicationPg) QueryAppOpsByAppId(applicationID int) (records []application.AppOpsRecord, err error) {
-	queryByAppId := fmt.Sprintf(`SELECT * FROM %s WHERE application_id=$1`, apg.tableName)
+	queryByAppId := fmt.Sprintf(`SELECT * FROM %s WHERE application_id=$1`, apg.opsTableName)
 	err = apg.db.Select(&records, queryByAppId, applicationID)
 	if err != nil {
 		return nil, fmt.Errorf("query application operations By application id from db error: %v", err)

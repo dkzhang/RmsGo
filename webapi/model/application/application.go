@@ -14,7 +14,7 @@ type Application struct {
 	Status                   int       `db:"status" json:"status"`
 	ApplicantUserID          int       `db:"app_user_id" json:"app_user_id"`
 	ApplicantUserChineseName string    `db:"app_user_cn_name" json:"app_user_cn_name"`
-	DepartmentCode           int       `db:"department_code" json:"department_code"`
+	DepartmentCode           string    `db:"department_code" json:"department_code"`
 	BasicContent             string    `db:"basic_content" json:"basic_content"`
 	ExtraContent             string    `db:"extra_content" json:"extra_content"`
 	CreatedAt                time.Time `db:"created_at" json:"created_at"`
