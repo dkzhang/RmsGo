@@ -18,6 +18,7 @@ type Application struct {
 	BasicContent             string    `db:"basic_content" json:"basic_content"`
 	ExtraContent             string    `db:"extra_content" json:"extra_content"`
 	CreatedAt                time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt                time.Time `db:"updated_at" json:"updated_at"`
 }
 
 type AppOpsRecord struct {
@@ -52,7 +53,8 @@ var schemaFormatApplication = `
 			department_code varchar(32),
 			basic_content varchar(16384),
 			extra_content varchar(16384),			
-			created_at TIMESTAMP WITH TIME ZONE
+			created_at TIMESTAMP WITH TIME ZONE,
+			updated_at TIMESTAMP WITH TIME ZONE
 		);`
 
 var schemaAppOpsRecord = `

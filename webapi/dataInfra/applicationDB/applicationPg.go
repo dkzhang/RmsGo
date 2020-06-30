@@ -71,11 +71,12 @@ func (apg ApplicationPg) QueryApplicationByFilter(appFilter func(application.App
 }
 
 func (apg ApplicationPg) InsertApplication(app application.Application) (appID int, err error) {
-	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_type, status, app_user_id, app_user_cn_name, department_code, basic_content, extra_content, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING application_id`, apg.tableName)
+	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_type, status, app_user_id, app_user_cn_name, department_code, basic_content, extra_content, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING application_id`, apg.appTableName)
 	err = apg.db.Get(&appID, execInsert,
 		app.ProjectID, app.Type, app.Status,
 		app.ApplicationID, app.ApplicantUserChineseName, app.DepartmentCode,
-		app.BasicContent, app.ExtraContent, time.Now())
+		app.BasicContent, app.ExtraContent,
+		time.Now(), time.Now())
 	if err != nil {
 		return -1, fmt.Errorf("db.Get InsertApplication in db error: %v", err)
 	}
@@ -83,7 +84,7 @@ func (apg ApplicationPg) InsertApplication(app application.Application) (appID i
 }
 
 func (apg ApplicationPg) UpdateApplication(app application.Application) (err error) {
-	execUpdate := fmt.Sprintf(`UPDATE %s SET status=:status, basic_content=:basic_content, extra_content=:extra_content WHERE application_id=:application_id`, apg.appTableName)
+	execUpdate := fmt.Sprintf(`UPDATE %s SET status=:status, basic_content=:basic_content, extra_content=:extra_content, updated_at=:updated_at WHERE application_id=:application_id`, apg.appTableName)
 
 	_, err = apg.db.NamedExec(execUpdate, app)
 	if err != nil {
