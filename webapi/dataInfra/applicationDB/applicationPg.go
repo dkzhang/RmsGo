@@ -94,7 +94,7 @@ func (apg ApplicationPg) UpdateApplication(app application.Application) (err err
 }
 
 func (apg ApplicationPg) InsertAppOps(record application.AppOpsRecord) (recordID int, err error) {
-	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_id, ops_user_id, ops_user_cn_name, action, action_str, basic_info, extra_info, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING application_id`, apg.opsTableName)
+	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_id, ops_user_id, ops_user_cn_name, action, action_str, basic_info, extra_info, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING record_id`, apg.opsTableName)
 	err = apg.db.Get(&recordID, execInsert,
 		record.ProjectID, record.ApplicationID, record.OpsUserID, record.OpsUserChineseName,
 		record.Action, record.ActionStr, record.BasicInfo, record.ExtraInfo, time.Now())

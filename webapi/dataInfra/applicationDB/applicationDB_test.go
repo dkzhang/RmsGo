@@ -57,36 +57,38 @@ var _ = Describe("ApplicationDB", func() {
 		// Assumed completed
 		projectID := 1
 
-		basicStr := "Application BasicContent"
-		extraStr := "Application ExtraContent"
+		basicStr := "Application %d BasicContent"
+		extraStr := "Application %d ExtraContent"
 
 		//Insert new application
-		It("ProjectChief insert an Application and an AppOpsRecord", func() {
-			appID, err := adb.InsertApplication(application.Application{
-				ProjectID:                projectID,
-				Type:                     application.AppTypeNew,
-				Status:                   application.AppStatusProjectChief,
-				ApplicantUserID:          userPC.UserID,
-				ApplicantUserChineseName: userPC.ChineseName,
-				DepartmentCode:           userPC.DepartmentCode,
-				BasicContent:             basicStr,
-				ExtraContent:             extraStr,
-			})
-			Expect(err).ShouldNot(HaveOccurred(), "InsertApplication error: %v", err)
-			By(fmt.Sprintf("InsertApplication success, got application ID = %d", appID))
+		It("ProjectChief insert 3 Application and 3 AppOpsRecord", func() {
+			for i := 1; i <= 3; i++ {
+				appID, err := adb.InsertApplication(application.Application{
+					ProjectID:                projectID,
+					Type:                     application.AppTypeNew,
+					Status:                   application.AppStatusProjectChief,
+					ApplicantUserID:          userPC.UserID,
+					ApplicantUserChineseName: userPC.ChineseName,
+					DepartmentCode:           userPC.DepartmentCode,
+					BasicContent:             fmt.Sprintf(basicStr, i),
+					ExtraContent:             fmt.Sprintf(extraStr, i),
+				})
+				Expect(err).ShouldNot(HaveOccurred(), "InsertApplication %d error: %v", i, err)
+				By(fmt.Sprintf("InsertApplication %d success, got application ID = %d", i, appID))
 
-			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
-				ProjectID:          projectID,
-				ApplicationID:      appID,
-				OpsUserID:          userPC.UserID,
-				OpsUserChineseName: userPC.ChineseName,
-				Action:             1,
-				ActionStr:          "提交",
-				BasicInfo:          basicStr,
-				ExtraInfo:          extraStr,
-			})
-			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
-			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
+				recordID, err := adb.InsertAppOps(application.AppOpsRecord{
+					ProjectID:          projectID,
+					ApplicationID:      appID,
+					OpsUserID:          userPC.UserID,
+					OpsUserChineseName: userPC.ChineseName,
+					Action:             1,
+					ActionStr:          "提交",
+					BasicInfo:          fmt.Sprintf(basicStr, i),
+					ExtraInfo:          fmt.Sprintf(extraStr, i),
+				})
+				Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps %d error: %v", i, err)
+				By(fmt.Sprintf("InsertAppOps %d success, got ops record ID = %d", i, recordID))
+			}
 		})
 	})
 
@@ -148,6 +150,15 @@ var _ = Describe("ApplicationDB", func() {
 			err = adb.UpdateApplication(app)
 			Expect(err).ShouldNot(HaveOccurred(), "UpdateApplication error: %v", err)
 			By(fmt.Sprintf("UpdateApplication success"))
+		})
+	})
+
+	Describe("QueryAppOpsByAppId", func() {
+		It("Query application 1 ops", func() {
+			appID := 1
+			records, err := adb.QueryAppOpsByAppId(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryAppOpsByAppId error: %v", err)
+			By(fmt.Sprintf("QueryAppOpsByAppId success: %v", records))
 		})
 	})
 })
