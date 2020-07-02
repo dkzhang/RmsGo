@@ -92,11 +92,10 @@ var _ = Describe("ApplicationDB", func() {
 		})
 	})
 
-	Describe("Approver examine the new Project&Resource application", func() {
-		projectID := 1
-		appID := 1
-
-		It("Approver query the application,insert an AppOpsRecord, update the application", func() {
+	Describe("Approver examine the new Project&Resource application, agree app1, reject app2", func() {
+		It("Approver agree app1, query the application,insert an AppOpsRecord, update the application", func() {
+			projectID := 1
+			appID := 1
 
 			app, err := adb.QueryApplicationByID(appID)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryApplicationByID error: %v", err)
@@ -111,6 +110,33 @@ var _ = Describe("ApplicationDB", func() {
 				ActionStr:          "是",
 				BasicInfo:          "",
 				ExtraInfo:          "同意",
+			})
+			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
+			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
+
+			app.Status = application.AppStatusController
+			err = adb.UpdateApplication(app)
+			Expect(err).ShouldNot(HaveOccurred(), "UpdateApplication error: %v", err)
+			By(fmt.Sprintf("UpdateApplication success"))
+		})
+
+		It("Approver reject app2, query the application,insert an AppOpsRecord, update the application", func() {
+			projectID := 1
+			appID := 2
+
+			app, err := adb.QueryApplicationByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryApplicationByID error: %v", err)
+			By(fmt.Sprintf("QueryApplicationByID success, got application = %v", app))
+
+			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
+				ProjectID:          projectID,
+				ApplicationID:      appID,
+				OpsUserID:          userApp.UserID,
+				OpsUserChineseName: userApp.ChineseName,
+				Action:             -1,
+				ActionStr:          "否",
+				BasicInfo:          "",
+				ExtraInfo:          "不同意",
 			})
 			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
@@ -154,11 +180,13 @@ var _ = Describe("ApplicationDB", func() {
 	})
 
 	Describe("QueryAppOpsByAppId", func() {
-		It("Query application 1 ops", func() {
-			appID := 1
-			records, err := adb.QueryAppOpsByAppId(appID)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryAppOpsByAppId error: %v", err)
-			By(fmt.Sprintf("QueryAppOpsByAppId success: %v", records))
+
+		It("Query application ops", func() {
+			for appID := 1; appID <= 3; appID++ {
+				records, err := adb.QueryAppOpsByAppId(appID)
+				Expect(err).ShouldNot(HaveOccurred(), "QueryAppOpsByAppId error: %v", err)
+				By(fmt.Sprintf("QueryAppOpsByAppId %d success: %v", appID, records))
+			}
 		})
 	})
 })
