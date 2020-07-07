@@ -30,6 +30,31 @@ type DynamicInfo struct {
 	UpdatedAt      time.Time `db:"updated_at" json:"updated_at"`
 }
 
+var SchemaDynamicInfo = `
+		CREATE TABLE user_info (
+    		project_id int UNIQUE,
+			basic_status int,
+			computing_alloc_status int,
+			storage_alloc_status int,
+			app_in_progress_num int,
+			app_accomplished_num int,
+			metering_in_progress_num int,
+			metering_accomplished_num int,
+			res_alloc_num int,
+			cpu_nodes_expected int,
+			gpu_nodes_expected int,
+			storage_size_expected int,
+			cpu_nodes_acquired int,
+			gpu_nodes_acquired int,
+			storage_size_acquired int,
+			start_billing_at TIMESTAMP WITH TIME ZONE,
+			total_days_apply int,
+			end_reminder_at TIMESTAMP WITH TIME ZONE,
+			created_at TIMESTAMP WITH TIME ZONE,
+			updated_at TIMESTAMP WITH TIME ZONE
+		);
+		`
+
 const (
 	BasicStatusApplying    = 1
 	BasicStatusEstablished = 2

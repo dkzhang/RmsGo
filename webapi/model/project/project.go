@@ -16,3 +16,18 @@ type StaticInfo struct {
 	CreatedAt        time.Time `db:"created_at" json:"created_at"`
 	UpdatedAt        time.Time `db:"updated_at" json:"updated_at"`
 }
+
+var SchemaStaticInfo = `
+		CREATE TABLE user_info (
+    		project_id SERIAL PRIMARY KEY,
+			project_name varchar(256) ,
+			project_code varchar(32) UNIQUE,
+			department_code varchar(32),
+			department varchar(256),
+			chief_id int,
+			chief_cn_name varchar(32), 
+			basic_content varchar(16384),			
+			created_at TIMESTAMP WITH TIME ZONE,
+			updated_at TIMESTAMP WITH TIME ZONE
+		);
+		`
