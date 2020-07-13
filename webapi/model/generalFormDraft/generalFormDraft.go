@@ -10,7 +10,7 @@ type GeneralFormDraft struct {
 
 var SchemaGeneralFormDraft = `
 		CREATE TABLE general_form_draft (
-    		form_id_id SERIAL PRIMARY KEY,
+    		form_id SERIAL PRIMARY KEY,
 			user_id int,
 			form_type int, 
 			basic_content varchar(16384),			
