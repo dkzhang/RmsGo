@@ -78,6 +78,7 @@ const (
 	AppStatusApprover     = 2
 	AppStatusController   = 7
 	AppStatusArchived     = 8
+	AppStatusALL          = 99
 )
 
 const (
@@ -85,5 +86,5 @@ const (
 	AppTypeChange        = 2
 	AppTypeReturnCompute = 3
 	AppTypeReturnStorage = 4
-	AppTypeMetering      = 5
+	AppTypeALL           = 99
 )
