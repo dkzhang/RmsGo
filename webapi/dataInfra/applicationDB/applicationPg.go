@@ -8,12 +8,12 @@ import (
 )
 
 type ApplicationPg struct {
-	ApplicationDbInfo
+	DBInfo
 }
 
 func NewApplicationPg(sqlxdb *sqlx.DB, appname, opsname string) ApplicationPg {
 	return ApplicationPg{
-		ApplicationDbInfo{
+		DBInfo{
 			TheDB:        sqlxdb,
 			AppTableName: appname,
 			OpsTableName: opsname,
@@ -206,7 +206,7 @@ func (apg ApplicationPg) QueryAppOpsByAppId(applicationID int) (records []applic
 	return records, nil
 }
 
-func (apg ApplicationPg) ArchiveToHistory(historyADI ApplicationDbInfo, projectID int) (err error) {
+func (apg ApplicationPg) ArchiveToHistory(historyADI DBInfo, projectID int) (err error) {
 	//TODO
 	return fmt.Errorf("the method has not been implemented")
 }

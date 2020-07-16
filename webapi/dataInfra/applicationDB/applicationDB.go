@@ -5,7 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type ApplicationDbInfo struct {
+type DBInfo struct {
 	TheDB        *sqlx.DB
 	AppTableName string
 	OpsTableName string
@@ -24,7 +24,7 @@ type ApplicationDB interface {
 	InsertAppOps(record application.AppOpsRecord) (recordID int, err error)
 	QueryAppOpsByAppId(applicationID int) (records []application.AppOpsRecord, err error)
 
-	ArchiveToHistory(historyADI ApplicationDbInfo, projectID int) (err error)
+	ArchiveToHistory(historyADI DBInfo, projectID int) (err error)
 
 	Close()
 }
