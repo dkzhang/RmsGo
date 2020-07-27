@@ -20,7 +20,7 @@ type ProjectDB interface {
 	QueryAllInfo() ([]project.StaticInfo, []project.DynamicInfo)
 
 	///////////////////////////////////////////////////////////////////////////////
-	InsertAllInfo(project.StaticInfo, project.DynamicInfo) (err error)
+	InsertAllInfo(project.StaticInfo, project.DynamicInfo) (projectID int, err error)
 	UpdateStaticInfo(projectInfo project.StaticInfo) (err error)
 	UpdateDynamicInfo(projectInfo project.DynamicInfo) (err error)
 
