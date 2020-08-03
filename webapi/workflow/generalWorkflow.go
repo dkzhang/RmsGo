@@ -6,6 +6,6 @@ import (
 )
 
 type GeneralWorkflow interface {
-	Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, err error)
-	Process(form generalForm.GeneralForm, userInfo user.UserInfo) (err error)
+	Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, err error, msg string)
+	Process(form generalForm.GeneralForm, userInfo user.UserInfo) (err error, msg string)
 }

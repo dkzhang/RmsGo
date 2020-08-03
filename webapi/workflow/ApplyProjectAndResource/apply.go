@@ -18,11 +18,18 @@ type Workflow struct {
 	pdb projectDB.ProjectDB
 }
 
-func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, err error) {
+func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, err error, msg string) {
 	var app gfApplication.AppNewProRes
 	err = yaml.Unmarshal([]byte(form.BasicContent), &app)
 	if err != nil {
-		return -1, fmt.Errorf("json Unmarshal to AppNewProRes error: %v", err)
+		return -1, fmt.Errorf("json Unmarshal to AppNewProRes error: %v", err),
+			fmt.Sprintf("无法解析form.BasicContent的结构")
+	}
+
+	// check
+	if form.Action != 1 {
+		return -1, fmt.Errorf("the Action in Apply must be equal 1"),
+			fmt.Sprintf("首次提交申请单时form.Action必须为1")
 	}
 
 	// (1) Insert New Project
@@ -64,7 +71,8 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 
 	projectID, err := wf.pdb.InsertAllInfo(theProjectS, theProjectD)
 	if err != nil {
-		return -1, fmt.Errorf("insert project info error: %v", err)
+		return -1, fmt.Errorf("insert project info error: %v", err),
+			fmt.Sprintf("在数据库中新建项目记录失败")
 	}
 
 	// (2) Insert New Application
@@ -84,15 +92,35 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 
 	appID, err = wf.adb.InsertApplication(theApplication)
 	if err != nil {
-		return -1, fmt.Errorf("database operation InsertApplication error: %v", err)
+		return -1, fmt.Errorf("database operation InsertApplication error: %v", err),
+			fmt.Sprintf("在数据库中新建申请单记录失败")
 	}
 
 	// (3) Insert New ApplicationOps
+	theAppOpsRecord := application.AppOpsRecord{
+		//RecordID:           0,
+		ProjectID:          projectID,
+		ApplicationID:      appID,
+		OpsUserID:          userInfo.UserID,
+		OpsUserChineseName: userInfo.ChineseName,
+		Action:             form.Action,
+		ActionStr:          "首次提交",
+		BasicInfo:          form.BasicContent,
+		ExtraInfo:          form.ExtraContent,
+		CreatedAt:          time.Now(),
+	}
 
-	return appID, nil
+	recordID, err := wf.adb.InsertAppOps(theAppOpsRecord)
+	if err != nil {
+		return -1, fmt.Errorf("database operation InsertApplicationOps error: %v", err),
+			fmt.Sprintf("在数据库中新建申请单操作记录失败")
+	}
+
+	return appID, nil,
+		fmt.Sprintf("首次提交申请单成功,ProjectID=%d, ApplicationID=%d, RecordID=%d", projectID, appID, recordID)
 }
 
-func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo) (err error) {
+func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo) (err error, msg string) {
 
-	return fmt.Errorf("NEED TODO")
+	return fmt.Errorf("NEED TODO"), ""
 }
