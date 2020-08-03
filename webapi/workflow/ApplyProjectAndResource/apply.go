@@ -40,11 +40,11 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 	}
 
 	theProjectD := project.DynamicInfo{
-		ProjectID:               0,
-		BasicStatus:             0,
-		ComputingAllocStatus:    0,
-		StorageAllocStatus:      0,
-		AppInProgressNum:        0,
+		//ProjectID:               0,
+		BasicStatus:             project.BasicStatusApplying,
+		ComputingAllocStatus:    project.ResNotYetAssigned,
+		StorageAllocStatus:      project.ResNotYetAssigned,
+		AppInProgressNum:        1,
 		AppAccomplishedNum:      0,
 		MeteringInProgressNum:   0,
 		MeteringAccomplishedNum: 0,
@@ -57,17 +57,20 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		StorageSizeAcquired:     0,
 		StartBillingAt:          time.Time{},
 		TotalDaysApply:          0,
-		EndReminderAt:           time.Time{},
-		CreatedAt:               time.Time{},
-		UpdatedAt:               time.Time{},
+		EndReminderAt:           time.Now().AddDate(100, 0, 0),
+		CreatedAt:               time.Now(),
+		UpdatedAt:               time.Now(),
 	}
 
-	wf.pdb.InsertAllInfo(theProjectS, theProjectD)
+	projectID, err := wf.pdb.InsertAllInfo(theProjectS, theProjectD)
+	if err != nil {
+		return -1, fmt.Errorf("insert project info error: %v", err)
+	}
 
 	// (2) Insert New Application
 	theApplication := application.Application{
 		//ApplicationID:            0,
-		ProjectID:                -1,
+		ProjectID:                projectID,
 		Type:                     form.Type,
 		Status:                   application.AppStatusApprover,
 		ApplicantUserID:          userInfo.UserID,
@@ -89,6 +92,7 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 	return appID, nil
 }
 
-func (wf Workflow) Process(form generalForm.GeneralForm) (err error) {
+func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo) (err error) {
 
+	return fmt.Errorf("NEED TODO")
 }

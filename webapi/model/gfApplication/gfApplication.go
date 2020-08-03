@@ -20,10 +20,10 @@ type AppResChange struct {
 }
 
 type AppResComReturn struct {
-	CpuNodesReturnNum int
-	CpuNodesReturnMap string
-	GpuNodesReturnNum int
-	GpuNodesReturnMap string
+	CpuNodesReturnNum int    `json:"cpu_nodes_return_num"`
+	CpuNodesReturnMap string `json:"cpu_nodes_return_map"`
+	GpuNodesReturnNum int    `json:"gpu_nodes_return_num"`
+	GpuNodesReturnMap string `json:"cpu_nodes_return_map"`
 }
 
 //type AppResStoReturn struct {
