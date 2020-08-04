@@ -194,7 +194,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		_, err := wf.adb.InsertAppOps(theAppOpsRecord)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
-				fmt.Sprintf("database operation InsertApplicationOps error: %v", err),
+				fmt.Sprintf("database operation InsertApplicationOps for ProjectChief error: %v", err),
 				"无法为项目长在数据库中新建申请单操作记录")
 		}
 
@@ -244,6 +244,48 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			return webapiError.WaErr(webapiError.TypeAuthorityError,
 				fmt.Sprintf("application department code = %s but current user's department code is %s", theApplication.DepartmentCode, userInfo.DepartmentCode),
 				"当前用户无权操作该申请单，不是该表单所属单位的审批人")
+		}
+
+		// Check Action value
+		switch form.Action {
+		case 1:
+			// Insert New ApplicationOps
+			theAppOpsRecord := application.AppOpsRecord{
+				//RecordID:           0,
+				ProjectID:          theProjectS.ProjectID,
+				ApplicationID:      theApplication.ApplicationID,
+				OpsUserID:          userInfo.UserID,
+				OpsUserChineseName: userInfo.ChineseName,
+				Action:             form.Action,
+				ActionStr:          "是",
+				BasicInfo:          form.BasicContent,
+				ExtraInfo:          form.ExtraContent,
+				CreatedAt:          time.Now(),
+			}
+			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
+					"无法为审批人在数据库中新建申请单操作记录")
+			}
+
+			// Update application
+			// Update Application
+			theApplication.Status = application.AppStatusController
+			theApplication.UpdatedAt = time.Now()
+			err = wf.adb.UpdateApplication(theApplication)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("UpdateApplication for Approver error: %v", err),
+					"无法为审批人在数据库中更新Application")
+			}
+
+		case -1:
+
+		default:
+			return webapiError.WaErr(webapiError.TypeBadRequest,
+				fmt.Sprintf("unsupported action value: %d", form.Action),
+				"不支持此action值")
 		}
 	case application.AppStatusController:
 		if userInfo.Role != user.RoleController {
