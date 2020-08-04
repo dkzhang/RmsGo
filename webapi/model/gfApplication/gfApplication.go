@@ -29,3 +29,11 @@ type AppResComReturn struct {
 //type AppResStoReturn struct {
 //	// nothing
 //}
+
+type AppCtrlProjectInfo struct {
+	ProjectCode string `json:"project_code"`
+}
+
+//type AppCtrlAccountInfo struct {
+//	AccountInfo string    `json:"account_info"`
+//}

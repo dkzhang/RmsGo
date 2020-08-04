@@ -10,6 +10,10 @@ type DynamicInfo struct {
 	ComputingAllocStatus int `db:"computing_alloc_status" json:"computing_alloc_status"`
 	StorageAllocStatus   int `db:"storage_alloc_status" json:"storage_alloc_status"`
 
+	StartDate time.Time `db:"start_date" json:"start_date"`
+	DaysOfUse int       `db:"days_of_use" json:"days_of_use"`
+	EndDate   time.Time `db:"end_date" json:"end_date"`
+
 	AppInProgressNum        int `db:"app_in_progress_num" json:"app_in_progress_num"`
 	AppAccomplishedNum      int `db:"app_accomplished_num" json:"app_accomplished_num"`
 	MeteringInProgressNum   int `db:"metering_in_progress_num" json:"metering_in_progress_num"`
@@ -23,7 +27,7 @@ type DynamicInfo struct {
 	GpuNodesAcquired    int `db:"gpu_nodes_acquired" json:"gpu_nodes_acquired"`
 	StorageSizeAcquired int `db:"storage_size_acquired" json:"storage_size_acquired"`
 
-	StartBillingAt time.Time `db:"start_billing_at" json:"start_billing_at"`
+	//StartBillingAt time.Time `db:"start_billing_at" json:"start_billing_at"`
 	TotalDaysApply int       `db:"total_days_apply" json:"total_days_apply"`
 	EndReminderAt  time.Time `db:"end_reminder_at" json:"end_reminder_at"`
 	CreatedAt      time.Time `db:"created_at" json:"created_at"`
@@ -36,6 +40,9 @@ var SchemaDynamicInfo = `
 			basic_status int,
 			computing_alloc_status int,
 			storage_alloc_status int,
+			start_date TIMESTAMP WITH TIME ZONE,
+			days_of_use int,
+			end_date TIMESTAMP WITH TIME ZONE,
 			app_in_progress_num int,
 			app_accomplished_num int,
 			metering_in_progress_num int,
@@ -46,8 +53,7 @@ var SchemaDynamicInfo = `
 			storage_size_expected int,
 			cpu_nodes_acquired int,
 			gpu_nodes_acquired int,
-			storage_size_acquired int,
-			start_billing_at TIMESTAMP WITH TIME ZONE,
+			storage_size_acquired int,			
 			total_days_apply int,
 			end_reminder_at TIMESTAMP WITH TIME ZONE,
 			created_at TIMESTAMP WITH TIME ZONE,
