@@ -1,17 +1,17 @@
 # Summary
 
-Date : 2020-06-30 16:56:41
+Date : 2020-08-04 11:32:09
 
 Directory c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo
 
-Total : 119 files,  5418 codes, 442 comments, 1123 blanks, all 6983 lines
+Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| Go | 89 | 4,080 | 429 | 850 | 5,359 |
+| Go | 92 | 4,496 | 446 | 904 | 5,846 |
 | Markdown | 10 | 986 | 2 | 229 | 1,217 |
 | YAML | 9 | 151 | 9 | 24 | 184 |
 | XML | 7 | 122 | 0 | 3 | 125 |
@@ -22,7 +22,7 @@ Total : 119 files,  5418 codes, 442 comments, 1123 blanks, all 6983 lines
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 119 | 5,418 | 442 | 1,123 | 6,983 |
+| . | 122 | 5,834 | 459 | 1,177 | 7,470 |
 | .github | 1 | 29 | 0 | 9 | 38 |
 | .github\workflows | 1 | 29 | 0 | 9 | 38 |
 | .idea | 6 | 93 | 0 | 0 | 93 |
@@ -57,15 +57,15 @@ Total : 119 files,  5418 codes, 442 comments, 1123 blanks, all 6983 lines
 | myUtils\logMap | 7 | 191 | 83 | 57 | 331 |
 | myUtils\nodeEncode | 3 | 66 | 5 | 13 | 84 |
 | myUtils\shortMessageService | 4 | 92 | 40 | 35 | 167 |
-| webapi | 56 | 2,730 | 239 | 559 | 3,528 |
+| webapi | 59 | 3,146 | 256 | 613 | 4,015 |
 | webapi\authority | 3 | 196 | 6 | 29 | 231 |
 | webapi\authority\authApplication | 1 | 33 | 0 | 7 | 40 |
 | webapi\authority\authGeneralFormDraftCRUD | 1 | 63 | 3 | 10 | 76 |
 | webapi\authority\authUserCRUD | 1 | 100 | 3 | 12 | 115 |
-| webapi\dataInfra | 23 | 1,118 | 65 | 228 | 1,411 |
-| webapi\dataInfra\applicationDB | 4 | 272 | 4 | 46 | 322 |
+| webapi\dataInfra | 24 | 1,284 | 60 | 247 | 1,591 |
+| webapi\dataInfra\applicationDB | 4 | 418 | 5 | 58 | 481 |
 | webapi\dataInfra\generalFormDraftDB | 3 | 137 | 0 | 26 | 163 |
-| webapi\dataInfra\projectDB | 2 | 16 | 8 | 7 | 31 |
+| webapi\dataInfra\projectDB | 3 | 36 | 2 | 14 | 52 |
 | webapi\dataInfra\projectDM | 2 | 21 | 14 | 14 | 49 |
 | webapi\dataInfra\userDB | 5 | 245 | 12 | 35 | 292 |
 | webapi\dataInfra\userDM | 2 | 213 | 21 | 50 | 284 |
@@ -80,16 +80,18 @@ Total : 119 files,  5418 codes, 442 comments, 1123 blanks, all 6983 lines
 | webapi\handle\handleUser | 3 | 328 | 14 | 49 | 391 |
 | webapi\infrastructure | 1 | 90 | 12 | 22 | 124 |
 | webapi\middleware | 2 | 51 | 14 | 16 | 81 |
-| webapi\model | 13 | 362 | 71 | 86 | 519 |
-| webapi\model\application | 1 | 76 | 3 | 11 | 90 |
+| webapi\model | 13 | 410 | 75 | 89 | 574 |
+| webapi\model\application | 1 | 77 | 3 | 11 | 91 |
 | webapi\model\generalForm | 1 | 10 | 0 | 2 | 12 |
 | webapi\model\generalFormDraft | 1 | 17 | 1 | 4 | 22 |
-| webapi\model\gfApplication | 1 | 23 | 3 | 6 | 32 |
+| webapi\model\gfApplication | 1 | 26 | 6 | 8 | 40 |
 | webapi\model\metering | 1 | 41 | 0 | 9 | 50 |
-| webapi\model\project | 2 | 52 | 0 | 13 | 65 |
+| webapi\model\project | 2 | 96 | 1 | 14 | 111 |
 | webapi\model\resource | 1 | 35 | 0 | 8 | 43 |
 | webapi\model\statusActionMap | 1 | 18 | 1 | 5 | 24 |
 | webapi\model\user | 4 | 90 | 63 | 28 | 181 |
-| webapi\webAPI | 1 | 5 | 0 | 2 | 7 |
+| webapi\workflow | 3 | 207 | 18 | 34 | 259 |
+| webapi\workflow\ApplyChangeResource | 1 | 1 | 0 | 1 | 2 |
+| webapi\workflow\ApplyProjectAndResource | 1 | 197 | 18 | 30 | 245 |
 
 [details](details.md)

@@ -217,6 +217,8 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 				fmt.Sprintf("无法为项目长在数据库中更新Project动态信息")
 		}
 
+		return nil, fmt.Sprintf("项目长重新提交申请成功")
+
 	case application.AppStatusApprover:
 		if userInfo.Role != user.RoleApprover {
 			return fmt.Errorf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
