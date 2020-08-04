@@ -2,6 +2,7 @@ package ApplyProjectAndResource
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/myUtils/webapiError"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
@@ -18,18 +19,20 @@ type Workflow struct {
 	pdb projectDB.ProjectDB
 }
 
-func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, err error, msg string) {
+func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 	var app gfApplication.AppNewProRes
-	err = yaml.Unmarshal([]byte(form.BasicContent), &app)
+	err := yaml.Unmarshal([]byte(form.BasicContent), &app)
 	if err != nil {
-		return -1, fmt.Errorf("json Unmarshal to AppNewProRes error: %v", err),
-			fmt.Sprintf("无法解析form.BasicContent的结构")
+		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
+			"无法解析申请表单的BasicContent的json结构")
 	}
 
 	// check
 	if form.Action != 1 {
-		return -1, fmt.Errorf("the Action in Apply must be equal 1"),
-			fmt.Sprintf("首次提交申请单时form.Action必须为1")
+		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("the Action in Apply must be equal 1"),
+			"项目长首次提交申请的action必须为1")
 	}
 
 	// (1) Insert New Project
@@ -73,8 +76,9 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 
 	projectID, err := wf.pdb.InsertAllInfo(theProjectS, theProjectD)
 	if err != nil {
-		return -1, fmt.Errorf("insert project info error: %v", err),
-			fmt.Sprintf("在数据库中新建项目记录失败")
+		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("insert project info error: %v", err),
+			"在数据库中新建项目记录失败")
 	}
 
 	// (2) Insert New Application
@@ -94,8 +98,9 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 
 	appID, err = wf.adb.InsertApplication(theApplication)
 	if err != nil {
-		return -1, fmt.Errorf("database operation InsertApplication error: %v", err),
-			fmt.Sprintf("在数据库中新建申请单记录失败")
+		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation InsertApplication error: %v", err),
+			"在数据库中新建申请单记录失败")
 	}
 
 	// (3) Insert New ApplicationOps
@@ -112,59 +117,65 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		CreatedAt:          time.Now(),
 	}
 
-	recordID, err := wf.adb.InsertAppOps(theAppOpsRecord)
+	_, err = wf.adb.InsertAppOps(theAppOpsRecord)
 	if err != nil {
-		return -1, fmt.Errorf("database operation InsertApplicationOps error: %v", err),
-			fmt.Sprintf("在数据库中新建申请单操作记录失败")
+		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation InsertApplicationOps error: %v", err),
+			"在数据库中新建申请单操作记录失败")
 	}
-
-	return appID, nil,
-		fmt.Sprintf("首次提交申请单成功,ProjectID=%d, ApplicationID=%d, RecordID=%d", projectID, appID, recordID)
+	return appID, nil
 }
 
-func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo) (err error, msg string) {
+func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo) (waErr webapiError.Err) {
 
 	// Query Application and Project static & dynamic
 	theApplication, err := wf.adb.QueryApplicationByID(form.FormID)
 	if err != nil {
-		return fmt.Errorf("database operation QueryApplicationByID error: %v", err),
-			fmt.Sprintf("在数据库中查询申请单失败")
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryApplicationByID error: %v", err),
+			"在数据库中查询申请单失败")
 	}
 
 	theProjectS, err := wf.pdb.QueryStaticInfoByID(theApplication.ProjectID)
 	if err != nil {
-		return fmt.Errorf("database operation QueryApplicationByID error: %v", err),
-			fmt.Sprintf("在数据库中查询项目静态信息失败")
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryApplicationByID error: %v", err),
+			"在数据库中查询项目静态信息失败")
 	}
 
 	theProjectD, err := wf.pdb.QueryDynamicInfoByID(theApplication.ProjectID)
 	if err != nil {
-		return fmt.Errorf("database operation QueryApplicationByID error: %v", err),
-			fmt.Sprintf("在数据库中查询项目动态信息失败")
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryApplicationByID error: %v", err),
+			"在数据库中查询项目动态信息失败")
 	}
 
 	switch theApplication.Status {
 	case application.AppStatusProjectChief:
 		if userInfo.Role != user.RoleProjectChief {
-			return fmt.Errorf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
-				fmt.Sprintf("当前用户无权操作该申请单，不符合设定流程")
+			return webapiError.WaErr(webapiError.TypeAuthorityError,
+				fmt.Sprintf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
+				"当前用户无权操作该申请单，不符合设定流程")
 		}
 		if userInfo.UserID != theApplication.ApplicantUserID {
-			return fmt.Errorf("application owner id = %d but current user is %d", theApplication.ApplicantUserID, userInfo.UserID),
-				fmt.Sprintf("当前用户无权操作该申请单，不是创建该表单的项目长")
+			return webapiError.WaErr(webapiError.TypeAuthorityError,
+				fmt.Sprintf("application owner id = %d but current user is %d", theApplication.ApplicantUserID, userInfo.UserID),
+				"当前用户无权操作该申请单，不是创建该表单的项目长")
 		}
 
 		//项目长重新提交表单
 		if form.Action != 1 {
-			return fmt.Errorf("the Action for ProjectChief ReApply must be equal 1"),
-				fmt.Sprintf("项目长重新提交申请单时form.Action必须为1")
+			return webapiError.WaErr(webapiError.TypeBadRequest,
+				fmt.Sprintf("the Action for ProjectChief ReApply must be equal 1"),
+				"项目长重新提交申请单时form.Action必须为1")
 		}
 
 		var app gfApplication.AppNewProRes
 		err = yaml.Unmarshal([]byte(form.BasicContent), &app)
 		if err != nil {
-			return fmt.Errorf("json Unmarshal to AppNewProRes error: %v", err),
-				fmt.Sprintf("无法解析form.BasicContent的结构")
+			return webapiError.WaErr(webapiError.TypeBadRequest,
+				fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
+				"无法解析form.BasicContent的结构")
 		}
 
 		// Insert New ApplicationOps
@@ -182,8 +193,9 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		}
 		_, err := wf.adb.InsertAppOps(theAppOpsRecord)
 		if err != nil {
-			return fmt.Errorf("database operation InsertApplicationOps error: %v", err),
-				fmt.Sprintf("无法为项目长在数据库中新建申请单操作记录")
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("database operation InsertApplicationOps error: %v", err),
+				"无法为项目长在数据库中新建申请单操作记录")
 		}
 
 		// Update Application
@@ -193,8 +205,9 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		theApplication.UpdatedAt = time.Now()
 		err = wf.adb.UpdateApplication(theApplication)
 		if err != nil {
-			return fmt.Errorf("UpdateApplication for ProjectChief error: %v", err),
-				fmt.Sprintf("无法为项目长在数据库中更新Application")
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("UpdateApplication for ProjectChief error: %v", err),
+				"无法为项目长在数据库中更新Application")
 		}
 
 		// Update Project
@@ -203,8 +216,9 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		theProjectS.UpdatedAt = time.Now()
 		err = wf.pdb.UpdateStaticInfo(theProjectS)
 		if err != nil {
-			return fmt.Errorf("UpdateApplication for ProjectChief error: %v", err),
-				fmt.Sprintf("无法为项目长在数据库中更新Project静态信息")
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("UpdateApplication for ProjectChief error: %v", err),
+				"无法为项目长在数据库中更新Project静态信息")
 		}
 
 		theProjectD.StartDate = app.StartDate
@@ -213,25 +227,29 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		theProjectD.UpdatedAt = time.Now()
 		err = wf.pdb.UpdateDynamicInfo(theProjectD)
 		if err != nil {
-			return fmt.Errorf("UpdateApplication for ProjectChief error: %v", err),
-				fmt.Sprintf("无法为项目长在数据库中更新Project动态信息")
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("UpdateApplication for ProjectChief error: %v", err),
+				"无法为项目长在数据库中更新Project动态信息")
 		}
 
-		return nil, fmt.Sprintf("项目长重新提交申请成功")
+		return nil
 
 	case application.AppStatusApprover:
 		if userInfo.Role != user.RoleApprover {
-			return fmt.Errorf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
-				fmt.Sprintf("当前用户无权操作该申请单，不符合设定流程")
+			return webapiError.WaErr(webapiError.TypeAuthorityError,
+				fmt.Sprintf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
+				"当前用户无权操作该申请单，不符合设定流程")
 		}
 		if userInfo.UserID != theApplication.ApplicantUserID {
-			return fmt.Errorf("application department code = %s but current user's department code is %s", theApplication.DepartmentCode, userInfo.DepartmentCode),
-				fmt.Sprintf("当前用户无权操作该申请单，不是该表单所属单位的审批人")
+			return webapiError.WaErr(webapiError.TypeAuthorityError,
+				fmt.Sprintf("application department code = %s but current user's department code is %s", theApplication.DepartmentCode, userInfo.DepartmentCode),
+				"当前用户无权操作该申请单，不是该表单所属单位的审批人")
 		}
 	case application.AppStatusController:
 		if userInfo.Role != user.RoleController {
-			return fmt.Errorf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
-				fmt.Sprintf("当前用户无权操作该申请单，不符合设定流程")
+			return webapiError.WaErr(webapiError.TypeAuthorityError,
+				fmt.Sprintf("application status = %d but current user is %d", theApplication.Status, userInfo.Role),
+				"当前用户无权操作该申请单，不符合设定流程")
 		}
 
 	}
@@ -242,5 +260,5 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 
 	// (3) Update ApplicationOps
 
-	return fmt.Errorf("NEED TODO"), ""
+	return webapiError.WaErr(webapiError.TypeNotYetImplemented, "not yet implemented", "尚未实现")
 }
