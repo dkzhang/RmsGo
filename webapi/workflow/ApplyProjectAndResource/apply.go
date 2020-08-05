@@ -20,6 +20,12 @@ type Workflow struct {
 }
 
 func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
+	if form.Type != application.AppTypeNew {
+		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("expected form type is %d but got %d", application.AppTypeNew, form.Type),
+			"此接口只处理新建项目申请资源的表单")
+	}
+
 	var app gfApplication.AppNewProRes
 	err := yaml.Unmarshal([]byte(form.BasicContent), &app)
 	if err != nil {
@@ -55,7 +61,7 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		ComputingAllocStatus:    project.ResNotYetAssigned,
 		StorageAllocStatus:      project.ResNotYetAssigned,
 		StartDate:               app.StartDate,
-		DaysOfUse:               app.DaysOfUse,
+		TotalDaysApply:          app.TotalDaysApply,
 		EndDate:                 app.EndDate,
 		AppInProgressNum:        1,
 		AppAccomplishedNum:      0,
@@ -68,7 +74,6 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		CpuNodesAcquired:        0,
 		GpuNodesAcquired:        0,
 		StorageSizeAcquired:     0,
-		TotalDaysApply:          0,
 		EndReminderAt:           time.Now().AddDate(100, 0, 0),
 		CreatedAt:               time.Now(),
 		UpdatedAt:               time.Now(),
@@ -127,6 +132,11 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 }
 
 func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo) (waErr webapiError.Err) {
+	if form.Type != application.AppTypeNew {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("expected form type is %d but got %d", application.AppTypeNew, form.Type),
+			"此接口只处理新建项目申请资源的表单")
+	}
 
 	// Query Application and Project static & dynamic
 	theApplication, err := wf.adb.QueryApplicationByID(form.FormID)
@@ -222,7 +232,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		}
 
 		theProjectD.StartDate = app.StartDate
-		theProjectD.DaysOfUse = app.DaysOfUse
+		theProjectD.TotalDaysApply = app.TotalDaysApply
 		theProjectD.EndDate = app.EndDate
 		theProjectD.UpdatedAt = time.Now()
 		err = wf.pdb.UpdateDynamicInfo(theProjectD)
@@ -269,7 +279,6 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 					"无法为审批人在数据库中新建申请单操作记录")
 			}
 
-			// Update application
 			// Update Application
 			theApplication.Status = application.AppStatusController
 			theApplication.UpdatedAt = time.Now()
@@ -279,8 +288,36 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 					fmt.Sprintf("UpdateApplication for Approver error: %v", err),
 					"无法为审批人在数据库中更新Application")
 			}
-
 		case -1:
+			// Insert New ApplicationOps
+			theAppOpsRecord := application.AppOpsRecord{
+				//RecordID:           0,
+				ProjectID:          theProjectS.ProjectID,
+				ApplicationID:      theApplication.ApplicationID,
+				OpsUserID:          userInfo.UserID,
+				OpsUserChineseName: userInfo.ChineseName,
+				Action:             form.Action,
+				ActionStr:          "否",
+				BasicInfo:          form.BasicContent,
+				ExtraInfo:          form.ExtraContent,
+				CreatedAt:          time.Now(),
+			}
+			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
+					"无法为审批人在数据库中新建申请单操作记录")
+			}
+
+			// Update Application
+			theApplication.Status = application.AppStatusProjectChief
+			theApplication.UpdatedAt = time.Now()
+			err = wf.adb.UpdateApplication(theApplication)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("UpdateApplication for Approver error: %v", err),
+					"无法为审批人在数据库中更新Application")
+			}
 
 		default:
 			return webapiError.WaErr(webapiError.TypeBadRequest,
@@ -294,13 +331,118 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 				"当前用户无权操作该申请单，不符合设定流程")
 		}
 
+		var appCtrlProjectInfo gfApplication.AppCtrlProjectInfo
+		err = yaml.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeBadRequest,
+				fmt.Sprintf("json Unmarshal to AppCtrlProjectInfo error: %v", err),
+				"无法解析form.BasicContent的结构")
+		}
+
+		// Check Action value
+		switch form.Action {
+		case 1:
+			// Insert New ApplicationOps
+			theAppOpsRecord := application.AppOpsRecord{
+				//RecordID:           0,
+				ProjectID:          theProjectS.ProjectID,
+				ApplicationID:      theApplication.ApplicationID,
+				OpsUserID:          userInfo.UserID,
+				OpsUserChineseName: userInfo.ChineseName,
+				Action:             form.Action,
+				ActionStr:          "是",
+				BasicInfo:          form.BasicContent,
+				ExtraInfo:          form.ExtraContent,
+				CreatedAt:          time.Now(),
+			}
+			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("database operation InsertApplicationOps for Controller error: %v", err),
+					"无法为调度员在数据库中新建申请单操作记录")
+			}
+
+			// Update Application
+			theApplication.Status = application.AppStatusArchived
+			theApplication.UpdatedAt = time.Now()
+			err = wf.adb.UpdateApplication(theApplication)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					"无法为调度员在数据库中更新Application")
+			}
+
+			// Update Project
+			theProjectS.ProjectName = appCtrlProjectInfo.ProjectCode
+			theProjectS.UpdatedAt = time.Now()
+			err = wf.pdb.UpdateStaticInfo(theProjectS)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					"无法为调度员在数据库中更新Project静态信息")
+			}
+
+			theProjectD.BasicStatus = project.BasicStatusEstablished
+			theProjectD.AppInProgressNum -= 1
+			theProjectD.AppAccomplishedNum += 1
+
+			// application passed
+			var appNewProRes gfApplication.AppNewProRes
+			err = yaml.Unmarshal([]byte(theApplication.BasicContent), &appNewProRes)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeServerInternalError,
+					fmt.Sprintf("theApplication.BasicContent json Unmarshal to AppNewProRes error: %v", err),
+					"无法解析form.BasicContent的结构")
+			}
+			theProjectD.CpuNodesExpected = appNewProRes.CpuNodes
+			theProjectD.GpuNodesExpected = appNewProRes.GpuNodes
+			theProjectD.StorageSizeExpected = appNewProRes.StorageSize
+
+			theProjectD.UpdatedAt = time.Now()
+			err = wf.pdb.UpdateDynamicInfo(theProjectD)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					"无法为调度员在数据库中更新Project动态信息")
+			}
+
+		case -1:
+			// Insert New ApplicationOps
+			theAppOpsRecord := application.AppOpsRecord{
+				//RecordID:           0,
+				ProjectID:          theProjectS.ProjectID,
+				ApplicationID:      theApplication.ApplicationID,
+				OpsUserID:          userInfo.UserID,
+				OpsUserChineseName: userInfo.ChineseName,
+				Action:             form.Action,
+				ActionStr:          "否",
+				BasicInfo:          form.BasicContent,
+				ExtraInfo:          form.ExtraContent,
+				CreatedAt:          time.Now(),
+			}
+			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("database operation InsertApplicationOps for Controller error: %v", err),
+					"无法为调度员在数据库中新建申请单操作记录")
+			}
+
+			// Update Application
+			theApplication.Status = application.AppStatusProjectChief
+			theApplication.UpdatedAt = time.Now()
+			err = wf.adb.UpdateApplication(theApplication)
+			if err != nil {
+				return webapiError.WaErr(webapiError.TypeDatabaseError,
+					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					"无法为调度员在数据库中更新Application")
+			}
+
+		default:
+			return webapiError.WaErr(webapiError.TypeBadRequest,
+				fmt.Sprintf("unsupported action value: %d", form.Action),
+				"不支持此action值")
+		}
 	}
 
-	// (1) Update Project
-
-	// (2) Update Application
-
-	// (3) Update ApplicationOps
-
-	return webapiError.WaErr(webapiError.TypeNotYetImplemented, "not yet implemented", "尚未实现")
+	return nil
 }

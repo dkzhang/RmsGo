@@ -11,8 +11,10 @@ type DynamicInfo struct {
 	StorageAllocStatus   int `db:"storage_alloc_status" json:"storage_alloc_status"`
 
 	StartDate time.Time `db:"start_date" json:"start_date"`
-	DaysOfUse int       `db:"days_of_use" json:"days_of_use"`
 	EndDate   time.Time `db:"end_date" json:"end_date"`
+	//StartBillingAt time.Time `db:"start_billing_at" json:"start_billing_at"`
+	TotalDaysApply int       `db:"total_days_apply" json:"total_days_apply"`
+	EndReminderAt  time.Time `db:"end_reminder_at" json:"end_reminder_at"`
 
 	AppInProgressNum        int `db:"app_in_progress_num" json:"app_in_progress_num"`
 	AppAccomplishedNum      int `db:"app_accomplished_num" json:"app_accomplished_num"`
@@ -27,11 +29,8 @@ type DynamicInfo struct {
 	GpuNodesAcquired    int `db:"gpu_nodes_acquired" json:"gpu_nodes_acquired"`
 	StorageSizeAcquired int `db:"storage_size_acquired" json:"storage_size_acquired"`
 
-	//StartBillingAt time.Time `db:"start_billing_at" json:"start_billing_at"`
-	TotalDaysApply int       `db:"total_days_apply" json:"total_days_apply"`
-	EndReminderAt  time.Time `db:"end_reminder_at" json:"end_reminder_at"`
-	CreatedAt      time.Time `db:"created_at" json:"created_at"`
-	UpdatedAt      time.Time `db:"updated_at" json:"updated_at"`
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
 var SchemaDynamicInfo = `

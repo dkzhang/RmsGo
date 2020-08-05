@@ -8,9 +8,9 @@ import (
 type AppNewProRes struct {
 	ProjectName string `json:"project_name"`
 	resource.Resource
-	StartDate time.Time `json:"start_date"`
-	DaysOfUse int       `json:"days_of_use"`
-	EndDate   time.Time `json:"end_date"`
+	StartDate      time.Time `json:"start_date"`
+	TotalDaysApply int       `json:"total_days_apply"`
+	EndDate        time.Time `json:"end_date"`
 }
 
 type AppResChange struct {
