@@ -85,6 +85,7 @@ func ApplyLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
 		PhoneNumberSet: []string{shortMessageService.ChineseMobile(userInfo.Mobile)},
 		TemplateParamSet: []string{userInfo.ChineseName, passwd,
 			fmt.Sprintf("%.1f", infra.TheLoginConfig.ThePasswordConfig.Expire.Minutes())},
+		TemplateType: shortMessageService.TemplatePwd,
 	})
 	if err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{

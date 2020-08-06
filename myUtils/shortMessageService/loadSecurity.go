@@ -7,11 +7,12 @@ import (
 )
 
 type SmsSecurity struct {
-	ID         string `yaml:"id"`
-	Key        string `yaml:"key"`
-	AppID      string `yaml:"appid"`
-	Sign       string `yaml:"sign"`
-	TemplateID string `yaml:"templateid"`
+	ID               string `yaml:"id"`
+	Key              string `yaml:"key"`
+	AppID            string `yaml:"appid"`
+	Sign             string `yaml:"sign"`
+	PwdTemplateID    string `yaml:"pwd_templateid"`
+	NotifyTemplateID string `yaml:"notify_templateid"`
 }
 
 func LoadSmsSecurity(filepath string) (theSmsSecurity SmsSecurity, err error) {

@@ -85,7 +85,14 @@ func (smsService SmsTencentCloudService) SendSMS(msg MessageContent) (resp strin
 	request.TemplateParamSet = common.StringPtrs(msg.TemplateParamSet)
 
 	/* 模板 ID: 必须填写已审核通过的模板 ID，可登录 [短信控制台] 查看模板 ID */
-	request.TemplateID = common.StringPtr(smsService.theSmsSecurity.TemplateID)
+	switch msg.TemplateType {
+	case TemplatePwd:
+		request.TemplateID = common.StringPtr(smsService.theSmsSecurity.PwdTemplateID)
+	case TemplateNofity:
+		request.TemplateID = common.StringPtr(smsService.theSmsSecurity.NotifyTemplateID)
+	default:
+		return "", fmt.Errorf("unsupported template type: %d", msg.TemplateType)
+	}
 
 	/* 下发手机号码，采用 e.164 标准，+[国家或地区码][手机号]
 	 * 例如+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号*/
@@ -108,3 +115,9 @@ func (smsService SmsTencentCloudService) SendSMS(msg MessageContent) (resp strin
 func ChineseMobile(m string) string {
 	return "+86" + m
 }
+
+const (
+	_ = iota
+	TemplatePwd
+	TemplateNofity
+)
