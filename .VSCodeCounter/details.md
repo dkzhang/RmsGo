@@ -1,10 +1,10 @@
 # Details
 
-Date : 2020-08-04 11:32:09
+Date : 2020-08-06 08:45:22
 
 Directory c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo
 
-Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
+Total : 124 files,  6083 codes, 472 comments, 1204 blanks, all 7759 lines
 
 [summary](results.md)
 
@@ -24,7 +24,7 @@ Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
 | [Configuration/Security/database.yaml](/Configuration/Security/database.yaml) | YAML | 9 | 4 | 2 | 15 |
 | [Configuration/Security/db41.yaml](/Configuration/Security/db41.yaml) | YAML | 9 | 4 | 2 | 15 |
 | [Configuration/Security/readme.md](/Configuration/Security/readme.md) | Markdown | 13 | 0 | 3 | 16 |
-| [Configuration/Security/sms.yaml](/Configuration/Security/sms.yaml) | YAML | 5 | 0 | 1 | 6 |
+| [Configuration/Security/sms.yaml](/Configuration/Security/sms.yaml) | YAML | 6 | 0 | 1 | 7 |
 | [DK_Experiments/jsonNodeGroup/jsonNodeGroup.go](/DK_Experiments/jsonNodeGroup/jsonNodeGroup.go) | Go | 17 | 0 | 4 | 21 |
 | [DK_Experiments/jsonNodeGroup/jsonNodeGroup_suite_test.go](/DK_Experiments/jsonNodeGroup/jsonNodeGroup_suite_test.go) | Go | 10 | 0 | 4 | 14 |
 | [DK_Experiments/jsonNodeGroup/jsonNodeGroup_test.go](/DK_Experiments/jsonNodeGroup/jsonNodeGroup_test.go) | Go | 53 | 0 | 5 | 58 |
@@ -70,11 +70,13 @@ Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
 | [myUtils/nodeEncode/base64_ByteArray.go](/myUtils/nodeEncode/base64_ByteArray.go) | Go | 9 | 0 | 4 | 13 |
 | [myUtils/nodeEncode/base64_IntArray.go](/myUtils/nodeEncode/base64_IntArray.go) | Go | 40 | 0 | 5 | 45 |
 | [myUtils/nodeEncode/base64_IntArray_test.go](/myUtils/nodeEncode/base64_IntArray_test.go) | Go | 17 | 5 | 4 | 26 |
-| [myUtils/shortMessageService/loadSecurity.go](/myUtils/shortMessageService/loadSecurity.go) | Go | 24 | 0 | 4 | 28 |
-| [myUtils/shortMessageService/messageContent.go](/myUtils/shortMessageService/messageContent.go) | Go | 5 | 0 | 2 | 7 |
-| [myUtils/shortMessageService/sendSMS.go](/myUtils/shortMessageService/sendSMS.go) | Go | 47 | 40 | 24 | 111 |
+| [myUtils/shortMessageService/loadSecurity.go](/myUtils/shortMessageService/loadSecurity.go) | Go | 25 | 0 | 4 | 29 |
+| [myUtils/shortMessageService/messageContent.go](/myUtils/shortMessageService/messageContent.go) | Go | 6 | 0 | 2 | 8 |
+| [myUtils/shortMessageService/sendSMS.go](/myUtils/shortMessageService/sendSMS.go) | Go | 59 | 40 | 25 | 124 |
 | [myUtils/shortMessageService/sendSMS_test.go](/myUtils/shortMessageService/sendSMS_test.go) | Go | 16 | 0 | 5 | 21 |
+| [myUtils/webapiError/webapiError.go](/myUtils/webapiError/webapiError.go) | Go | 34 | 0 | 8 | 42 |
 | [webapi/Dockerfile](/webapi/Dockerfile) | Dockerfile | 12 | 0 | 7 | 19 |
+| [webapi/SmsNotifier/smsNotifier.go](/webapi/SmsNotifier/smsNotifier.go) | Go | 19 | 0 | 7 | 26 |
 | [webapi/authority/authApplication/authApplication.go](/webapi/authority/authApplication/authApplication.go) | Go | 33 | 0 | 7 | 40 |
 | [webapi/authority/authGeneralFormDraftCRUD/generalFormDraftCRUD.go](/webapi/authority/authGeneralFormDraftCRUD/generalFormDraftCRUD.go) | Go | 63 | 3 | 10 | 76 |
 | [webapi/authority/authUserCRUD/userCRUD.go](/webapi/authority/authUserCRUD/userCRUD.go) | Go | 100 | 3 | 12 | 115 |
@@ -106,7 +108,7 @@ Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
 | [webapi/entrypoint.sh](/webapi/entrypoint.sh) | Shell Script | 10 | 1 | 6 | 17 |
 | [webapi/handle/extractLoginUserInfo/extract.go](/webapi/handle/extractLoginUserInfo/extract.go) | Go | 33 | 0 | 6 | 39 |
 | [webapi/handle/handleGeneralFormDraft/generalFormDraftCRUD.go](/webapi/handle/handleGeneralFormDraft/generalFormDraftCRUD.go) | Go | 241 | 15 | 37 | 293 |
-| [webapi/handle/handleLogin/applyLogin.go](/webapi/handle/handleLogin/applyLogin.go) | Go | 94 | 12 | 18 | 124 |
+| [webapi/handle/handleLogin/applyLogin.go](/webapi/handle/handleLogin/applyLogin.go) | Go | 95 | 12 | 18 | 125 |
 | [webapi/handle/handleLogin/login.go](/webapi/handle/handleLogin/login.go) | Go | 76 | 11 | 18 | 105 |
 | [webapi/handle/handleLogin/logout.go](/webapi/handle/handleLogin/logout.go) | Go | 13 | 0 | 4 | 17 |
 | [webapi/handle/handleProRes/projectAndResource.go](/webapi/handle/handleProRes/projectAndResource.go) | Go | 48 | 15 | 15 | 78 |
@@ -122,7 +124,7 @@ Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
 | [webapi/model/gfApplication/gfApplication.go](/webapi/model/gfApplication/gfApplication.go) | Go | 26 | 6 | 8 | 40 |
 | [webapi/model/metering/metering.go](/webapi/model/metering/metering.go) | Go | 41 | 0 | 9 | 50 |
 | [webapi/model/project/project.go](/webapi/model/project/project.go) | Go | 30 | 0 | 4 | 34 |
-| [webapi/model/project/projectDynamic.go](/webapi/model/project/projectDynamic.go) | Go | 66 | 1 | 10 | 77 |
+| [webapi/model/project/projectDynamic.go](/webapi/model/project/projectDynamic.go) | Go | 65 | 1 | 10 | 76 |
 | [webapi/model/resource/resource.go](/webapi/model/resource/resource.go) | Go | 35 | 0 | 8 | 43 |
 | [webapi/model/statusActionMap/statusActionMap.go](/webapi/model/statusActionMap/statusActionMap.go) | Go | 18 | 1 | 5 | 24 |
 | [webapi/model/user/checkUserName.go](/webapi/model/user/checkUserName.go) | Go | 12 | 1 | 6 | 19 |
@@ -131,7 +133,7 @@ Total : 122 files,  5834 codes, 459 comments, 1177 blanks, all 7470 lines
 | [webapi/model/user/user_test.go](/webapi/model/user/user_test.go) | Go | 1 | 52 | 2 | 55 |
 | [webapi/server.go](/webapi/server.go) | Go | 44 | 2 | 12 | 58 |
 | [webapi/workflow/ApplyChangeResource/apply.go](/webapi/workflow/ApplyChangeResource/apply.go) | Go | 1 | 0 | 1 | 2 |
-| [webapi/workflow/ApplyProjectAndResource/apply.go](/webapi/workflow/ApplyProjectAndResource/apply.go) | Go | 197 | 18 | 30 | 245 |
-| [webapi/workflow/generalWorkflow.go](/webapi/workflow/generalWorkflow.go) | Go | 9 | 0 | 3 | 12 |
+| [webapi/workflow/ApplyProjectAndResource/apply.go](/webapi/workflow/ApplyProjectAndResource/apply.go) | Go | 377 | 31 | 41 | 449 |
+| [webapi/workflow/generalWorkflow.go](/webapi/workflow/generalWorkflow.go) | Go | 10 | 0 | 3 | 13 |
 
 [summary](results.md)
