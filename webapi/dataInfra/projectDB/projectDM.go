@@ -18,3 +18,13 @@ type ProjectDM interface {
 
 	ArchiveProject(projectID int) (err error)
 }
+
+type ProjectHistoryDM interface {
+	QueryStaticInfoByID(projectID int) (project.StaticInfo, error)
+	QueryDynamicInfoByID(projectID int) (project.DynamicInfo, error)
+
+	QueryInfoByOwner(userID int) ([]project.StaticInfo, []project.DynamicInfo)
+	QueryInfoByDepartmentCode(dc string) ([]project.StaticInfo, []project.DynamicInfo)
+	QueryAllInfo() ([]project.StaticInfo, []project.DynamicInfo)
+	QueryProjectByFilter(userFilter func(project.StaticInfo, project.DynamicInfo) bool) ([]project.StaticInfo, []project.DynamicInfo)
+}

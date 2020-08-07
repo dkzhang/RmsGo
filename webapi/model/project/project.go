@@ -26,7 +26,7 @@ var SchemaStaticInfo = `
 			department varchar(256),
 			chief_id int,
 			chief_cn_name varchar(32), 
-			basic_content varchar(16384),			
+			extra_info varchar(16384),			
 			created_at TIMESTAMP WITH TIME ZONE,
 			updated_at TIMESTAMP WITH TIME ZONE
 		);

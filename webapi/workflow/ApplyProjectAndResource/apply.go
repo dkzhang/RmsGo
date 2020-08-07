@@ -19,6 +19,13 @@ type Workflow struct {
 	pdb projectDB.ProjectDB
 }
 
+func NewWorkflow(adb applicationDB.ApplicationDB, pdb projectDB.ProjectDB) Workflow {
+	return Workflow{
+		adb: adb,
+		pdb: pdb,
+	}
+}
+
 func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 	if form.Type != application.AppTypeNew {
 		return -1, webapiError.WaErr(webapiError.TypeBadRequest,

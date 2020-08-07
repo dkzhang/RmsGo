@@ -40,8 +40,9 @@ var SchemaDynamicInfo = `
 			computing_alloc_status int,
 			storage_alloc_status int,
 			start_date TIMESTAMP WITH TIME ZONE,
-			days_of_use int,
 			end_date TIMESTAMP WITH TIME ZONE,
+			total_days_apply int,
+			end_reminder_at TIMESTAMP WITH TIME ZONE,
 			app_in_progress_num int,
 			app_accomplished_num int,
 			metering_in_progress_num int,
@@ -52,9 +53,7 @@ var SchemaDynamicInfo = `
 			storage_size_expected int,
 			cpu_nodes_acquired int,
 			gpu_nodes_acquired int,
-			storage_size_acquired int,			
-			total_days_apply int,
-			end_reminder_at TIMESTAMP WITH TIME ZONE,
+			storage_size_acquired int,				
 			created_at TIMESTAMP WITH TIME ZONE,
 			updated_at TIMESTAMP WITH TIME ZONE
 		);
