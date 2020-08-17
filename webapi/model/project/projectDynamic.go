@@ -34,7 +34,7 @@ type DynamicInfo struct {
 }
 
 var SchemaDynamicInfo = `
-		CREATE TABLE user_info (
+		CREATE TABLE project_dynamic_info (
     		project_id int UNIQUE,
 			basic_status int,
 			computing_alloc_status int,

@@ -12,13 +12,7 @@ type DBInfo struct {
 }
 
 type ProjectDB interface {
-	QueryStaticInfoByID(projectID int) (project.StaticInfo, error)
-	QueryDynamicInfoByID(projectID int) (project.DynamicInfo, error)
-
-	QueryInfoByOwner(userID int) ([]project.StaticInfo, []project.DynamicInfo)
-	QueryInfoByDepartmentCode(dc string) ([]project.StaticInfo, []project.DynamicInfo)
-	QueryAllInfo() ([]project.StaticInfo, []project.DynamicInfo)
-
+	ProjectHistoryDB
 	///////////////////////////////////////////////////////////////////////////////
 	InsertAllInfo(project.StaticInfo, project.DynamicInfo) (projectID int, err error)
 	UpdateStaticInfo(projectInfo project.StaticInfo) (err error)
@@ -26,17 +20,15 @@ type ProjectDB interface {
 
 	// 同一数据库内归档
 	InnerArchiveProject(stnHistory string, dtnHistory string, projectID int) (err error)
-
-	Close()
 }
 
 type ProjectHistoryDB interface {
 	QueryStaticInfoByID(projectID int) (project.StaticInfo, error)
 	QueryDynamicInfoByID(projectID int) (project.DynamicInfo, error)
 
-	QueryInfoByOwner(userID int) ([]project.StaticInfo, []project.DynamicInfo)
-	QueryInfoByDepartmentCode(dc string) ([]project.StaticInfo, []project.DynamicInfo)
-	QueryAllInfo() ([]project.StaticInfo, []project.DynamicInfo)
+	QueryInfoByOwner(userID int) ([]project.StaticInfo, []project.DynamicInfo, error)
+	QueryInfoByDepartmentCode(dc string) ([]project.StaticInfo, []project.DynamicInfo, error)
+	QueryAllInfo() ([]project.StaticInfo, []project.DynamicInfo, error)
 
 	Close()
 }

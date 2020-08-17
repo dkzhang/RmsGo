@@ -18,7 +18,7 @@ type StaticInfo struct {
 }
 
 var SchemaStaticInfo = `
-		CREATE TABLE user_info (
+		CREATE TABLE project_static_info (
     		project_id SERIAL PRIMARY KEY,
 			project_name varchar(256) ,
 			project_code varchar(32) UNIQUE,
