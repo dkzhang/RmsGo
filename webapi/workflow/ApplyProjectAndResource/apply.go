@@ -230,7 +230,6 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		// Update Project
 		theProjectS.ProjectName = app.ProjectName
 		theProjectS.ExtraInfo = form.ExtraContent
-		theProjectS.UpdatedAt = time.Now()
 		err = wf.pdb.UpdateStaticInfo(theProjectS)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
@@ -241,7 +240,6 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		theProjectD.StartDate = app.StartDate
 		theProjectD.TotalDaysApply = app.TotalDaysApply
 		theProjectD.EndDate = app.EndDate
-		theProjectD.UpdatedAt = time.Now()
 		err = wf.pdb.UpdateDynamicInfo(theProjectD)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
@@ -381,7 +379,6 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 
 			// Update Project
 			theProjectS.ProjectName = appCtrlProjectInfo.ProjectCode
-			theProjectS.UpdatedAt = time.Now()
 			err = wf.pdb.UpdateStaticInfo(theProjectS)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
@@ -405,7 +402,6 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			theProjectD.GpuNodesExpected = appNewProRes.GpuNodes
 			theProjectD.StorageSizeExpected = appNewProRes.StorageSize
 
-			theProjectD.UpdatedAt = time.Now()
 			err = wf.pdb.UpdateDynamicInfo(theProjectD)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,

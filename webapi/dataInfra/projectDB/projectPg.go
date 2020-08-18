@@ -2,9 +2,9 @@ package projectDB
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/jmoiron/sqlx"
+	"time"
 )
 
 type ProjectPg struct {
@@ -101,16 +101,69 @@ func (ppg ProjectPg) QueryAllInfo() (psis []project.StaticInfo, pdis []project.D
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-func (ppg ProjectPg) InsertAllInfo(project.StaticInfo, project.DynamicInfo) (projectID int, err error) {
+func (ppg ProjectPg) InsertAllInfo(psi project.StaticInfo, pdi project.DynamicInfo) (projectID int, err error) {
+	execInsertStatic := fmt.Sprintf(`INSERT INTO %s (project_name, project_code, department_code, department, chief_id, chief_cn_name, extra_info, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING project_id`, ppg.StaticTableName)
+	err = ppg.TheDB.Get(&projectID, execInsertStatic,
+		psi.ProjectName, psi.ProjectCode,
+		psi.DepartmentCode, psi.Department,
+		psi.ChiefID, psi.ChiefChineseName, psi.ExtraInfo,
+		time.Now(), time.Now())
+	if err != nil {
+		return -1, fmt.Errorf("TheDB.Get Insert Project StaticInfo in TheDB error: %v", err)
+	}
 
+	execInsertDynamic := fmt.Sprintf(`INSERT INTO %s (project_id, basic_status, computing_alloc_status, storage_alloc_status, start_date, end_date, total_days_apply, end_reminder_at, app_in_progress_num, app_accomplished_num, metering_in_progress_num, metering_accomplished_num, res_alloc_num, cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, cpu_nodes_acquired, gpu_nodes_acquired, storage_size_acquired, created_at, updated_at)  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING project_id`, ppg.DynamicTableName)
+	err = ppg.TheDB.Get(&projectID, execInsertDynamic,
+		pdi.ProjectID, pdi.BasicStatus,
+		pdi.ComputingAllocStatus, pdi.StorageAllocStatus,
+		pdi.StartDate, pdi.EndDate,
+		pdi.TotalDaysApply, pdi.EndReminderAt,
+		pdi.AppInProgressNum, pdi.AppAccomplishedNum,
+		pdi.MeteringInProgressNum, pdi.MeteringAccomplishedNum, pdi.ResAllocNum,
+		pdi.CpuNodesExpected, pdi.GpuNodesExpected, pdi.StorageSizeExpected,
+		pdi.CpuNodesAcquired, pdi.GpuNodesAcquired, pdi.StorageSizeAcquired,
+		time.Now(), time.Now())
+	if err != nil {
+		return -1, fmt.Errorf("TheDB.Get Insert Project DynamicInfo in TheDB error: %v", err)
+	}
+	return projectID, nil
 }
-func (ppg ProjectPg) UpdateStaticInfo(projectInfo project.StaticInfo) (err error) {
+func (ppg ProjectPg) UpdateStaticInfo(psi project.StaticInfo) (err error) {
+	execUpdate := fmt.Sprintf(`UPDATE %s SET project_name=:project_name, project_code=:project_code, extra_info=:extra_info, updated_at=:updated_at WHERE project_id=:project_id`, ppg.StaticTableName)
 
+	psi.UpdatedAt = time.Now()
+	_, err = ppg.TheDB.NamedExec(execUpdate, psi)
+	if err != nil {
+		return fmt.Errorf("TheDB.NamedExec UPDATE project.StaticInfo error: %v", err)
+	}
+	return nil
 }
-func (ppg ProjectPg) UpdateDynamicInfo(projectInfo project.DynamicInfo) (err error) {
+func (ppg ProjectPg) UpdateDynamicInfo(pdi project.DynamicInfo) (err error) {
+	execUpdate := fmt.Sprintf(`UPDATE %s SET basic_status:=basic_status, computing_alloc_status:=computing_alloc_status, storage_alloc_status:=storage_alloc_status, start_date:=start_date, end_date:=end_date, total_days_apply:=total_days_apply, end_reminder_at:=end_reminder_at, app_in_progress_num:=app_in_progress_num, app_accomplished_num:=app_accomplished_num, metering_in_progress_num:=metering_in_progress_num, metering_accomplished_num:=metering_accomplished_num, res_alloc_num:=res_alloc_num, cpu_nodes_expected:=cpu_nodes_expected, gpu_nodes_expected:=gpu_nodes_expected, storage_size_expected:=storage_size_expected, cpu_nodes_acquired:=cpu_nodes_acquired, gpu_nodes_acquired:=gpu_nodes_acquired, storage_size_acquired:=storage_size_acquired, updated_at:=updated_at WHERE project_id=:project_id`, ppg.DynamicTableName)
 
+	pdi.UpdatedAt = time.Now()
+	_, err = ppg.TheDB.NamedExec(execUpdate, pdi)
+	if err != nil {
+		return fmt.Errorf("TheDB.NamedExec UPDATE project.DynamicInfo error: %v", err)
+	}
+	return nil
 }
 
 func (ppg ProjectPg) InnerArchiveProject(stnHistory string, dtnHistory string, projectID int) (err error) {
+	execCopyS := fmt.Sprintf(`INSERT INTO %s SELECT * FROM %s WHERE project_id=$1`, stnHistory, ppg.StaticTableName)
+	execCopyD := fmt.Sprintf(`INSERT INTO %s SELECT * FROM %s WHERE project_id=$1`, dtnHistory, ppg.DynamicTableName)
+	execDelS := fmt.Sprintf(`DELETE FROM %s WHERE project_id=$1`, ppg.StaticTableName)
+	execDelD := fmt.Sprintf(`DELETE FROM %s WHERE project_id=$1`, ppg.DynamicTableName)
 
+	tx, err := ppg.TheDB.Begin()
+	_, err = ppg.TheDB.Exec(execCopyS, projectID)
+	_, err = ppg.TheDB.Exec(execCopyD, projectID)
+	_, err = ppg.TheDB.Exec(execDelS, projectID)
+	_, err = ppg.TheDB.Exec(execDelD, projectID)
+	err = tx.Commit()
+
+	if err != nil {
+		return fmt.Errorf("InnerArchiveProject Commit error: %v", err)
+	}
+	return nil
 }
