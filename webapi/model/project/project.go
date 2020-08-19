@@ -4,6 +4,12 @@ import (
 	"time"
 )
 
+type ProjectInfo struct {
+	ProjectID      int
+	TheStaticInfo  StaticInfo
+	TheDynamicInfo DynamicInfo
+}
+
 type StaticInfo struct {
 	ProjectID        int       `db:"project_id" json:"project_id"`
 	ProjectName      string    `db:"project_name" json:"project_name"`

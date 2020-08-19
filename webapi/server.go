@@ -1,6 +1,7 @@
 package webapi
 
 import (
+	"github.com/dkzhang/RmsGo/webapi/handle/handleApplication"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleGeneralFormDraft"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleLogin"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
@@ -49,6 +50,15 @@ func Serve() {
 			hAppTemp.GET("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleGeneralFormDraft.RetrieveByID(infra, c) })
 			hAppTemp.PUT("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleGeneralFormDraft.Update(infra, c) })
 			hAppTemp.DELETE("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleGeneralFormDraft.Delete(infra, c) })
+		}
+
+		hApp := webAPIv1.Group("/Application")
+		{
+			hApp.GET("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.RetrieveByOwner(infra, c) })
+
+			hApp.POST("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.Create(infra, c) })
+			hApp.GET("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.RetrieveByID(infra, c) })
+			hApp.PUT("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.Update(infra, c) })
 		}
 	}
 

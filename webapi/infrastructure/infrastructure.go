@@ -12,6 +12,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM"
 	userConfig "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/config"
 	userSecurity "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/security"
+	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
@@ -33,6 +34,8 @@ type Infrastructure struct {
 	TheGeneralFormDraftDB generalFormDraftDB.GeneralFormDraftDB
 
 	TheLogMap logMap.LogMap
+
+	TheApplyProjectAndResourceWorkflow ApplyProjectAndResource.Workflow
 }
 
 type InfraConfigFile struct {
@@ -118,6 +121,10 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 	/////////////////////////////////////////////////////////
 	// GeneralFormDraftDB
 	theInfras.TheGeneralFormDraftDB = generalFormDraftDB.NewGeneralFormDraftPg(theInfras.TheDb)
+
+	/////////////////////////////////////////////////////////
+	// GeneralFormDraftDB
+	theInfras.TheApplyProjectAndResourceWorkflow = ApplyProjectAndResource.NewWorkflow()
 
 	return &theInfras
 }
