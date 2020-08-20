@@ -9,6 +9,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
+	"github.com/dkzhang/RmsGo/webapi/workflow"
 	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -17,10 +18,7 @@ import (
 )
 
 type HandleApp struct {
-	TheAppNewWorkflow           ApplyProjectAndResource.Workflow
-	TheAppChangeWorkflow        interface{}
-	TheAppReturnComputeWorkflow interface{}
-	TheAppReturnStorageWorkflow interface{}
+	TheAppWorkflow map[int]workflow.GeneralWorkflow
 
 	TheAppDM applicationDM.ApplicationDM
 
@@ -69,29 +67,8 @@ func (h HandleApp) Create(c *gin.Context) {
 	}
 
 	appType := c.GetInt("type")
-	switch appType {
-	case application.AppTypeNew:
-		appID, waErr := h.TheAppNewWorkflow.Apply(gfc, userLoginInfo)
-		if waErr != nil {
-			h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-				"userLoginID": userLoginInfo.UserID,
-				"error":       waErr.Error(),
-			}).Error("TheAppNewWorkflow.Apply error.")
-
-			c.JSON(waErr.Type(), gin.H{
-				"msg": waErr.Msg(),
-			})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{
-			"appID": appID,
-			"msg":   "新建项目的申请单创建成功",
-		})
-		return
-	case application.AppTypeChange:
-	case application.AppTypeReturnCompute:
-	case application.AppTypeReturnStorage:
-	default:
+	wf, ok := h.TheAppWorkflow[appType]
+	if !ok {
 		h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"appType": appType,
 		}).Error("unsupported application type for create.")
@@ -101,6 +78,25 @@ func (h HandleApp) Create(c *gin.Context) {
 		})
 		return
 	}
+
+	appID, waErr := wf.Apply(gfc, userLoginInfo)
+	if waErr != nil {
+		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"userLoginID": userLoginInfo.UserID,
+			"error":       waErr.Error(),
+		}).Error("TheAppNewWorkflow.Apply error.")
+
+		c.JSON(waErr.Type(), gin.H{
+			"msg": waErr.Msg(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"appID": appID,
+		"msg":   "新建项目的申请单创建成功",
+	})
+	return
 }
 
 func (h HandleApp) Update(c *gin.Context) {
@@ -140,7 +136,20 @@ func (h HandleApp) Update(c *gin.Context) {
 	// fill attribute
 	gf.FormID = app.ApplicationID
 
-	waErr := h.TheAppNewWorkflow.Process(gf, userLoginInfo)
+	appType := c.GetInt("type")
+	wf, ok := h.TheAppWorkflow[appType]
+	if !ok {
+		h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			"appType": appType,
+		}).Error("unsupported application type for create.")
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": fmt.Sprintf("不支持的appType: %s", appType),
+		})
+		return
+	}
+
+	waErr := wf.Process(gf, app, userLoginInfo)
 
 	if waErr != nil {
 		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -154,7 +163,7 @@ func (h HandleApp) Update(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "新建项目的申请单操作成功",
+		"msg": "新建项目的申请单审批操作成功",
 	})
 	return
 }

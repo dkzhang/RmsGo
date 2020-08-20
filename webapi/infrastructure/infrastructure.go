@@ -17,6 +17,7 @@ import (
 	userConfig "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/config"
 	userSecurity "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/security"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
+	"github.com/dkzhang/RmsGo/webapi/workflow"
 	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -48,7 +49,7 @@ type Infrastructure struct {
 
 	TheLogMap logMap.LogMap
 
-	TheApplyProjectAndResourceWorkflow ApplyProjectAndResource.Workflow
+	TheApplyProjectAndResourceWorkflow workflow.GeneralWorkflow
 }
 
 type InfraConfigFile struct {
