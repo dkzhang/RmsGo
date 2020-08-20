@@ -12,15 +12,15 @@ import (
 //	Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err)
 //	Process(form generalForm.GeneralForm, userInfo user.UserInfo) (waErr webapiError.Err)
 //}
-type applyFunc func(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err)
-type processFunc func(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err)
+type ApplyFunc func(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err)
+type ProcessFunc func(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err)
 
 type GeneralWorkflow struct {
-	applyMap   map[KeySRA]applyFunc
-	processMap map[KeySRA]processFunc
+	applyMap   map[KeySRA]ApplyFunc
+	processMap map[KeySRA]ProcessFunc
 }
 
-func NewGeneralWorkflow(am map[KeySRA]applyFunc, pm map[KeySRA]processFunc) GeneralWorkflow {
+func NewGeneralWorkflow(am map[KeySRA]ApplyFunc, pm map[KeySRA]ProcessFunc) GeneralWorkflow {
 	return GeneralWorkflow{
 		applyMap:   am,
 		processMap: pm,
@@ -29,6 +29,7 @@ func NewGeneralWorkflow(am map[KeySRA]applyFunc, pm map[KeySRA]processFunc) Gene
 
 func (gwf GeneralWorkflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 	k := KeySRA{
+		AppType:   form.Type,
 		AppStatus: 0,
 		UserRole:  userInfo.Role,
 		Action:    form.Action,
@@ -44,7 +45,8 @@ func (gwf GeneralWorkflow) Apply(form generalForm.GeneralForm, userInfo user.Use
 
 func (gwf GeneralWorkflow) Process(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
 	k := KeySRA{
-		AppStatus: 0,
+		AppType:   form.Type,
+		AppStatus: app.Status,
 		UserRole:  userInfo.Role,
 		Action:    form.Action,
 	}
@@ -58,6 +60,7 @@ func (gwf GeneralWorkflow) Process(form generalForm.GeneralForm, app application
 }
 
 type KeySRA struct {
+	AppType   int
 	AppStatus int
 	UserRole  int
 	Action    int

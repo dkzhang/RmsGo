@@ -72,21 +72,3 @@ var schemaAppOpsRecord = `
 		);`
 
 // 16K = 1024 * 16 = 16384
-
-const (
-	AppStatusProjectChief = 1
-	AppStatusApprover     = 2
-	AppStatusController   = 8
-	AppStatusArchived     = 16
-
-	AppStatusALL = -1
-)
-
-const (
-	AppTypeNew = 1 << iota
-	AppTypeChange
-	AppTypeReturnCompute
-	AppTypeReturnStorage
-
-	AppTypeALL = -1
-)
