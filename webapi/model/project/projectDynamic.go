@@ -62,13 +62,13 @@ var SchemaDynamicInfo = `
 const (
 	BasicStatusApplying    = 1
 	BasicStatusEstablished = 2
-	BasicStatusArchived    = -9
+	BasicStatusArchived    = 64
 )
 
 const (
 	ResNotYetAssigned  = 1
 	ResFullAllocation  = 2
-	ResUnderAllocation = 3
-	ResOverAllocation  = 4
-	ResAllReturned     = 5
+	ResUnderAllocation = 4
+	ResOverAllocation  = 8
+	ResAllReturned     = 64
 )

@@ -63,7 +63,7 @@ var _ = Describe("ApplicationDB", func() {
 		//Insert new application
 		It("ProjectChief insert 3 Application and 3 AppOpsRecord", func() {
 			for i := 1; i <= 3; i++ {
-				appID, err := adb.InsertApplication(application.Application{
+				appID, err := adb.Insert(application.Application{
 					ProjectID:                projectID,
 					Type:                     application.AppTypeNew,
 					Status:                   application.AppStatusProjectChief,
@@ -73,8 +73,8 @@ var _ = Describe("ApplicationDB", func() {
 					BasicContent:             fmt.Sprintf(basicStr, i),
 					ExtraContent:             fmt.Sprintf(extraStr, i),
 				})
-				Expect(err).ShouldNot(HaveOccurred(), "InsertApplication %d error: %v", i, err)
-				By(fmt.Sprintf("InsertApplication %d success, got application ID = %d", i, appID))
+				Expect(err).ShouldNot(HaveOccurred(), "Insert %d error: %v", i, err)
+				By(fmt.Sprintf("Insert %d success, got application ID = %d", i, appID))
 
 				recordID, err := adb.InsertAppOps(application.AppOpsRecord{
 					ProjectID:          projectID,
@@ -97,9 +97,9 @@ var _ = Describe("ApplicationDB", func() {
 			projectID := 1
 			appID := 1
 
-			app, err := adb.QueryApplicationByID(appID)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryApplicationByID error: %v", err)
-			By(fmt.Sprintf("QueryApplicationByID success, got application = %v", app))
+			app, err := adb.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
 			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
 				ProjectID:          projectID,
@@ -115,18 +115,18 @@ var _ = Describe("ApplicationDB", func() {
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
 			app.Status = application.AppStatusController
-			err = adb.UpdateApplication(app)
-			Expect(err).ShouldNot(HaveOccurred(), "UpdateApplication error: %v", err)
-			By(fmt.Sprintf("UpdateApplication success"))
+			err = adb.Update(app)
+			Expect(err).ShouldNot(HaveOccurred(), "Update error: %v", err)
+			By(fmt.Sprintf("Update success"))
 		})
 
 		It("Approver reject app2, query the application,insert an AppOpsRecord, update the application", func() {
 			projectID := 1
 			appID := 2
 
-			app, err := adb.QueryApplicationByID(appID)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryApplicationByID error: %v", err)
-			By(fmt.Sprintf("QueryApplicationByID success, got application = %v", app))
+			app, err := adb.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
 			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
 				ProjectID:          projectID,
@@ -142,9 +142,9 @@ var _ = Describe("ApplicationDB", func() {
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
 			app.Status = application.AppStatusController
-			err = adb.UpdateApplication(app)
-			Expect(err).ShouldNot(HaveOccurred(), "UpdateApplication error: %v", err)
-			By(fmt.Sprintf("UpdateApplication success"))
+			err = adb.Update(app)
+			Expect(err).ShouldNot(HaveOccurred(), "Update error: %v", err)
+			By(fmt.Sprintf("Update success"))
 		})
 
 	})
@@ -155,9 +155,9 @@ var _ = Describe("ApplicationDB", func() {
 
 		It("Controller query the application,insert an AppOpsRecord, update the application", func() {
 
-			app, err := adb.QueryApplicationByID(appID)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryApplicationByID error: %v", err)
-			By(fmt.Sprintf("QueryApplicationByID success, got application = %v", app))
+			app, err := adb.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
 			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
 				ProjectID:          projectID,
@@ -173,9 +173,9 @@ var _ = Describe("ApplicationDB", func() {
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
 			app.Status = application.AppStatusArchived
-			err = adb.UpdateApplication(app)
-			Expect(err).ShouldNot(HaveOccurred(), "UpdateApplication error: %v", err)
-			By(fmt.Sprintf("UpdateApplication success"))
+			err = adb.Update(app)
+			Expect(err).ShouldNot(HaveOccurred(), "Update error: %v", err)
+			By(fmt.Sprintf("Update success"))
 		})
 	})
 

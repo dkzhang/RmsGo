@@ -35,14 +35,14 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 	GeneralFormDraftCreated.FormID = -1
 
 	// authentication
-	permission := authGeneralFormDraftCRUD.GeneralFormDraftAuthorityCheck(infra.TheLogMap,
+	permission := authGeneralFormDraftCRUD.AuthorityCheck(infra.TheLogMap,
 		userLoginInfo, GeneralFormDraftCreated, authGeneralFormDraftCRUD.OPS_CREATE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":             userLoginInfo.UserID,
 			"GeneralFormDraftCreated": GeneralFormDraftCreated,
-		}).Error("Create GeneralFormDraft failed, since GeneralFormDraftAuthorityCheck permission not allowed.")
+		}).Error("Create GeneralFormDraft failed, since AuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "此用户无权访问该数据",
 		})
@@ -118,14 +118,14 @@ func RetrieveByID(infra *infrastructure.Infrastructure, c *gin.Context) {
 	}
 
 	// authentication
-	permission := authGeneralFormDraftCRUD.GeneralFormDraftAuthorityCheck(infra.TheLogMap,
+	permission := authGeneralFormDraftCRUD.AuthorityCheck(infra.TheLogMap,
 		userLoginInfo, GeneralFormDraftAccessed, authGeneralFormDraftCRUD.OPS_UPDATE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":              userLoginInfo.UserID,
 			"GeneralFormDraftAccessed": GeneralFormDraftAccessed,
-		}).Error("Update GeneralFormDraft failed, since GeneralFormDraftAuthorityCheck permission not allowed.")
+		}).Error("Update GeneralFormDraft failed, since AuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "此用户无权访问该数据",
 		})
@@ -171,14 +171,14 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 	GeneralFormDraftUpdated.FormID = GeneralFormDraftAccessed.FormID
 
 	// authentication
-	permission := authGeneralFormDraftCRUD.GeneralFormDraftAuthorityCheck(infra.TheLogMap,
+	permission := authGeneralFormDraftCRUD.AuthorityCheck(infra.TheLogMap,
 		userLoginInfo, GeneralFormDraftAccessed, authGeneralFormDraftCRUD.OPS_UPDATE)
 
 	if permission == false {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID":              userLoginInfo.UserID,
 			"GeneralFormDraftAccessed": GeneralFormDraftAccessed,
-		}).Error("Update GeneralFormDraft failed, since GeneralFormDraftAuthorityCheck permission not allowed.")
+		}).Error("Update GeneralFormDraft failed, since AuthorityCheck permission not allowed.")
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "此用户无权访问该数据",
 		})
@@ -222,7 +222,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 		return
 	}
 
-	permission := authGeneralFormDraftCRUD.GeneralFormDraftAuthorityCheck(infra.TheLogMap,
+	permission := authGeneralFormDraftCRUD.AuthorityCheck(infra.TheLogMap,
 		userLoginInfo, GeneralFormDraftAccessed, authGeneralFormDraftCRUD.OPS_DELETE)
 
 	if permission == false {
@@ -286,7 +286,7 @@ func extractAccessedGeneralFormDraftInfo(infra *infrastructure.Infrastructure, c
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "无法找到该GeneralFormDraft",
 		})
-		return generalFormDraft.GeneralFormDraft{}, fmt.Errorf("TheUserDM.QueryUserByID (using userAccessedID from gin.Context) error: %v", err)
+		return generalFormDraft.GeneralFormDraft{}, fmt.Errorf("theUserDM.QueryUserByID (using userAccessedID from gin.Context) error: %v", err)
 	}
 	return GeneralFormDraftAccessed, nil
 }

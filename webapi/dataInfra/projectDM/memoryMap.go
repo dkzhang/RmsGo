@@ -127,6 +127,10 @@ func (pdm MemoryMap) InsertAllInfo(pInfo project.ProjectInfo) (projectID int, er
 	if err != nil {
 		return -1, fmt.Errorf("ProjectDB.InsertAllInfo error: %v", err)
 	}
+
+	pdm.projectStaticInfo[pInfo.ProjectID] = &(pInfo.TheStaticInfo)
+	pdm.projectDynamicInfo[pInfo.ProjectID] = &(pInfo.TheDynamicInfo)
+
 	return projectID, nil
 }
 func (pdm MemoryMap) UpdateStaticInfo(psi project.StaticInfo) (err error) {
@@ -134,6 +138,9 @@ func (pdm MemoryMap) UpdateStaticInfo(psi project.StaticInfo) (err error) {
 	if err != nil {
 		return fmt.Errorf("ProjectDB.UpdateStaticInfo error: %v", err)
 	}
+
+	pdm.projectStaticInfo[psi.ProjectID] = &(psi)
+
 	return nil
 }
 func (pdm MemoryMap) UpdateDynamicInfo(pdi project.DynamicInfo) (err error) {
@@ -141,6 +148,8 @@ func (pdm MemoryMap) UpdateDynamicInfo(pdi project.DynamicInfo) (err error) {
 	if err != nil {
 		return fmt.Errorf("ProjectDB.UpdateDynamicInfo error: %v", err)
 	}
+
+	pdm.projectDynamicInfo[pdi.ProjectID] = &(pdi)
 	return nil
 }
 

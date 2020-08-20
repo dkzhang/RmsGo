@@ -27,7 +27,7 @@ func AllUsers(infra *infrastructure.Infrastructure, c *gin.Context) {
 	if err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"UserID": userID,
-		}).Error("TheUserDM.QueryUserByID (using userID from gin.Context) failed.")
+		}).Error("theUserDM.QueryUserByID (using userID from gin.Context) failed.")
 
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",

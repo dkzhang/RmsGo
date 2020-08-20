@@ -3,8 +3,8 @@ package ApplyProjectAndResource
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/webapiError"
-	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
-	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/gfApplication"
@@ -15,14 +15,14 @@ import (
 )
 
 type Workflow struct {
-	adb applicationDB.ApplicationDB
-	pdb projectDB.ProjectDB
+	adm applicationDM.ApplicationDM
+	pdm projectDM.ProjectDM
 }
 
-func NewWorkflow(adb applicationDB.ApplicationDB, pdb projectDB.ProjectDB) Workflow {
+func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) Workflow {
 	return Workflow{
-		adb: adb,
-		pdb: pdb,
+		adm: adm,
+		pdm: pdm,
 	}
 }
 
@@ -86,7 +86,12 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		UpdatedAt:               time.Now(),
 	}
 
-	projectID, err := wf.pdb.InsertAllInfo(theProjectS, theProjectD)
+	projectID, err := wf.pdm.InsertAllInfo(project.ProjectInfo{
+		ProjectID:      theProjectS.ProjectID,
+		TheStaticInfo:  theProjectS,
+		TheDynamicInfo: theProjectD,
+	})
+
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("insert project info error: %v", err),
@@ -108,10 +113,10 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		UpdatedAt:                time.Now(),
 	}
 
-	appID, err = wf.adb.InsertApplication(theApplication)
+	appID, err = wf.adm.Insert(theApplication)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation InsertApplication error: %v", err),
+			fmt.Sprintf("database operation Insert error: %v", err),
 			"在数据库中新建申请单记录失败")
 	}
 
@@ -129,7 +134,7 @@ func (wf Workflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (
 		CreatedAt:          time.Now(),
 	}
 
-	_, err = wf.adb.InsertAppOps(theAppOpsRecord)
+	_, err = wf.adm.InsertAppOps(theAppOpsRecord)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("database operation InsertApplicationOps error: %v", err),
@@ -146,24 +151,24 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 	}
 
 	// Query Application and Project static & dynamic
-	theApplication, err := wf.adb.QueryApplicationByID(form.FormID)
+	theApplication, err := wf.adm.QueryByID(form.FormID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryApplicationByID error: %v", err),
+			fmt.Sprintf("database operation QueryByID error: %v", err),
 			"在数据库中查询申请单失败")
 	}
 
-	theProjectS, err := wf.pdb.QueryStaticInfoByID(theApplication.ProjectID)
+	theProjectS, err := wf.pdm.QueryStaticInfoByID(theApplication.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryApplicationByID error: %v", err),
+			fmt.Sprintf("database operation QueryByID error: %v", err),
 			"在数据库中查询项目静态信息失败")
 	}
 
-	theProjectD, err := wf.pdb.QueryDynamicInfoByID(theApplication.ProjectID)
+	theProjectD, err := wf.pdm.QueryDynamicInfoByID(theApplication.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryApplicationByID error: %v", err),
+			fmt.Sprintf("database operation QueryByID error: %v", err),
 			"在数据库中查询项目动态信息失败")
 	}
 
@@ -208,7 +213,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			ExtraInfo:          form.ExtraContent,
 			CreatedAt:          time.Now(),
 		}
-		_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+		_, err := wf.adm.InsertAppOps(theAppOpsRecord)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
 				fmt.Sprintf("database operation InsertApplicationOps for ProjectChief error: %v", err),
@@ -220,30 +225,30 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 		theApplication.BasicContent = form.BasicContent
 		theApplication.ExtraContent = form.ExtraContent
 		theApplication.UpdatedAt = time.Now()
-		err = wf.adb.UpdateApplication(theApplication)
+		err = wf.adm.Update(theApplication)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
-				fmt.Sprintf("UpdateApplication for ProjectChief error: %v", err),
+				fmt.Sprintf("Update for ProjectChief error: %v", err),
 				"无法为项目长在数据库中更新Application")
 		}
 
 		// Update Project
 		theProjectS.ProjectName = app.ProjectName
 		theProjectS.ExtraInfo = form.ExtraContent
-		err = wf.pdb.UpdateStaticInfo(theProjectS)
+		err = wf.pdm.UpdateStaticInfo(theProjectS)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
-				fmt.Sprintf("UpdateApplication for ProjectChief error: %v", err),
+				fmt.Sprintf("Update for ProjectChief error: %v", err),
 				"无法为项目长在数据库中更新Project静态信息")
 		}
 
 		theProjectD.StartDate = app.StartDate
 		theProjectD.TotalDaysApply = app.TotalDaysApply
 		theProjectD.EndDate = app.EndDate
-		err = wf.pdb.UpdateDynamicInfo(theProjectD)
+		err = wf.pdm.UpdateDynamicInfo(theProjectD)
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
-				fmt.Sprintf("UpdateApplication for ProjectChief error: %v", err),
+				fmt.Sprintf("Update for ProjectChief error: %v", err),
 				"无法为项目长在数据库中更新Project动态信息")
 		}
 
@@ -277,7 +282,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 				ExtraInfo:          form.ExtraContent,
 				CreatedAt:          time.Now(),
 			}
-			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			_, err := wf.adm.InsertAppOps(theAppOpsRecord)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
 					fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
@@ -287,10 +292,10 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			// Update Application
 			theApplication.Status = application.AppStatusController
 			theApplication.UpdatedAt = time.Now()
-			err = wf.adb.UpdateApplication(theApplication)
+			err = wf.adm.Update(theApplication)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
-					fmt.Sprintf("UpdateApplication for Approver error: %v", err),
+					fmt.Sprintf("Update for Approver error: %v", err),
 					"无法为审批人在数据库中更新Application")
 			}
 		case -1:
@@ -307,7 +312,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 				ExtraInfo:          form.ExtraContent,
 				CreatedAt:          time.Now(),
 			}
-			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			_, err := wf.adm.InsertAppOps(theAppOpsRecord)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
 					fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
@@ -317,10 +322,10 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			// Update Application
 			theApplication.Status = application.AppStatusProjectChief
 			theApplication.UpdatedAt = time.Now()
-			err = wf.adb.UpdateApplication(theApplication)
+			err = wf.adm.Update(theApplication)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
-					fmt.Sprintf("UpdateApplication for Approver error: %v", err),
+					fmt.Sprintf("Update for Approver error: %v", err),
 					"无法为审批人在数据库中更新Application")
 			}
 
@@ -360,7 +365,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 				ExtraInfo:          form.ExtraContent,
 				CreatedAt:          time.Now(),
 			}
-			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			_, err := wf.adm.InsertAppOps(theAppOpsRecord)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
 					fmt.Sprintf("database operation InsertApplicationOps for Controller error: %v", err),
@@ -370,19 +375,19 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			// Update Application
 			theApplication.Status = application.AppStatusArchived
 			theApplication.UpdatedAt = time.Now()
-			err = wf.adb.UpdateApplication(theApplication)
+			err = wf.adm.Update(theApplication)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
-					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					fmt.Sprintf("Update for Controller error: %v", err),
 					"无法为调度员在数据库中更新Application")
 			}
 
 			// Update Project
 			theProjectS.ProjectName = appCtrlProjectInfo.ProjectCode
-			err = wf.pdb.UpdateStaticInfo(theProjectS)
+			err = wf.pdm.UpdateStaticInfo(theProjectS)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
-					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					fmt.Sprintf("Update for Controller error: %v", err),
 					"无法为调度员在数据库中更新Project静态信息")
 			}
 
@@ -402,10 +407,10 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			theProjectD.GpuNodesExpected = appNewProRes.GpuNodes
 			theProjectD.StorageSizeExpected = appNewProRes.StorageSize
 
-			err = wf.pdb.UpdateDynamicInfo(theProjectD)
+			err = wf.pdm.UpdateDynamicInfo(theProjectD)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
-					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					fmt.Sprintf("Update for Controller error: %v", err),
 					"无法为调度员在数据库中更新Project动态信息")
 			}
 
@@ -423,7 +428,7 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 				ExtraInfo:          form.ExtraContent,
 				CreatedAt:          time.Now(),
 			}
-			_, err := wf.adb.InsertAppOps(theAppOpsRecord)
+			_, err := wf.adm.InsertAppOps(theAppOpsRecord)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
 					fmt.Sprintf("database operation InsertApplicationOps for Controller error: %v", err),
@@ -433,10 +438,10 @@ func (wf Workflow) Process(form generalForm.GeneralForm, userInfo user.UserInfo)
 			// Update Application
 			theApplication.Status = application.AppStatusProjectChief
 			theApplication.UpdatedAt = time.Now()
-			err = wf.adb.UpdateApplication(theApplication)
+			err = wf.adm.Update(theApplication)
 			if err != nil {
 				return webapiError.WaErr(webapiError.TypeDatabaseError,
-					fmt.Sprintf("UpdateApplication for Controller error: %v", err),
+					fmt.Sprintf("Update for Controller error: %v", err),
 					"无法为调度员在数据库中更新Application")
 			}
 

@@ -1,17 +1,17 @@
 # Summary
 
-Date : 2020-08-06 08:45:22
+Date : 2020-08-20 16:22:45
 
 Directory c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo
 
-Total : 124 files,  6083 codes, 472 comments, 1204 blanks, all 7759 lines
+Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| Go | 94 | 4,744 | 459 | 931 | 6,134 |
+| Go | 98 | 5,642 | 457 | 1,101 | 7,200 |
 | Markdown | 10 | 986 | 2 | 229 | 1,217 |
 | YAML | 9 | 152 | 9 | 24 | 185 |
 | XML | 7 | 122 | 0 | 3 | 125 |
@@ -22,7 +22,7 @@ Total : 124 files,  6083 codes, 472 comments, 1204 blanks, all 7759 lines
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 124 | 6,083 | 472 | 1,204 | 7,759 |
+| . | 128 | 6,981 | 470 | 1,374 | 8,825 |
 | .github | 1 | 29 | 0 | 9 | 38 |
 | .github\workflows | 1 | 29 | 0 | 9 | 38 |
 | .idea | 6 | 93 | 0 | 0 | 93 |
@@ -58,42 +58,44 @@ Total : 124 files,  6083 codes, 472 comments, 1204 blanks, all 7759 lines
 | myUtils\nodeEncode | 3 | 66 | 5 | 13 | 84 |
 | myUtils\shortMessageService | 4 | 106 | 40 | 36 | 182 |
 | myUtils\webapiError | 1 | 34 | 0 | 8 | 42 |
-| webapi | 60 | 3,346 | 269 | 631 | 4,246 |
-| webapi\SmsNotifier | 1 | 19 | 0 | 7 | 26 |
-| webapi\authority | 3 | 196 | 6 | 29 | 231 |
-| webapi\authority\authApplication | 1 | 33 | 0 | 7 | 40 |
+| webapi | 64 | 4,244 | 267 | 801 | 5,312 |
+| webapi\SmsNotifier | 1 | 84 | 0 | 18 | 102 |
+| webapi\authority | 3 | 203 | 6 | 31 | 240 |
+| webapi\authority\authApplication | 1 | 40 | 0 | 9 | 49 |
 | webapi\authority\authGeneralFormDraftCRUD | 1 | 63 | 3 | 10 | 76 |
 | webapi\authority\authUserCRUD | 1 | 100 | 3 | 12 | 115 |
-| webapi\dataInfra | 24 | 1,284 | 60 | 247 | 1,591 |
-| webapi\dataInfra\applicationDB | 4 | 418 | 5 | 58 | 481 |
+| webapi\dataInfra | 27 | 1,735 | 50 | 342 | 2,127 |
+| webapi\dataInfra\applicationDB | 4 | 314 | 4 | 56 | 374 |
+| webapi\dataInfra\applicationDM | 3 | 195 | 2 | 48 | 245 |
 | webapi\dataInfra\generalFormDraftDB | 3 | 137 | 0 | 26 | 163 |
-| webapi\dataInfra\projectDB | 3 | 36 | 2 | 14 | 52 |
-| webapi\dataInfra\projectDM | 2 | 21 | 14 | 14 | 49 |
+| webapi\dataInfra\projectDB | 2 | 173 | 3 | 29 | 205 |
+| webapi\dataInfra\projectDM | 3 | 244 | 2 | 48 | 294 |
 | webapi\dataInfra\userDB | 5 | 245 | 12 | 35 | 292 |
 | webapi\dataInfra\userDM | 2 | 213 | 21 | 50 | 284 |
 | webapi\dataInfra\userTempDM | 5 | 214 | 6 | 50 | 270 |
 | webapi\dataInfra\userTempDM\config | 2 | 63 | 1 | 13 | 77 |
 | webapi\dataInfra\userTempDM\security | 1 | 16 | 0 | 5 | 21 |
-| webapi\handle | 9 | 834 | 67 | 147 | 1,048 |
-| webapi\handle\extractLoginUserInfo | 1 | 33 | 0 | 6 | 39 |
+| webapi\handle | 10 | 1,121 | 69 | 191 | 1,381 |
+| webapi\handle\extractLoginUserInfo | 1 | 67 | 0 | 12 | 79 |
+| webapi\handle\handleApplication | 1 | 253 | 2 | 38 | 293 |
 | webapi\handle\handleGeneralFormDraft | 1 | 241 | 15 | 37 | 293 |
 | webapi\handle\handleLogin | 3 | 184 | 23 | 40 | 247 |
 | webapi\handle\handleProRes | 1 | 48 | 15 | 15 | 78 |
 | webapi\handle\handleUser | 3 | 328 | 14 | 49 | 391 |
-| webapi\infrastructure | 1 | 90 | 12 | 22 | 124 |
+| webapi\infrastructure | 1 | 117 | 14 | 29 | 160 |
 | webapi\middleware | 2 | 51 | 14 | 16 | 81 |
-| webapi\model | 13 | 409 | 75 | 89 | 573 |
-| webapi\model\application | 1 | 77 | 3 | 11 | 91 |
+| webapi\model | 13 | 413 | 75 | 91 | 579 |
+| webapi\model\application | 1 | 77 | 3 | 12 | 92 |
 | webapi\model\generalForm | 1 | 10 | 0 | 2 | 12 |
 | webapi\model\generalFormDraft | 1 | 17 | 1 | 4 | 22 |
 | webapi\model\gfApplication | 1 | 26 | 6 | 8 | 40 |
 | webapi\model\metering | 1 | 41 | 0 | 9 | 50 |
-| webapi\model\project | 2 | 95 | 1 | 14 | 110 |
+| webapi\model\project | 2 | 99 | 1 | 15 | 115 |
 | webapi\model\resource | 1 | 35 | 0 | 8 | 43 |
 | webapi\model\statusActionMap | 1 | 18 | 1 | 5 | 24 |
 | webapi\model\user | 4 | 90 | 63 | 28 | 181 |
-| webapi\workflow | 3 | 388 | 31 | 45 | 464 |
+| webapi\workflow | 3 | 437 | 35 | 52 | 524 |
 | webapi\workflow\ApplyChangeResource | 1 | 1 | 0 | 1 | 2 |
-| webapi\workflow\ApplyProjectAndResource | 1 | 377 | 31 | 41 | 449 |
+| webapi\workflow\ApplyProjectAndResource | 1 | 383 | 31 | 43 | 457 |
 
 [details](details.md)

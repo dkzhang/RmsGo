@@ -6,12 +6,17 @@ import (
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/myUtils/shortMessageService"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/generalFormDraftDB"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM"
 	userConfig "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/config"
 	userSecurity "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/security"
+	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -31,7 +36,15 @@ type Infrastructure struct {
 	TheUserDM     userDM.UserDM
 	TheUserTempDM userTempDM.UserTempDM
 
+	TheExtractor extractLoginUserInfo.Extractor
+
 	TheGeneralFormDraftDB generalFormDraftDB.GeneralFormDraftDB
+
+	TheApplicationDB applicationDB.ApplicationDB
+	TheApplicationDM applicationDM.ApplicationDM
+
+	TheProjectDB projectDB.ProjectDB
+	TheProjectDM projectDM.ProjectDM
 
 	TheLogMap logMap.LogMap
 
@@ -123,8 +136,24 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 	theInfras.TheGeneralFormDraftDB = generalFormDraftDB.NewGeneralFormDraftPg(theInfras.TheDb)
 
 	/////////////////////////////////////////////////////////
-	// GeneralFormDraftDB
-	theInfras.TheApplyProjectAndResourceWorkflow = ApplyProjectAndResource.NewWorkflow()
+	// Application DB & DM
+	theInfras.TheApplicationDB = applicationDB.NewApplicationPg(theInfras.TheDb, "application", "application_ops")
+	theInfras.TheApplicationDM, err = applicationDM.NewMemoryMap(theInfras.TheApplicationDB, theInfras.TheLogMap)
+	if err != nil {
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"error": err,
+		}).Fatal("applicationDM.NewMemoryMap error.")
+	}
+
+	theInfras.TheProjectDB = projectDB.NewProjectPg(theInfras.TheDb, "project_static", "project_dynamic")
+	theInfras.TheProjectDM, err = projectDM.NewMemoryMap(theInfras.TheProjectDB, theInfras.TheLogMap)
+	if err != nil {
+		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
+			"error": err,
+		}).Fatal("projectDM.NewMemoryMap error.")
+	}
+
+	theInfras.TheApplyProjectAndResourceWorkflow = ApplyProjectAndResource.NewWorkflow(theInfras.TheApplicationDM, theInfras.TheProjectDM)
 
 	return &theInfras
 }

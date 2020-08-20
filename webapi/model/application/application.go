@@ -76,15 +76,17 @@ var schemaAppOpsRecord = `
 const (
 	AppStatusProjectChief = 1
 	AppStatusApprover     = 2
-	AppStatusController   = 7
-	AppStatusArchived     = 8
-	AppStatusALL          = 99
+	AppStatusController   = 8
+	AppStatusArchived     = 16
+
+	AppStatusALL = -1
 )
 
 const (
-	AppTypeNew           = 1
-	AppTypeChange        = 2
-	AppTypeReturnCompute = 3
-	AppTypeReturnStorage = 4
-	AppTypeALL           = 99
+	AppTypeNew = 1 << iota
+	AppTypeChange
+	AppTypeReturnCompute
+	AppTypeReturnStorage
+
+	AppTypeALL = -1
 )

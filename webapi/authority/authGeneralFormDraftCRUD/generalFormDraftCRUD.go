@@ -42,7 +42,7 @@ func init() {
 	})
 }
 
-func GeneralFormDraftAuthorityCheck(theLogMap logMap.LogMap,
+func AuthorityCheck(theLogMap logMap.LogMap,
 	userLoginInfo user.UserInfo, GeneralFormDraftAccessed generalFormDraft.GeneralFormDraft, ops int) (permission bool) {
 	for _, rule := range theGeneralFormDraftAuthorityTable {
 		if (ops&rule.Operation != 0) && rule.RelationShipBetween(userLoginInfo, GeneralFormDraftAccessed) == true {

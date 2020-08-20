@@ -1,12 +1,12 @@
-Date : 2020-08-06 08:45:22
+Date : 2020-08-20 16:22:45
 Directory : c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo
-Total : 124 files,  6083 codes, 472 comments, 1204 blanks, all 7759 lines
+Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
 
 Languages
 +--------------+------------+------------+------------+------------+------------+
 | language     | files      | code       | comment    | blank      | total      |
 +--------------+------------+------------+------------+------------+------------+
-| Go           |         94 |      4,744 |        459 |        931 |      6,134 |
+| Go           |         98 |      5,642 |        457 |      1,101 |      7,200 |
 | Markdown     |         10 |        986 |          2 |        229 |      1,217 |
 | YAML         |          9 |        152 |          9 |         24 |        185 |
 | XML          |          7 |        122 |          0 |          3 |        125 |
@@ -19,7 +19,7 @@ Directories
 +--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                                                                               | files      | code       | comment    | blank      | total      |
 +--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                                                                  |        124 |      6,083 |        472 |      1,204 |      7,759 |
+| .                                                                                                                  |        128 |      6,981 |        470 |      1,374 |      8,825 |
 | .github                                                                                                            |          1 |         29 |          0 |          9 |         38 |
 | .github\workflows                                                                                                  |          1 |         29 |          0 |          9 |         38 |
 | .idea                                                                                                              |          6 |         93 |          0 |          0 |         93 |
@@ -55,43 +55,45 @@ Directories
 | myUtils\nodeEncode                                                                                                 |          3 |         66 |          5 |         13 |         84 |
 | myUtils\shortMessageService                                                                                        |          4 |        106 |         40 |         36 |        182 |
 | myUtils\webapiError                                                                                                |          1 |         34 |          0 |          8 |         42 |
-| webapi                                                                                                             |         60 |      3,346 |        269 |        631 |      4,246 |
-| webapi\SmsNotifier                                                                                                 |          1 |         19 |          0 |          7 |         26 |
-| webapi\authority                                                                                                   |          3 |        196 |          6 |         29 |        231 |
-| webapi\authority\authApplication                                                                                   |          1 |         33 |          0 |          7 |         40 |
+| webapi                                                                                                             |         64 |      4,244 |        267 |        801 |      5,312 |
+| webapi\SmsNotifier                                                                                                 |          1 |         84 |          0 |         18 |        102 |
+| webapi\authority                                                                                                   |          3 |        203 |          6 |         31 |        240 |
+| webapi\authority\authApplication                                                                                   |          1 |         40 |          0 |          9 |         49 |
 | webapi\authority\authGeneralFormDraftCRUD                                                                          |          1 |         63 |          3 |         10 |         76 |
 | webapi\authority\authUserCRUD                                                                                      |          1 |        100 |          3 |         12 |        115 |
-| webapi\dataInfra                                                                                                   |         24 |      1,284 |         60 |        247 |      1,591 |
-| webapi\dataInfra\applicationDB                                                                                     |          4 |        418 |          5 |         58 |        481 |
+| webapi\dataInfra                                                                                                   |         27 |      1,735 |         50 |        342 |      2,127 |
+| webapi\dataInfra\applicationDB                                                                                     |          4 |        314 |          4 |         56 |        374 |
+| webapi\dataInfra\applicationDM                                                                                     |          3 |        195 |          2 |         48 |        245 |
 | webapi\dataInfra\generalFormDraftDB                                                                                |          3 |        137 |          0 |         26 |        163 |
-| webapi\dataInfra\projectDB                                                                                         |          3 |         36 |          2 |         14 |         52 |
-| webapi\dataInfra\projectDM                                                                                         |          2 |         21 |         14 |         14 |         49 |
+| webapi\dataInfra\projectDB                                                                                         |          2 |        173 |          3 |         29 |        205 |
+| webapi\dataInfra\projectDM                                                                                         |          3 |        244 |          2 |         48 |        294 |
 | webapi\dataInfra\userDB                                                                                            |          5 |        245 |         12 |         35 |        292 |
 | webapi\dataInfra\userDM                                                                                            |          2 |        213 |         21 |         50 |        284 |
 | webapi\dataInfra\userTempDM                                                                                        |          5 |        214 |          6 |         50 |        270 |
 | webapi\dataInfra\userTempDM\config                                                                                 |          2 |         63 |          1 |         13 |         77 |
 | webapi\dataInfra\userTempDM\security                                                                               |          1 |         16 |          0 |          5 |         21 |
-| webapi\handle                                                                                                      |          9 |        834 |         67 |        147 |      1,048 |
-| webapi\handle\extractLoginUserInfo                                                                                 |          1 |         33 |          0 |          6 |         39 |
+| webapi\handle                                                                                                      |         10 |      1,121 |         69 |        191 |      1,381 |
+| webapi\handle\extractLoginUserInfo                                                                                 |          1 |         67 |          0 |         12 |         79 |
+| webapi\handle\handleApplication                                                                                    |          1 |        253 |          2 |         38 |        293 |
 | webapi\handle\handleGeneralFormDraft                                                                               |          1 |        241 |         15 |         37 |        293 |
 | webapi\handle\handleLogin                                                                                          |          3 |        184 |         23 |         40 |        247 |
 | webapi\handle\handleProRes                                                                                         |          1 |         48 |         15 |         15 |         78 |
 | webapi\handle\handleUser                                                                                           |          3 |        328 |         14 |         49 |        391 |
-| webapi\infrastructure                                                                                              |          1 |         90 |         12 |         22 |        124 |
+| webapi\infrastructure                                                                                              |          1 |        117 |         14 |         29 |        160 |
 | webapi\middleware                                                                                                  |          2 |         51 |         14 |         16 |         81 |
-| webapi\model                                                                                                       |         13 |        409 |         75 |         89 |        573 |
-| webapi\model\application                                                                                           |          1 |         77 |          3 |         11 |         91 |
+| webapi\model                                                                                                       |         13 |        413 |         75 |         91 |        579 |
+| webapi\model\application                                                                                           |          1 |         77 |          3 |         12 |         92 |
 | webapi\model\generalForm                                                                                           |          1 |         10 |          0 |          2 |         12 |
 | webapi\model\generalFormDraft                                                                                      |          1 |         17 |          1 |          4 |         22 |
 | webapi\model\gfApplication                                                                                         |          1 |         26 |          6 |          8 |         40 |
 | webapi\model\metering                                                                                              |          1 |         41 |          0 |          9 |         50 |
-| webapi\model\project                                                                                               |          2 |         95 |          1 |         14 |        110 |
+| webapi\model\project                                                                                               |          2 |         99 |          1 |         15 |        115 |
 | webapi\model\resource                                                                                              |          1 |         35 |          0 |          8 |         43 |
 | webapi\model\statusActionMap                                                                                       |          1 |         18 |          1 |          5 |         24 |
 | webapi\model\user                                                                                                  |          4 |         90 |         63 |         28 |        181 |
-| webapi\workflow                                                                                                    |          3 |        388 |         31 |         45 |        464 |
+| webapi\workflow                                                                                                    |          3 |        437 |         35 |         52 |        524 |
 | webapi\workflow\ApplyChangeResource                                                                                |          1 |          1 |          0 |          1 |          2 |
-| webapi\workflow\ApplyProjectAndResource                                                                            |          1 |        377 |         31 |         41 |        449 |
+| webapi\workflow\ApplyProjectAndResource                                                                            |          1 |        383 |         31 |         43 |        457 |
 +--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
@@ -163,22 +165,25 @@ Files
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\shortMessageService\sendSMS_test.go                       | Go           |         16 |          0 |          5 |         21 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\myUtils\webapiError\webapiError.go                                | Go           |         34 |          0 |          8 |         42 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\Dockerfile                                                 | Dockerfile   |         12 |          0 |          7 |         19 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\SmsNotifier\smsNotifier.go                                 | Go           |         19 |          0 |          7 |         26 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\authority\authApplication\authApplication.go               | Go           |         33 |          0 |          7 |         40 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\SmsNotifier\smsNotifier.go                                 | Go           |         84 |          0 |         18 |        102 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\authority\authApplication\authApplication.go               | Go           |         40 |          0 |          9 |         49 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\authority\authGeneralFormDraftCRUD\generalFormDraftCRUD.go | Go           |         63 |          3 |         10 |         76 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\authority\authUserCRUD\userCRUD.go                         | Go           |        100 |          3 |         12 |        115 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationDB.go                   | Go           |         32 |          0 |         11 |         43 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationDB.go                   | Go           |         26 |          0 |         11 |         37 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationDB_suite_test.go        | Go           |         24 |          0 |          8 |         32 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationDB_test.go              | Go           |        168 |          3 |         22 |        193 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationPg.go                   | Go           |        194 |          2 |         17 |        213 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDB\applicationPg.go                   | Go           |         96 |          1 |         15 |        112 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDM\applicationDM.go                   | Go           |         21 |          0 |          9 |         30 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDM\forHistory.go                      | Go           |         64 |          0 |         14 |         78 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\applicationDM\memoryMap.go                       | Go           |        110 |          2 |         25 |        137 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\generalFormDraftDB\generalFormDraftDB.go         | Go           |         11 |          0 |          4 |         15 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\generalFormDraftDB\generalFormDraftDB_test.go    | Go           |         72 |          0 |         12 |         84 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\generalFormDraftDB\generalFormDraftPg.go         | Go           |         54 |          0 |         10 |         64 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDB\projectDB.go                           | Go           |         21 |          1 |          7 |         29 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDB\projectDM.go                           | Go           |         14 |          1 |          6 |         21 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDB\projectPg.go                           | Go           |          1 |          0 |          1 |          2 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDM\projectDM.go                           | Go           |          8 |         14 |          9 |         31 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDM\projectDMv1.go                         | Go           |         13 |          0 |          5 |         18 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDB\projectDB.go                           | Go           |         25 |          2 |          8 |         35 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDB\projectPg.go                           | Go           |        148 |          1 |         21 |        170 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDM\forHistory.go                          | Go           |         90 |          1 |         20 |        111 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDM\memoryMap.go                           | Go           |        137 |          0 |         22 |        159 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\projectDM\projectDM.go                           | Go           |         17 |          1 |          6 |         24 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\postgre.go                                | Go           |         83 |          3 |         13 |         99 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\userDB.go                                 | Go           |         14 |          0 |          3 |         17 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userDB\userDB_suite_test.go                      | Go           |         24 |          0 |          8 |         32 |
@@ -193,7 +198,8 @@ Files
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\dataInfra\userTempDM\userTempDM.go                         | Go           |         12 |          0 |          5 |         17 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\entrypoint.prod.sh                                         | Shell Script |          9 |          1 |          4 |         14 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\entrypoint.sh                                              | Shell Script |         10 |          1 |          6 |         17 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\extractLoginUserInfo\extract.go                     | Go           |         33 |          0 |          6 |         39 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\extractLoginUserInfo\extract.go                     | Go           |         67 |          0 |         12 |         79 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleApplication\handleApp.go                      | Go           |        253 |          2 |         38 |        293 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleGeneralFormDraft\generalFormDraftCRUD.go      | Go           |        241 |         15 |         37 |        293 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleLogin\applyLogin.go                           | Go           |         95 |         12 |         18 |        125 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleLogin\login.go                                | Go           |         76 |         11 |         18 |        105 |
@@ -202,25 +208,25 @@ Files
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleUser\allUsers.go                              | Go           |         56 |          0 |          8 |         64 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleUser\retrieveUserLogin.go                     | Go           |         24 |          0 |          4 |         28 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\handle\handleUser\userCRUD.go                              | Go           |        248 |         14 |         37 |        299 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\infrastructure\infrastructure.go                           | Go           |         90 |         12 |         22 |        124 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\infrastructure\infrastructure.go                           | Go           |        117 |         14 |         29 |        160 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\middleware\logGin.go                                       | Go           |         26 |         12 |         13 |         51 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\middleware\tokenAuth.go                                    | Go           |         25 |          2 |          3 |         30 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\application\application.go                           | Go           |         77 |          3 |         11 |         91 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\application\application.go                           | Go           |         77 |          3 |         12 |         92 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\generalFormDraft\generalFormDraft.go                 | Go           |         17 |          1 |          4 |         22 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\generalForm\generalForm.go                           | Go           |         10 |          0 |          2 |         12 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\gfApplication\gfApplication.go                       | Go           |         26 |          6 |          8 |         40 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\metering\metering.go                                 | Go           |         41 |          0 |          9 |         50 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\project\project.go                                   | Go           |         30 |          0 |          4 |         34 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\project\projectDynamic.go                            | Go           |         65 |          1 |         10 |         76 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\project\project.go                                   | Go           |         35 |          0 |          5 |         40 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\project\projectDynamic.go                            | Go           |         64 |          1 |         10 |         75 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\resource\resource.go                                 | Go           |         35 |          0 |          8 |         43 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\statusActionMap\statusActionMap.go                   | Go           |         18 |          1 |          5 |         24 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\checkUserName.go                                | Go           |         12 |          1 |          6 |         19 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\checkUserName_test.go                           | Go           |         27 |          0 |          4 |         31 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\user.go                                         | Go           |         50 |         10 |         16 |         76 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\model\user\user_test.go                                    | Go           |          1 |         52 |          2 |         55 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\server.go                                                  | Go           |         44 |          2 |         12 |         58 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\server.go                                                  | Go           |         52 |          2 |         14 |         68 |
 | c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\workflow\ApplyChangeResource\apply.go                      | Go           |          1 |          0 |          1 |          2 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\workflow\ApplyProjectAndResource\apply.go                  | Go           |        377 |         31 |         41 |        449 |
-| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\workflow\generalWorkflow.go                                | Go           |         10 |          0 |          3 |         13 |
-| Total                                                                                                              |              |      6,083 |        472 |      1,204 |      7,759 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\workflow\ApplyProjectAndResource\apply.go                  | Go           |        383 |         31 |         43 |        457 |
+| c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\webapi\workflow\generalWorkflow.go                                | Go           |         53 |          4 |          8 |         65 |
+| Total                                                                                                              |              |      6,981 |        470 |      1,374 |      8,825 |
 +--------------------------------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+

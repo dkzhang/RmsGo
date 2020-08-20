@@ -1,6 +1,7 @@
 package authApplication
 
 import (
+	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 )
@@ -36,4 +37,12 @@ func init() {
 		Permission:  true,
 		Description: "Allow RoleProjectChief CREATE Application",
 	})
+}
+
+func AuthorityCheck(theLogMap logMap.LogMap,
+	userLoginInfo user.UserInfo,
+	app application.Application,
+	ops int) (permission bool) {
+
+	return false
 }

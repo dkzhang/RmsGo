@@ -66,7 +66,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 			"userLoginInfo":   userLoginInfo,
 			"userCreatedInfo": userCreatedInfo,
 			"error":           err,
-		}).Error("TheUserDM.InsertUserPreCheck error.")
+		}).Error("theUserDM.InsertUserPreCheck error.")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": msg,
 		})
@@ -80,7 +80,7 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 			"userLoginID":     userLoginInfo.UserID,
 			"userCreatedInfo": userCreatedInfo.UserID,
 			"error":           err,
-		}).Error("TheUserDM.InsertUser error.")
+		}).Error("theUserDM.InsertUser error.")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
 		})
@@ -183,7 +183,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 			"userAccessedID":  userAccessedInfo.UserID,
 			"userUpdatedInfo": userUpdatedInfo,
 			"error":           err,
-		}).Error("TheUserDM.UpdateUserPreCheck error.")
+		}).Error("theUserDM.UpdateUserPreCheck error.")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"msg": msg,
 		})
@@ -198,7 +198,7 @@ func Update(infra *infrastructure.Infrastructure, c *gin.Context) {
 			"userAccessedID":  userAccessedInfo.UserID,
 			"userUpdatedInfo": userUpdatedInfo,
 			"error":           err,
-		}).Error("TheUserDM.UpdateUser error.")
+		}).Error("theUserDM.UpdateUser error.")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
 		})
@@ -248,7 +248,7 @@ func Delete(infra *infrastructure.Infrastructure, c *gin.Context) {
 			"userLoginID":    userLoginInfo.UserID,
 			"userAccessedID": userAccessedInfo.UserID,
 			"error":          err,
-		}).Error("TheUserDM.DeleteUser error.")
+		}).Error("theUserDM.DeleteUser error.")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "服务器内部错误",
 		})
@@ -287,12 +287,12 @@ func extractAccessedUserInfo(infra *infrastructure.Infrastructure, c *gin.Contex
 	if err != nil {
 		infra.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userAccessedID": userAccessedID,
-		}).Error("TheUserDM.QueryUserByID (using userAccessedID from gin.Context) failed.")
+		}).Error("theUserDM.QueryUserByID (using userAccessedID from gin.Context) failed.")
 
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "无法找到该用户",
 		})
-		return user.UserInfo{}, fmt.Errorf("TheUserDM.QueryUserByID (using userAccessedID from gin.Context) error: %v", err)
+		return user.UserInfo{}, fmt.Errorf("theUserDM.QueryUserByID (using userAccessedID from gin.Context) error: %v", err)
 	}
 	return userAccessedInfo, nil
 }

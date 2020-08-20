@@ -44,13 +44,13 @@ var SchemaUser = `
 const (
 	RoleProjectChief = 1
 	RoleApprover     = 2
-	RoleController   = 7
+	RoleController   = 8
 )
 
 const (
 	StatusNormal  = 1
-	StatusDisable = -1
-	StatusDelete  = -9
+	StatusDisable = 2
+	StatusDelete  = 4
 )
 
 func (ui *UserInfo) ToJsonString() string {
