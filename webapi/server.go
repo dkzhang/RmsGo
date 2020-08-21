@@ -7,6 +7,8 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
+	"github.com/dkzhang/RmsGo/webapi/model/application"
+	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/gin-gonic/gin"
 	"os"
 )
@@ -23,6 +25,10 @@ func Serve() {
 	r.Use(middleware.LoggerGinToFile(infra.TheLogMap))
 
 	/////////////////////////////////////////////////////////////
+	theHandleApp := handleApplication.NewHandleApp(infra.TheApplicationDM,
+		infra.TheExtractor, infra.TheLogMap)
+	theHandleApp.RegisterWorkflow(application.AppTypeNew,
+		ApplyProjectAndResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM))
 
 	webAPIv1 := r.Group("/webapi")
 	{
@@ -54,11 +60,11 @@ func Serve() {
 
 		hApp := webAPIv1.Group("/Application")
 		{
-			hApp.GET("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.RetrieveByOwner(infra, c) })
+			hApp.GET("/", middleware.TokenAuth(infra), theHandleApp.RetrieveByUserLogin)
 
-			hApp.POST("/", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.Create(infra, c) })
-			hApp.GET("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.RetrieveByID(infra, c) })
-			hApp.PUT("/:id", middleware.TokenAuth(infra), func(c *gin.Context) { handleApplication.Update(infra, c) })
+			hApp.POST("/", middleware.TokenAuth(infra), theHandleApp.Create)
+			hApp.GET("/:id", middleware.TokenAuth(infra), theHandleApp.RetrieveByID)
+			hApp.PUT("/:id", middleware.TokenAuth(infra), theHandleApp.Update)
 		}
 	}
 

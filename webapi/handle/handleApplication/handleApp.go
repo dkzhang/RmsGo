@@ -17,40 +17,40 @@ import (
 )
 
 type HandleApp struct {
-	TheAppWorkflow map[int]workflow.GeneralWorkflow
+	theAppWorkflow map[int]workflow.GeneralWorkflow
 
-	TheAppDM applicationDM.ApplicationDM
+	theAppDM applicationDM.ApplicationDM
 
-	TheExtractor extractLoginUserInfo.Extractor
+	theExtractor extractLoginUserInfo.Extractor
 
-	TheLogMap logMap.LogMap
+	theLogMap logMap.LogMap
 }
 
 func NewHandleApp(adm applicationDM.ApplicationDM,
 	ext extractLoginUserInfo.Extractor, lm logMap.LogMap) HandleApp {
 	return HandleApp{
-		TheAppWorkflow: make(map[int]workflow.GeneralWorkflow),
-		TheAppDM:       adm,
-		TheExtractor:   ext,
-		TheLogMap:      lm,
+		theAppWorkflow: make(map[int]workflow.GeneralWorkflow),
+		theAppDM:       adm,
+		theExtractor:   ext,
+		theLogMap:      lm,
 	}
 }
 
 func (h HandleApp) RegisterWorkflow(t int, wl workflow.GeneralWorkflow) {
-	h.TheAppWorkflow[t] = wl
+	h.theAppWorkflow[t] = wl
 }
 
 func (h HandleApp) Create(c *gin.Context) {
-	userLoginInfo, err := h.TheExtractor.Extract(c)
+	userLoginInfo, err := h.theExtractor.Extract(c)
 	if err != nil {
 		return
 	}
 
-	permission := authApplication.AuthorityCheck(h.TheLogMap,
+	permission := authApplication.AuthorityCheck(h.theLogMap,
 		userLoginInfo, application.Application{},
 		authApplication.OPS_CREATE)
 	if permission == false {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 		}).Error(" AuthorityCheck failed.")
 
@@ -64,7 +64,7 @@ func (h HandleApp) Create(c *gin.Context) {
 	gfc := generalForm.GeneralForm{}
 	err = c.BindJSON(&gfc)
 	if err != nil {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 			"error":       err,
 		}).Error("c.BindJSON(&GeneralFormDraftCreated) error.")
@@ -76,9 +76,9 @@ func (h HandleApp) Create(c *gin.Context) {
 	}
 
 	appType := c.GetInt("type")
-	wf, ok := h.TheAppWorkflow[appType]
+	wf, ok := h.theAppWorkflow[appType]
 	if !ok {
-		h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"appType": appType,
 		}).Error("unsupported application type for create.")
 
@@ -90,7 +90,7 @@ func (h HandleApp) Create(c *gin.Context) {
 
 	appID, waErr := wf.Apply(gfc, userLoginInfo)
 	if waErr != nil {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 			"error":       waErr.Error(),
 		}).Error("TheAppNewWorkflow.Apply error.")
@@ -109,7 +109,7 @@ func (h HandleApp) Create(c *gin.Context) {
 }
 
 func (h HandleApp) Update(c *gin.Context) {
-	userLoginInfo, err := h.TheExtractor.Extract(c)
+	userLoginInfo, err := h.theExtractor.Extract(c)
 	if err != nil {
 		return
 	}
@@ -119,9 +119,9 @@ func (h HandleApp) Update(c *gin.Context) {
 		return
 	}
 
-	permission := authApplication.AuthorityCheck(h.TheLogMap, userLoginInfo, app, authApplication.OPS_UPDATE)
+	permission := authApplication.AuthorityCheck(h.theLogMap, userLoginInfo, app, authApplication.OPS_UPDATE)
 	if permission == false {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 			"appID":       app.ApplicationID,
 		}).Error(" AuthorityCheck failed.")
@@ -135,7 +135,7 @@ func (h HandleApp) Update(c *gin.Context) {
 	gf := generalForm.GeneralForm{}
 	err = c.BindJSON(&gf)
 	if err != nil {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 			"error":       err,
 		}).Error("c.BindJSON GeneralForm error.")
@@ -146,9 +146,9 @@ func (h HandleApp) Update(c *gin.Context) {
 	gf.FormID = app.ApplicationID
 
 	appType := c.GetInt("type")
-	wf, ok := h.TheAppWorkflow[appType]
+	wf, ok := h.theAppWorkflow[appType]
 	if !ok {
-		h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"appType": appType,
 		}).Error("unsupported application type for create.")
 
@@ -161,7 +161,7 @@ func (h HandleApp) Update(c *gin.Context) {
 	waErr := wf.Process(gf, app, userLoginInfo)
 
 	if waErr != nil {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userLoginID": userLoginInfo.UserID,
 			"error":       waErr.Error(),
 		}).Error("TheAppNewWorkflow.Process error.")
@@ -178,7 +178,7 @@ func (h HandleApp) Update(c *gin.Context) {
 }
 
 func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
-	userLoginInfo, err := h.TheExtractor.Extract(c)
+	userLoginInfo, err := h.theExtractor.Extract(c)
 	if err != nil {
 		return
 	}
@@ -188,9 +188,9 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 
 	switch userLoginInfo.Role {
 	case user.RoleProjectChief:
-		apps, err := h.TheAppDM.QueryByOwner(userLoginInfo.UserID, appType, appStatus)
+		apps, err := h.theAppDM.QueryByOwner(userLoginInfo.UserID, appType, appStatus)
 		if err != nil {
-			h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -205,9 +205,9 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			"msg":  "查询项目长相关申请单成功",
 		})
 	case user.RoleApprover:
-		apps, err := h.TheAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, appType, appStatus)
+		apps, err := h.theAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, appType, appStatus)
 		if err != nil {
-			h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -222,9 +222,9 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			"msg":  "查询项目长相关申请单成功",
 		})
 	case user.RoleController:
-		apps, err := h.TheAppDM.QueryAll(appType, appStatus)
+		apps, err := h.theAppDM.QueryAll(appType, appStatus)
 		if err != nil {
-			h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -239,7 +239,7 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			"msg":  "查询项目长相关申请单成功",
 		})
 	default:
-		h.TheLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 			"userID": userLoginInfo.UserID,
 			"Role":   userLoginInfo.Role,
 			"error":  err,
@@ -253,7 +253,7 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 }
 
 func (h HandleApp) RetrieveByID(c *gin.Context) {
-	userLoginInfo, err := h.TheExtractor.Extract(c)
+	userLoginInfo, err := h.theExtractor.Extract(c)
 	if err != nil {
 		return
 	}
@@ -263,7 +263,7 @@ func (h HandleApp) RetrieveByID(c *gin.Context) {
 		return
 	}
 
-	permission := authApplication.AuthorityCheck(h.TheLogMap, userLoginInfo, app, authApplication.OPS_RETRIEVE)
+	permission := authApplication.AuthorityCheck(h.theLogMap, userLoginInfo, app, authApplication.OPS_RETRIEVE)
 	if permission == true {
 		c.JSON(http.StatusOK, gin.H{
 			"app": app,
@@ -283,7 +283,7 @@ func (h HandleApp) extractAccessedApplication(c *gin.Context) (app application.A
 	appID, err := strconv.Atoi(idStr)
 
 	if err != nil {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"idStr": idStr,
 			"error": err,
 		}).Error("get GeneralFormDraft ID from gin.Context failed.")
@@ -295,17 +295,17 @@ func (h HandleApp) extractAccessedApplication(c *gin.Context) (app application.A
 			fmt.Errorf("get Application ID from gin.Context failed: %v", err)
 	}
 
-	app, err = h.TheAppDM.QueryByID(appID)
+	app, err = h.theAppDM.QueryByID(appID)
 	if err != nil {
-		h.TheLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"appID": appID,
-		}).Error("TheAppDM.QueryByID (using appID from gin.Context) failed.")
+		}).Error("theAppDM.QueryByID (using appID from gin.Context) failed.")
 
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "无法找到该申请表单",
 		})
 		return application.Application{},
-			fmt.Errorf("TheAppDM.QueryByID (using appID from gin.Context) error: %v", err)
+			fmt.Errorf("theAppDM.QueryByID (using appID from gin.Context) error: %v", err)
 	}
 	return app, nil
 }
