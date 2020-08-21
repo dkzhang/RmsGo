@@ -10,7 +10,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
-	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -27,8 +26,18 @@ type HandleApp struct {
 	TheLogMap logMap.LogMap
 }
 
-func NewHandleApp(nwf ApplyProjectAndResource.Workflow) (h HandleApp) {
-	return h
+func NewHandleApp(adm applicationDM.ApplicationDM,
+	ext extractLoginUserInfo.Extractor, lm logMap.LogMap) HandleApp {
+	return HandleApp{
+		TheAppWorkflow: make(map[int]workflow.GeneralWorkflow),
+		TheAppDM:       adm,
+		TheExtractor:   ext,
+		TheLogMap:      lm,
+	}
+}
+
+func (h HandleApp) RegisterWorkflow(t int, wl workflow.GeneralWorkflow) {
+	h.TheAppWorkflow[t] = wl
 }
 
 func (h HandleApp) Create(c *gin.Context) {
