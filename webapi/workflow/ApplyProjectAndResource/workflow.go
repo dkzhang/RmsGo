@@ -25,11 +25,11 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 		adm: adm,
 		pdm: pdm,
 	}
-	applyMap := make(map[workflow.KeySRA]workflow.ApplyFunc)
-	processMap := make(map[workflow.KeySRA]workflow.ProcessFunc)
+	applyMap := make(map[workflow.KeyTSRA]workflow.ApplyFunc)
+	processMap := make(map[workflow.KeyTSRA]workflow.ProcessFunc)
 
 	// 项目长首次提交
-	applyMap[workflow.KeySRA{
+	applyMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
 		AppStatus: 0,
 		UserRole:  user.RoleProjectChief,
@@ -37,7 +37,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 	}] = wf.ProjectChiefApply
 
 	// 审批人通过
-	processMap[workflow.KeySRA{
+	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
@@ -45,7 +45,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 	}] = wf.ApproverProcessPassOrReject
 
 	// 审批人拒绝
-	processMap[workflow.KeySRA{
+	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
@@ -53,7 +53,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 	}] = wf.ApproverProcessPassOrReject
 
 	// 项目长重新提交
-	processMap[workflow.KeySRA{
+	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
 		AppStatus: application.AppStatusProjectChief,
 		UserRole:  user.RoleProjectChief,
@@ -61,7 +61,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 	}] = wf.ProjectChiefProcessResubmit
 
 	// 调度员通过
-	processMap[workflow.KeySRA{
+	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,
@@ -69,7 +69,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 	}] = wf.ControllerProcessPass
 
 	// 调度员拒绝
-	processMap[workflow.KeySRA{
+	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,

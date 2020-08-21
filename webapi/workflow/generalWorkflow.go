@@ -15,20 +15,40 @@ import (
 type ApplyFunc func(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err)
 type ProcessFunc func(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err)
 
+type ApplyHookFunc func(form generalForm.GeneralForm, userInfo user.UserInfo, appID int, waErr webapiError.Err)
+type ProcessHookFunc func(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo, waErr webapiError.Err)
+
 type GeneralWorkflow struct {
-	applyMap   map[KeySRA]ApplyFunc
-	processMap map[KeySRA]ProcessFunc
+	applyMap   map[KeyTSRA]ApplyFunc
+	processMap map[KeyTSRA]ProcessFunc
+
+	applyHook   map[KeyTSRA]([]ApplyHookFunc)
+	processHook map[KeyTSRA]([]ProcessHookFunc)
 }
 
-func NewGeneralWorkflow(am map[KeySRA]ApplyFunc, pm map[KeySRA]ProcessFunc) GeneralWorkflow {
+func NewGeneralWorkflow(am map[KeyTSRA]ApplyFunc, pm map[KeyTSRA]ProcessFunc) GeneralWorkflow {
 	return GeneralWorkflow{
-		applyMap:   am,
-		processMap: pm,
+		applyMap:    am,
+		processMap:  pm,
+		applyHook:   make(map[KeyTSRA]([]ApplyHookFunc)),
+		processHook: make(map[KeyTSRA]([]ProcessHookFunc)),
+	}
+}
+
+func (gwf GeneralWorkflow) HookApply(k KeyTSRA, ahf ApplyHookFunc) {
+	if _, ok := gwf.applyHook[k]; !ok {
+		gwf.applyHook[k] = append(gwf.applyHook[k], ahf)
+	}
+}
+
+func (gwf GeneralWorkflow) HookProcess(k KeyTSRA, phf ProcessHookFunc) {
+	if _, ok := gwf.processHook[k]; !ok {
+		gwf.processHook[k] = append(gwf.processHook[k], phf)
 	}
 }
 
 func (gwf GeneralWorkflow) Apply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
-	k := KeySRA{
+	k := KeyTSRA{
 		AppType:   form.Type,
 		AppStatus: 0,
 		UserRole:  userInfo.Role,
@@ -40,11 +60,21 @@ func (gwf GeneralWorkflow) Apply(form generalForm.GeneralForm, userInfo user.Use
 			fmt.Sprintf("apply application (key: %v) does not allowed", k),
 			"该用户无权对该申请单进行该操作")
 	}
-	return execFunc(form, userInfo)
+
+	appID, waErr = execFunc(form, userInfo)
+
+	// Hook
+	if hooks, ok := gwf.applyHook[k]; ok {
+		for _, h := range hooks {
+			h(form, userInfo, appID, waErr)
+		}
+	}
+
+	return appID, waErr
 }
 
 func (gwf GeneralWorkflow) Process(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	k := KeySRA{
+	k := KeyTSRA{
 		AppType:   form.Type,
 		AppStatus: app.Status,
 		UserRole:  userInfo.Role,
@@ -56,10 +86,19 @@ func (gwf GeneralWorkflow) Process(form generalForm.GeneralForm, app application
 			fmt.Sprintf("apply application (key: %v) does not allowed", k),
 			"该用户无权对该申请单进行该操作")
 	}
-	return execFunc(form, app, userInfo)
+
+	waErr = execFunc(form, app, userInfo)
+
+	// Hook
+	if hooks, ok := gwf.processHook[k]; ok {
+		for _, h := range hooks {
+			h(form, app, userInfo, waErr)
+		}
+	}
+	return waErr
 }
 
-type KeySRA struct {
+type KeyTSRA struct {
 	AppType   int
 	AppStatus int
 	UserRole  int
