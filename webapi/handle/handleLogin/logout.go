@@ -1,13 +1,12 @@
 package handleLogin
 
 import (
-	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/gin-gonic/gin"
 )
 
 func Logout(infra *infrastructure.Infrastructure, c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
+	userLoginInfo, err := infra.TheExtractor.Extract(c)
 	if err != nil {
 		return
 	}

@@ -3,7 +3,6 @@ package handleUser
 import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -11,7 +10,7 @@ import (
 )
 
 func RetrieveUserLogin(infra *infrastructure.Infrastructure, c *gin.Context) {
-	userLoginInfo, err := extractLoginUserInfo.Extract(infra, c)
+	userLoginInfo, err := infra.TheExtractor.Extract(c)
 	if err != nil {
 		return
 	}
