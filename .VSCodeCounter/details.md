@@ -24,7 +24,7 @@ Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
 | [Configuration/Security/database.yaml](/Configuration/Security/database.yaml) | YAML | 9 | 4 | 2 | 15 |
 | [Configuration/Security/db41.yaml](/Configuration/Security/db41.yaml) | YAML | 9 | 4 | 2 | 15 |
 | [Configuration/Security/readme.md](/Configuration/Security/readme.md) | Markdown | 13 | 0 | 3 | 16 |
-| [Configuration/Security/sms.yaml](/Configuration/Security/sms.yaml) | YAML | 6 | 0 | 1 | 7 |
+| [Configuration/Security/sms.yaml](/Configuration/Security/sms_xx.yaml) | YAML | 6 | 0 | 1 | 7 |
 | [DK_Experiments/jsonNodeGroup/jsonNodeGroup.go](/DK_Experiments/jsonNodeGroup/jsonNodeGroup.go) | Go | 17 | 0 | 4 | 21 |
 | [DK_Experiments/jsonNodeGroup/jsonNodeGroup_suite_test.go](/DK_Experiments/jsonNodeGroup/jsonNodeGroup_suite_test.go) | Go | 10 | 0 | 4 | 14 |
 | [DK_Experiments/jsonNodeGroup/jsonNodeGroup_test.go](/DK_Experiments/jsonNodeGroup/jsonNodeGroup_test.go) | Go | 53 | 0 | 5 | 58 |
