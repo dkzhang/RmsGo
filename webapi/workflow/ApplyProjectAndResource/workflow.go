@@ -104,26 +104,20 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 
 	theProjectD := project.DynamicInfo{
 		//ProjectID:               0,
-		BasicStatus:             project.BasicStatusApplying,
-		ComputingAllocStatus:    project.ResNotYetAssigned,
-		StorageAllocStatus:      project.ResNotYetAssigned,
-		StartDate:               app.StartDate,
-		TotalDaysApply:          app.TotalDaysApply,
-		EndDate:                 app.EndDate,
-		AppInProgressNum:        1,
-		AppAccomplishedNum:      0,
-		MeteringInProgressNum:   0,
-		MeteringAccomplishedNum: 0,
-		ResAllocNum:             0,
-		CpuNodesExpected:        0,
-		GpuNodesExpected:        0,
-		StorageSizeExpected:     0,
-		CpuNodesAcquired:        0,
-		GpuNodesAcquired:        0,
-		StorageSizeAcquired:     0,
-		EndReminderAt:           time.Now().AddDate(100, 0, 0),
-		CreatedAt:               time.Now(),
-		UpdatedAt:               time.Now(),
+		BasicStatus:          project.BasicStatusApplying,
+		ComputingAllocStatus: project.ResNotYetAssigned,
+		StorageAllocStatus:   project.ResNotYetAssigned,
+		StartDate:            app.StartDate,
+		TotalDaysApply:       app.TotalDaysApply,
+		CpuNodesExpected:     0,
+		GpuNodesExpected:     0,
+		StorageSizeExpected:  0,
+		CpuNodesAcquired:     0,
+		GpuNodesAcquired:     0,
+		StorageSizeAcquired:  0,
+		EndReminderAt:        app.EndDate,
+		CreatedAt:            time.Now(),
+		UpdatedAt:            time.Now(),
 	}
 
 	projectID, err := wf.pdm.InsertAllInfo(project.ProjectInfo{
@@ -330,7 +324,7 @@ func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app
 
 	theProjectD.StartDate = appNewProRes.StartDate
 	theProjectD.TotalDaysApply = appNewProRes.TotalDaysApply
-	theProjectD.EndDate = appNewProRes.EndDate
+	theProjectD.EndReminderAt = appNewProRes.EndDate
 	err = wf.pdm.UpdateDynamicInfo(theProjectD)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
@@ -459,8 +453,6 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 	}
 
 	theProjectD.BasicStatus = project.BasicStatusEstablished
-	theProjectD.AppInProgressNum -= 1
-	theProjectD.AppAccomplishedNum += 1
 
 	// application passed
 	var appNewProRes gfApplication.AppNewProRes

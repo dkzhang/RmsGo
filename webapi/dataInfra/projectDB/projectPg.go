@@ -111,14 +111,11 @@ func (ppg ProjectPg) InsertAllInfo(psi project.StaticInfo, pdi project.DynamicIn
 		return -1, fmt.Errorf("TheDB.Get Insert Project StaticInfo in TheDB error: %v", err)
 	}
 
-	execInsertDynamic := fmt.Sprintf(`INSERT INTO %s (project_id, basic_status, computing_alloc_status, storage_alloc_status, start_date, end_date, total_days_apply, end_reminder_at, app_in_progress_num, app_accomplished_num, metering_in_progress_num, metering_accomplished_num, res_alloc_num, cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, cpu_nodes_acquired, gpu_nodes_acquired, storage_size_acquired, created_at, updated_at)  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING project_id`, ppg.DynamicTableName)
+	execInsertDynamic := fmt.Sprintf(`INSERT INTO %s (project_id, basic_status, computing_alloc_status, storage_alloc_status, start_date, total_days_apply, end_reminder_at, cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, cpu_nodes_acquired, gpu_nodes_acquired, storage_size_acquired, created_at, updated_at)  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING project_id`, ppg.DynamicTableName)
 	err = ppg.TheDB.Get(&projectID, execInsertDynamic,
 		projectID, pdi.BasicStatus,
 		pdi.ComputingAllocStatus, pdi.StorageAllocStatus,
-		pdi.StartDate, pdi.EndDate,
-		pdi.TotalDaysApply, pdi.EndReminderAt,
-		pdi.AppInProgressNum, pdi.AppAccomplishedNum,
-		pdi.MeteringInProgressNum, pdi.MeteringAccomplishedNum, pdi.ResAllocNum,
+		pdi.StartDate, pdi.TotalDaysApply, pdi.EndReminderAt,
 		pdi.CpuNodesExpected, pdi.GpuNodesExpected, pdi.StorageSizeExpected,
 		pdi.CpuNodesAcquired, pdi.GpuNodesAcquired, pdi.StorageSizeAcquired,
 		pdi.CreatedAt, pdi.UpdatedAt)
@@ -137,7 +134,7 @@ func (ppg ProjectPg) UpdateStaticInfo(psi project.StaticInfo) (err error) {
 	return nil
 }
 func (ppg ProjectPg) UpdateDynamicInfo(pdi project.DynamicInfo) (err error) {
-	execUpdate := fmt.Sprintf(`UPDATE %s SET basic_status=:basic_status, computing_alloc_status=:computing_alloc_status, storage_alloc_status=:storage_alloc_status, start_date=:start_date, end_date=:end_date, total_days_apply=:total_days_apply, end_reminder_at=:end_reminder_at, app_in_progress_num=:app_in_progress_num, app_accomplished_num=:app_accomplished_num, metering_in_progress_num=:metering_in_progress_num, metering_accomplished_num=:metering_accomplished_num, res_alloc_num=:res_alloc_num, cpu_nodes_expected=:cpu_nodes_expected, gpu_nodes_expected=:gpu_nodes_expected, storage_size_expected=:storage_size_expected, cpu_nodes_acquired=:cpu_nodes_acquired, gpu_nodes_acquired=:gpu_nodes_acquired, storage_size_acquired=:storage_size_acquired, updated_at=:updated_at WHERE project_id=:project_id`, ppg.DynamicTableName)
+	execUpdate := fmt.Sprintf(`UPDATE %s SET basic_status=:basic_status, computing_alloc_status=:computing_alloc_status, storage_alloc_status=:storage_alloc_status, start_date=:start_date, total_days_apply=:total_days_apply, end_reminder_at=:end_reminder_at, cpu_nodes_expected=:cpu_nodes_expected, gpu_nodes_expected=:gpu_nodes_expected, storage_size_expected=:storage_size_expected, cpu_nodes_acquired=:cpu_nodes_acquired, gpu_nodes_acquired=:gpu_nodes_acquired, storage_size_acquired=:storage_size_acquired, updated_at=:updated_at WHERE project_id=:project_id`, ppg.DynamicTableName)
 
 	_, err = ppg.TheDB.NamedExec(execUpdate, pdi)
 	if err != nil {

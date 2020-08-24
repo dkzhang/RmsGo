@@ -12,16 +12,16 @@ type DynamicInfo struct {
 	StorageAllocStatus   int `db:"storage_alloc_status" json:"storage_alloc_status"`
 
 	StartDate time.Time `db:"start_date" json:"start_date"`
-	EndDate   time.Time `db:"end_date" json:"end_date"`
+	//EndDate   time.Time `db:"end_date" json:"end_date"`
 	//StartBillingAt time.Time `db:"start_billing_at" json:"start_billing_at"`
 	TotalDaysApply int       `db:"total_days_apply" json:"total_days_apply"`
 	EndReminderAt  time.Time `db:"end_reminder_at" json:"end_reminder_at"`
 
-	AppInProgressNum        int `db:"app_in_progress_num" json:"app_in_progress_num"`
-	AppAccomplishedNum      int `db:"app_accomplished_num" json:"app_accomplished_num"`
-	MeteringInProgressNum   int `db:"metering_in_progress_num" json:"metering_in_progress_num"`
-	MeteringAccomplishedNum int `db:"metering_accomplished_num" json:"metering_accomplished_num"`
-	ResAllocNum             int `db:"res_alloc_num" json:"res_alloc_num"`
+	//AppInProgressNum        int `db:"app_in_progress_num" json:"app_in_progress_num"`
+	//AppAccomplishedNum      int `db:"app_accomplished_num" json:"app_accomplished_num"`
+	//MeteringInProgressNum   int `db:"metering_in_progress_num" json:"metering_in_progress_num"`
+	//MeteringAccomplishedNum int `db:"metering_accomplished_num" json:"metering_accomplished_num"`
+	//ResAllocNum             int `db:"res_alloc_num" json:"res_alloc_num"`
 
 	CpuNodesExpected    int `db:"cpu_nodes_expected" json:"cpu_nodes_expected"`
 	GpuNodesExpected    int `db:"gpu_nodes_expected" json:"gpu_nodes_expected"`
@@ -40,15 +40,9 @@ var SchemaDynamicInfo = `
 			basic_status int,
 			computing_alloc_status int,
 			storage_alloc_status int,
-			start_date TIMESTAMP WITH TIME ZONE,
-			end_date TIMESTAMP WITH TIME ZONE,
+			start_date TIMESTAMP WITH TIME ZONE,			
 			total_days_apply int,
-			end_reminder_at TIMESTAMP WITH TIME ZONE,
-			app_in_progress_num int,
-			app_accomplished_num int,
-			metering_in_progress_num int,
-			metering_accomplished_num int,
-			res_alloc_num int,
+			end_reminder_at TIMESTAMP WITH TIME ZONE,			
 			cpu_nodes_expected int,
 			gpu_nodes_expected int,
 			storage_size_expected int,

@@ -31,26 +31,20 @@ var _ = Describe("ProjectDB", func() {
 				}
 
 				proDs[i] = project.DynamicInfo{
-					BasicStatus:             rand.Intn(100),
-					ComputingAllocStatus:    rand.Intn(100),
-					StorageAllocStatus:      rand.Intn(100),
-					StartDate:               time.Now(),
-					EndDate:                 time.Now().AddDate(0, 0, 10),
-					TotalDaysApply:          10,
-					EndReminderAt:           time.Now().AddDate(0, 0, 10),
-					AppInProgressNum:        rand.Intn(100),
-					AppAccomplishedNum:      rand.Intn(100),
-					MeteringInProgressNum:   rand.Intn(100),
-					MeteringAccomplishedNum: rand.Intn(100),
-					ResAllocNum:             rand.Intn(100),
-					CpuNodesExpected:        rand.Intn(100),
-					GpuNodesExpected:        rand.Intn(100),
-					StorageSizeExpected:     rand.Intn(100),
-					CpuNodesAcquired:        rand.Intn(100),
-					GpuNodesAcquired:        rand.Intn(100),
-					StorageSizeAcquired:     rand.Intn(100),
-					CreatedAt:               time.Now(),
-					UpdatedAt:               time.Now(),
+					BasicStatus:          rand.Intn(100),
+					ComputingAllocStatus: rand.Intn(100),
+					StorageAllocStatus:   rand.Intn(100),
+					StartDate:            time.Now(),
+					TotalDaysApply:       10,
+					EndReminderAt:        time.Now().AddDate(0, 0, 10),
+					CpuNodesExpected:     rand.Intn(100),
+					GpuNodesExpected:     rand.Intn(100),
+					StorageSizeExpected:  rand.Intn(100),
+					CpuNodesAcquired:     rand.Intn(100),
+					GpuNodesAcquired:     rand.Intn(100),
+					StorageSizeAcquired:  rand.Intn(100),
+					CreatedAt:            time.Now(),
+					UpdatedAt:            time.Now(),
 				}
 
 				projectID, err := pdb.InsertAllInfo(proSs[i], proDs[i])
@@ -81,13 +75,11 @@ var _ = Describe("ProjectDB", func() {
 				Expect(pdi.UpdatedAt).Should(BeTemporally("~", proDs[j-1].UpdatedAt, time.Second))
 
 				Expect(pdi.StartDate).Should(BeTemporally("~", proDs[j-1].StartDate, time.Second))
-				Expect(pdi.EndDate).Should(BeTemporally("~", proDs[j-1].EndDate, time.Second))
 				Expect(pdi.EndReminderAt).Should(BeTemporally("~", proDs[j-1].EndReminderAt, time.Second))
 
 				proDs[j-1].CreatedAt = pdi.CreatedAt
 				proDs[j-1].UpdatedAt = pdi.UpdatedAt
 				proDs[j-1].StartDate = pdi.StartDate
-				proDs[j-1].EndDate = pdi.EndDate
 				proDs[j-1].EndReminderAt = pdi.EndReminderAt
 
 				Expect(pdi).Should(Equal(proDs[j-1]))
