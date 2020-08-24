@@ -34,14 +34,6 @@ type AppOpsRecord struct {
 	CreatedAt          time.Time `db:"created_at" json:"created_at"`
 }
 
-func GetSchemaApplication(tableName string) string {
-	return fmt.Sprintf(schemaFormatApplication, tableName)
-}
-
-func GetSchemaAppOpsRecord(tableName string) string {
-	return fmt.Sprintf(schemaAppOpsRecord, tableName)
-}
-
 var schemaFormatApplication = `
 		CREATE TABLE %s (
     		application_id SERIAL PRIMARY KEY,
@@ -72,3 +64,23 @@ var schemaAppOpsRecord = `
 		);`
 
 // 16K = 1024 * 16 = 16384
+
+var TableApp = "application"
+var TableHistoryApp = "history_application"
+
+var TableAppOps = "app_ops_record"
+var TableHistoryAppOps = "history_app_ops_record"
+
+func GetSchemaApp() string {
+	return fmt.Sprintf(schemaFormatApplication, TableApp)
+}
+func GetSchemaHistoryApp() string {
+	return fmt.Sprintf(schemaFormatApplication, TableHistoryApp)
+}
+
+func GetSchemaAppOps() string {
+	return fmt.Sprintf(schemaFormatApplication, TableAppOps)
+}
+func GetSchemaHistoryAppOps() string {
+	return fmt.Sprintf(schemaFormatApplication, TableHistoryAppOps)
+}

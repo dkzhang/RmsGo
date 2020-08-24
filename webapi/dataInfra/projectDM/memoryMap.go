@@ -16,6 +16,8 @@ type MemoryMap struct {
 
 func NewMemoryMap(pdb projectDB.ProjectDB, theLogMap logMap.LogMap) (nmm MemoryMap, err error) {
 	nmm.theProjectDB = pdb
+	nmm.projectStaticInfo = make(map[int]*project.StaticInfo)
+	nmm.projectDynamicInfo = make(map[int]*project.DynamicInfo)
 
 	psis, pdis, err := nmm.theProjectDB.QueryAllInfo()
 	if err != nil {

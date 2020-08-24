@@ -1,10 +1,10 @@
-package applicationDB_test
+package projectDB_test
 
 import (
 	"github.com/dkzhang/RmsGo/databaseInit"
 	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
-	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
-	"github.com/dkzhang/RmsGo/webapi/model/application"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
+	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"os"
 	"testing"
 
@@ -12,21 +12,21 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestApplicationDB(t *testing.T) {
+func TestProjectDB(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ApplicationDB Suite")
+	RunSpecs(t, "ProjectDB Suite")
 }
 
-var adb applicationDB.ApplicationDB
+var pdb projectDB.ProjectDB
 
 var _ = BeforeSuite(func() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
 	db := databaseInit.ConnectToDatabase()
 	pgOps.CreateAllTable(db)
 
-	adb = applicationDB.NewApplicationPg(db, application.TableApp, application.TableAppOps)
+	pdb = projectDB.NewProjectPg(db, project.TableStatic, project.TableDynamic)
 })
 
 var _ = AfterSuite(func() {
-	adb.Close()
+	pdb.Close()
 })

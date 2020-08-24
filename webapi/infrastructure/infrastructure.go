@@ -17,6 +17,8 @@ import (
 	userConfig "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/config"
 	userSecurity "github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM/security"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
+	"github.com/dkzhang/RmsGo/webapi/model/application"
+	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
 	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/jmoiron/sqlx"
@@ -138,7 +140,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	/////////////////////////////////////////////////////////
 	// Application DB & DM
-	theInfras.TheApplicationDB = applicationDB.NewApplicationPg(theInfras.TheDb, "application", "application_ops")
+	theInfras.TheApplicationDB = applicationDB.NewApplicationPg(theInfras.TheDb, application.TableApp, application.TableAppOps)
 	theInfras.TheApplicationDM, err = applicationDM.NewMemoryMap(theInfras.TheApplicationDB, theInfras.TheLogMap)
 	if err != nil {
 		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
@@ -146,7 +148,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 		}).Fatal("applicationDM.NewMemoryMap error.")
 	}
 
-	theInfras.TheProjectDB = projectDB.NewProjectPg(theInfras.TheDb, "project_static", "project_dynamic")
+	theInfras.TheProjectDB = projectDB.NewProjectPg(theInfras.TheDb, project.TableStatic, project.TableDynamic)
 	theInfras.TheProjectDM, err = projectDM.NewMemoryMap(theInfras.TheProjectDB, theInfras.TheLogMap)
 	if err != nil {
 		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{

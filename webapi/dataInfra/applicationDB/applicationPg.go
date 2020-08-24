@@ -66,7 +66,7 @@ func (apg ApplicationPg) Insert(app application.Application) (appID int, err err
 	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_type, status, app_user_id, app_user_cn_name, department_code, basic_content, extra_content, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING application_id`, apg.AppTableName)
 	err = apg.TheDB.Get(&appID, execInsert,
 		app.ProjectID, app.Type, app.Status,
-		app.ApplicationID, app.ApplicantUserChineseName, app.DepartmentCode,
+		app.ApplicantUserID, app.ApplicantUserChineseName, app.DepartmentCode,
 		app.BasicContent, app.ExtraContent,
 		time.Now(), time.Now())
 	if err != nil {

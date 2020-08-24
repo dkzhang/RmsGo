@@ -15,6 +15,7 @@ type MemoryMap struct {
 
 func NewMemoryMap(adb applicationDB.ApplicationDB, theLogMap logMap.LogMap) (nmm MemoryMap, err error) {
 	nmm.theDB = adb
+	nmm.theAppMap = make(map[int]*application.Application)
 
 	apps, err := nmm.theDB.QueryAll(application.AppTypeALL, application.AppStatusALL)
 	if err != nil {

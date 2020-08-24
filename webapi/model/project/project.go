@@ -28,7 +28,7 @@ var SchemaStaticInfo = `
 		CREATE TABLE %s (
     		project_id SERIAL PRIMARY KEY,
 			project_name varchar(256) ,
-			project_code varchar(32) UNIQUE,
+			project_code varchar(32),
 			department_code varchar(32),
 			department varchar(256),
 			chief_id int,
@@ -39,6 +39,13 @@ var SchemaStaticInfo = `
 		);
 		`
 
-func GetSchemaStatic(tableName string) string {
-	return fmt.Sprintf(SchemaStaticInfo, tableName)
+var TableStatic = "project_static"
+var TableHistoryStatic = "history_project_static"
+
+func GetSchemaStatic() string {
+	return fmt.Sprintf(SchemaStaticInfo, TableStatic)
+}
+
+func GetSchemaHistoryStatic() string {
+	return fmt.Sprintf(SchemaStaticInfo, TableHistoryStatic)
 }

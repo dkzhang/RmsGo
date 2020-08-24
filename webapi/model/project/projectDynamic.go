@@ -60,8 +60,15 @@ var SchemaDynamicInfo = `
 		);
 		`
 
-func GetSchemaDynamic(tableName string) string {
-	return fmt.Sprintf(SchemaDynamicInfo, tableName)
+var TableDynamic = "project_dynamic"
+var TableHistoryDynamic = "history_project_dynamic"
+
+func GetSchemaDynamic() string {
+	return fmt.Sprintf(SchemaDynamicInfo, TableDynamic)
+}
+
+func GetSchemaHistoryDynamic() string {
+	return fmt.Sprintf(SchemaDynamicInfo, TableHistoryDynamic)
 }
 
 const (
