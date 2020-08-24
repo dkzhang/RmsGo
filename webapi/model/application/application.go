@@ -34,7 +34,7 @@ type AppOpsRecord struct {
 	CreatedAt          time.Time `db:"created_at" json:"created_at"`
 }
 
-var schemaFormatApplication = `
+var schemaApp = `
 		CREATE TABLE %s (
     		application_id SERIAL PRIMARY KEY,
 			project_id int,
@@ -49,7 +49,7 @@ var schemaFormatApplication = `
 			updated_at TIMESTAMP WITH TIME ZONE
 		);`
 
-var schemaAppOpsRecord = `
+var schemaAppOps = `
 		CREATE TABLE %s (
 			record_id SERIAL PRIMARY KEY,
 			project_id int,
@@ -72,15 +72,15 @@ var TableAppOps = "app_ops_record"
 var TableHistoryAppOps = "history_app_ops_record"
 
 func GetSchemaApp() string {
-	return fmt.Sprintf(schemaFormatApplication, TableApp)
+	return fmt.Sprintf(schemaApp, TableApp)
 }
 func GetSchemaHistoryApp() string {
-	return fmt.Sprintf(schemaFormatApplication, TableHistoryApp)
+	return fmt.Sprintf(schemaApp, TableHistoryApp)
 }
 
 func GetSchemaAppOps() string {
-	return fmt.Sprintf(schemaFormatApplication, TableAppOps)
+	return fmt.Sprintf(schemaAppOps, TableAppOps)
 }
 func GetSchemaHistoryAppOps() string {
-	return fmt.Sprintf(schemaFormatApplication, TableHistoryAppOps)
+	return fmt.Sprintf(schemaAppOps, TableHistoryAppOps)
 }
