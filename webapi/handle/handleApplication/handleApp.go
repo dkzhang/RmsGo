@@ -252,6 +252,78 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 	}
 }
 
+func (h HandleApp) RetrieveJTBD(c *gin.Context) {
+	userLoginInfo, err := h.theExtractor.Extract(c)
+	if err != nil {
+		return
+	}
+
+	switch userLoginInfo.Role {
+	case user.RoleProjectChief:
+		apps, err := h.theAppDM.QueryByOwner(userLoginInfo.UserID, application.AppTypeALL, application.AppStatusProjectChief)
+		if err != nil {
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+				"userID": userLoginInfo.UserID,
+				"error":  err,
+			}).Error("Query Application By Owner error")
+
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": "数据库中查询项目长相关申请单失败",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"apps": apps,
+			"msg":  "查询项目长相关申请单成功",
+		})
+	case user.RoleApprover:
+		apps, err := h.theAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
+		if err != nil {
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+				"userID": userLoginInfo.UserID,
+				"error":  err,
+			}).Error("Query Application By Owner error")
+
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": "数据库中查询审批人相关申请单失败",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"apps": apps,
+			"msg":  "查询项目长相关申请单成功",
+		})
+	case user.RoleController:
+		apps, err := h.theAppDM.QueryAll(application.AppTypeALL, application.AppStatusController)
+		if err != nil {
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+				"userID": userLoginInfo.UserID,
+				"error":  err,
+			}).Error("Query Application By Owner error")
+
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": "数据库中查询调度员相关申请单失败",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"apps": apps,
+			"msg":  "查询项目长相关申请单成功",
+		})
+	default:
+		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			"userID": userLoginInfo.UserID,
+			"Role":   userLoginInfo.Role,
+			"error":  err,
+		}).Error("error: unsupported user type")
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "用户身份代码不支持",
+		})
+		return
+	}
+}
+
 func (h HandleApp) RetrieveByID(c *gin.Context) {
 	userLoginInfo, err := h.theExtractor.Extract(c)
 	if err != nil {

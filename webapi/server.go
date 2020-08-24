@@ -61,6 +61,7 @@ func Serve() {
 		hApp := webAPIv1.Group("/Application")
 		{
 			hApp.GET("/", middleware.TokenAuth(infra), theHandleApp.RetrieveByUserLogin)
+			hApp.GET("/JTBD", middleware.TokenAuth(infra), theHandleApp.RetrieveJTBD)
 
 			hApp.POST("/", middleware.TokenAuth(infra), theHandleApp.Create)
 			hApp.GET("/:id", middleware.TokenAuth(infra), theHandleApp.RetrieveByID)
