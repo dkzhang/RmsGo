@@ -6,6 +6,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/sirupsen/logrus"
+	"time"
 )
 
 type MemoryMap struct {
@@ -125,17 +126,26 @@ func (pdm MemoryMap) QueryProjectByFilter(userFilter func(project.StaticInfo, pr
 }
 
 func (pdm MemoryMap) InsertAllInfo(pInfo project.ProjectInfo) (projectID int, err error) {
+	pInfo.TheStaticInfo.CreatedAt = time.Now()
+	pInfo.TheStaticInfo.UpdatedAt = time.Now()
+
+	pInfo.TheDynamicInfo.CreatedAt = time.Now()
+	pInfo.TheDynamicInfo.UpdatedAt = time.Now()
+
 	projectID, err = pdm.theProjectDB.InsertAllInfo(pInfo.TheStaticInfo, pInfo.TheDynamicInfo)
 	if err != nil {
 		return -1, fmt.Errorf("ProjectDB.InsertAllInfo error: %v", err)
 	}
 
-	pdm.projectStaticInfo[pInfo.ProjectID] = &(pInfo.TheStaticInfo)
-	pdm.projectDynamicInfo[pInfo.ProjectID] = &(pInfo.TheDynamicInfo)
+	pInfo.TheStaticInfo.ProjectID = projectID
+	pInfo.TheDynamicInfo.ProjectID = projectID
+	pdm.projectStaticInfo[projectID] = &(pInfo.TheStaticInfo)
+	pdm.projectDynamicInfo[projectID] = &(pInfo.TheDynamicInfo)
 
 	return projectID, nil
 }
 func (pdm MemoryMap) UpdateStaticInfo(psi project.StaticInfo) (err error) {
+	psi.UpdatedAt = time.Now()
 	err = pdm.theProjectDB.UpdateStaticInfo(psi)
 	if err != nil {
 		return fmt.Errorf("ProjectDB.UpdateStaticInfo error: %v", err)
@@ -146,6 +156,7 @@ func (pdm MemoryMap) UpdateStaticInfo(psi project.StaticInfo) (err error) {
 	return nil
 }
 func (pdm MemoryMap) UpdateDynamicInfo(pdi project.DynamicInfo) (err error) {
+	pdi.UpdatedAt = time.Now()
 	err = pdm.theProjectDB.UpdateDynamicInfo(pdi)
 	if err != nil {
 		return fmt.Errorf("ProjectDB.UpdateDynamicInfo error: %v", err)

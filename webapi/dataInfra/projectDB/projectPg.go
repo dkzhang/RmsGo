@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/jmoiron/sqlx"
-	"time"
 )
 
 type ProjectPg struct {
@@ -107,7 +106,7 @@ func (ppg ProjectPg) InsertAllInfo(psi project.StaticInfo, pdi project.DynamicIn
 		psi.ProjectName, psi.ProjectCode,
 		psi.DepartmentCode, psi.Department,
 		psi.ChiefID, psi.ChiefChineseName, psi.ExtraInfo,
-		time.Now(), time.Now())
+		psi.CreatedAt, psi.UpdatedAt)
 	if err != nil {
 		return -1, fmt.Errorf("TheDB.Get Insert Project StaticInfo in TheDB error: %v", err)
 	}
@@ -122,7 +121,7 @@ func (ppg ProjectPg) InsertAllInfo(psi project.StaticInfo, pdi project.DynamicIn
 		pdi.MeteringInProgressNum, pdi.MeteringAccomplishedNum, pdi.ResAllocNum,
 		pdi.CpuNodesExpected, pdi.GpuNodesExpected, pdi.StorageSizeExpected,
 		pdi.CpuNodesAcquired, pdi.GpuNodesAcquired, pdi.StorageSizeAcquired,
-		time.Now(), time.Now())
+		pdi.CreatedAt, pdi.UpdatedAt)
 	if err != nil {
 		return -1, fmt.Errorf("TheDB.Get Insert Project DynamicInfo in TheDB error: %v", err)
 	}
@@ -131,7 +130,6 @@ func (ppg ProjectPg) InsertAllInfo(psi project.StaticInfo, pdi project.DynamicIn
 func (ppg ProjectPg) UpdateStaticInfo(psi project.StaticInfo) (err error) {
 	execUpdate := fmt.Sprintf(`UPDATE %s SET project_name=:project_name, project_code=:project_code, extra_info=:extra_info, updated_at=:updated_at WHERE project_id=:project_id`, ppg.StaticTableName)
 
-	psi.UpdatedAt = time.Now()
 	_, err = ppg.TheDB.NamedExec(execUpdate, psi)
 	if err != nil {
 		return fmt.Errorf("TheDB.NamedExec UPDATE project.StaticInfo error: %v", err)
@@ -139,9 +137,8 @@ func (ppg ProjectPg) UpdateStaticInfo(psi project.StaticInfo) (err error) {
 	return nil
 }
 func (ppg ProjectPg) UpdateDynamicInfo(pdi project.DynamicInfo) (err error) {
-	execUpdate := fmt.Sprintf(`UPDATE %s SET basic_status:=basic_status, computing_alloc_status:=computing_alloc_status, storage_alloc_status:=storage_alloc_status, start_date:=start_date, end_date:=end_date, total_days_apply:=total_days_apply, end_reminder_at:=end_reminder_at, app_in_progress_num:=app_in_progress_num, app_accomplished_num:=app_accomplished_num, metering_in_progress_num:=metering_in_progress_num, metering_accomplished_num:=metering_accomplished_num, res_alloc_num:=res_alloc_num, cpu_nodes_expected:=cpu_nodes_expected, gpu_nodes_expected:=gpu_nodes_expected, storage_size_expected:=storage_size_expected, cpu_nodes_acquired:=cpu_nodes_acquired, gpu_nodes_acquired:=gpu_nodes_acquired, storage_size_acquired:=storage_size_acquired, updated_at:=updated_at WHERE project_id=:project_id`, ppg.DynamicTableName)
+	execUpdate := fmt.Sprintf(`UPDATE %s SET basic_status=:basic_status, computing_alloc_status=:computing_alloc_status, storage_alloc_status=:storage_alloc_status, start_date=:start_date, end_date=:end_date, total_days_apply=:total_days_apply, end_reminder_at=:end_reminder_at, app_in_progress_num=:app_in_progress_num, app_accomplished_num=:app_accomplished_num, metering_in_progress_num=:metering_in_progress_num, metering_accomplished_num=:metering_accomplished_num, res_alloc_num=:res_alloc_num, cpu_nodes_expected=:cpu_nodes_expected, gpu_nodes_expected=:gpu_nodes_expected, storage_size_expected=:storage_size_expected, cpu_nodes_acquired=:cpu_nodes_acquired, gpu_nodes_acquired=:gpu_nodes_acquired, storage_size_acquired=:storage_size_acquired, updated_at=:updated_at WHERE project_id=:project_id`, ppg.DynamicTableName)
 
-	pdi.UpdatedAt = time.Now()
 	_, err = ppg.TheDB.NamedExec(execUpdate, pdi)
 	if err != nil {
 		return fmt.Errorf("TheDB.NamedExec UPDATE project.DynamicInfo error: %v", err)

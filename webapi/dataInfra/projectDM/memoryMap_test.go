@@ -1,4 +1,4 @@
-package projectDB_test
+package projectDM_test
 
 import (
 	"fmt"
@@ -9,11 +9,11 @@ import (
 	"time"
 )
 
-var _ = Describe("ProjectDB", func() {
+var _ = Describe("ProjectDM", func() {
 
 	Describe("InsertAndRetrieve", func() {
-		//Query All Project Info from db
-		It("QueryAllInfo from db", func() {
+		//Query All Project Info from dm
+		It("QueryAllInfo from dm", func() {
 			proSs := make([]project.StaticInfo, 3)
 			proDs := make([]project.DynamicInfo, 3)
 
@@ -53,7 +53,12 @@ var _ = Describe("ProjectDB", func() {
 					UpdatedAt:               time.Now(),
 				}
 
-				projectID, err := pdb.InsertAllInfo(proSs[i], proDs[i])
+				projectID, err := pdm.InsertAllInfo(project.ProjectInfo{
+					ProjectID:      0,
+					TheStaticInfo:  proSs[i],
+					TheDynamicInfo: proDs[i],
+				})
+
 				Expect(err).ShouldNot(HaveOccurred(), "InsertAllInfo %d error: %v", i, err)
 				By(fmt.Sprintf("InsertAllInfo %d success, projectID=%d", i, projectID))
 				proSs[i].ProjectID = projectID
@@ -61,7 +66,7 @@ var _ = Describe("ProjectDB", func() {
 			}
 
 			for j := 1; j < 4; j++ {
-				psi, err := pdb.QueryStaticInfoByID(j)
+				psi, err := pdm.QueryStaticInfoByID(j)
 				Expect(err).ShouldNot(HaveOccurred(), "QueryStaticInfoByID %d error: %v", j, err)
 
 				Expect(psi.CreatedAt).Should(BeTemporally("~", proSs[j-1].CreatedAt, time.Second))
@@ -74,7 +79,7 @@ var _ = Describe("ProjectDB", func() {
 			}
 
 			for j := 1; j < 4; j++ {
-				pdi, err := pdb.QueryDynamicInfoByID(j)
+				pdi, err := pdm.QueryDynamicInfoByID(j)
 				Expect(err).ShouldNot(HaveOccurred(), "QueryDynamicInfoByID %d error: %v", j, err)
 
 				Expect(pdi.CreatedAt).Should(BeTemporally("~", proDs[j-1].CreatedAt, time.Second))
@@ -96,47 +101,49 @@ var _ = Describe("ProjectDB", func() {
 		})
 	})
 
-	Describe("Update from db", func() {
-		//Query All Project Info from db
+	Describe("Update from dm", func() {
+		//Query All Project Info from dm
 		It("UpdateStaticInfo", func() {
 			id := 2
 
-			psi, err := pdb.QueryStaticInfoByID(id)
+			psi, err := pdm.QueryStaticInfoByID(id)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryStaticInfoByID %d error: %v", id, err)
 
 			psi.ProjectName = fmt.Sprintf("ProjectNameUpdated%d", id)
 			psi.ProjectCode = fmt.Sprintf("ProjectNameUpdated%d", id)
 			psi.ExtraInfo = fmt.Sprintf("ProjectNameUpdated%d", id)
-			err = pdb.UpdateStaticInfo(psi)
+			err = pdm.UpdateStaticInfo(psi)
 			Expect(err).ShouldNot(HaveOccurred(), "UpdateStaticInfo %d error: %v", id, err)
 
-			psiU, err := pdb.QueryStaticInfoByID(id)
+			psiU, err := pdm.QueryStaticInfoByID(id)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryStaticInfoByID %d error: %v", id, err)
+			psi.UpdatedAt = psiU.UpdatedAt
 			Expect(psiU).Should(Equal(psi))
 		})
 
 		It("UpdateStaticInfo", func() {
 			id := 3
 
-			pdi, err := pdb.QueryDynamicInfoByID(id)
+			pdi, err := pdm.QueryDynamicInfoByID(id)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryDynamicInfoByID %d error: %v", id, err)
 
 			pdi.BasicStatus = rand.Intn(100)
 			pdi.CpuNodesExpected = rand.Intn(100)
 
-			err = pdb.UpdateDynamicInfo(pdi)
+			err = pdm.UpdateDynamicInfo(pdi)
 			Expect(err).ShouldNot(HaveOccurred(), "UpdateDynamicInfo %d error: %v", id, err)
 
-			pdiU, err := pdb.QueryDynamicInfoByID(id)
+			pdiU, err := pdm.QueryDynamicInfoByID(id)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryDynamicInfoByID %d error: %v", id, err)
+			pdi.UpdatedAt = pdiU.UpdatedAt
 			Expect(pdiU).Should(Equal(pdi))
 		})
 	})
 
-	Describe("QueryAllInfo from db", func() {
-		//Query All Project Info from db
-		It("QueryAllInfo from db", func() {
-			_, _, err := pdb.QueryAllInfo()
+	Describe("QueryAllInfo from dm", func() {
+		//Query All Project Info from dm
+		It("QueryAllInfo from dm", func() {
+			_, err := pdm.QueryAllInfo()
 			Expect(err).ShouldNot(HaveOccurred(), "QueryAllInfo error: %v")
 		})
 	})
