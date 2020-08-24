@@ -111,7 +111,7 @@ func (ppg ProjectPg) InsertAllInfo(psi project.StaticInfo, pdi project.DynamicIn
 		return -1, fmt.Errorf("TheDB.Get Insert Project StaticInfo in TheDB error: %v", err)
 	}
 
-	execInsertDynamic := fmt.Sprintf(`INSERT INTO %s (project_id, basic_status, computing_alloc_status, storage_alloc_status, start_date, total_days_apply, end_reminder_at, cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, cpu_nodes_acquired, gpu_nodes_acquired, storage_size_acquired, created_at, updated_at)  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING project_id`, ppg.DynamicTableName)
+	execInsertDynamic := fmt.Sprintf(`INSERT INTO %s (project_id, basic_status, computing_alloc_status, storage_alloc_status, start_date, total_days_apply, end_reminder_at, cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, cpu_nodes_acquired, gpu_nodes_acquired, storage_size_acquired, created_at, updated_at)  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING project_id`, ppg.DynamicTableName)
 	err = ppg.TheDB.Get(&projectID, execInsertDynamic,
 		projectID, pdi.BasicStatus,
 		pdi.ComputingAllocStatus, pdi.StorageAllocStatus,
