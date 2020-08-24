@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -24,7 +25,7 @@ type StaticInfo struct {
 }
 
 var SchemaStaticInfo = `
-		CREATE TABLE project_static_info (
+		CREATE TABLE %s (
     		project_id SERIAL PRIMARY KEY,
 			project_name varchar(256) ,
 			project_code varchar(32) UNIQUE,
@@ -37,3 +38,7 @@ var SchemaStaticInfo = `
 			updated_at TIMESTAMP WITH TIME ZONE
 		);
 		`
+
+func GetSchemaStatic(tableName string) string {
+	return fmt.Sprintf(SchemaStaticInfo, tableName)
+}

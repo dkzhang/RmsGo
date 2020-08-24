@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -34,7 +35,7 @@ type DynamicInfo struct {
 }
 
 var SchemaDynamicInfo = `
-		CREATE TABLE project_dynamic_info (
+		CREATE TABLE %s (
     		project_id int UNIQUE,
 			basic_status int,
 			computing_alloc_status int,
@@ -58,6 +59,10 @@ var SchemaDynamicInfo = `
 			updated_at TIMESTAMP WITH TIME ZONE
 		);
 		`
+
+func GetSchemaDynamic(tableName string) string {
+	return fmt.Sprintf(SchemaDynamicInfo, tableName)
+}
 
 const (
 	BasicStatusApplying    = 1
