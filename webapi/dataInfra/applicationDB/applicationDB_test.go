@@ -9,7 +9,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"gopkg.in/yaml.v2"
 	"time"
 )
 
@@ -263,7 +262,7 @@ var _ = Describe("ApplicationDB", func() {
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
 			var appNewProRes gfApplication.AppNewProRes
-			err = yaml.Unmarshal([]byte(app.BasicContent), &appNewProRes)
+			err = json.Unmarshal([]byte(app.BasicContent), &appNewProRes)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("Unmarshal AppNewProRes: %v", appNewProRes))
 

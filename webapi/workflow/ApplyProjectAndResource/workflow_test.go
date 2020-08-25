@@ -6,6 +6,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/gfApplication"
+	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/resource"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
@@ -80,19 +81,25 @@ var _ = Describe("Workflow", func() {
 					ProjectID:    0,
 					FormID:       0,
 					Type:         application.AppTypeNew,
-					Action:       1,
+					Action:       application.AppActionSubmit,
 					BasicContent: anprJson,
 					ExtraContent: fmt.Sprintf("extra content %d", i),
 				}
 
-				appID, err := gwf.Apply(form, userPC)
-				Expect(err).ShouldNot(HaveOccurred())
-				//Expect(err).ShouldNot(HaveOccurred(), "Apply New ProRes Application %d error: %v", i, err)
+				appID, waErr := gwf.Apply(form, userPC)
+				Expect(waErr).ShouldNot(HaveOccurred())
 				By(fmt.Sprintf("Apply New ProRes Application %d success, got appID = %d", i, appID))
+
+				//Check After
+				appAfter, err := adm.QueryByID(appID)
+				Expect(err).ShouldNot(HaveOccurred())
+				By(fmt.Sprintf("QueryByID %d = %v", appID, appAfter))
+
+				proStaticAfter, err := pdm.QueryStaticInfoByID(appAfter.ProjectID)
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(proStaticAfter.ProjectName).Should(Equal(anpr.ProjectName))
+				By(fmt.Sprintf("QueryStaticInfoByID %d = %v", appAfter.ProjectID, proStaticAfter))
 			}
-		})
-		It("ProjectChief Apply 3 Application", func() {
-			By(fmt.Sprintf("%v,%v", userApp, userCtrl))
 		})
 	})
 
@@ -135,6 +142,47 @@ var _ = Describe("Workflow", func() {
 				ExtraContent: "",
 			}, app2, userApp)
 			Expect(waErr).Should(BeNil())
+		})
+	})
+
+	Describe("Controller examine the new Project&Resource application, agree app1", func() {
+		It("Controller query the application, agree app1", func() {
+			appID := 1
+
+			apps, err := adm.QueryByDepartmentCode(userApp.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("QueryByDepartmentCode len(apps) = %d", len(apps)))
+
+			app1, err := adm.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("QueryByID 1 = %v", app1))
+
+			bcs := gfApplication.AppCtrlProjectInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
+			bcb, _ := json.Marshal(bcs)
+
+			waErr := gwf.Process(generalForm.GeneralForm{
+				ProjectID:    app1.ProjectID,
+				FormID:       app1.ApplicationID,
+				Type:         application.AppTypeNew,
+				Action:       1,
+				BasicContent: string(bcb),
+				ExtraContent: "",
+			}, app1, userCtrl)
+			Expect(waErr).Should(BeNil())
+
+			// Check After
+			app1After, err := adm.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(app1After.Status).Should(Equal(application.AppStatusArchived))
+			By(fmt.Sprintf("QueryByID 1 = %v", app1After))
+
+			proStatic1After, err := pdm.QueryStaticInfoByID(app1.ProjectID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(proStatic1After.ProjectCode).Should(Equal(bcs.ProjectCode))
+
+			proDynamic1After, err := pdm.QueryDynamicInfoByID(app1.ProjectID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(proDynamic1After.BasicStatus).Should(Equal(project.BasicStatusEstablished))
 		})
 	})
 })
