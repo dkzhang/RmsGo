@@ -6,6 +6,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/sirupsen/logrus"
+	"time"
 )
 
 type MemoryMap struct {
@@ -99,10 +100,14 @@ func (adm MemoryMap) QueryAppOpsByAppId(appID int) (records []application.AppOps
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 func (adm MemoryMap) Insert(appInfo application.Application) (appID int, err error) {
+	appInfo.CreatedAt = time.Now()
+	appInfo.UpdatedAt = time.Now()
 	appID, err = adm.theDB.Insert(appInfo)
 	if err != nil {
 		return -1, fmt.Errorf("Insert in db error: %v", err)
 	}
+
+	appInfo.ApplicationID = appID
 	adm.theAppMap[appID] = &appInfo
 
 	return appID, nil
@@ -113,6 +118,7 @@ func (adm MemoryMap) Update(appInfo application.Application) (err error) {
 		return fmt.Errorf("application id %d does not exist", appInfo.ApplicationID)
 	}
 
+	appInfo.UpdatedAt = time.Now()
 	err = adm.theDB.Update(appInfo)
 	if err != nil {
 		return fmt.Errorf("Update in db error: %v", err)
