@@ -1,11 +1,16 @@
 package applicationDB_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
+	"github.com/dkzhang/RmsGo/webapi/model/gfApplication"
+	"github.com/dkzhang/RmsGo/webapi/model/resource"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"gopkg.in/yaml.v2"
+	"time"
 )
 
 var _ = Describe("ApplicationDB", func() {
@@ -53,43 +58,86 @@ var _ = Describe("ApplicationDB", func() {
 		}
 	})
 	Describe("ProjectChief launch a new Project&Resource application", func() {
-		// Insert new project
-		// Assumed completed
-		projectID := 1
 
-		basicStr := "Application %d BasicContent"
-		extraStr := "Application %d ExtraContent"
-
-		//Insert new application
 		It("ProjectChief insert 3 Application and 3 AppOpsRecord", func() {
+			apps := make([]application.Application, 3)
+			appOpss := make([]application.AppOpsRecord, 3)
 			for i := 1; i <= 3; i++ {
-				appID, err := adb.Insert(application.Application{
-					ProjectID:                projectID,
+				// Insert Application
+				bcs := gfApplication.AppNewProRes{
+					ProjectName: fmt.Sprintf("ProjectName%d", i),
+					Resource: resource.Resource{
+						CpuNodes:    i * 10,
+						GpuNodes:    i * 20,
+						StorageSize: i * 30,
+					},
+					StartDate:      time.Now(),
+					TotalDaysApply: i * 10,
+					EndDate:        time.Now().AddDate(0, 0, i*10),
+				}
+				bcb, _ := json.Marshal(bcs)
+				apps[i-1] = application.Application{
+					ProjectID:                i,
 					Type:                     application.AppTypeNew,
-					Status:                   application.AppStatusProjectChief,
+					Status:                   application.AppStatusApprover,
 					ApplicantUserID:          userPC.UserID,
 					ApplicantUserChineseName: userPC.ChineseName,
 					DepartmentCode:           userPC.DepartmentCode,
-					BasicContent:             fmt.Sprintf(basicStr, i),
-					ExtraContent:             fmt.Sprintf(extraStr, i),
-				})
+					BasicContent:             string(bcb),
+					ExtraContent:             fmt.Sprintf("ExtraContent%d", i),
+					CreatedAt:                time.Now(),
+					UpdatedAt:                time.Now(),
+				}
+
+				appID, err := adb.Insert(apps[i-1])
 				Expect(err).ShouldNot(HaveOccurred(), "Insert %d error: %v", i, err)
 				By(fmt.Sprintf("Insert %d success, got application ID = %d", i, appID))
 
-				recordID, err := adb.InsertAppOps(application.AppOpsRecord{
-					ProjectID:          projectID,
+				// Insert AppOpsRecord
+				appOpss[i-1] = application.AppOpsRecord{
+					ProjectID:          i,
 					ApplicationID:      appID,
 					OpsUserID:          userPC.UserID,
 					OpsUserChineseName: userPC.ChineseName,
 					Action:             1,
 					ActionStr:          "提交",
-					BasicInfo:          fmt.Sprintf(basicStr, i),
-					ExtraInfo:          fmt.Sprintf(extraStr, i),
-				})
+					BasicInfo:          string(bcb),
+					ExtraInfo:          fmt.Sprintf("ExtraContent%d", i),
+					CreatedAt:          time.Now(),
+				}
+				recordID, err := adb.InsertAppOps(appOpss[i-1])
 				Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps %d error: %v", i, err)
 				By(fmt.Sprintf("InsertAppOps %d success, got ops record ID = %d", i, recordID))
 			}
+
+			// Retrieve Application and AppOpsRecord by id
+			for i := 1; i <= 3; i++ {
+				app, err := adb.QueryByID(i)
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(app.CreatedAt).Should(BeTemporally("~", apps[i-1].CreatedAt, time.Second))
+				Expect(app.UpdatedAt).Should(BeTemporally("~", apps[i-1].UpdatedAt, time.Second))
+				apps[i-1].CreatedAt = app.CreatedAt
+				apps[i-1].UpdatedAt = app.UpdatedAt
+				apps[i-1].ApplicationID = app.ApplicationID
+				Expect(app).Should(Equal(apps[i-1]))
+				By(fmt.Sprintf("application info %d : %v", i, app))
+
+				appOpsArray, err := adb.QueryAppOpsByAppId(i)
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(len(appOpsArray)).Should(Equal(1))
+				appOps := appOpsArray[0]
+				Expect(appOps.CreatedAt).Should(BeTemporally("~", appOpss[i-1].CreatedAt, time.Second))
+				appOpss[i-1].CreatedAt = appOps.CreatedAt
+				appOpss[i-1].RecordID = appOps.RecordID
+				Expect(appOps).Should(Equal(appOpss[i-1]))
+				By(fmt.Sprintf("appOps record %d : %v", i, appOps))
+			}
+
 		})
+		It("ProjectChief insert 3 Application and 3 AppOpsRecord", func() {
+			By(fmt.Sprintf("%v, %v", userApp, userCtrl))
+		})
+
 	})
 
 	Describe("Approver examine the new Project&Resource application, agree app1, reject app2", func() {
@@ -99,18 +147,21 @@ var _ = Describe("ApplicationDB", func() {
 
 			app, err := adb.QueryByID(appID)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			Expect(app.Status).Should(Equal(application.AppStatusApprover))
 			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
-			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
+			appOps := application.AppOpsRecord{
 				ProjectID:          projectID,
 				ApplicationID:      appID,
 				OpsUserID:          userApp.UserID,
 				OpsUserChineseName: userApp.ChineseName,
 				Action:             1,
 				ActionStr:          "是",
-				BasicInfo:          "",
-				ExtraInfo:          "同意",
-			})
+				BasicInfo:          "BasicInfo: 1",
+				ExtraInfo:          "ExtraInfo:同意",
+				CreatedAt:          time.Now(),
+			}
+			recordID, err := adb.InsertAppOps(appOps)
 			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
@@ -118,75 +169,124 @@ var _ = Describe("ApplicationDB", func() {
 			err = adb.Update(app)
 			Expect(err).ShouldNot(HaveOccurred(), "Update error: %v", err)
 			By(fmt.Sprintf("Update success"))
+
+			// check result
+			appAfter, err := adb.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			Expect(appAfter.Status).Should(Equal(application.AppStatusController))
+			By(fmt.Sprintf("QueryByID success, got application = %v", appAfter))
+
+			appOpsArrayAfter, err := adb.QueryAppOpsByAppId(appID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(appOpsArrayAfter)).Should(Equal(2))
+			appOpsAfter := appOpsArrayAfter[1]
+			Expect(appOpsAfter.CreatedAt).Should(BeTemporally("~", appOps.CreatedAt, time.Second))
+			appOps.CreatedAt = appOpsAfter.CreatedAt
+			appOps.RecordID = appOpsAfter.RecordID
+			Expect(appOpsAfter).Should(Equal(appOps))
+			By(fmt.Sprintf("appOpsAfter record : %v", appOpsAfter))
 		})
 
 		It("Approver reject app2, query the application,insert an AppOpsRecord, update the application", func() {
-			projectID := 1
+
+			projectID := 2
 			appID := 2
 
 			app, err := adb.QueryByID(appID)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
 			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
-			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
+			appOps := application.AppOpsRecord{
 				ProjectID:          projectID,
 				ApplicationID:      appID,
 				OpsUserID:          userApp.UserID,
 				OpsUserChineseName: userApp.ChineseName,
-				Action:             -1,
+				Action:             1,
 				ActionStr:          "否",
-				BasicInfo:          "",
-				ExtraInfo:          "不同意",
-			})
+				BasicInfo:          "BasicInfo: 1",
+				ExtraInfo:          "ExtraInfo:拒绝",
+				CreatedAt:          time.Now(),
+			}
+			recordID, err := adb.InsertAppOps(appOps)
 			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
-			app.Status = application.AppStatusController
+			app.Status = application.AppStatusProjectChief
 			err = adb.Update(app)
 			Expect(err).ShouldNot(HaveOccurred(), "Update error: %v", err)
 			By(fmt.Sprintf("Update success"))
-		})
 
+			// check result
+			appAfter, err := adb.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			Expect(appAfter.Status).Should(Equal(application.AppStatusProjectChief))
+			By(fmt.Sprintf("QueryByID success, got application = %v", appAfter))
+
+			appOpsArrayAfter, err := adb.QueryAppOpsByAppId(appID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(appOpsArrayAfter)).Should(Equal(2))
+			appOpsAfter := appOpsArrayAfter[1]
+			Expect(appOpsAfter.CreatedAt).Should(BeTemporally("~", appOps.CreatedAt, time.Second))
+			appOps.CreatedAt = appOpsAfter.CreatedAt
+			appOps.RecordID = appOpsAfter.RecordID
+			Expect(appOpsAfter).Should(Equal(appOps))
+			By(fmt.Sprintf("appOpsAfter record : %v", appOpsAfter))
+		})
 	})
 
-	Describe("Controller check the new Project&Resource application", func() {
-		projectID := 1
-		appID := 1
+	Describe("Controller check the new Project&Resource application, agree app1", func() {
+		It("Controller agree app1", func() {
 
-		It("Controller query the application,insert an AppOpsRecord, update the application", func() {
+			projectID := 1
+			appID := 1
 
 			app, err := adb.QueryByID(appID)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			Expect(app.Status).Should(Equal(application.AppStatusController))
 			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
-			recordID, err := adb.InsertAppOps(application.AppOpsRecord{
+			bcs := gfApplication.AppCtrlProjectInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", projectID)}
+			bcb, _ := json.Marshal(bcs)
+			appOps := application.AppOpsRecord{
 				ProjectID:          projectID,
 				ApplicationID:      appID,
-				OpsUserID:          userCtrl.UserID,
-				OpsUserChineseName: userCtrl.ChineseName,
+				OpsUserID:          userApp.UserID,
+				OpsUserChineseName: userApp.ChineseName,
 				Action:             1,
 				ActionStr:          "是",
-				BasicInfo:          "",
-				ExtraInfo:          "同意",
-			})
+				BasicInfo:          string(bcb),
+				ExtraInfo:          "ExtraInfo:同意",
+				CreatedAt:          time.Now(),
+			}
+			recordID, err := adb.InsertAppOps(appOps)
 			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
+
+			var appNewProRes gfApplication.AppNewProRes
+			err = yaml.Unmarshal([]byte(app.BasicContent), &appNewProRes)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("Unmarshal AppNewProRes: %v", appNewProRes))
 
 			app.Status = application.AppStatusArchived
 			err = adb.Update(app)
 			Expect(err).ShouldNot(HaveOccurred(), "Update error: %v", err)
 			By(fmt.Sprintf("Update success"))
-		})
-	})
 
-	Describe("QueryAppOpsByAppId", func() {
+			// check result
+			appAfter, err := adb.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryByID error: %v", err)
+			Expect(appAfter.Status).Should(Equal(application.AppStatusArchived))
+			By(fmt.Sprintf("QueryByID success, got application = %v", appAfter))
 
-		It("Query application ops", func() {
-			for appID := 1; appID <= 3; appID++ {
-				records, err := adb.QueryAppOpsByAppId(appID)
-				Expect(err).ShouldNot(HaveOccurred(), "QueryAppOpsByAppId error: %v", err)
-				By(fmt.Sprintf("QueryAppOpsByAppId %d success: %v", appID, records))
-			}
+			appOpsArrayAfter, err := adb.QueryAppOpsByAppId(appID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(appOpsArrayAfter)).Should(Equal(3))
+			appOpsAfter := appOpsArrayAfter[2]
+			Expect(appOpsAfter.CreatedAt).Should(BeTemporally("~", appOps.CreatedAt, time.Second))
+			appOps.CreatedAt = appOpsAfter.CreatedAt
+			appOps.RecordID = appOpsAfter.RecordID
+			Expect(appOpsAfter).Should(Equal(appOps))
+			By(fmt.Sprintf("appOpsAfter record : %v", appOpsAfter))
 		})
 	})
 })

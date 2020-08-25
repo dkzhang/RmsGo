@@ -1,10 +1,10 @@
 # Details
 
-Date : 2020-08-20 16:22:45
+Date : 2020-08-24 20:49:41
 
 Directory c:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo
 
-Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
+Total : 136 files,  7625 codes, 523 comments, 1516 blanks, all 9664 lines
 
 [summary](results.md)
 
@@ -46,7 +46,8 @@ Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
 | [RmsLog/login/readme.md](/RmsLog/login/readme.md) | Markdown | 0 | 0 | 1 | 1 |
 | [RmsLog/normal/readme.md](/RmsLog/normal/readme.md) | Markdown | 0 | 0 | 1 | 1 |
 | [databaseInit/ops.go](/databaseInit/ops.go) | Go | 45 | 0 | 8 | 53 |
-| [databaseInit/pgOps/pgOps.go](/databaseInit/pgOps/pgOps.go) | Go | 86 | 0 | 12 | 98 |
+| [databaseInit/pgOps/createTable.go](/databaseInit/pgOps/createTable.go) | Go | 38 | 0 | 5 | 43 |
+| [databaseInit/pgOps/seedTable.go](/databaseInit/pgOps/seedTable.go) | Go | 58 | 0 | 9 | 67 |
 | [datebaseCommon/postgreOps/mySqlx.go](/datebaseCommon/postgreOps/mySqlx.go) | Go | 26 | 0 | 6 | 32 |
 | [datebaseCommon/postgreOps/mySqlx_test.go](/datebaseCommon/postgreOps/mySqlx_test.go) | Go | 4 | 9 | 3 | 16 |
 | [datebaseCommon/redisOps/redis.go](/datebaseCommon/redisOps/redis.go) | Go | 81 | 20 | 20 | 121 |
@@ -77,24 +78,28 @@ Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
 | [myUtils/webapiError/webapiError.go](/myUtils/webapiError/webapiError.go) | Go | 34 | 0 | 8 | 42 |
 | [webapi/Dockerfile](/webapi/Dockerfile) | Dockerfile | 12 | 0 | 7 | 19 |
 | [webapi/SmsNotifier/smsNotifier.go](/webapi/SmsNotifier/smsNotifier.go) | Go | 84 | 0 | 18 | 102 |
-| [webapi/authority/authApplication/authApplication.go](/webapi/authority/authApplication/authApplication.go) | Go | 40 | 0 | 9 | 49 |
+| [webapi/authority/authApplication/authApplication.go](/webapi/authority/authApplication/authApplication.go) | Go | 100 | 3 | 13 | 116 |
 | [webapi/authority/authGeneralFormDraftCRUD/generalFormDraftCRUD.go](/webapi/authority/authGeneralFormDraftCRUD/generalFormDraftCRUD.go) | Go | 63 | 3 | 10 | 76 |
 | [webapi/authority/authUserCRUD/userCRUD.go](/webapi/authority/authUserCRUD/userCRUD.go) | Go | 100 | 3 | 12 | 115 |
 | [webapi/dataInfra/applicationDB/applicationDB.go](/webapi/dataInfra/applicationDB/applicationDB.go) | Go | 26 | 0 | 11 | 37 |
-| [webapi/dataInfra/applicationDB/applicationDB_suite_test.go](/webapi/dataInfra/applicationDB/applicationDB_suite_test.go) | Go | 24 | 0 | 8 | 32 |
+| [webapi/dataInfra/applicationDB/applicationDB_suite_test.go](/webapi/dataInfra/applicationDB/applicationDB_suite_test.go) | Go | 25 | 0 | 8 | 33 |
 | [webapi/dataInfra/applicationDB/applicationDB_test.go](/webapi/dataInfra/applicationDB/applicationDB_test.go) | Go | 168 | 3 | 22 | 193 |
 | [webapi/dataInfra/applicationDB/applicationPg.go](/webapi/dataInfra/applicationDB/applicationPg.go) | Go | 96 | 1 | 15 | 112 |
 | [webapi/dataInfra/applicationDM/applicationDM.go](/webapi/dataInfra/applicationDM/applicationDM.go) | Go | 21 | 0 | 9 | 30 |
-| [webapi/dataInfra/applicationDM/forHistory.go](/webapi/dataInfra/applicationDM/forHistory.go) | Go | 64 | 0 | 14 | 78 |
-| [webapi/dataInfra/applicationDM/memoryMap.go](/webapi/dataInfra/applicationDM/memoryMap.go) | Go | 110 | 2 | 25 | 137 |
+| [webapi/dataInfra/applicationDM/forHistory.go](/webapi/dataInfra/applicationDM/forHistory.go) | Go | 64 | 0 | 13 | 77 |
+| [webapi/dataInfra/applicationDM/memoryMap.go](/webapi/dataInfra/applicationDM/memoryMap.go) | Go | 111 | 2 | 25 | 138 |
 | [webapi/dataInfra/generalFormDraftDB/generalFormDraftDB.go](/webapi/dataInfra/generalFormDraftDB/generalFormDraftDB.go) | Go | 11 | 0 | 4 | 15 |
 | [webapi/dataInfra/generalFormDraftDB/generalFormDraftDB_test.go](/webapi/dataInfra/generalFormDraftDB/generalFormDraftDB_test.go) | Go | 72 | 0 | 12 | 84 |
 | [webapi/dataInfra/generalFormDraftDB/generalFormDraftPg.go](/webapi/dataInfra/generalFormDraftDB/generalFormDraftPg.go) | Go | 54 | 0 | 10 | 64 |
 | [webapi/dataInfra/projectDB/projectDB.go](/webapi/dataInfra/projectDB/projectDB.go) | Go | 25 | 2 | 8 | 35 |
-| [webapi/dataInfra/projectDB/projectPg.go](/webapi/dataInfra/projectDB/projectPg.go) | Go | 148 | 1 | 21 | 170 |
+| [webapi/dataInfra/projectDB/projectDB_suite_test.go](/webapi/dataInfra/projectDB/projectDB_suite_test.go) | Go | 25 | 0 | 8 | 33 |
+| [webapi/dataInfra/projectDB/projectDB_test.go](/webapi/dataInfra/projectDB/projectDB_test.go) | Go | 108 | 3 | 26 | 137 |
+| [webapi/dataInfra/projectDB/projectPg.go](/webapi/dataInfra/projectDB/projectPg.go) | Go | 142 | 1 | 21 | 164 |
 | [webapi/dataInfra/projectDM/forHistory.go](/webapi/dataInfra/projectDM/forHistory.go) | Go | 90 | 1 | 20 | 111 |
-| [webapi/dataInfra/projectDM/memoryMap.go](/webapi/dataInfra/projectDM/memoryMap.go) | Go | 137 | 0 | 22 | 159 |
+| [webapi/dataInfra/projectDM/memoryMap.go](/webapi/dataInfra/projectDM/memoryMap.go) | Go | 148 | 0 | 24 | 172 |
+| [webapi/dataInfra/projectDM/memoryMap_test.go](/webapi/dataInfra/projectDM/memoryMap_test.go) | Go | 114 | 3 | 27 | 144 |
 | [webapi/dataInfra/projectDM/projectDM.go](/webapi/dataInfra/projectDM/projectDM.go) | Go | 17 | 1 | 6 | 24 |
+| [webapi/dataInfra/projectDM/projectDM_suite_test.go](/webapi/dataInfra/projectDM/projectDM_suite_test.go) | Go | 32 | 1 | 9 | 42 |
 | [webapi/dataInfra/userDB/postgre.go](/webapi/dataInfra/userDB/postgre.go) | Go | 83 | 3 | 13 | 99 |
 | [webapi/dataInfra/userDB/userDB.go](/webapi/dataInfra/userDB/userDB.go) | Go | 14 | 0 | 3 | 17 |
 | [webapi/dataInfra/userDB/userDB_suite_test.go](/webapi/dataInfra/userDB/userDB_suite_test.go) | Go | 24 | 0 | 8 | 32 |
@@ -109,35 +114,38 @@ Total : 128 files,  6981 codes, 470 comments, 1374 blanks, all 8825 lines
 | [webapi/dataInfra/userTempDM/userTempDM.go](/webapi/dataInfra/userTempDM/userTempDM.go) | Go | 12 | 0 | 5 | 17 |
 | [webapi/entrypoint.prod.sh](/webapi/entrypoint.prod.sh) | Shell Script | 9 | 1 | 4 | 14 |
 | [webapi/entrypoint.sh](/webapi/entrypoint.sh) | Shell Script | 10 | 1 | 6 | 17 |
-| [webapi/handle/extractLoginUserInfo/extract.go](/webapi/handle/extractLoginUserInfo/extract.go) | Go | 67 | 0 | 12 | 79 |
-| [webapi/handle/handleApplication/handleApp.go](/webapi/handle/handleApplication/handleApp.go) | Go | 253 | 2 | 38 | 293 |
-| [webapi/handle/handleGeneralFormDraft/generalFormDraftCRUD.go](/webapi/handle/handleGeneralFormDraft/generalFormDraftCRUD.go) | Go | 241 | 15 | 37 | 293 |
+| [webapi/handle/extractLoginUserInfo/extract.go](/webapi/handle/extractLoginUserInfo/extract.go) | Go | 43 | 26 | 9 | 78 |
+| [webapi/handle/handleApplication/handleApp.go](/webapi/handle/handleApplication/handleApp.go) | Go | 332 | 2 | 50 | 384 |
+| [webapi/handle/handleGeneralFormDraft/generalFormDraftCRUD.go](/webapi/handle/handleGeneralFormDraft/generalFormDraftCRUD.go) | Go | 240 | 15 | 37 | 292 |
 | [webapi/handle/handleLogin/applyLogin.go](/webapi/handle/handleLogin/applyLogin.go) | Go | 95 | 12 | 18 | 125 |
 | [webapi/handle/handleLogin/login.go](/webapi/handle/handleLogin/login.go) | Go | 76 | 11 | 18 | 105 |
-| [webapi/handle/handleLogin/logout.go](/webapi/handle/handleLogin/logout.go) | Go | 13 | 0 | 4 | 17 |
+| [webapi/handle/handleLogin/logout.go](/webapi/handle/handleLogin/logout.go) | Go | 12 | 0 | 4 | 16 |
 | [webapi/handle/handleProRes/projectAndResource.go](/webapi/handle/handleProRes/projectAndResource.go) | Go | 48 | 15 | 15 | 78 |
 | [webapi/handle/handleUser/allUsers.go](/webapi/handle/handleUser/allUsers.go) | Go | 56 | 0 | 8 | 64 |
-| [webapi/handle/handleUser/retrieveUserLogin.go](/webapi/handle/handleUser/retrieveUserLogin.go) | Go | 24 | 0 | 4 | 28 |
-| [webapi/handle/handleUser/userCRUD.go](/webapi/handle/handleUser/userCRUD.go) | Go | 248 | 14 | 37 | 299 |
-| [webapi/infrastructure/infrastructure.go](/webapi/infrastructure/infrastructure.go) | Go | 117 | 14 | 29 | 160 |
+| [webapi/handle/handleUser/retrieveUserLogin.go](/webapi/handle/handleUser/retrieveUserLogin.go) | Go | 23 | 0 | 4 | 27 |
+| [webapi/handle/handleUser/userCRUD.go](/webapi/handle/handleUser/userCRUD.go) | Go | 247 | 14 | 37 | 298 |
+| [webapi/infrastructure/infrastructure.go](/webapi/infrastructure/infrastructure.go) | Go | 120 | 14 | 29 | 163 |
 | [webapi/middleware/logGin.go](/webapi/middleware/logGin.go) | Go | 26 | 12 | 13 | 51 |
 | [webapi/middleware/tokenAuth.go](/webapi/middleware/tokenAuth.go) | Go | 25 | 2 | 3 | 30 |
-| [webapi/model/application/application.go](/webapi/model/application/application.go) | Go | 77 | 3 | 12 | 92 |
+| [webapi/model/application/appConst.go](/webapi/model/application/appConst.go) | Go | 21 | 0 | 7 | 28 |
+| [webapi/model/application/application.go](/webapi/model/application/application.go) | Go | 73 | 3 | 11 | 87 |
 | [webapi/model/generalFormDraft/generalFormDraft.go](/webapi/model/generalFormDraft/generalFormDraft.go) | Go | 17 | 1 | 4 | 22 |
-| [webapi/model/generalForm/generalForm.go](/webapi/model/generalForm/generalForm.go) | Go | 10 | 0 | 2 | 12 |
+| [webapi/model/generalForm/generalForm.go](/webapi/model/generalForm/generalForm.go) | Go | 9 | 0 | 2 | 11 |
 | [webapi/model/gfApplication/gfApplication.go](/webapi/model/gfApplication/gfApplication.go) | Go | 26 | 6 | 8 | 40 |
 | [webapi/model/metering/metering.go](/webapi/model/metering/metering.go) | Go | 41 | 0 | 9 | 50 |
-| [webapi/model/project/project.go](/webapi/model/project/project.go) | Go | 35 | 0 | 5 | 40 |
-| [webapi/model/project/projectDynamic.go](/webapi/model/project/projectDynamic.go) | Go | 64 | 1 | 10 | 75 |
+| [webapi/model/project/project.go](/webapi/model/project/project.go) | Go | 44 | 0 | 8 | 52 |
+| [webapi/model/project/projectDynamic.go](/webapi/model/project/projectDynamic.go) | Go | 61 | 7 | 13 | 81 |
 | [webapi/model/resource/resource.go](/webapi/model/resource/resource.go) | Go | 35 | 0 | 8 | 43 |
 | [webapi/model/statusActionMap/statusActionMap.go](/webapi/model/statusActionMap/statusActionMap.go) | Go | 18 | 1 | 5 | 24 |
 | [webapi/model/user/checkUserName.go](/webapi/model/user/checkUserName.go) | Go | 12 | 1 | 6 | 19 |
 | [webapi/model/user/checkUserName_test.go](/webapi/model/user/checkUserName_test.go) | Go | 27 | 0 | 4 | 31 |
 | [webapi/model/user/user.go](/webapi/model/user/user.go) | Go | 50 | 10 | 16 | 76 |
 | [webapi/model/user/user_test.go](/webapi/model/user/user_test.go) | Go | 1 | 52 | 2 | 55 |
-| [webapi/server.go](/webapi/server.go) | Go | 52 | 2 | 14 | 68 |
+| [webapi/server.go](/webapi/server.go) | Go | 59 | 2 | 14 | 75 |
 | [webapi/workflow/ApplyChangeResource/apply.go](/webapi/workflow/ApplyChangeResource/apply.go) | Go | 1 | 0 | 1 | 2 |
-| [webapi/workflow/ApplyProjectAndResource/apply.go](/webapi/workflow/ApplyProjectAndResource/apply.go) | Go | 383 | 31 | 43 | 457 |
-| [webapi/workflow/generalWorkflow.go](/webapi/workflow/generalWorkflow.go) | Go | 53 | 4 | 8 | 65 |
+| [webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go](/webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go) | Go | 40 | 2 | 14 | 56 |
+| [webapi/workflow/ApplyProjectAndResource/workflow.go](/webapi/workflow/ApplyProjectAndResource/workflow.go) | Go | 390 | 37 | 51 | 478 |
+| [webapi/workflow/ApplyProjectAndResource/workflow_test.go](/webapi/workflow/ApplyProjectAndResource/workflow_test.go) | Go | 127 | 1 | 13 | 141 |
+| [webapi/workflow/generalWorkflow.go](/webapi/workflow/generalWorkflow.go) | Go | 84 | 6 | 17 | 107 |
 
 [summary](results.md)

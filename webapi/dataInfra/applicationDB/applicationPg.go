@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/jmoiron/sqlx"
-	"time"
 )
 
 type ApplicationPg struct {
@@ -68,7 +67,7 @@ func (apg ApplicationPg) Insert(app application.Application) (appID int, err err
 		app.ProjectID, app.Type, app.Status,
 		app.ApplicantUserID, app.ApplicantUserChineseName, app.DepartmentCode,
 		app.BasicContent, app.ExtraContent,
-		time.Now(), time.Now())
+		app.CreatedAt, app.UpdatedAt)
 	if err != nil {
 		return -1, fmt.Errorf("TheDB.Get Insert in TheDB error: %v", err)
 	}
@@ -89,7 +88,7 @@ func (apg ApplicationPg) InsertAppOps(record application.AppOpsRecord) (recordID
 	execInsert := fmt.Sprintf(`INSERT INTO %s (project_id, application_id, ops_user_id, ops_user_cn_name, action, action_str, basic_info, extra_info, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING record_id`, apg.OpsTableName)
 	err = apg.TheDB.Get(&recordID, execInsert,
 		record.ProjectID, record.ApplicationID, record.OpsUserID, record.OpsUserChineseName,
-		record.Action, record.ActionStr, record.BasicInfo, record.ExtraInfo, time.Now())
+		record.Action, record.ActionStr, record.BasicInfo, record.ExtraInfo, record.CreatedAt)
 	if err != nil {
 		return -1, fmt.Errorf("TheDB.Get InsertAppOps in TheDB error: %v", err)
 	}
