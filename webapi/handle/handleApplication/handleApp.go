@@ -358,10 +358,10 @@ func (h HandleApp) extractAccessedApplication(c *gin.Context) (app application.A
 		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"idStr": idStr,
 			"error": err,
-		}).Error("get GeneralFormDraft ID from gin.Context failed.")
+		}).Error("get Application ID from gin.Context failed.")
 
 		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": "错误的Request：拟操作的GeneralFormDraftID无效",
+			"msg": "错误的Request：拟操作的Application ID无效",
 		})
 		return application.Application{},
 			fmt.Errorf("get Application ID from gin.Context failed: %v", err)
