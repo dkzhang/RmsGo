@@ -13,6 +13,7 @@ type ProjectDM interface {
 }
 
 type ProjectHistoryDM interface {
+	QueryByID(projectID int) (project.Info, error)
 	QueryStaticInfoByID(projectID int) (project.StaticInfo, error)
 	QueryDynamicInfoByID(projectID int) (project.DynamicInfo, error)
 
