@@ -90,6 +90,11 @@ var _ = Describe("Workflow", func() {
 				Expect(waErr).ShouldNot(HaveOccurred())
 				By(fmt.Sprintf("Apply New ProRes Application %d success, got appID = %d", i, appID))
 
+				/////////////////////////////////
+				formB, _ := json.Marshal(form)
+				By(string(formB))
+				/////////////////////////////////
+
 				//Check After
 				appAfter, err := adm.QueryByID(appID)
 				Expect(err).ShouldNot(HaveOccurred())

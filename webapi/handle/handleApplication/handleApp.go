@@ -75,7 +75,7 @@ func (h HandleApp) Create(c *gin.Context) {
 		return
 	}
 
-	appType := c.GetInt("type")
+	appType := gfc.Type
 	wf, ok := h.theAppWorkflow[appType]
 	if !ok {
 		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
@@ -83,7 +83,7 @@ func (h HandleApp) Create(c *gin.Context) {
 		}).Error("unsupported application type for create.")
 
 		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": fmt.Sprintf("不支持的appType: %s", appType),
+			"msg": fmt.Sprintf("不支持的appType: %d", appType),
 		})
 		return
 	}
