@@ -362,6 +362,44 @@ func (h HandleApp) RetrieveByID(c *gin.Context) {
 	}
 }
 
+func (h HandleApp) RetrieveAppOpsByAppId(c *gin.Context) {
+	userLoginInfo, err := h.theExtractor.Extract(c)
+	if err != nil {
+		return
+	}
+
+	app, err := h.extractAccessedApplication(c)
+	if err != nil {
+		return
+	}
+
+	permission := authApplication.AuthorityCheck(h.theLogMap, userLoginInfo, app, authApplication.OPS_RETRIEVE)
+	if permission == false {
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "无权访问",
+		})
+		return
+	}
+
+	appOpsRecords, err := h.theAppDM.QueryAppOpsByAppId(app.ApplicationID)
+	if err != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"error": err,
+		}).Error("theAppDM.QueryAppOpsByAppId error")
+
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "查询申请单操作记录错误",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"records": appOpsRecords,
+		"msg":     "查询成功",
+	})
+	return
+}
+
 func (h HandleApp) extractAccessedApplication(c *gin.Context) (app application.Application, err error) {
 	idStr := c.Param("id")
 	appID, err := strconv.Atoi(idStr)

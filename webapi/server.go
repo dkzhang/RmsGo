@@ -67,6 +67,7 @@ func Serve() {
 			hApp.GET("/", middleware.TokenAuth(infra), theHandleApp.RetrieveByUserLogin)
 			hApp.GET("/ByID/:id", middleware.TokenAuth(infra), theHandleApp.RetrieveByID)
 			hApp.GET("/JTBD", middleware.TokenAuth(infra), theHandleApp.RetrieveJTBD)
+			hApp.GET("/OpsRecords/:id", middleware.TokenAuth(infra), theHandleApp.RetrieveAppOpsByAppId)
 
 			hApp.POST("/", middleware.TokenAuth(infra), theHandleApp.Create)
 			hApp.PUT("/:id", middleware.TokenAuth(infra), theHandleApp.Update)
