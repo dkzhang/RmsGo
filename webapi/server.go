@@ -72,7 +72,7 @@ func Serve() {
 			hApp.PUT("/:id", middleware.TokenAuth(infra), theHandleApp.Update)
 		}
 
-		hProject := webAPIv1.Group("/Application")
+		hProject := webAPIv1.Group("/Project")
 		{
 			hProject.GET("/", middleware.TokenAuth(infra), theHandleProject.RetrieveByUserLogin)
 		}
