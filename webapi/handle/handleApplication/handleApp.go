@@ -78,7 +78,7 @@ func (h HandleApp) Create(c *gin.Context) {
 	appType := gfc.Type
 	wf, ok := h.theAppWorkflow[appType]
 	if !ok {
-		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"appType": appType,
 		}).Error("unsupported application type for create.")
 
@@ -148,7 +148,7 @@ func (h HandleApp) Update(c *gin.Context) {
 	appType := c.GetInt("type")
 	wf, ok := h.theAppWorkflow[appType]
 	if !ok {
-		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"appType": appType,
 		}).Error("unsupported application type for create.")
 
@@ -186,11 +186,24 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 	appType := c.GetInt("type")
 	appStatus := c.GetInt("status")
 
+	h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+		"appType":   appType,
+		"appStatus": appStatus,
+	}).Info("Parse out appType and appStatus from URL")
+
+	// set default value
+	if appType == 0 {
+		appType = -1
+	}
+	if appStatus == 0 {
+		appStatus = -1
+	}
+
 	switch userLoginInfo.Role {
 	case user.RoleProjectChief:
 		apps, err := h.theAppDM.QueryByOwner(userLoginInfo.UserID, appType, appStatus)
 		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -207,7 +220,7 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 	case user.RoleApprover:
 		apps, err := h.theAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, appType, appStatus)
 		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -224,7 +237,7 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 	case user.RoleController:
 		apps, err := h.theAppDM.QueryAll(appType, appStatus)
 		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -239,7 +252,7 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			"msg":  "查询项目长相关申请单成功",
 		})
 	default:
-		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userID": userLoginInfo.UserID,
 			"Role":   userLoginInfo.Role,
 			"error":  err,
@@ -262,7 +275,7 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 	case user.RoleProjectChief:
 		apps, err := h.theAppDM.QueryByOwner(userLoginInfo.UserID, application.AppTypeALL, application.AppStatusProjectChief)
 		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -279,7 +292,7 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 	case user.RoleApprover:
 		apps, err := h.theAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
 		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -296,7 +309,7 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 	case user.RoleController:
 		apps, err := h.theAppDM.QueryAll(application.AppTypeALL, application.AppStatusController)
 		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
 				"error":  err,
 			}).Error("Query Application By Owner error")
@@ -311,7 +324,7 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 			"msg":  "查询项目长相关申请单成功",
 		})
 	default:
-		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"userID": userLoginInfo.UserID,
 			"Role":   userLoginInfo.Role,
 			"error":  err,

@@ -105,6 +105,10 @@ var _ = Describe("Workflow", func() {
 				Expect(proStaticAfter.ProjectName).Should(Equal(anpr.ProjectName))
 				By(fmt.Sprintf("QueryStaticInfoByID %d = %v", appAfter.ProjectID, proStaticAfter))
 			}
+
+			appsAfter, err := adm.QueryAll(-1, -1)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(appsAfter)).Should(Equal(3))
 		})
 	})
 
