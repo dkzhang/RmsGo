@@ -148,6 +148,8 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 		}).Fatal("applicationDM.NewMemoryMap error.")
 	}
 
+	/////////////////////////////////////////////////////////
+	// Project DB & DM
 	theInfras.TheProjectDB = projectDB.NewProjectPg(theInfras.TheDb, project.TableStatic, project.TableDynamic)
 	theInfras.TheProjectDM, err = projectDM.NewMemoryMap(theInfras.TheProjectDB, theInfras.TheLogMap)
 	if err != nil {
@@ -156,6 +158,12 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 		}).Fatal("projectDM.NewMemoryMap error.")
 	}
 
+	/////////////////////////////////////////////////////////
+	// Extractor
+	theInfras.TheExtractor = extractLoginUserInfo.NewExtractor(theInfras.TheLogMap, theInfras.TheUserDM)
+
+	/////////////////////////////////////////////////////////
+	// Workflow
 	theInfras.TheApplyProjectAndResourceWorkflow = ApplyProjectAndResource.NewWorkflow(theInfras.TheApplicationDM, theInfras.TheProjectDM)
 
 	return &theInfras
