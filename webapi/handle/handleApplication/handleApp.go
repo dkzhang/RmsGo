@@ -145,15 +145,15 @@ func (h HandleApp) Update(c *gin.Context) {
 	// fill attribute
 	gf.FormID = app.ApplicationID
 
-	appType := c.GetInt("type")
+	appType := gf.Type
 	wf, ok := h.theAppWorkflow[appType]
 	if !ok {
 		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 			"appType": appType,
-		}).Error("unsupported application type for create.")
+		}).Error("unsupported application type for update.")
 
 		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": fmt.Sprintf("不支持的appType: %s", appType),
+			"msg": fmt.Sprintf("不支持的appType: %d", appType),
 		})
 		return
 	}
