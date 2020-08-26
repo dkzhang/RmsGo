@@ -41,7 +41,7 @@ func init() {
 
 	theApplicationAuthorityTable = append(theApplicationAuthorityTable, applicationAuthority{
 		RelationShipBetween: func(userLoginInfo user.UserInfo, applicationAccessed application.Application) bool {
-			if userLoginInfo.Role == user.RoleProjectChief && applicationAccessed.ApplicationID == userLoginInfo.UserID {
+			if userLoginInfo.Role == user.RoleProjectChief && applicationAccessed.ApplicantUserID == userLoginInfo.UserID {
 				return true
 			} else {
 				return false
