@@ -183,20 +183,19 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 		return
 	}
 
-	appType := c.GetInt("type")
-	appStatus := c.GetInt("status")
+	appType, errT := strconv.Atoi(c.DefaultQuery("type", "-1"))
+	appStatus, errS := strconv.Atoi(c.DefaultQuery("status", "-1"))
 
-	h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-		"appType":   appType,
-		"appStatus": appStatus,
-	}).Info("Parse out appType and appStatus from URL")
+	if errT != nil || errS != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"errT": errT,
+			"errS": errS,
+		}).Error("Parse appType and appStatus from URL error")
 
-	// set default value
-	if appType == 0 {
-		appType = -1
-	}
-	if appStatus == 0 {
-		appStatus = -1
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "type和status参数无效",
+		})
+		return
 	}
 
 	switch userLoginInfo.Role {
