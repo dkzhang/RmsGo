@@ -29,12 +29,13 @@ type Info struct {
 	GpuNodesExpected    int       `db:"gpu_nodes_expected" json:"gpu_nodes_expected"`
 	StorageSizeExpected int       `db:"storage_size_expected" json:"storage_size_expected"`
 
-	// Alloc 5
+	// Alloc 6
 	CpuNodesAcquired    int    `db:"cpu_nodes_acquired" json:"cpu_nodes_acquired"`
 	GpuNodesAcquired    int    `db:"gpu_nodes_acquired" json:"gpu_nodes_acquired"`
 	StorageSizeAcquired int    `db:"storage_size_acquired" json:"storage_size_acquired"`
 	CpuNodesMap         string `db:"cpu_nodes_map" json:"cpu_nodes_map"`
 	GpuNodesMap         string `db:"gpu_nodes_map" json:"gpu_nodes_map"`
+	StorageAllocInfo    string `db:"storage_alloc_info" json:"storage_alloc_info"`
 
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
@@ -67,6 +68,7 @@ var SchemaInfo = `
 			storage_size_acquired int,		
 			cpu_nodes_map varchar(1024),
 			gpu_nodes_map varchar(1024),
+			storage_alloc_info varchar(1024),
 
 			created_at TIMESTAMP WITH TIME ZONE,
 			updated_at TIMESTAMP WITH TIME ZONE
