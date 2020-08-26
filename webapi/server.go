@@ -4,6 +4,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/handle/handleApplication"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleGeneralFormDraft"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleLogin"
+	"github.com/dkzhang/RmsGo/webapi/handle/handleProject"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
@@ -29,6 +30,9 @@ func Serve() {
 		infra.TheExtractor, infra.TheLogMap)
 	theHandleApp.RegisterWorkflow(application.AppTypeNew,
 		ApplyProjectAndResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM))
+
+	theHandleProject := handleProject.NewHandleProject(infra.TheProjectDM,
+		infra.TheExtractor, infra.TheLogMap)
 
 	webAPIv1 := r.Group("/webapi")
 	{
@@ -66,6 +70,11 @@ func Serve() {
 			hApp.POST("/", middleware.TokenAuth(infra), theHandleApp.Create)
 			hApp.GET("/:id", middleware.TokenAuth(infra), theHandleApp.RetrieveByID)
 			hApp.PUT("/:id", middleware.TokenAuth(infra), theHandleApp.Update)
+		}
+
+		hProject := webAPIv1.Group("/Application")
+		{
+			hProject.GET("/", middleware.TokenAuth(infra), theHandleProject.RetrieveByUserLogin)
 		}
 	}
 
