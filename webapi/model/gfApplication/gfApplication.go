@@ -1,6 +1,8 @@
 package gfApplication
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/dkzhang/RmsGo/webapi/model/resource"
 	"time"
 )
@@ -8,15 +10,27 @@ import (
 type AppNewProRes struct {
 	ProjectName string `json:"project_name"`
 	resource.Resource
-	StartDate      time.Time `json:"start_date"`
+	StartDateStr   string    `json:"start_date"`
+	StartDate      time.Time `json:"-"`
 	TotalDaysApply int       `json:"total_days_apply"`
-	EndDate        time.Time `json:"end_date"`
+	EndDateStr     string    `json:"end_date"`
+	EndDate        time.Time `json:"-"`
+}
+
+func JsonUnmarshalAppNewProRes(jsonStr string) (appNewProRes AppNewProRes, err error) {
+	err = json.Unmarshal([]byte(jsonStr), &appNewProRes)
+	if err != nil {
+		return AppNewProRes{}, fmt.Errorf("json.Unmarshal error: %v", err)
+	}
+
+	return appNewProRes, nil
 }
 
 type AppResChange struct {
 	resource.Resource
 	DaysExtended int       `json:"days_extended"`
-	EndDate      time.Time `json:"end_date"`
+	EndDateStr   string    `json:"end_date"`
+	EndDate      time.Time `json:"-"`
 }
 
 type AppResComReturn struct {
