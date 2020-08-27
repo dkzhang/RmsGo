@@ -82,7 +82,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 
 	var app gfApplication.AppNewProRes
-	err := json.Unmarshal(([]byte)(form.BasicContent), &app)
+	app, err := gfApplication.JsonUnmarshalAppNewProRes(form.BasicContent)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
@@ -270,7 +270,7 @@ func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app
 	}
 
 	var appNewProRes gfApplication.AppNewProRes
-	err = json.Unmarshal([]byte(form.BasicContent), &appNewProRes)
+	appNewProRes, err = gfApplication.JsonUnmarshalAppNewProRes(form.BasicContent)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
@@ -453,7 +453,8 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 
 	// application passed
 	var appNewProRes gfApplication.AppNewProRes
-	err = json.Unmarshal([]byte(app.BasicContent), &appNewProRes)
+	appNewProRes, err = gfApplication.JsonUnmarshalAppNewProRes(app.BasicContent)
+
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeServerInternalError,
 			fmt.Sprintf("app.BasicContent json Unmarshal to AppNewProRes error: %v", err),

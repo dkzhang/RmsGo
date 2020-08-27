@@ -11,7 +11,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"time"
 )
 
 var _ = Describe("Workflow", func() {
@@ -70,9 +69,9 @@ var _ = Describe("Workflow", func() {
 						GpuNodes:    i * 10,
 						StorageSize: i * 50,
 					},
-					StartDate:      time.Now(),
-					TotalDaysApply: i * 10,
-					EndDate:        time.Now().AddDate(0, 0, i*10),
+					StartDateStr:   "2020-08-17",
+					TotalDaysApply: 10,
+					EndDateStr:     "2020-08-27",
 				}
 				anprB, _ := json.Marshal(anpr)
 				anprJson := string(anprB)
