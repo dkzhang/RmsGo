@@ -1,14 +1,12 @@
 package resNodeTree
 
 type Group struct {
-	ID             int         `json:"group_id"`
-	Name           string      `json:"group_name"`
-	Status         int         `json:"group_status"`
-	Description    string      `json:"description"`
-	SubGroups      []Group     `json:"sub_groups"`
-	Nodes          []Node      `json:"nodes"`
-	NodesNum       int         `json:"nodes_num"`
-	NodesStatusMap map[int]int `json:"nodes_status_map"`
+	ID          int     `json:"group_id"`
+	Name        string  `json:"group_name"`
+	Status      int     `json:"group_status"`
+	Description string  `json:"description"`
+	SubGroups   []Group `json:"sub_groups"`
+	Nodes       []Node  `json:"nodes"`
 }
 
 type Node struct {
@@ -18,11 +16,25 @@ type Node struct {
 	Description string `json:"description"`
 }
 
-func (g Group) Count() {
-	g.NodesStatusMap = make(map[int]int)
+func Count(g Group) (nodesNum int, nodesStatusMap map[int]int) {
+	nodesStatusMap = make(map[int]int)
+	nodesNum = 0
 
-	for _, node := range g.Nodes {
-		g.NodesNum++
-		g.NodesStatusMap[node.Status]++
+	if g.Nodes != nil {
+		for _, node := range g.Nodes {
+			nodesNum++
+			nodesStatusMap[node.Status]++
+		}
 	}
+
+	if g.SubGroups != nil {
+		for _, sg := range g.SubGroups {
+			num, sMap := Count(sg)
+			nodesNum += num
+			for k, v := range sMap {
+				nodesStatusMap[k] += v
+			}
+		}
+	}
+	return nodesNum, nodesStatusMap
 }
