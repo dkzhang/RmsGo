@@ -45,7 +45,7 @@ func NewMemoryMap(pdb projectDB.ProjectDB, theLogMap logMap.LogMap) (nmm MemoryM
 
 func (pdm MemoryMap) QueryByID(projectID int) (project.Info, error) {
 	// TODO
-	return project.Info{}, fmt.Errorf("Need to be done")
+	return project.Info{}, fmt.Errorf("need to be done")
 }
 
 func (pdm MemoryMap) QueryStaticInfoByID(projectID int) (project.StaticInfo, error) {
