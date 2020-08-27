@@ -210,6 +210,49 @@ var _ = Describe("ProjectDB", func() {
 			pi.UpdatedAt = piUpdated.UpdatedAt
 			Expect(piUpdated).Should(Equal(pi))
 		})
+
+		It("Update Alloc Info", func() {
+			projectID := 3
+
+			pi, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
+
+			ali := project.AllocInfo{
+				ProjectID:           projectID,
+				CpuNodesAcquired:    rand.Intn(100),
+				GpuNodesAcquired:    rand.Intn(100),
+				StorageSizeAcquired: rand.Intn(100),
+				CpuNodesMap:         fmt.Sprintf("CpuNodesMap%dUpdated", projectID),
+				GpuNodesMap:         fmt.Sprintf("GpuNodesMap%dUpdated", projectID),
+				StorageAllocInfo:    fmt.Sprintf("StorageAllocInfo%dUpdated", projectID),
+				UpdatedAt:           time.Now(),
+			}
+
+			err = pdb.UpdateAllocInfo(ali)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			piUpdated, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// check updated info
+			Expect(piUpdated.CpuNodesAcquired).Should(Equal(ali.CpuNodesAcquired))
+			Expect(piUpdated.GpuNodesAcquired).Should(Equal(ali.GpuNodesAcquired))
+			Expect(piUpdated.StorageSizeAcquired).Should(Equal(ali.StorageSizeAcquired))
+			Expect(piUpdated.CpuNodesMap).Should(Equal(ali.CpuNodesMap))
+			Expect(piUpdated.GpuNodesMap).Should(Equal(ali.GpuNodesMap))
+			Expect(piUpdated.StorageAllocInfo).Should(Equal(ali.StorageAllocInfo))
+
+			// check not updated info
+			pi.CpuNodesAcquired = piUpdated.CpuNodesAcquired
+			pi.GpuNodesAcquired = piUpdated.GpuNodesAcquired
+			pi.StorageSizeAcquired = piUpdated.StorageSizeAcquired
+			pi.CpuNodesMap = piUpdated.CpuNodesMap
+			pi.GpuNodesMap = piUpdated.GpuNodesMap
+			pi.StorageSizeExpected = piUpdated.StorageSizeExpected
+			pi.StorageAllocInfo = piUpdated.StorageAllocInfo
+			pi.UpdatedAt = piUpdated.UpdatedAt
+			Expect(piUpdated).Should(Equal(pi))
+		})
 	})
 
 	Describe("QueryAllInfo from db", func() {
