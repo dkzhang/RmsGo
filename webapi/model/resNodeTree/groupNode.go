@@ -38,3 +38,23 @@ func Count(g Group) (nodesNum int, nodesStatusMap map[int]int) {
 	}
 	return nodesNum, nodesStatusMap
 }
+
+func OrganizeGroupStatus(g Group) (status int) {
+	num, sMap := Count(g)
+	if num != 0 {
+		if sMap[StatusUnselected] == 0 {
+			status = StatusSelected
+		} else if sMap[StatusSelected] == 0 {
+			status = StatusUnselected
+		} else {
+			status = StatusPartiallySelected
+		}
+	}
+	return status
+}
+
+const (
+	StatusUnselected        = 1
+	StatusPartiallySelected = 2
+	StatusSelected          = 4
+)
