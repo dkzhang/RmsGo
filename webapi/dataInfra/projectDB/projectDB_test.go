@@ -14,122 +14,210 @@ var _ = Describe("ProjectDB", func() {
 	Describe("InsertAndRetrieve", func() {
 		//Query All Project Info from db
 		It("QueryAllInfo from db", func() {
-			proSs := make([]project.StaticInfo, 3)
-			proDs := make([]project.DynamicInfo, 3)
+			pros := make([]project.Info, 3)
 
 			for i := 0; i < 3; i++ {
-				proSs[i] = project.StaticInfo{
-					ProjectName:      fmt.Sprintf("ProjectName%d", i),
-					ProjectCode:      fmt.Sprintf("ProjectCode%d", i),
-					DepartmentCode:   "jf",
-					Department:       "计服中心",
+				pros[i] = project.Info{
+					//ProjectID:            0,
+					ProjectName:      fmt.Sprintf("ProjectName%d", i+1),
+					ProjectCode:      fmt.Sprintf("ProjectCode%d", i+1),
+					DepartmentCode:   "jf1",
+					Department:       "计服中心1",
 					ChiefID:          1,
-					ChiefChineseName: "项目长001",
-					ExtraInfo:        fmt.Sprintf("ExtraInfo%d", i),
-					CreatedAt:        time.Now(),
-					UpdatedAt:        time.Now(),
-				}
+					ChiefChineseName: "项目长张俊",
+					ExtraInfo:        fmt.Sprintf("ExtraInfo%d", i+1),
 
-				proDs[i] = project.DynamicInfo{
 					BasicStatus:          rand.Intn(100),
 					ComputingAllocStatus: rand.Intn(100),
 					StorageAllocStatus:   rand.Intn(100),
-					StartDate:            time.Now(),
-					TotalDaysApply:       10,
-					EndReminderAt:        time.Now().AddDate(0, 0, 10),
-					CpuNodesExpected:     rand.Intn(100),
-					GpuNodesExpected:     rand.Intn(100),
-					StorageSizeExpected:  rand.Intn(100),
-					CpuNodesAcquired:     rand.Intn(100),
-					GpuNodesAcquired:     rand.Intn(100),
-					StorageSizeAcquired:  rand.Intn(100),
-					CreatedAt:            time.Now(),
-					UpdatedAt:            time.Now(),
+
+					StartDate:           time.Now(),
+					TotalDaysApply:      10,
+					EndReminderAt:       time.Now().AddDate(0, 0, 10),
+					CpuNodesExpected:    rand.Intn(100),
+					GpuNodesExpected:    rand.Intn(100),
+					StorageSizeExpected: rand.Intn(100),
+
+					CpuNodesAcquired:    rand.Intn(100),
+					GpuNodesAcquired:    rand.Intn(100),
+					StorageSizeAcquired: rand.Intn(100),
+					CpuNodesMap:         fmt.Sprintf("CpuNodesMap%d", i+1),
+					GpuNodesMap:         fmt.Sprintf("GpuNodesMap%d", i+1),
+					StorageAllocInfo:    fmt.Sprintf("StorageAllocInfo%d", i+1),
+
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
 				}
 
-				projectID, err := pdb.InsertAllInfo(proSs[i], proDs[i])
-				Expect(err).ShouldNot(HaveOccurred(), "InsertAllInfo %d error: %v", i, err)
-				By(fmt.Sprintf("InsertAllInfo %d success, projectID=%d", i, projectID))
-				proSs[i].ProjectID = projectID
-				proDs[i].ProjectID = projectID
+				projectID, err := pdb.Insert(pros[i])
+				Expect(err).ShouldNot(HaveOccurred(), "Insert %d error: %v", i, err)
+				By(fmt.Sprintf("Insert %d success, projectID=%d", i, projectID))
+				pros[i].ProjectID = projectID
 			}
 
 			for j := 1; j < 4; j++ {
-				psi, err := pdb.QueryStaticInfoByID(j)
+				psi, err := pdb.QueryByID(j)
 				Expect(err).ShouldNot(HaveOccurred(), "QueryStaticInfoByID %d error: %v", j, err)
 
-				Expect(psi.CreatedAt).Should(BeTemporally("~", proSs[j-1].CreatedAt, time.Second))
-				Expect(psi.UpdatedAt).Should(BeTemporally("~", proSs[j-1].UpdatedAt, time.Second))
-				proSs[j-1].CreatedAt = psi.CreatedAt
-				proSs[j-1].UpdatedAt = psi.UpdatedAt
+				Expect(psi.StartDate).Should(BeTemporally("~", pros[j-1].StartDate, time.Second))
+				Expect(psi.EndReminderAt).Should(BeTemporally("~", pros[j-1].EndReminderAt, time.Second))
+				Expect(psi.CreatedAt).Should(BeTemporally("~", pros[j-1].CreatedAt, time.Second))
+				Expect(psi.UpdatedAt).Should(BeTemporally("~", pros[j-1].UpdatedAt, time.Second))
 
-				Expect(psi).Should(Equal(proSs[j-1]))
-				By(fmt.Sprintf("project static info: %v", psi))
-			}
+				pros[j-1].StartDate = psi.StartDate
+				pros[j-1].EndReminderAt = psi.EndReminderAt
+				pros[j-1].CreatedAt = psi.CreatedAt
+				pros[j-1].UpdatedAt = psi.UpdatedAt
 
-			for j := 1; j < 4; j++ {
-				pdi, err := pdb.QueryDynamicInfoByID(j)
-				Expect(err).ShouldNot(HaveOccurred(), "QueryDynamicInfoByID %d error: %v", j, err)
-
-				Expect(pdi.CreatedAt).Should(BeTemporally("~", proDs[j-1].CreatedAt, time.Second))
-				Expect(pdi.UpdatedAt).Should(BeTemporally("~", proDs[j-1].UpdatedAt, time.Second))
-
-				Expect(pdi.StartDate).Should(BeTemporally("~", proDs[j-1].StartDate, time.Second))
-				Expect(pdi.EndReminderAt).Should(BeTemporally("~", proDs[j-1].EndReminderAt, time.Second))
-
-				proDs[j-1].CreatedAt = pdi.CreatedAt
-				proDs[j-1].UpdatedAt = pdi.UpdatedAt
-				proDs[j-1].StartDate = pdi.StartDate
-				proDs[j-1].EndReminderAt = pdi.EndReminderAt
-
-				Expect(pdi).Should(Equal(proDs[j-1]))
-				By(fmt.Sprintf("project dynamic info: %v", pdi))
+				Expect(psi).Should(Equal(pros[j-1]))
+				By(fmt.Sprintf("project info: %v", psi))
 			}
 		})
 	})
 
 	Describe("Update from db", func() {
-		//Query All Project Info from db
-		It("UpdateStaticInfo", func() {
-			id := 2
+		It("Update Static Info", func() {
+			projectID := 2
 
-			psi, err := pdb.QueryStaticInfoByID(id)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryStaticInfoByID %d error: %v", id, err)
+			pi, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
 
-			psi.ProjectName = fmt.Sprintf("ProjectNameUpdated%d", id)
-			psi.ProjectCode = fmt.Sprintf("ProjectNameUpdated%d", id)
-			psi.ExtraInfo = fmt.Sprintf("ProjectNameUpdated%d", id)
-			err = pdb.UpdateStaticInfo(psi)
-			Expect(err).ShouldNot(HaveOccurred(), "UpdateStaticInfo %d error: %v", id, err)
+			bi := project.BasicInfo{
+				ProjectID:   projectID,
+				ProjectName: fmt.Sprintf("ProjectName%d-Updated", projectID),
+				ExtraInfo:   fmt.Sprintf("ExtraInfo%d-Updated", projectID),
+				UpdatedAt:   time.Now(),
+			}
 
-			psiU, err := pdb.QueryStaticInfoByID(id)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryStaticInfoByID %d error: %v", id, err)
-			Expect(psiU).Should(Equal(psi))
+			err = pdb.UpdateBasicInfo(bi)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			piUpdated, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// check updated info
+			Expect(piUpdated.ProjectID).Should(Equal(bi.ProjectID))
+			Expect(piUpdated.ProjectName).Should(Equal(bi.ProjectName))
+			Expect(piUpdated.ExtraInfo).Should(Equal(bi.ExtraInfo))
+
+			// check not updated info
+			pi.ProjectName = piUpdated.ProjectName
+			pi.ExtraInfo = piUpdated.ExtraInfo
+			pi.UpdatedAt = piUpdated.UpdatedAt
+			Expect(piUpdated).Should(Equal(pi))
 		})
 
-		It("UpdateStaticInfo", func() {
-			id := 3
+		It("Update Code Info", func() {
+			projectID := 3
 
-			pdi, err := pdb.QueryDynamicInfoByID(id)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryDynamicInfoByID %d error: %v", id, err)
+			pi, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
 
-			pdi.BasicStatus = rand.Intn(100)
-			pdi.CpuNodesExpected = rand.Intn(100)
+			ci := project.CodeInfo{
+				ProjectID:   projectID,
+				ProjectCode: fmt.Sprintf("ProjectCode%d-Updated", projectID),
+				UpdatedAt:   time.Now(),
+			}
 
-			err = pdb.UpdateDynamicInfo(pdi)
-			Expect(err).ShouldNot(HaveOccurred(), "UpdateDynamicInfo %d error: %v", id, err)
+			err = pdb.UpdateCodeInfo(ci)
+			Expect(err).ShouldNot(HaveOccurred())
 
-			pdiU, err := pdb.QueryDynamicInfoByID(id)
-			Expect(err).ShouldNot(HaveOccurred(), "QueryDynamicInfoByID %d error: %v", id, err)
-			Expect(pdiU).Should(Equal(pdi))
+			piUpdated, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// check updated info
+			Expect(piUpdated.ProjectID).Should(Equal(ci.ProjectID))
+			Expect(piUpdated.ProjectCode).Should(Equal(ci.ProjectCode))
+
+			// check not updated info
+			pi.ProjectCode = piUpdated.ProjectCode
+			pi.UpdatedAt = piUpdated.UpdatedAt
+			Expect(piUpdated).Should(Equal(pi))
+		})
+
+		It("Update Status Info", func() {
+			projectID := 3
+
+			pi, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
+
+			si := project.StatusInfo{
+				ProjectID:            projectID,
+				BasicStatus:          rand.Intn(100),
+				ComputingAllocStatus: rand.Intn(100),
+				StorageAllocStatus:   rand.Intn(100),
+				UpdatedAt:            time.Now(),
+			}
+
+			err = pdb.UpdateStatusInfo(si)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			piUpdated, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// check updated info
+			Expect(piUpdated.ProjectID).Should(Equal(si.ProjectID))
+			Expect(piUpdated.BasicStatus).Should(Equal(si.BasicStatus))
+			Expect(piUpdated.ComputingAllocStatus).Should(Equal(si.ComputingAllocStatus))
+			Expect(piUpdated.StorageAllocStatus).Should(Equal(si.StorageAllocStatus))
+
+			// check not updated info
+			pi.BasicStatus = piUpdated.BasicStatus
+			pi.ComputingAllocStatus = piUpdated.ComputingAllocStatus
+			pi.StorageAllocStatus = piUpdated.StorageAllocStatus
+			pi.UpdatedAt = piUpdated.UpdatedAt
+			Expect(piUpdated).Should(Equal(pi))
+		})
+
+		It("Update Apply Info", func() {
+			projectID := 1
+
+			pi, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
+
+			ai := project.ApplyInfo{
+				ProjectID:           projectID,
+				StartDate:           time.Now().AddDate(0, 1, 0),
+				TotalDaysApply:      16,
+				EndReminderAt:       time.Now().AddDate(0, 1, 16),
+				CpuNodesExpected:    rand.Intn(100),
+				GpuNodesExpected:    rand.Intn(100),
+				StorageSizeExpected: rand.Intn(100),
+				UpdatedAt:           time.Now(),
+			}
+
+			err = pdb.UpdateApplyInfo(ai)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			piUpdated, err := pdb.QueryByID(projectID)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// check updated info
+			Expect(piUpdated.StartDate).Should(BeTemporally("~", ai.StartDate, time.Second))
+			Expect(piUpdated.TotalDaysApply).Should(Equal(ai.TotalDaysApply))
+			Expect(piUpdated.EndReminderAt).Should(BeTemporally("~", ai.EndReminderAt, time.Second))
+			Expect(piUpdated.CpuNodesExpected).Should(Equal(ai.CpuNodesExpected))
+			Expect(piUpdated.GpuNodesExpected).Should(Equal(ai.GpuNodesExpected))
+			Expect(piUpdated.StorageSizeExpected).Should(Equal(ai.StorageSizeExpected))
+
+			// check not updated info
+			pi.StartDate = piUpdated.StartDate
+			pi.TotalDaysApply = piUpdated.TotalDaysApply
+			pi.EndReminderAt = piUpdated.EndReminderAt
+			pi.CpuNodesExpected = piUpdated.CpuNodesExpected
+			pi.GpuNodesExpected = piUpdated.GpuNodesExpected
+			pi.StorageSizeExpected = piUpdated.StorageSizeExpected
+			pi.UpdatedAt = piUpdated.UpdatedAt
+			Expect(piUpdated).Should(Equal(pi))
 		})
 	})
 
 	Describe("QueryAllInfo from db", func() {
 		//Query All Project Info from db
 		It("QueryAllInfo from db", func() {
-			_, _, err := pdb.QueryAllInfo()
-			Expect(err).ShouldNot(HaveOccurred(), "QueryAllInfo error: %v")
+			pis, err := pdb.QueryAllInfo()
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(pis)).Should(Equal(3))
 		})
 	})
 

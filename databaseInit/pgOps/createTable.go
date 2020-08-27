@@ -11,16 +11,14 @@ import (
 )
 
 var tableList = map[string]string{
-	"user_info":               user.SchemaUser,
-	"general_form_draft":      generalFormDraft.SchemaGeneralFormDraft,
-	"application":             application.GetSchemaApp(),
-	"history_application":     application.GetSchemaHistoryApp(),
-	"app_ops_record":          application.GetSchemaAppOps(),
-	"history_app_ops_record":  application.GetSchemaHistoryAppOps(),
-	"project_static":          project.GetSchemaStatic(),
-	"project_dynamic":         project.GetSchemaDynamic(),
-	"history_project_static":  project.GetSchemaHistoryStatic(),
-	"history_project_dynamic": project.GetSchemaHistoryDynamic(),
+	"user_info":              user.SchemaUser,
+	"general_form_draft":     generalFormDraft.SchemaGeneralFormDraft,
+	"application":            application.GetSchemaApp(),
+	"history_application":    application.GetSchemaHistoryApp(),
+	"app_ops_record":         application.GetSchemaAppOps(),
+	"history_app_ops_record": application.GetSchemaHistoryAppOps(),
+	"project_info":           project.GetSchema(),
+	"history_project_info":   project.GetSchemaHistory(),
 }
 
 func CreateAllTable(db *sqlx.DB) {

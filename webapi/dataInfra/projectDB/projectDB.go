@@ -15,10 +15,11 @@ type ProjectDB interface {
 	///////////////////////////////////////////////////////////////////////////////
 	Insert(project.Info) (projectID int, err error)
 
-	UpdateProjectCode(projectID int, projectCode string) (err error)
-	UpdateBasicInfo()
-	UpdateApplyInfo()
-	UpdateAllocInfo()
+	UpdateBasicInfo(bi project.BasicInfo) (err error)
+	UpdateCodeInfo(pc project.CodeInfo) (err error)
+	UpdateStatusInfo(si project.StatusInfo) (err error)
+	UpdateApplyInfo(ai project.ApplyInfo) (err error)
+	UpdateAllocInfo(ali project.AllocInfo) (err error)
 
 	// 同一数据库内归档
 	InnerArchiveProject(stnHistory string, dtnHistory string, projectID int) (err error)
@@ -26,7 +27,6 @@ type ProjectDB interface {
 
 type ProjectHistoryDB interface {
 	QueryByID(projectID int) (project.Info, error)
-
 	QueryByOwner(userID int) ([]project.Info, error)
 	QueryByDepartmentCode(dc string) ([]project.Info, error)
 	QueryAllInfo() ([]project.Info, error)
