@@ -6,29 +6,30 @@ import (
 )
 
 type DBInfo struct {
-	TheDB            *sqlx.DB
-	StaticTableName  string
-	DynamicTableName string
+	TheDB     *sqlx.DB
+	TableName string
 }
 
 type ProjectDB interface {
 	ProjectHistoryDB
 	///////////////////////////////////////////////////////////////////////////////
-	InsertAllInfo(project.StaticInfo, project.DynamicInfo) (projectID int, err error)
-	UpdateStaticInfo(projectInfo project.StaticInfo) (err error)
-	UpdateDynamicInfo(projectInfo project.DynamicInfo) (err error)
+	Insert(project.Info) (projectID int, err error)
+
+	UpdateProjectCode(projectID int, projectCode string) (err error)
+	UpdateBasicInfo()
+	UpdateApplyInfo()
+	UpdateAllocInfo()
 
 	// 同一数据库内归档
 	InnerArchiveProject(stnHistory string, dtnHistory string, projectID int) (err error)
 }
 
 type ProjectHistoryDB interface {
-	QueryStaticInfoByID(projectID int) (project.StaticInfo, error)
-	QueryDynamicInfoByID(projectID int) (project.DynamicInfo, error)
+	QueryByID(projectID int) (project.Info, error)
 
-	QueryInfoByOwner(userID int) ([]project.StaticInfo, []project.DynamicInfo, error)
-	QueryInfoByDepartmentCode(dc string) ([]project.StaticInfo, []project.DynamicInfo, error)
-	QueryAllInfo() ([]project.StaticInfo, []project.DynamicInfo, error)
+	QueryByOwner(userID int) ([]project.Info, error)
+	QueryByDepartmentCode(dc string) ([]project.Info, error)
+	QueryAllInfo() ([]project.Info, error)
 
 	Close()
 }
