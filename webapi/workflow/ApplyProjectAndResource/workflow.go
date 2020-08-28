@@ -90,38 +90,36 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 	}
 
 	// (1) Insert New Project
-	theProjectS := project.StaticInfo{
-		//ProjectID:        0,
+	theProject := project.Info{
+		//ProjectID:            0,
 		ProjectName: app.ProjectName,
-		//ProjectCode:      "",
+		//ProjectCode:          "",
 		DepartmentCode:   userInfo.DepartmentCode,
 		Department:       userInfo.Department,
 		ChiefID:          userInfo.UserID,
 		ChiefChineseName: userInfo.ChineseName,
 		ExtraInfo:        form.ExtraContent,
-	}
 
-	theProjectD := project.DynamicInfo{
-		//ProjectID:               0,
 		BasicStatus:          project.BasicStatusApplying,
 		ComputingAllocStatus: project.ResNotYetAssigned,
 		StorageAllocStatus:   project.ResNotYetAssigned,
-		StartDate:            app.StartDate,
-		TotalDaysApply:       app.TotalDaysApply,
-		CpuNodesExpected:     0,
-		GpuNodesExpected:     0,
-		StorageSizeExpected:  0,
-		CpuNodesAcquired:     0,
-		GpuNodesAcquired:     0,
-		StorageSizeAcquired:  0,
-		EndReminderAt:        app.EndDate,
+
+		StartDate:           app.StartDate,
+		TotalDaysApply:      app.TotalDaysApply,
+		EndReminderAt:       app.EndDate,
+		CpuNodesExpected:    0,
+		GpuNodesExpected:    0,
+		StorageSizeExpected: 0,
+
+		CpuNodesAcquired:    0,
+		GpuNodesAcquired:    0,
+		StorageSizeAcquired: 0,
+		CpuNodesMap:         "",
+		GpuNodesMap:         "",
+		StorageAllocInfo:    "",
 	}
 
-	projectID, err := wf.pdm.InsertAllInfo(project.ProjectInfo{
-		ProjectID:      theProjectS.ProjectID,
-		TheStaticInfo:  theProjectS,
-		TheDynamicInfo: theProjectD,
-	})
+	projectID, err := wf.pdm.Insert(theProject)
 
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
@@ -175,11 +173,11 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 }
 
 func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	theProjectS, err := wf.pdm.QueryStaticInfoByID(app.ProjectID)
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目静态信息失败")
+			"在数据库中查询项目信息失败")
 	}
 
 	// Check Action value
@@ -188,7 +186,7 @@ func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app
 		// Insert New ApplicationOps
 		theAppOpsRecord := application.AppOpsRecord{
 			//RecordID:           0,
-			ProjectID:          theProjectS.ProjectID,
+			ProjectID:          theProject.ProjectID,
 			ApplicationID:      app.ApplicationID,
 			OpsUserID:          userInfo.UserID,
 			OpsUserChineseName: userInfo.ChineseName,
@@ -218,7 +216,7 @@ func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app
 		// Insert New ApplicationOps
 		theAppOpsRecord := application.AppOpsRecord{
 			//RecordID:           0,
-			ProjectID:          theProjectS.ProjectID,
+			ProjectID:          theProject.ProjectID,
 			ApplicationID:      app.ApplicationID,
 			OpsUserID:          userInfo.UserID,
 			OpsUserChineseName: userInfo.ChineseName,
@@ -255,18 +253,11 @@ func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app
 }
 
 func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	theProjectS, err := wf.pdm.QueryStaticInfoByID(app.ProjectID)
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目静态信息失败")
-	}
-
-	theProjectD, err := wf.pdm.QueryDynamicInfoByID(app.ProjectID)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目动态信息失败")
+			"在数据库中查询项目信息失败")
 	}
 
 	var appNewProRes gfApplication.AppNewProRes
@@ -280,7 +271,7 @@ func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app
 	// Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
 		//RecordID:           0,
-		ProjectID:          theProjectS.ProjectID,
+		ProjectID:          theProject.ProjectID,
 		ApplicationID:      app.ApplicationID,
 		OpsUserID:          userInfo.UserID,
 		OpsUserChineseName: userInfo.ChineseName,
@@ -310,34 +301,45 @@ func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app
 	}
 
 	// Update Project
-	theProjectS.ProjectName = appNewProRes.ProjectName
-	theProjectS.ExtraInfo = form.ExtraContent
-	err = wf.pdm.UpdateStaticInfo(theProjectS)
+	bi := project.BasicInfo{
+		ProjectID:   theProject.ProjectID,
+		ProjectName: appNewProRes.ProjectName,
+		ExtraInfo:   form.ExtraContent,
+		UpdatedAt:   time.Time{},
+	}
+	err = wf.pdm.UpdateBasicInfo(bi)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("Update for ProjectChief error: %v", err),
-			"无法为项目长在数据库中更新Project静态信息")
+			"无法为项目长在数据库中更新Project基本信息")
 	}
 
-	theProjectD.StartDate = appNewProRes.StartDate
-	theProjectD.TotalDaysApply = appNewProRes.TotalDaysApply
-	theProjectD.EndReminderAt = appNewProRes.EndDate
-	err = wf.pdm.UpdateDynamicInfo(theProjectD)
+	ai := project.ApplyInfo{
+		ProjectID:           theProject.ProjectID,
+		StartDate:           appNewProRes.StartDate,
+		TotalDaysApply:      appNewProRes.TotalDaysApply,
+		EndReminderAt:       appNewProRes.EndDate,
+		CpuNodesExpected:    appNewProRes.CpuNodes,
+		GpuNodesExpected:    appNewProRes.GpuNodes,
+		StorageSizeExpected: appNewProRes.StorageSize,
+	}
+
+	err = wf.pdm.UpdateApplyInfo(ai)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("Update for ProjectChief error: %v", err),
-			"无法为项目长在数据库中更新Project动态信息")
+			"无法为项目长在数据库中更新Project申请信息")
 	}
 
 	return nil
 }
 
 func (wf Workflow) ControllerProcessReject(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	theProjectS, err := wf.pdm.QueryStaticInfoByID(app.ProjectID)
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目静态信息失败")
+			"在数据库中查询项目信息失败")
 	}
 
 	var appCtrlProjectInfo gfApplication.AppCtrlProjectInfo
@@ -354,7 +356,7 @@ func (wf Workflow) ControllerProcessReject(form generalForm.GeneralForm, app app
 	// Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
 		//RecordID:           0,
-		ProjectID:          theProjectS.ProjectID,
+		ProjectID:          theProject.ProjectID,
 		ApplicationID:      app.ApplicationID,
 		OpsUserID:          userInfo.UserID,
 		OpsUserChineseName: userInfo.ChineseName,
@@ -385,18 +387,11 @@ func (wf Workflow) ControllerProcessReject(form generalForm.GeneralForm, app app
 }
 
 func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	theProjectS, err := wf.pdm.QueryStaticInfoByID(app.ProjectID)
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目静态信息失败")
-	}
-
-	theProjectD, err := wf.pdm.QueryDynamicInfoByID(app.ProjectID)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目动态信息失败")
+			"在数据库中查询项目信息失败")
 	}
 
 	var appCtrlProjectInfo gfApplication.AppCtrlProjectInfo
@@ -413,7 +408,7 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 	// Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
 		//RecordID:           0,
-		ProjectID:          theProjectS.ProjectID,
+		ProjectID:          theProject.ProjectID,
 		ApplicationID:      app.ApplicationID,
 		OpsUserID:          userInfo.UserID,
 		OpsUserChineseName: userInfo.ChineseName,
@@ -441,34 +436,28 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 	}
 
 	// Update Project
-	theProjectS.ProjectCode = appCtrlProjectInfo.ProjectCode
-	err = wf.pdm.UpdateStaticInfo(theProjectS)
+	ci := project.CodeInfo{
+		ProjectID:   theProject.ProjectID,
+		ProjectCode: appCtrlProjectInfo.ProjectCode,
+	}
+	err = wf.pdm.UpdateCodeInfo(ci)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("Update for Controller error: %v", err),
-			"无法为调度员在数据库中更新Project静态信息")
+			"无法为调度员在数据库中更新Project项目编码信息")
 	}
 
-	theProjectD.BasicStatus = project.BasicStatusEstablished
-
-	// application passed
-	var appNewProRes gfApplication.AppNewProRes
-	err = json.Unmarshal([]byte(app.BasicContent), &appNewProRes)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeServerInternalError,
-			fmt.Sprintf("app.BasicContent json Unmarshal to AppNewProRes error: %v", err),
-			"无法解析form.BasicContent的结构")
+	si := project.StatusInfo{
+		ProjectID:            theProject.ProjectID,
+		BasicStatus:          project.BasicStatusEstablished,
+		ComputingAllocStatus: project.ResNotYetAssigned,
+		StorageAllocStatus:   project.ResNotYetAssigned,
 	}
-	theProjectD.CpuNodesExpected = appNewProRes.CpuNodes
-	theProjectD.GpuNodesExpected = appNewProRes.GpuNodes
-	theProjectD.StorageSizeExpected = appNewProRes.StorageSize
-
-	err = wf.pdm.UpdateDynamicInfo(theProjectD)
+	err = wf.pdm.UpdateStatusInfo(si)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("Update for Controller error: %v", err),
-			"无法为调度员在数据库中更新Project动态信息")
+			"无法为调度员在数据库中更新Project状态信息")
 	}
-
 	return nil
 }

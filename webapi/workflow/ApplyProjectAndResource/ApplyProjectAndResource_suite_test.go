@@ -42,7 +42,7 @@ var _ = BeforeSuite(func() {
 	adb := applicationDB.NewApplicationPg(db, application.TableApp, application.TableAppOps)
 	adm, _ = applicationDM.NewMemoryMap(adb, theLogMap)
 
-	pdb := projectDB.NewProjectPg(db, project.TableStatic, project.TableDynamic)
+	pdb := projectDB.NewProjectPg(db, project.TableName)
 	pdm, _ = projectDM.NewMemoryMap(pdb, theLogMap)
 
 	gwf = ApplyProjectAndResource.NewWorkflow(adm, pdm)

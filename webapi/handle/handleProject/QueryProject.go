@@ -35,7 +35,7 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 
 	switch userLoginInfo.Role {
 	case user.RoleProjectChief:
-		pros, err := h.theProjectDM.QueryInfoByOwner(userLoginInfo.UserID)
+		pros, err := h.theProjectDM.QueryByOwner(userLoginInfo.UserID)
 		if err != nil {
 			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
@@ -52,7 +52,7 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			"msg":      "查询项目长相关申请单成功",
 		})
 	case user.RoleApprover:
-		pros, err := h.theProjectDM.QueryInfoByDepartmentCode(userLoginInfo.DepartmentCode)
+		pros, err := h.theProjectDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode)
 		if err != nil {
 			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,

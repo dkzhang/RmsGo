@@ -150,7 +150,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	/////////////////////////////////////////////////////////
 	// Project DB & DM
-	theInfras.TheProjectDB = projectDB.NewProjectPg(theInfras.TheDb, project.TableStatic, project.TableDynamic)
+	theInfras.TheProjectDB = projectDB.NewProjectPg(theInfras.TheDb, project.TableName)
 	theInfras.TheProjectDM, err = projectDM.NewMemoryMap(theInfras.TheProjectDB, theInfras.TheLogMap)
 	if err != nil {
 		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
