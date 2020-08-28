@@ -28,7 +28,7 @@ var _ = BeforeSuite(func() {
 
 	theLogMap := logMap.NewLogMap(`C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml`)
 
-	pdb := projectDB.NewProjectPg(db, project.TableStatic, project.TableDynamic)
+	pdb := projectDB.NewProjectPg(db, project.TableName)
 	var err error
 	pdm, err = projectDM.NewMemoryMap(pdb, theLogMap)
 	if err != nil {

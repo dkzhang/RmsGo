@@ -143,8 +143,8 @@ func (ppg ProjectPg) UpdateAllocInfo(ali project.AllocInfo) (err error) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-func (ppg ProjectPg) InnerArchiveProject(stnHistory string, dtnHistory string, projectID int) (err error) {
-	execCopy := fmt.Sprintf(`INSERT INTO %s SELECT * FROM %s WHERE project_id=$1`, stnHistory, ppg.TableName)
+func (ppg ProjectPg) InnerArchiveProject(historyTableName string, projectID int) (err error) {
+	execCopy := fmt.Sprintf(`INSERT INTO %s SELECT * FROM %s WHERE project_id=$1`, historyTableName, ppg.TableName)
 	execDel := fmt.Sprintf(`DELETE FROM %s WHERE project_id=$1`, ppg.TableName)
 
 	tx, err := ppg.TheDB.Begin()

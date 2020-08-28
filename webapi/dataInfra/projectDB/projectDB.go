@@ -22,7 +22,7 @@ type ProjectDB interface {
 	UpdateAllocInfo(ali project.AllocInfo) (err error)
 
 	// 同一数据库内归档
-	InnerArchiveProject(stnHistory string, dtnHistory string, projectID int) (err error)
+	InnerArchiveProject(historyTableName string, projectID int) (err error)
 }
 
 type ProjectHistoryDB interface {
