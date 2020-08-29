@@ -2,7 +2,6 @@ package ApplyChangeResource_test
 
 import (
 	"github.com/dkzhang/RmsGo/databaseInit"
-	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
@@ -35,7 +34,7 @@ func TestApplyChangeResource(t *testing.T) {
 var _ = BeforeSuite(func() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
 	db := databaseInit.ConnectToDatabase()
-	pgOps.CreateAllTable(db)
+	//pgOps.CreateAllTable(db)
 
 	theLogMap := logMap.NewLogMap(`C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml`)
 
@@ -45,7 +44,7 @@ var _ = BeforeSuite(func() {
 	pdb := projectDB.NewProjectPg(db, project.TableName)
 	pdm, _ = projectDM.NewMemoryMap(pdb, theLogMap)
 
-	gwf = ApplyChangeResource.NewWorkflow(adm, pdm)
+	gwf = ApplyChangeResource.NewWorkflow(adm, pdm, theLogMap)
 
 })
 

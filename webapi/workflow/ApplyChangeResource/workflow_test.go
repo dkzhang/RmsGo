@@ -58,135 +58,140 @@ var _ = Describe("Workflow", func() {
 		}
 	})
 
-	Describe("ProjectChief launch a new Project&Resource application", func() {
-		It("ProjectChief Apply 3 Application", func() {
-			for i := 1; i < 4; i++ {
+	Describe("ProjectChief launch a new Resource  Change application", func() {
+		It("ProjectChief Apply 3 Application No. 4,5,6", func() {
+			projectID := 1
 
-				anpr := gfApplication.AppNewProRes{
-					ProjectName: fmt.Sprintf("Project%d", i),
-					Resource: resource.Resource{
-						CpuNodes:    i * 20,
-						GpuNodes:    i * 10,
-						StorageSize: i * 50,
-					},
-					StartDate:      time.Now(),
-					TotalDaysApply: i * 10,
-					EndDate:        time.Now().AddDate(0, 0, i*10),
-				}
-				anprB, _ := json.Marshal(anpr)
-				anprJson := string(anprB)
-
-				form := generalForm.GeneralForm{
-					ProjectID:    0,
-					FormID:       0,
-					Type:         application.AppTypeNew,
-					Action:       application.AppActionSubmit,
-					BasicContent: anprJson,
-					ExtraContent: fmt.Sprintf("extra content %d", i),
-				}
-
-				appID, waErr := gwf.Apply(form, userPC)
-				Expect(waErr).ShouldNot(HaveOccurred())
-				By(fmt.Sprintf("Apply New ProRes Application %d success, got appID = %d", i, appID))
-
-				/////////////////////////////////
-				formB, _ := json.Marshal(form)
-				By(string(formB))
-				/////////////////////////////////
-
-				//Check After
-				appAfter, err := adm.QueryByID(appID)
-				Expect(err).ShouldNot(HaveOccurred())
-				By(fmt.Sprintf("QueryByID %d = %v", appID, appAfter))
-
-				proInfoAfter, err := pdm.QueryByID(appAfter.ProjectID)
-				Expect(err).ShouldNot(HaveOccurred())
-				Expect(proInfoAfter.ProjectName).Should(Equal(anpr.ProjectName))
-				By(fmt.Sprintf("QueryStaticInfoByID %d = %v", appAfter.ProjectID, proInfoAfter))
+			arc := gfApplication.AppResChange{
+				Resource: resource.Resource{
+					CpuNodes:    projectID * 21,
+					GpuNodes:    projectID * 11,
+					StorageSize: projectID * 51,
+				},
+				EndDate: time.Now().AddDate(0, 2, 0),
 			}
+			arcB, _ := json.Marshal(arc)
+			arcJson := string(arcB)
+
+			form := generalForm.GeneralForm{
+				ProjectID:    projectID,
+				FormID:       0,
+				Type:         application.AppTypeChange,
+				Action:       application.AppActionSubmit,
+				BasicContent: arcJson,
+				ExtraContent: fmt.Sprintf("extra content %d", projectID),
+			}
+
+			appID, waErr := gwf.Apply(form, userPC)
+			Expect(waErr).ShouldNot(HaveOccurred(), fmt.Sprintf("apply change for project %d error", projectID))
+			By(fmt.Sprintf("Apply New ProRes Application %d success, got appID = %d", projectID, appID))
+
+			/////////////////////////////////
+			formB, _ := json.Marshal(form)
+			By(string(formB))
+			/////////////////////////////////
+
+			//Check After
+			appAfter, err := adm.QueryByID(appID)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("QueryByID %d = %v", appID, appAfter))
+
+			proInfoAfter, err := pdm.QueryByID(appAfter.ProjectID)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("QueryProjectInfoByID %d = %v", appAfter.ProjectID, proInfoAfter))
 
 			appsAfter, err := adm.QueryAll(-1, -1)
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(len(appsAfter)).Should(Equal(3))
+			Expect(len(appsAfter)).Should(Equal(4))
 		})
 	})
 
 	Describe("Approver examine the new Project&Resource application, agree app1, reject app2", func() {
-		It("Approver query the application, agree app1", func() {
+		It("Approver query the application, agree project1~app4", func() {
+			appID := 4
+			projectID := 1
 			apps, err := adm.QueryByDepartmentCode(userApp.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("QueryByDepartmentCode len(apps) = %d", len(apps)))
 
-			app1, err := adm.QueryByID(1)
+			app4, err := adm.QueryByID(appID)
 			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("QueryByID 1 = %v", app1))
+			By(fmt.Sprintf("QueryByID %d = %v", appID, app4))
 
 			waErr := gwf.Process(generalForm.GeneralForm{
-				ProjectID:    1,
-				FormID:       1,
-				Type:         application.AppTypeNew,
+				ProjectID:    projectID,
+				FormID:       appID,
+				Type:         application.AppTypeChange,
 				Action:       1,
 				BasicContent: "",
 				ExtraContent: "",
-			}, app1, userApp)
+			}, app4, userApp)
 			Expect(waErr).Should(BeNil())
 		})
 
-		It("Approver query the application, reject app2", func() {
-			apps, err := adm.QueryByDepartmentCode(userApp.DepartmentCode, application.AppTypeALL, application.AppStatusALL)
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("QueryByDepartmentCode len(apps) = %d", len(apps)))
-
-			app2, err := adm.QueryByID(2)
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("QueryByID 2 = %v", app2))
-
-			waErr := gwf.Process(generalForm.GeneralForm{
-				ProjectID:    2,
-				FormID:       2,
-				Type:         application.AppTypeNew,
-				Action:       1,
-				BasicContent: "",
-				ExtraContent: "",
-			}, app2, userApp)
-			Expect(waErr).Should(BeNil())
-		})
+		//It("Approver query the application, reject project2~app5", func() {
+		//	appID := 5
+		//	projectID := 2
+		//	apps, err := adm.QueryByDepartmentCode(userApp.DepartmentCode, application.AppTypeALL, application.AppStatusALL)
+		//	Expect(err).ShouldNot(HaveOccurred())
+		//	By(fmt.Sprintf("QueryByDepartmentCode len(apps) = %d", len(apps)))
+		//
+		//	app, err := adm.QueryByID(appID)
+		//	Expect(err).ShouldNot(HaveOccurred())
+		//	By(fmt.Sprintf("QueryByID %d = %v", appID, app))
+		//
+		//	waErr := gwf.Process(generalForm.GeneralForm{
+		//		ProjectID:    projectID,
+		//		FormID:       appID,
+		//		Type:         application.AppTypeChange,
+		//		Action:       1,
+		//		BasicContent: "",
+		//		ExtraContent: "",
+		//	}, app, userApp)
+		//	Expect(waErr).Should(BeNil())
+		//})
 	})
 
-	Describe("Controller examine the new Project&Resource application, agree app1", func() {
-		It("Controller query the application, agree app1", func() {
-			appID := 1
+	//Describe("Controller examine the new Project&Resource application, agree app1", func() {
+	//	It("Controller query the application, agree app1", func() {
+	//		appID := 1
+	//
+	//		apps, err := adm.QueryByDepartmentCode(userApp.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		By(fmt.Sprintf("QueryByDepartmentCode len(apps) = %d", len(apps)))
+	//
+	//		app1, err := adm.QueryByID(appID)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		By(fmt.Sprintf("QueryByID 1 = %v", app1))
+	//
+	//		bcs := gfApplication.AppCtrlProjectInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
+	//		bcb, _ := json.Marshal(bcs)
+	//
+	//		waErr := gwf.Process(generalForm.GeneralForm{
+	//			ProjectID:    app1.ProjectID,
+	//			FormID:       app1.ApplicationID,
+	//			Type:         application.AppTypeNew,
+	//			Action:       1,
+	//			BasicContent: string(bcb),
+	//			ExtraContent: "",
+	//		}, app1, userCtrl)
+	//		Expect(waErr).Should(BeNil())
+	//
+	//		// Check After
+	//		app1After, err := adm.QueryByID(appID)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		Expect(app1After.Status).Should(Equal(application.AppStatusArchived))
+	//		By(fmt.Sprintf("QueryByID 1 = %v", app1After))
+	//
+	//		proInfo1After, err := pdm.QueryByID(app1.ProjectID)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		Expect(proInfo1After.ProjectCode).Should(Equal(bcs.ProjectCode))
+	//	})
+	//})
 
-			apps, err := adm.QueryByDepartmentCode(userApp.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("QueryByDepartmentCode len(apps) = %d", len(apps)))
-
-			app1, err := adm.QueryByID(appID)
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("QueryByID 1 = %v", app1))
-
-			bcs := gfApplication.AppCtrlProjectInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
-			bcb, _ := json.Marshal(bcs)
-
-			waErr := gwf.Process(generalForm.GeneralForm{
-				ProjectID:    app1.ProjectID,
-				FormID:       app1.ApplicationID,
-				Type:         application.AppTypeNew,
-				Action:       1,
-				BasicContent: string(bcb),
-				ExtraContent: "",
-			}, app1, userCtrl)
-			Expect(waErr).Should(BeNil())
-
-			// Check After
-			app1After, err := adm.QueryByID(appID)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(app1After.Status).Should(Equal(application.AppStatusArchived))
-			By(fmt.Sprintf("QueryByID 1 = %v", app1After))
-
-			proInfo1After, err := pdm.QueryByID(app1.ProjectID)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(proInfo1After.ProjectCode).Should(Equal(bcs.ProjectCode))
+	Describe("ProjectChief launch a new Resource  Change application", func() {
+		It("ProjectChief Apply 3 Application No. 4,5,6", func() {
+			By(fmt.Sprintf("%v%v", userApp, userCtrl))
 		})
 	})
 })

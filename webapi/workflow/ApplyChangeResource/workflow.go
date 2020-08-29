@@ -15,6 +15,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
+	"github.com/sirupsen/logrus"
 )
 
 type Workflow struct {
@@ -23,10 +24,11 @@ type Workflow struct {
 	theLogMap logMap.LogMap
 }
 
-func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workflow.GeneralWorkflow {
+func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm logMap.LogMap) workflow.GeneralWorkflow {
 	wf := Workflow{
-		adm: adm,
-		pdm: pdm,
+		adm:       adm,
+		pdm:       pdm,
+		theLogMap: lm,
 	}
 	applyMap := make(map[workflow.KeyTSRA]workflow.ApplyFunc)
 	processMap := make(map[workflow.KeyTSRA]workflow.ProcessFunc)
@@ -99,7 +101,12 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 			"查询项目信息失败")
 	}
 
-	permission := authProject.AuthorityCheck(wf.theLogMap, userInfo, pi, authApplication.OPS_RETRIEVE)
+	// ask permission for update project.
+	permission := authProject.AuthorityCheck(wf.theLogMap, userInfo, pi, authApplication.OPS_UPDATE)
+	//test
+	logrus.Infof("permission = %v, basic status = %d", permission, pi.BasicStatus)
+	logrus.Infof("project info = %v", pi)
+
 	if permission == false {
 		return -1, webapiError.WaErr(webapiError.TypeAuthorityError,
 			fmt.Sprintf("AuthorityCheck reject"),
