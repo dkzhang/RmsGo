@@ -1,9 +1,12 @@
-package ApplyProjectAndResource
+package ApplyChangeResource
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/myUtils/webapiError"
+	"github.com/dkzhang/RmsGo/webapi/authority/authApplication"
+	"github.com/dkzhang/RmsGo/webapi/authority/authProject"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
@@ -15,8 +18,9 @@ import (
 )
 
 type Workflow struct {
-	adm applicationDM.ApplicationDM
-	pdm projectDM.ProjectDM
+	adm       applicationDM.ApplicationDM
+	pdm       projectDM.ProjectDM
+	theLogMap logMap.LogMap
 }
 
 func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workflow.GeneralWorkflow {
@@ -29,7 +33,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 项目长首次提交
 	applyMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: 0,
 		UserRole:  user.RoleProjectChief,
 		Action:    application.AppActionSubmit,
@@ -37,7 +41,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 审批人通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
 		Action:    application.AppActionPass,
@@ -45,7 +49,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 审批人拒绝
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
 		Action:    application.AppActionReject,
@@ -53,7 +57,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 项目长重新提交
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusProjectChief,
 		UserRole:  user.RoleProjectChief,
 		Action:    application.AppActionSubmit,
@@ -61,7 +65,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 调度员通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,
 		Action:    application.AppActionPass,
@@ -69,7 +73,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 调度员拒绝
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,
 		Action:    application.AppActionReject,
@@ -80,56 +84,32 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 
-	var app gfApplication.AppNewProRes
+	var app gfApplication.AppResChange
 	err := json.Unmarshal(([]byte)(form.BasicContent), &app)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
 			"无法解析申请表单的BasicContent的json结构")
 	}
-
-	// (1) Insert New Project
-	theProject := project.Info{
-		//ProjectID:            0,
-		ProjectName: app.ProjectName,
-		//ProjectCode:          "",
-		DepartmentCode:   userInfo.DepartmentCode,
-		Department:       userInfo.Department,
-		ChiefID:          userInfo.UserID,
-		ChiefChineseName: userInfo.ChineseName,
-		ExtraInfo:        form.ExtraContent,
-
-		BasicStatus:          project.BasicStatusApplying,
-		ComputingAllocStatus: project.ResNotYetAssigned,
-		StorageAllocStatus:   project.ResNotYetAssigned,
-
-		StartDate:           app.StartDate,
-		TotalDaysApply:      app.TotalDaysApply,
-		EndReminderAt:       app.EndDate,
-		CpuNodesExpected:    0,
-		GpuNodesExpected:    0,
-		StorageSizeExpected: 0,
-
-		CpuNodesAcquired:    0,
-		GpuNodesAcquired:    0,
-		StorageSizeAcquired: 0,
-		CpuNodesMap:         "",
-		GpuNodesMap:         "",
-		StorageAllocInfo:    "",
+	// (1) Query Project Info from DM and Check auth permission
+	pi, err := wf.pdm.QueryByID(form.ProjectID)
+	if err != nil {
+		return -1, webapiError.WaErr(webapiError.TypeNotFound,
+			fmt.Sprintf("Query Project Info ByID (id=%d)  error: %v", form.ProjectID, err),
+			"查询项目信息失败")
 	}
 
-	projectID, err := wf.pdm.Insert(theProject)
-
-	if err != nil {
-		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("insert project info error: %v", err),
-			"在数据库中新建项目记录失败")
+	permission := authProject.AuthorityCheck(wf.theLogMap, userInfo, pi, authApplication.OPS_RETRIEVE)
+	if permission == false {
+		return -1, webapiError.WaErr(webapiError.TypeAuthorityError,
+			fmt.Sprintf("AuthorityCheck reject"),
+			"当前用户无权访问该项目")
 	}
 
 	// (2) Insert New Application
 	theApplication := application.Application{
 		//ApplicationID:            0,
-		ProjectID:                projectID,
+		ProjectID:                form.ProjectID,
 		Type:                     form.Type,
 		Status:                   application.AppStatusApprover,
 		ApplicantUserID:          userInfo.UserID,
@@ -149,7 +129,7 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 	// (3) Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
 		//RecordID:           0,
-		ProjectID:          projectID,
+		ProjectID:          form.ProjectID,
 		ApplicationID:      appID,
 		OpsUserID:          userInfo.UserID,
 		OpsUserChineseName: userInfo.ChineseName,
@@ -283,6 +263,7 @@ func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app
 	app.Status = application.AppStatusApprover
 	app.BasicContent = form.BasicContent
 	app.ExtraContent = form.ExtraContent
+
 	err = wf.adm.Update(app)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
