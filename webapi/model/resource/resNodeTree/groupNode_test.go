@@ -2,7 +2,7 @@ package resNodeTree_test
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/webapi/model/resNodeTree"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

@@ -24,6 +24,12 @@ func LoadTreeFromJson(str string) (t Tree, err error) {
 	return t, nil
 }
 
+// syn the nodes info from DB to the Tree struct
+func SynchronizeNodesInfo(t *Tree, nodes []Node) (err error) {
+	// TODO
+	return fmt.Errorf("not accomplished")
+}
+
 func genNodesMap(g *Group, nm map[int]*Node) (map[int]*Node, error) {
 	var err error
 	if g.Nodes != nil {
