@@ -1,4 +1,4 @@
-package resNodeTree
+package groupNode
 
 import (
 	"encoding/json"

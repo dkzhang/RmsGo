@@ -1,7 +1,7 @@
-package resNodeTree
+package groupNode
 
 // make new Group, but keep the *Node pointer
-func copyGroup(g *Group) (ng *Group) {
+func CopyGroup(g *Group) (ng *Group) {
 	ng = &Group{
 		ID:             g.ID,
 		Name:           g.Name,
@@ -23,7 +23,7 @@ func copyGroup(g *Group) (ng *Group) {
 	// recursion copy SubGroups Array
 	if g.SubGroups != nil {
 		for _, sg := range g.SubGroups {
-			ng.SubGroups = append(ng.SubGroups, copyGroup(sg))
+			ng.SubGroups = append(ng.SubGroups, CopyGroup(sg))
 		}
 	}
 

@@ -1,6 +1,7 @@
 package resNodeTree
 
 import (
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
 	"github.com/golang-collections/collections/stack"
 )
 
@@ -23,7 +24,7 @@ func FiltrateTree(t *Tree, projectID int) (nt *Tree) {
 
 		if gi.index == 0 {
 			if gi.group.Nodes != nil {
-				nodes := make([]*Node, 0, len(gi.group.Nodes))
+				nodes := make([]*groupNode.Node, 0, len(gi.group.Nodes))
 				for _, node := range gi.group.Nodes {
 					if node.ProjectID == 0 || node.ProjectID == projectID {
 						// reserve this node
@@ -49,7 +50,7 @@ func FiltrateTree(t *Tree, projectID int) (nt *Tree) {
 				})
 			} else {
 				//At the end of SubGroups
-				groups := make([]*Group, 0, len(gi.group.SubGroups))
+				groups := make([]*groupNode.Group, 0, len(gi.group.SubGroups))
 				for _, sg := range gi.group.SubGroups {
 					if len(sg.Nodes) != 0 || len(sg.SubGroups) != 0 {
 						groups = append(groups, sg)

@@ -2,17 +2,18 @@ package resNodeTree
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
 	"github.com/golang-collections/collections/stack"
 )
 
 func LoadTreeFromJson(str string) (t Tree, err error) {
-	t.RootGroup, err = LoadGroupFromJson(str)
+	t.RootGroup, err = groupNode.LoadGroupFromJson(str)
 	if err != nil {
 		return Tree{}, fmt.Errorf("LoadFromJson error since LoadGroupFromJson error: %v", err)
 	}
 
 	//GenNodesMap
-	t.NodesMap = make(map[int]*Node)
+	t.NodesMap = make(map[int]*groupNode.Node)
 	//t.NodesMap, err = genNodesMap(&(t.RootGroup), t.NodesMap)
 	t.NodesMap, err = genNodesMapIteration(&(t.RootGroup))
 	if err != nil {
@@ -22,7 +23,7 @@ func LoadTreeFromJson(str string) (t Tree, err error) {
 }
 
 // syn the nodes info from DB to the Tree struct
-func SynchronizeNodesInfo(t *Tree, nodes []Node) (err error) {
+func SynchronizeNodesInfo(t *Tree, nodes []groupNode.Node) (err error) {
 	for _, n := range nodes {
 		if _, ok := t.NodesMap[n.ID]; ok {
 			t.NodesMap[n.ID].Name = n.Name
@@ -36,12 +37,12 @@ func SynchronizeNodesInfo(t *Tree, nodes []Node) (err error) {
 
 // generate a NodesMap from the Tree By iteration
 type groupAndIndex struct {
-	group *Group
+	group *groupNode.Group
 	index int
 }
 
-func genNodesMapIteration(g *Group) (map[int]*Node, error) {
-	nodesMap := make(map[int]*Node)
+func genNodesMapIteration(g *groupNode.Group) (map[int]*groupNode.Node, error) {
+	nodesMap := make(map[int]*groupNode.Node)
 	giStack := stack.New()
 
 	giStack.Push(groupAndIndex{
@@ -86,7 +87,7 @@ func genNodesMapIteration(g *Group) (map[int]*Node, error) {
 }
 
 // generate a NodesMap from the Tree
-func genNodesMap(g *Group, nm map[int]*Node) (map[int]*Node, error) {
+func genNodesMap(g *groupNode.Group, nm map[int]*groupNode.Node) (map[int]*groupNode.Node, error) {
 	var err error
 	if g.Nodes != nil {
 		for _, node := range g.Nodes {

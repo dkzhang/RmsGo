@@ -1,4 +1,4 @@
-package resNodeTree
+package groupNode
 
 func CountGroup(g *Group) {
 	if g == nil {
