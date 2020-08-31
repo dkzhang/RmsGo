@@ -22,6 +22,18 @@ type Node struct {
 	AllocatedTime time.Time `db:"allocated_time" json:"allocated_time"`
 }
 
+var SchemaInfo = `
+		CREATE TABLE %s (
+    		node_id int PRIMARY KEY,
+			node_name varchar(256),
+			node_status int,
+			description varchar(256),
+			project_id int,
+			allocated_time TIMESTAMP WITH TIME ZONE
+		);
+		`
+var TableName = "res_node_info"
+
 ///////////////////////////////////////////////////////////////////////////////
 
 const (
