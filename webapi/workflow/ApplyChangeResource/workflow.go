@@ -1,9 +1,12 @@
-package ApplyProjectAndResource
+package ApplyChangeResource
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/myUtils/webapiError"
+	"github.com/dkzhang/RmsGo/webapi/authority/authApplication"
+	"github.com/dkzhang/RmsGo/webapi/authority/authProject"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
@@ -12,24 +15,27 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
+	"github.com/sirupsen/logrus"
 )
 
 type Workflow struct {
-	adm applicationDM.ApplicationDM
-	pdm projectDM.ProjectDM
+	adm       applicationDM.ApplicationDM
+	pdm       projectDM.ProjectDM
+	theLogMap logMap.LogMap
 }
 
-func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workflow.GeneralWorkflow {
+func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm logMap.LogMap) workflow.GeneralWorkflow {
 	wf := Workflow{
-		adm: adm,
-		pdm: pdm,
+		adm:       adm,
+		pdm:       pdm,
+		theLogMap: lm,
 	}
 	applyMap := make(map[workflow.KeyTSRA]workflow.ApplyFunc)
 	processMap := make(map[workflow.KeyTSRA]workflow.ProcessFunc)
 
 	// 项目长首次提交
 	applyMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: 0,
 		UserRole:  user.RoleProjectChief,
 		Action:    application.AppActionSubmit,
@@ -37,7 +43,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 审批人通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
 		Action:    application.AppActionPass,
@@ -45,7 +51,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 审批人拒绝
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
 		Action:    application.AppActionReject,
@@ -53,7 +59,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 项目长重新提交
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusProjectChief,
 		UserRole:  user.RoleProjectChief,
 		Action:    application.AppActionSubmit,
@@ -61,7 +67,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 调度员通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,
 		Action:    application.AppActionPass,
@@ -69,7 +75,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 	// 调度员拒绝
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeNew,
+		AppType:   application.AppTypeChange,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,
 		Action:    application.AppActionReject,
@@ -80,56 +86,44 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 
 func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 
-	var app gfApplication.AppNewProRes
-	app, err := gfApplication.JsonUnmarshalAppNewProRes(form.BasicContent)
+	var app gfApplication.AppResChange
+	err := json.Unmarshal(([]byte)(form.BasicContent), &app)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
 			"无法解析申请表单的BasicContent的json结构")
 	}
-
-	// (1) Insert New Project
-	theProject := project.Info{
-		//ProjectID:            0,
-		ProjectName: app.ProjectName,
-		//ProjectCode:          "",
-		DepartmentCode:   userInfo.DepartmentCode,
-		Department:       userInfo.Department,
-		ChiefID:          userInfo.UserID,
-		ChiefChineseName: userInfo.ChineseName,
-		ExtraInfo:        form.ExtraContent,
-
-		BasicStatus:          project.BasicStatusApplying,
-		ComputingAllocStatus: project.ResNotYetAssigned,
-		StorageAllocStatus:   project.ResNotYetAssigned,
-
-		StartDate:           app.StartDate,
-		TotalDaysApply:      app.TotalDaysApply,
-		EndReminderAt:       app.EndDate,
-		CpuNodesExpected:    0,
-		GpuNodesExpected:    0,
-		StorageSizeExpected: 0,
-
-		CpuNodesAcquired:    0,
-		GpuNodesAcquired:    0,
-		StorageSizeAcquired: 0,
-		CpuNodesMap:         "",
-		GpuNodesMap:         "",
-		StorageAllocInfo:    "",
+	// (1) Query Project Info from DM and Check auth permission
+	pi, err := wf.pdm.QueryByID(form.ProjectID)
+	if err != nil {
+		return -1, webapiError.WaErr(webapiError.TypeNotFound,
+			fmt.Sprintf("Query Project Info ByID (id=%d)  error: %v", form.ProjectID, err),
+			"查询项目信息失败")
 	}
 
-	projectID, err := wf.pdm.Insert(theProject)
+	// ask permission for update project.
+	permission := authProject.AuthorityCheck(wf.theLogMap, userInfo, pi, authApplication.OPS_UPDATE)
+	//test
+	logrus.Infof("permission = %v, basic status = %d", permission, pi.BasicStatus)
+	logrus.Infof("project info = %v", pi)
 
-	if err != nil {
-		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("insert project info error: %v", err),
-			"在数据库中新建项目记录失败")
+	if permission == false {
+		return -1, webapiError.WaErr(webapiError.TypeAuthorityError,
+			fmt.Sprintf("AuthorityCheck reject"),
+			"当前用户无权访问该项目")
+	}
+	//compare res alloc
+	if app.CpuNodes < pi.CpuNodesAcquired || app.GpuNodes < pi.GpuNodesAcquired || app.StorageSize < pi.StorageSizeAcquired {
+		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("Res after change master greater than acquired: Expect CPU %d>%d, GPU %d>%d, Storage %d>%d",
+				app.CpuNodes, pi.CpuNodesAcquired, app.GpuNodes, pi.GpuNodesAcquired, app.StorageSize, pi.StorageSizeAcquired),
+			"变更后的资源数量应不少于已获得的资源数量")
 	}
 
 	// (2) Insert New Application
 	theApplication := application.Application{
 		//ApplicationID:            0,
-		ProjectID:                projectID,
+		ProjectID:                form.ProjectID,
 		Type:                     form.Type,
 		Status:                   application.AppStatusApprover,
 		ApplicantUserID:          userInfo.UserID,
@@ -149,7 +143,7 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 	// (3) Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
 		//RecordID:           0,
-		ProjectID:          projectID,
+		ProjectID:          form.ProjectID,
 		ApplicationID:      appID,
 		OpsUserID:          userInfo.UserID,
 		OpsUserChineseName: userInfo.ChineseName,
@@ -245,25 +239,44 @@ func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app
 }
 
 func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	theProject, err := wf.pdm.QueryByID(app.ProjectID)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目信息失败")
-	}
-
-	var appNewProRes gfApplication.AppNewProRes
-	appNewProRes, err = gfApplication.JsonUnmarshalAppNewProRes(form.BasicContent)
+	var appRC gfApplication.AppResChange
+	err := json.Unmarshal(([]byte)(form.BasicContent), &app)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
-			"无法解析form.BasicContent的结构")
+			"无法解析申请表单的BasicContent的json结构")
+	}
+	// (1) Query Project Info from DM and Check auth permission
+	pi, err := wf.pdm.QueryByID(form.ProjectID)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeNotFound,
+			fmt.Sprintf("Query Project Info ByID (id=%d)  error: %v", form.ProjectID, err),
+			"查询项目信息失败")
+	}
+
+	// ask permission for update project.
+	permission := authProject.AuthorityCheck(wf.theLogMap, userInfo, pi, authApplication.OPS_UPDATE)
+	//test
+	logrus.Infof("permission = %v, basic status = %d", permission, pi.BasicStatus)
+	logrus.Infof("project info = %v", pi)
+
+	if permission == false {
+		return webapiError.WaErr(webapiError.TypeAuthorityError,
+			fmt.Sprintf("AuthorityCheck reject"),
+			"当前用户无权访问该项目")
+	}
+	//compare res alloc
+	if appRC.CpuNodes < pi.CpuNodesAcquired || appRC.GpuNodes < pi.GpuNodesAcquired || appRC.StorageSize < pi.StorageSizeAcquired {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("Res after change master greater than acquired: Expect CPU %d>%d, GPU %d>%d, Storage %d>%d",
+				appRC.CpuNodes, pi.CpuNodesAcquired, appRC.GpuNodes, pi.GpuNodesAcquired, appRC.StorageSize, pi.StorageSizeAcquired),
+			"变更后的资源数量应不少于已获得的资源数量")
 	}
 
 	// Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
 		//RecordID:           0,
-		ProjectID:          theProject.ProjectID,
+		ProjectID:          pi.ProjectID,
 		ApplicationID:      app.ApplicationID,
 		OpsUserID:          userInfo.UserID,
 		OpsUserChineseName: userInfo.ChineseName,
@@ -283,41 +296,12 @@ func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app
 	app.Status = application.AppStatusApprover
 	app.BasicContent = form.BasicContent
 	app.ExtraContent = form.ExtraContent
+
 	err = wf.adm.Update(app)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("Update for ProjectChief error: %v", err),
 			"无法为项目长在数据库中更新Application")
-	}
-
-	// Update Project
-	bi := project.BasicInfo{
-		ProjectID:   theProject.ProjectID,
-		ProjectName: appNewProRes.ProjectName,
-		ExtraInfo:   form.ExtraContent,
-	}
-	err = wf.pdm.UpdateBasicInfo(bi)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("Update for ProjectChief error: %v", err),
-			"无法为项目长在数据库中更新Project基本信息")
-	}
-
-	ai := project.ApplyInfo{
-		ProjectID:           theProject.ProjectID,
-		StartDate:           appNewProRes.StartDate,
-		TotalDaysApply:      appNewProRes.TotalDaysApply,
-		EndReminderAt:       appNewProRes.EndDate,
-		CpuNodesExpected:    appNewProRes.CpuNodes,
-		GpuNodesExpected:    appNewProRes.GpuNodes,
-		StorageSizeExpected: appNewProRes.StorageSize,
-	}
-
-	err = wf.pdm.UpdateApplyInfo(ai)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("Update for ProjectChief error: %v", err),
-			"无法为项目长在数据库中更新Project申请信息")
 	}
 
 	return nil
@@ -381,16 +365,13 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"在数据库中查询项目信息失败")
 	}
 
-	var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
-	err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeBadRequest,
-			fmt.Sprintf("json Unmarshal to CtrlApprovalInfo error: %v", err),
-			"无法解析form.BasicContent的结构")
-	}
-
-	// Check Action value
-	// Pass
+	//var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
+	//err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
+	//if err != nil {
+	//	return webapiError.WaErr(webapiError.TypeBadRequest,
+	//		fmt.Sprintf("json Unmarshal to CtrlApprovalInfo error: %v", err),
+	//		"无法解析form.BasicContent的结构")
+	//}
 
 	// Insert New ApplicationOps
 	theAppOpsRecord := application.AppOpsRecord{
@@ -421,29 +402,30 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 	}
 
 	// Update Project
-	ci := project.CodeInfo{
-		ProjectID:   theProject.ProjectID,
-		ProjectCode: appCtrlProjectInfo.ProjectCode,
+	var appRC gfApplication.AppResChange
+	err = json.Unmarshal(([]byte)(app.BasicContent), &app)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
+			"无法解析申请表单的BasicContent的json结构")
 	}
-	err = wf.pdm.UpdateCodeInfo(ci)
+
+	ai := project.ApplyInfo{
+		ProjectID:           theProject.ProjectID,
+		StartDate:           theProject.StartDate,
+		TotalDaysApply:      theProject.TotalDaysApply + int(appRC.EndDate.Sub(theProject.EndReminderAt).Hours()/24),
+		EndReminderAt:       appRC.EndDate,
+		CpuNodesExpected:    appRC.CpuNodes,
+		GpuNodesExpected:    appRC.GpuNodes,
+		StorageSizeExpected: appRC.StorageSize,
+	}
+
+	err = wf.pdm.UpdateApplyInfo(ai)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
 			fmt.Sprintf("Update for Controller error: %v", err),
-			"无法为调度员在数据库中更新Project项目编码信息")
+			"无法为调度员在数据库中更新Project项目变更信息")
 	}
 
-	si := project.StatusInfo{
-		ProjectID:            theProject.ProjectID,
-		BasicStatus:          project.BasicStatusEstablished,
-		ComputingAllocStatus: project.ResNotYetAssigned,
-		StorageAllocStatus:   project.ResNotYetAssigned,
-
-	}
-	err = wf.pdm.UpdateStatusInfo(si)
-	if err != nil {
-		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("Update for Controller error: %v", err),
-			"无法为调度员在数据库中更新Project状态信息")
-	}
 	return nil
 }

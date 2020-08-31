@@ -15,8 +15,8 @@ require (
 	github.com/lestrrat-go/strftime v1.0.1 // indirect
 	github.com/lib/pq v1.5.2
 	github.com/myesui/uuid v1.0.0 // indirect
-	github.com/onsi/ginkgo v1.12.1
-	github.com/onsi/gomega v1.10.0
+	github.com/onsi/ginkgo v1.14.0
+	github.com/onsi/gomega v1.10.1
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/sirupsen/logrus v1.6.0
@@ -25,7 +25,8 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.180+incompatible
 	github.com/twinj/uuid v1.0.0
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.3.0
 )

@@ -1,8 +1,7 @@
-package ApplyProjectAndResource_test
+package ApplyChangeResource_test
 
 import (
 	"github.com/dkzhang/RmsGo/databaseInit"
-	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
@@ -11,7 +10,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
-	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
+	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyChangeResource"
 	"os"
 	"testing"
 
@@ -27,15 +26,15 @@ var pdb projectDB.ProjectDB
 
 var gwf workflow.GeneralWorkflow
 
-func TestApplyProjectAndResource(t *testing.T) {
+func TestApplyChangeResource(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ApplyProjectAndResource Suite")
+	RunSpecs(t, "ApplyChangeResource Suite")
 }
 
 var _ = BeforeSuite(func() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
 	db := databaseInit.ConnectToDatabase()
-	pgOps.CreateAllTable(db)
+	//pgOps.CreateAllTable(db)
 
 	theLogMap := logMap.NewLogMap(`C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml`)
 
@@ -45,7 +44,7 @@ var _ = BeforeSuite(func() {
 	pdb := projectDB.NewProjectPg(db, project.TableName)
 	pdm, _ = projectDM.NewMemoryMap(pdb, theLogMap)
 
-	gwf = ApplyProjectAndResource.NewWorkflow(adm, pdm)
+	gwf = ApplyChangeResource.NewWorkflow(adm, pdm, theLogMap)
 
 })
 

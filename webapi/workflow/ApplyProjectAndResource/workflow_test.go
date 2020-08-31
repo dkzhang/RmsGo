@@ -6,7 +6,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/gfApplication"
-	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/resource"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
@@ -99,10 +98,10 @@ var _ = Describe("Workflow", func() {
 				Expect(err).ShouldNot(HaveOccurred())
 				By(fmt.Sprintf("QueryByID %d = %v", appID, appAfter))
 
-				proStaticAfter, err := pdm.QueryStaticInfoByID(appAfter.ProjectID)
+				proInfoAfter, err := pdm.QueryByID(appAfter.ProjectID)
 				Expect(err).ShouldNot(HaveOccurred())
-				Expect(proStaticAfter.ProjectName).Should(Equal(anpr.ProjectName))
-				By(fmt.Sprintf("QueryStaticInfoByID %d = %v", appAfter.ProjectID, proStaticAfter))
+				Expect(proInfoAfter.ProjectName).Should(Equal(anpr.ProjectName))
+				By(fmt.Sprintf("QueryStaticInfoByID %d = %v", appAfter.ProjectID, proInfoAfter))
 			}
 
 			appsAfter, err := adm.QueryAll(-1, -1)
@@ -165,7 +164,7 @@ var _ = Describe("Workflow", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("QueryByID 1 = %v", app1))
 
-			bcs := gfApplication.AppCtrlProjectInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
+			bcs := gfApplication.CtrlApprovalInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
 			bcb, _ := json.Marshal(bcs)
 
 			waErr := gwf.Process(generalForm.GeneralForm{
@@ -184,13 +183,9 @@ var _ = Describe("Workflow", func() {
 			Expect(app1After.Status).Should(Equal(application.AppStatusArchived))
 			By(fmt.Sprintf("QueryByID 1 = %v", app1After))
 
-			proStatic1After, err := pdm.QueryStaticInfoByID(app1.ProjectID)
+			proInfo1After, err := pdm.QueryByID(app1.ProjectID)
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(proStatic1After.ProjectCode).Should(Equal(bcs.ProjectCode))
-
-			proDynamic1After, err := pdm.QueryDynamicInfoByID(app1.ProjectID)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(proDynamic1After.BasicStatus).Should(Equal(project.BasicStatusEstablished))
+			Expect(proInfo1After.ProjectCode).Should(Equal(bcs.ProjectCode))
 		})
 	})
 })

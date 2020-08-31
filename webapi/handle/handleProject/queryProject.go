@@ -1,13 +1,18 @@
 package handleProject
 
 import (
+	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
+	"github.com/dkzhang/RmsGo/webapi/authority/authApplication"
+	"github.com/dkzhang/RmsGo/webapi/authority/authProject"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
+	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
+	"strconv"
 )
 
 type HandleProject struct {
@@ -35,7 +40,7 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 
 	switch userLoginInfo.Role {
 	case user.RoleProjectChief:
-		pros, err := h.theProjectDM.QueryInfoByOwner(userLoginInfo.UserID)
+		pros, err := h.theProjectDM.QueryByOwner(userLoginInfo.UserID)
 		if err != nil {
 			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
@@ -52,7 +57,7 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			"msg":      "查询项目长相关申请单成功",
 		})
 	case user.RoleApprover:
-		pros, err := h.theProjectDM.QueryInfoByDepartmentCode(userLoginInfo.DepartmentCode)
+		pros, err := h.theProjectDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode)
 		if err != nil {
 			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
 				"userID": userLoginInfo.UserID,
@@ -99,6 +104,60 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 	}
 }
 
-//func (h HandleProject) RetrieveByID(c *gin.Context) {
-//
-//}
+func (h HandleProject) RetrieveByID(c *gin.Context) {
+	userLoginInfo, err := h.theExtractor.Extract(c)
+	if err != nil {
+		return
+	}
+
+	pi, err := h.extractAccessedProject(c)
+	if err != nil {
+		return
+	}
+
+	permission := authProject.AuthorityCheck(h.theLogMap, userLoginInfo, pi, authApplication.OPS_RETRIEVE)
+	if permission == true {
+		c.JSON(http.StatusOK, gin.H{
+			"pi":  pi,
+			"msg": "查询成功",
+		})
+		return
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "无权访问",
+		})
+		return
+	}
+}
+
+func (h HandleProject) extractAccessedProject(c *gin.Context) (pi project.Info, err error) {
+	idStr := c.Param("id")
+	pid, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"idStr": idStr,
+			"error": err,
+		}).Error("get Project ID from gin.Context failed.")
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "错误的Request：拟操作的Project ID无效",
+		})
+		return project.Info{},
+			fmt.Errorf("get Project ID from gin.Context failed: %v", err)
+	}
+
+	pi, err = h.theProjectDM.QueryByID(pid)
+	if err != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"pid": pid,
+		}).Error("ProjectDM.QueryByID (using pid from gin.Context) failed.")
+
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "无法找到该申请表单",
+		})
+		return project.Info{},
+			fmt.Errorf("ProjectDM.QueryByID (using pid from gin.Context) error: %v", err)
+	}
+	return pi, nil
+}

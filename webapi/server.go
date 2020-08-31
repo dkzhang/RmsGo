@@ -9,6 +9,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
+	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyChangeResource"
 	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -30,6 +31,8 @@ func Serve() {
 		infra.TheExtractor, infra.TheLogMap)
 	theHandleApp.RegisterWorkflow(application.AppTypeNew,
 		ApplyProjectAndResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM))
+	theHandleApp.RegisterWorkflow(application.AppTypeChange,
+		ApplyChangeResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheLogMap))
 
 	theHandleProject := handleProject.NewHandleProject(infra.TheProjectDM,
 		infra.TheExtractor, infra.TheLogMap)

@@ -24,7 +24,7 @@ var _ = BeforeSuite(func() {
 	db := databaseInit.ConnectToDatabase()
 	pgOps.CreateAllTable(db)
 
-	pdb = projectDB.NewProjectPg(db, project.TableStatic, project.TableDynamic)
+	pdb = projectDB.NewProjectPg(db, project.TableName)
 })
 
 var _ = AfterSuite(func() {

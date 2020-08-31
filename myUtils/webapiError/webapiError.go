@@ -35,6 +35,7 @@ func WaErr(et int, ei string, m string) errStruct {
 const (
 	TypeBadRequest          = 400
 	TypeDatabaseError       = 404
+	TypeNotFound            = 404
 	TypeAuthorityError      = 403
 	TypeServerInternalError = 500
 	TypeNotYetImplemented   = 500
