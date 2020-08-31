@@ -315,11 +315,11 @@ func (wf Workflow) ControllerProcessReject(form generalForm.GeneralForm, app app
 			"在数据库中查询项目信息失败")
 	}
 
-	var appCtrlProjectInfo gfApplication.AppCtrlProjectInfo
+	var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
 	err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
-			fmt.Sprintf("json Unmarshal to AppCtrlProjectInfo error: %v", err),
+			fmt.Sprintf("json Unmarshal to CtrlApprovalInfo error: %v", err),
 			"无法解析form.BasicContent的结构")
 	}
 
@@ -365,11 +365,11 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"在数据库中查询项目信息失败")
 	}
 
-	//var appCtrlProjectInfo gfApplication.AppCtrlProjectInfo
+	//var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
 	//err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
 	//if err != nil {
 	//	return webapiError.WaErr(webapiError.TypeBadRequest,
-	//		fmt.Sprintf("json Unmarshal to AppCtrlProjectInfo error: %v", err),
+	//		fmt.Sprintf("json Unmarshal to CtrlApprovalInfo error: %v", err),
 	//		"无法解析form.BasicContent的结构")
 	//}
 
