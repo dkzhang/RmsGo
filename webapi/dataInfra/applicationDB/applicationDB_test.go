@@ -70,9 +70,9 @@ var _ = Describe("ApplicationDB", func() {
 						GpuNodes:    i * 20,
 						StorageSize: i * 30,
 					},
-					StartDate:      time.Now(),
-					TotalDaysApply: i * 10,
-					EndDate:        time.Now().AddDate(0, 0, i*10),
+					StartDateStr:   "2020-08-17",
+					TotalDaysApply: 10,
+					EndDateStr:     "2020-08-27",
 				}
 				bcb, _ := json.Marshal(bcs)
 				apps[i-1] = application.Application{
@@ -261,8 +261,7 @@ var _ = Describe("ApplicationDB", func() {
 			Expect(err).ShouldNot(HaveOccurred(), "InsertAppOps error: %v", err)
 			By(fmt.Sprintf("InsertAppOps success, got ops record ID = %d", recordID))
 
-			var appNewProRes gfApplication.AppNewProRes
-			err = json.Unmarshal([]byte(app.BasicContent), &appNewProRes)
+			appNewProRes, err := gfApplication.JsonUnmarshalAppNewProRes(app.BasicContent)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("Unmarshal AppNewProRes: %v", appNewProRes))
 
