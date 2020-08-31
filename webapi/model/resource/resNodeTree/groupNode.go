@@ -1,5 +1,7 @@
 package resNodeTree
 
+import "time"
+
 type Group struct {
 	ID             int         `json:"group_id"`
 	Name           string      `json:"group_name"`
@@ -12,11 +14,12 @@ type Group struct {
 }
 
 type Node struct {
-	ID          int    `db:"node_id" json:"node_id"`
-	Name        string `db:"node_name" json:"node_name"`
-	Status      int    `db:"node_status" json:"node_status"`
-	Description string `db:"description" json:"description"`
-	ProjectID   int    `db:"project_id" json:"project_id"`
+	ID            int       `db:"node_id" json:"node_id"`
+	Name          string    `db:"node_name" json:"node_name"`
+	Status        int       `db:"node_status" json:"node_status"`
+	Description   string    `db:"description" json:"description"`
+	ProjectID     int       `db:"project_id" json:"project_id"`
+	AllocatedTime time.Time `db:"allocated_time" json:"allocated_time"`
 }
 
 ///////////////////////////////////////////////////////////////////////////////

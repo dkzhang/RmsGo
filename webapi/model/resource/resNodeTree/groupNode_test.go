@@ -11,16 +11,16 @@ var _ = Describe("GroupNode", func() {
 	var rootGroup resNodeTree.Group
 
 	BeforeEach(func() {
-		node1 := resNodeTree.Node{ID: 1, Status: 4}
-		node2 := resNodeTree.Node{ID: 2, Status: 1}
-		node3 := resNodeTree.Node{ID: 3, Status: 1}
-		node4 := resNodeTree.Node{ID: 4, Status: 4}
-		node5 := resNodeTree.Node{ID: 5, Status: 1}
-		node6 := resNodeTree.Node{ID: 6, Status: 4}
-		node7 := resNodeTree.Node{ID: 7, Status: 4}
-		node8 := resNodeTree.Node{ID: 8, Status: 1}
-		node9 := resNodeTree.Node{ID: 9, Status: 4}
-		node10 := resNodeTree.Node{ID: 10, Status: 4}
+		node1 := resNodeTree.Node{ID: 1, Name: "Node1", Status: 4, ProjectID: 2}
+		node2 := resNodeTree.Node{ID: 2, Name: "Node2", Status: 1, ProjectID: 2}
+		node3 := resNodeTree.Node{ID: 3, Name: "Node3", Status: 1, ProjectID: 3}
+		node4 := resNodeTree.Node{ID: 4, Name: "Node4", Status: 4, ProjectID: 1}
+		node5 := resNodeTree.Node{ID: 5, Name: "Node5", Status: 1, ProjectID: 3}
+		node6 := resNodeTree.Node{ID: 6, Name: "Node6", Status: 4, ProjectID: 1}
+		node7 := resNodeTree.Node{ID: 7, Name: "Node7", Status: 4, ProjectID: 2}
+		node8 := resNodeTree.Node{ID: 8, Name: "Node8", Status: 1, ProjectID: 0}
+		node9 := resNodeTree.Node{ID: 9, Name: "Node9", Status: 4, ProjectID: 0}
+		node10 := resNodeTree.Node{ID: 10, Name: "Node10", Status: 4, ProjectID: 1}
 
 		Group101 := resNodeTree.Group{
 			ID:    101,
@@ -64,136 +64,45 @@ var _ = Describe("GroupNode", func() {
 			By(fmt.Sprintf("strJson = %s", strJson))
 
 		})
+	})
 
-		It("Load from json", func() {
-			strJson := ` 
- {
-    "group_id": 0,
-    "group_name": "rootGroup",
-    "group_status": 2,
-    "description": "",
-    "sub_groups": [
-        {
-            "group_id": 1,
-            "group_name": "Group1",
-            "group_status": 2,
-            "description": "",
-            "sub_groups": [
-                {
-                    "group_id": 101,
-                    "group_name": "Group101",
-                    "group_status": 2,
-                    "description": "",
-                    "sub_groups": null,
-                    "nodes": [
-                        {
-                            "node_id": 1,
-                            "node_name": "",
-                            "node_status": 4,
-                            "description": ""
-                        },
-                        {
-                            "node_id": 2,
-                            "node_name": "",
-                            "node_status": 1,
-                            "description": ""
-                        }
-                    ],
-                    "nodes_num": 2,
-                    "nodes_status_map": {
-                        "1": 1,
-                        "4": 1
-                    }
-                }
-            ],
-            "nodes": [
-                {
-                    "node_id": 3,
-                    "node_name": "",
-                    "node_status": 1,
-                    "description": ""
-                },
-                {
-                    "node_id": 4,
-                    "node_name": "",
-                    "node_status": 4,
-                    "description": ""
-                },
-                {
-                    "node_id": 5,
-                    "node_name": "",
-                    "node_status": 1,
-                    "description": ""
-                }
-            ],
-            "nodes_num": 5,
-            "nodes_status_map": {
-                "1": 3,
-                "4": 2
-            }
-        },
-        {
-            "group_id": 2,
-            "group_name": "Group2",
-            "group_status": 4,
-            "description": "",
-            "sub_groups": null,
-            "nodes": [
-                {
-                    "node_id": 6,
-                    "node_name": "",
-                    "node_status": 4,
-                    "description": ""
-                },
-                {
-                    "node_id": 7,
-                    "node_name": "",
-                    "node_status": 4,
-                    "description": ""
-                }
-            ],
-            "nodes_num": 2,
-            "nodes_status_map": {
-                "4": 2
-            }
-        }
-    ],
-    "nodes": [
-        {
-            "node_id": 8,
-            "node_name": "",
-            "node_status": 1,
-            "description": ""
-        },
-        {
-            "node_id": 9,
-            "node_name": "",
-            "node_status": 4,
-            "description": ""
-        },
-        {
-            "node_id": 10,
-            "node_name": "",
-            "node_status": 4,
-            "description": ""
-        }
-    ],
-    "nodes_num": 10,
-    "nodes_status_map": {
-        "1": 4,
-        "4": 6
-    }
-}
-`
-			t, err := resNodeTree.LoadTreeFromJson(strJson)
+	Context("CopyTree", func() {
+		It("CopyTree", func() {
+			strJson, err := resNodeTree.GroupToJsonIndent(rootGroup)
 			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("t = %v", t))
-			By(fmt.Sprintf("t.NodesMap = %v", t.NodesMap))
 
-			strJson2, err := resNodeTree.TreeToJsonIndent(t)
+			t1, err := resNodeTree.LoadTreeFromJson(strJson)
+			Expect(err).ShouldNot(HaveOccurred())
+			resNodeTree.CountGroup(&t1.RootGroup)
+
+			tCopy := resNodeTree.CopyTree(&t1)
+			resNodeTree.CountGroup(&tCopy.RootGroup)
+
+			Expect(t1.RootGroup.NodesNum).Should(Equal(tCopy.RootGroup.NodesNum))
+			Expect(t1.RootGroup.NodesStatusMap[resNodeTree.StatusSelected]).
+				Should(Equal(tCopy.RootGroup.NodesStatusMap[resNodeTree.StatusSelected]))
+
+			strJson2, err := resNodeTree.TreeToJsonIndent(*tCopy)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("strJson2 = %s", strJson2))
 
+		})
+	})
+
+	Context("FiltrateTree", func() {
+		It("FiltrateTree", func() {
+			strJson, err := resNodeTree.GroupToJsonIndent(rootGroup)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			t1, err := resNodeTree.LoadTreeFromJson(strJson)
+			Expect(err).ShouldNot(HaveOccurred())
+			resNodeTree.CountGroup(&t1.RootGroup)
+
+			t2 := resNodeTree.FiltrateTree(&t1, 3)
+			resNodeTree.CountGroup(&t2.RootGroup)
+			strJson2, err := resNodeTree.TreeToJsonIndent(*t2)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("strJson2 = %s", strJson2))
 		})
 	})
 })

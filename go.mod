@@ -7,6 +7,7 @@ require (
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.7+incompatible
+	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
 	github.com/gomodule/redigo v1.8.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jmoiron/sqlx v1.2.0
