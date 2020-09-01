@@ -17,10 +17,7 @@ type Info struct {
 	ExtraInfo        string `db:"extra_info" json:"extra_info"`
 
 	// Status 4
-	BasicStatus    int `db:"basic_status" json:"basic_status"`
-	CpuAllocStatus int `db:"cpu_alloc_status" json:"cpu_alloc_status"`
-	//GpuAllocStatus     int `db:"gpu_alloc_status" json:"gpu_alloc_status"`
-	//StorageAllocStatus int `db:"storage_alloc_status" json:"storage_alloc_status"`
+	BasicStatus int `db:"basic_status" json:"basic_status"`
 
 	// Apply Info 6
 	StartDate           time.Time `db:"start_date" json:"start_date"`
