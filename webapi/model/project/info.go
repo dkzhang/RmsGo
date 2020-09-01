@@ -90,18 +90,10 @@ func GetSchemaHistory() string {
 ///////////////////////////////////////////////////////////
 
 const (
-	BasicStatusApplying   = 1
-	BasicStatusWaiting    = 2  // 已建立，待分配
-	BasicStatusRunning    = 4  // 已分配部分或全部资源
-	BasicStatusSettlement = 8  // 已归还全部资源，项目结算单审阅中
-	BasicStatusDeserted   = 64 // 已放弃的项目（只有从未分配过资源的项目可被放弃，即处于Applying和Waiting状态）
-	BasicStatusArchived   = 128
-)
-
-const (
-	ResNotYetAssigned  = 1
-	ResFullAllocation  = 2
-	ResUnderAllocation = 4
-	ResOverAllocation  = 8
-	ResAllReturned     = 64
+	BasicStatusApplying   = 1   // 申请中，尚未走完初申流程
+	BasicStatusWaiting    = 2   // 已建立，待分配
+	BasicStatusRunning    = 4   // 已分配部分或全部资源
+	BasicStatusSettlement = 8   // 已归还全部资源，项目结算单审阅中
+	BasicStatusDeserted   = 64  // 已放弃的项目（只有从未分配过资源的项目可被放弃，即处于Applying和Waiting状态）
+	BasicStatusArchived   = 128 // 已全部结束归档的项目，即将转入历史数据库
 )
