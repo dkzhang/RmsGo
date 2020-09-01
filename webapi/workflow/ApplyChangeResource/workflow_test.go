@@ -10,7 +10,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"time"
 )
 
 var _ = Describe("Workflow", func() {
@@ -68,7 +67,7 @@ var _ = Describe("Workflow", func() {
 					GpuNodes:    projectID * 11,
 					StorageSize: projectID * 51,
 				},
-				EndDate: time.Now().AddDate(0, 2, 0),
+				EndDateStr: "2020-10-01",
 			}
 			arcB, _ := json.Marshal(arc)
 			arcJson := string(arcB)

@@ -16,10 +16,11 @@ type Info struct {
 	ChiefChineseName string `db:"chief_cn_name" json:"chief_cn_name"`
 	ExtraInfo        string `db:"extra_info" json:"extra_info"`
 
-	// Status 3
-	BasicStatus          int `db:"basic_status" json:"basic_status"`
-	ComputingAllocStatus int `db:"computing_alloc_status" json:"computing_alloc_status"`
-	StorageAllocStatus   int `db:"storage_alloc_status" json:"storage_alloc_status"`
+	// Status 4
+	BasicStatus        int `db:"basic_status" json:"basic_status"`
+	CpuAllocStatus     int `db:"cpu_alloc_status" json:"cpu_alloc_status"`
+	GpuAllocStatus     int `db:"gpu_alloc_status" json:"gpu_alloc_status"`
+	StorageAllocStatus int `db:"storage_alloc_status" json:"storage_alloc_status"`
 
 	// Apply Info 6
 	StartDate           time.Time `db:"start_date" json:"start_date"`
@@ -53,7 +54,8 @@ var SchemaInfo = `
 			extra_info varchar(16384),			
 			
 			basic_status int,
-			computing_alloc_status int,
+			cpu_alloc_status int,
+			gpu_alloc_status int,
 			storage_alloc_status int,
 
 			start_date TIMESTAMP WITH TIME ZONE,			

@@ -3,7 +3,7 @@ package project
 //type DynamicInfo struct {
 //	ProjectID            int `db:"project_id" json:"project_id"`
 //	BasicStatus          int `db:"basic_status" json:"basic_status"`
-//	ComputingAllocStatus int `db:"computing_alloc_status" json:"computing_alloc_status"`
+//	CpuAllocStatus int `db:"cpu_alloc_status" json:"cpu_alloc_status"`
 //	StorageAllocStatus   int `db:"storage_alloc_status" json:"storage_alloc_status"`
 //
 //	StartDate time.Time `db:"start_date" json:"start_date"`
@@ -33,7 +33,7 @@ package project
 //		CREATE TABLE %s (
 //    		project_id int UNIQUE,
 //			basic_status int,
-//			computing_alloc_status int,
+//			cpu_alloc_status int,
 //			storage_alloc_status int,
 //			start_date TIMESTAMP WITH TIME ZONE,
 //			total_days_apply int,

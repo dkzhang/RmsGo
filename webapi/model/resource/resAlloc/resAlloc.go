@@ -22,6 +22,25 @@ type Record struct {
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 }
 
+var SchemaRecord = `
+		CREATE TABLE %s (
+			record_id SERIAL PRIMARY KEY,
+    		project_id int,			
+			num_before int,
+			alloc_info_before integer ARRAY,
+			alloc_info_before_str varchar(1024),
+			num_after int,
+			alloc_info_after integer ARRAY,
+			alloc_info_after_str varchar(1024),			
+			num_change int,
+			alloc_info_change integer ARRAY,
+			alloc_info_change_str varchar(1024),			
+			ctrl_id	 int,
+			ctrl_cn_name varchar(32),
+			created_at TIMESTAMP WITH TIME ZONE
+		);
+		`
+
 var TableNameCPU = "res_alloc_cpu"
 var TableNameGPU = "res_alloc_gpu"
 var TableNameStorage = "res_alloc_storage"

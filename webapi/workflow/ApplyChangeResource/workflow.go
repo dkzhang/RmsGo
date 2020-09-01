@@ -86,8 +86,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm lo
 
 func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 
-	var app gfApplication.AppResChange
-	err := json.Unmarshal(([]byte)(form.BasicContent), &app)
+	app, err := gfApplication.JsonUnmarshalAppResChange(form.BasicContent)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
@@ -239,8 +238,7 @@ func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app
 }
 
 func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
-	var appRC gfApplication.AppResChange
-	err := json.Unmarshal(([]byte)(form.BasicContent), &app)
+	appRC, err := gfApplication.JsonUnmarshalAppResChange(form.BasicContent)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
@@ -402,8 +400,7 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 	}
 
 	// Update Project
-	var appRC gfApplication.AppResChange
-	err = json.Unmarshal(([]byte)(app.BasicContent), &app)
+	appRC, err := gfApplication.JsonUnmarshalAppResChange(app.BasicContent)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
