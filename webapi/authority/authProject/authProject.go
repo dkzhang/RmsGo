@@ -30,8 +30,8 @@ func init() {
 		RelationShipBetween: func(userLoginInfo user.UserInfo, projectAccessed project.Info) bool {
 			if userLoginInfo.Role == user.RoleProjectChief &&
 				projectAccessed.ChiefID == userLoginInfo.UserID &&
-				projectAccessed.BasicStatus != project.BasicStatusApplying &&
-				projectAccessed.BasicStatus != project.BasicStatusArchived {
+				(projectAccessed.BasicStatus == project.BasicStatusWaiting ||
+					projectAccessed.BasicStatus == project.BasicStatusRunning) {
 				return true
 			} else {
 				return false
@@ -39,7 +39,7 @@ func init() {
 		},
 		Operation:   OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleProjectChief UPDATE Project (except in basicStatus Applying or Archived)",
+		Description: "Allow RoleProjectChief UPDATE Project (in basicStatus Waiting or Running)",
 	})
 
 	theProjectAuthorityTable = append(theProjectAuthorityTable, projectAuthority{
@@ -78,7 +78,7 @@ func init() {
 		},
 		Operation:   OPS_RETRIEVE | OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleProjectChief RETRIEVE and UPDATE Application",
+		Description: "Allow RoleProjectChief RETRIEVE and Project",
 	})
 }
 

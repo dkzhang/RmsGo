@@ -17,10 +17,10 @@ type Info struct {
 	ExtraInfo        string `db:"extra_info" json:"extra_info"`
 
 	// Status 4
-	BasicStatus        int `db:"basic_status" json:"basic_status"`
-	CpuAllocStatus     int `db:"cpu_alloc_status" json:"cpu_alloc_status"`
-	GpuAllocStatus     int `db:"gpu_alloc_status" json:"gpu_alloc_status"`
-	StorageAllocStatus int `db:"storage_alloc_status" json:"storage_alloc_status"`
+	BasicStatus    int `db:"basic_status" json:"basic_status"`
+	CpuAllocStatus int `db:"cpu_alloc_status" json:"cpu_alloc_status"`
+	//GpuAllocStatus     int `db:"gpu_alloc_status" json:"gpu_alloc_status"`
+	//StorageAllocStatus int `db:"storage_alloc_status" json:"storage_alloc_status"`
 
 	// Apply Info 6
 	StartDate           time.Time `db:"start_date" json:"start_date"`
@@ -53,10 +53,7 @@ var SchemaInfo = `
 			chief_cn_name varchar(32), 
 			extra_info varchar(16384),			
 			
-			basic_status int,
-			cpu_alloc_status int,
-			gpu_alloc_status int,
-			storage_alloc_status int,
+			basic_status int,			
 
 			start_date TIMESTAMP WITH TIME ZONE,			
 			total_days_apply int,
@@ -93,9 +90,12 @@ func GetSchemaHistory() string {
 ///////////////////////////////////////////////////////////
 
 const (
-	BasicStatusApplying    = 1
-	BasicStatusEstablished = 2
-	BasicStatusArchived    = 64
+	BasicStatusApplying   = 1
+	BasicStatusWaiting    = 2  // 已建立，待分配
+	BasicStatusRunning    = 4  // 已分配部分或全部资源
+	BasicStatusSettlement = 8  // 已归还全部资源，项目结算单审阅中
+	BasicStatusDeserted   = 64 // 已放弃的项目（只有从未分配过资源的项目可被放弃，即处于Applying和Waiting状态）
+	BasicStatusArchived   = 128
 )
 
 const (

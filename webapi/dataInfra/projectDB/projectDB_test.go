@@ -27,10 +27,7 @@ var _ = Describe("ProjectDB", func() {
 					ChiefChineseName: "项目长张俊",
 					ExtraInfo:        fmt.Sprintf("ExtraInfo%d", i+1),
 
-					BasicStatus:        rand.Intn(100),
-					CpuAllocStatus:     rand.Intn(100),
-					GpuAllocStatus:     rand.Intn(100),
-					StorageAllocStatus: rand.Intn(100),
+					BasicStatus: rand.Intn(100),
 
 					StartDate:           time.Now(),
 					TotalDaysApply:      10,
@@ -143,12 +140,9 @@ var _ = Describe("ProjectDB", func() {
 			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
 
 			si := project.StatusInfo{
-				ProjectID:          projectID,
-				BasicStatus:        rand.Intn(100),
-				CpuAllocStatus:     rand.Intn(100),
-				GpuAllocStatus:     rand.Intn(100),
-				StorageAllocStatus: rand.Intn(100),
-				UpdatedAt:          time.Now(),
+				ProjectID:   projectID,
+				BasicStatus: rand.Intn(100),
+				UpdatedAt:   time.Now(),
 			}
 
 			err = pdb.UpdateStatusInfo(si)
@@ -160,15 +154,9 @@ var _ = Describe("ProjectDB", func() {
 			// check updated info
 			Expect(piUpdated.ProjectID).Should(Equal(si.ProjectID))
 			Expect(piUpdated.BasicStatus).Should(Equal(si.BasicStatus))
-			Expect(piUpdated.CpuAllocStatus).Should(Equal(si.CpuAllocStatus))
-			Expect(piUpdated.GpuAllocStatus).Should(Equal(si.GpuAllocStatus))
-			Expect(piUpdated.StorageAllocStatus).Should(Equal(si.StorageAllocStatus))
 
 			// check not updated info
 			pi.BasicStatus = piUpdated.BasicStatus
-			pi.CpuAllocStatus = piUpdated.CpuAllocStatus
-			pi.GpuAllocStatus = piUpdated.GpuAllocStatus
-			pi.StorageAllocStatus = piUpdated.StorageAllocStatus
 			pi.UpdatedAt = piUpdated.UpdatedAt
 			Expect(piUpdated).Should(Equal(pi))
 		})

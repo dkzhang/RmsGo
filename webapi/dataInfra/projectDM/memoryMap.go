@@ -152,9 +152,6 @@ func (pdm MemoryMap) UpdateStatusInfo(si project.StatusInfo) (err error) {
 
 	// update in MemoryMap
 	pdm.infoMap[si.ProjectID].BasicStatus = si.BasicStatus
-	pdm.infoMap[si.ProjectID].CpuAllocStatus = si.CpuAllocStatus
-	pdm.infoMap[si.ProjectID].GpuAllocStatus = si.GpuAllocStatus
-	pdm.infoMap[si.ProjectID].StorageAllocStatus = si.StorageAllocStatus
 	pdm.infoMap[si.ProjectID].UpdatedAt = si.UpdatedAt
 
 	return nil

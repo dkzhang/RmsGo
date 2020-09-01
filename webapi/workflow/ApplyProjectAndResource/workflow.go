@@ -99,10 +99,7 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 		ChiefChineseName: userInfo.ChineseName,
 		ExtraInfo:        form.ExtraContent,
 
-		BasicStatus:        project.BasicStatusApplying,
-		CpuAllocStatus:     project.ResNotYetAssigned,
-		GpuAllocStatus:     project.ResNotYetAssigned,
-		StorageAllocStatus: project.ResNotYetAssigned,
+		BasicStatus: project.BasicStatusApplying,
 
 		StartDate:           app.StartDate,
 		TotalDaysApply:      app.TotalDaysApply,
@@ -434,11 +431,8 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 	}
 
 	si := project.StatusInfo{
-		ProjectID:          theProject.ProjectID,
-		BasicStatus:        project.BasicStatusEstablished,
-		CpuAllocStatus:     project.ResNotYetAssigned,
-		GpuAllocStatus:     project.ResNotYetAssigned,
-		StorageAllocStatus: project.ResNotYetAssigned,
+		ProjectID:   theProject.ProjectID,
+		BasicStatus: project.BasicStatusWaiting,
 	}
 	err = wf.pdm.UpdateStatusInfo(si)
 	if err != nil {

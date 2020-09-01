@@ -16,12 +16,9 @@ type CodeInfo struct {
 }
 
 type StatusInfo struct {
-	ProjectID          int       `db:"project_id" json:"project_id"`
-	BasicStatus        int       `db:"basic_status" json:"basic_status"`
-	CpuAllocStatus     int       `db:"cpu_alloc_status" json:"cpu_alloc_status"`
-	GpuAllocStatus     int       `db:"gpu_alloc_status" json:"gpu_alloc_status"`
-	StorageAllocStatus int       `db:"storage_alloc_status" json:"storage_alloc_status"`
-	UpdatedAt          time.Time `db:"updated_at" json:"updated_at"`
+	ProjectID   int       `db:"project_id" json:"project_id"`
+	BasicStatus int       `db:"basic_status" json:"basic_status"`
+	UpdatedAt   time.Time `db:"updated_at" json:"updated_at"`
 }
 
 type ApplyInfo struct {
