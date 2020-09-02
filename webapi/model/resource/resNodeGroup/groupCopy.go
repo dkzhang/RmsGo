@@ -1,4 +1,6 @@
-package groupNode
+package resNodeGroup
+
+import "github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
 
 // make new Group, but keep the *Node pointer
 func CopyGroup(g *Group) (ng *Group) {
@@ -8,7 +10,7 @@ func CopyGroup(g *Group) (ng *Group) {
 		Status:         g.Status,
 		Description:    g.Description,
 		SubGroups:      make([]*Group, 0),
-		Nodes:          make([]*Node, 0),
+		Nodes:          make([]*resNode.Node, 0),
 		NodesNum:       g.NodesNum,
 		NodesStatusMap: make(map[int]int),
 	}

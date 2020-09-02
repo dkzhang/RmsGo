@@ -1,11 +1,13 @@
 package resNodeTree
 
-import "github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
+import (
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeGroup"
+)
 
 func TreeToJson(t Tree) (string, error) {
-	return groupNode.GroupToJson(t.RootGroup)
+	return resNodeGroup.GroupToJson(t.RootGroup)
 }
 
 func TreeToJsonIndent(t Tree) (string, error) {
-	return groupNode.GroupToJsonIndent(t.RootGroup)
+	return resNodeGroup.GroupToJsonIndent(t.RootGroup)
 }

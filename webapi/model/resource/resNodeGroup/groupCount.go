@@ -1,4 +1,6 @@
-package groupNode
+package resNodeGroup
+
+import "github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
 
 func CountGroup(g *Group) {
 	if g == nil {
@@ -25,11 +27,11 @@ func CountGroup(g *Group) {
 		}
 	}
 
-	if g.NodesStatusMap[StatusSelected]+g.NodesStatusMap[StatusUnselected] != 0 {
-		if g.NodesStatusMap[StatusUnselected] == 0 {
-			g.Status = StatusSelected
-		} else if g.NodesStatusMap[StatusSelected] == 0 {
-			g.Status = StatusUnselected
+	if g.NodesStatusMap[resNode.StatusSelected]+g.NodesStatusMap[resNode.StatusUnselected] != 0 {
+		if g.NodesStatusMap[resNode.StatusUnselected] == 0 {
+			g.Status = resNode.StatusSelected
+		} else if g.NodesStatusMap[resNode.StatusSelected] == 0 {
+			g.Status = resNode.StatusUnselected
 		} else {
 			g.Status = StatusPartiallySelected
 		}

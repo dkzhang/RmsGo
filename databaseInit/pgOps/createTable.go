@@ -5,6 +5,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalFormDraft"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -19,6 +20,7 @@ var tableList = map[string]string{
 	"history_app_ops_record": application.GetSchemaHistoryAppOps(),
 	"project_info":           project.GetSchema(),
 	"history_project_info":   project.GetSchemaHistory(),
+	"res_node_info":          resNode.GetSchema(),
 }
 
 func CreateAllTable(db *sqlx.DB) {

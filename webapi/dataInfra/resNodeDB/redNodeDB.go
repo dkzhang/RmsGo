@@ -1,7 +1,7 @@
 package resNodeDB
 
 import (
-	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -11,8 +11,9 @@ type DBInfo struct {
 }
 
 type ResNodeDB interface {
-	QueryByID(nodeID int) (groupNode.Node, error)
-	QueryAll() ([]groupNode.Node, error)
-	Update(node groupNode.Node) (err error)
-	Insert(node groupNode.Node) (err error)
+	QueryByID(nodeID int) (resNode.Node, error)
+	QueryAll() ([]resNode.Node, error)
+	Update(node resNode.Node) (err error)
+	Insert(node resNode.Node) (err error)
+	Close()
 }

@@ -2,18 +2,19 @@ package resNodeTree
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeGroup"
 	"github.com/golang-collections/collections/stack"
 )
 
 func LoadTreeFromJson(str string) (t Tree, err error) {
-	t.RootGroup, err = groupNode.LoadGroupFromJson(str)
+	t.RootGroup, err = resNodeGroup.LoadGroupFromJson(str)
 	if err != nil {
 		return Tree{}, fmt.Errorf("LoadFromJson error since LoadGroupFromJson error: %v", err)
 	}
 
 	//GenNodesMap
-	t.NodesMap = make(map[int]*groupNode.Node)
+	t.NodesMap = make(map[int]*resNode.Node)
 	//t.NodesMap, err = genNodesMap(&(t.RootGroup), t.NodesMap)
 	t.NodesMap, err = genNodesMapIteration(&(t.RootGroup))
 	if err != nil {
@@ -23,7 +24,7 @@ func LoadTreeFromJson(str string) (t Tree, err error) {
 }
 
 // syn the nodes info from DB to the Tree struct
-func SynchronizeNodesInfo(t *Tree, nodes []groupNode.Node) (err error) {
+func SynchronizeNodesInfo(t *Tree, nodes []resNode.Node) (err error) {
 	for _, n := range nodes {
 		if _, ok := t.NodesMap[n.ID]; ok {
 			t.NodesMap[n.ID].Name = n.Name
@@ -37,12 +38,12 @@ func SynchronizeNodesInfo(t *Tree, nodes []groupNode.Node) (err error) {
 
 // generate a NodesMap from the Tree By iteration
 type groupAndIndex struct {
-	group *groupNode.Group
+	group *resNodeGroup.Group
 	index int
 }
 
-func genNodesMapIteration(g *groupNode.Group) (map[int]*groupNode.Node, error) {
-	nodesMap := make(map[int]*groupNode.Node)
+func genNodesMapIteration(g *resNodeGroup.Group) (map[int]*resNode.Node, error) {
+	nodesMap := make(map[int]*resNode.Node)
 	giStack := stack.New()
 
 	giStack.Push(groupAndIndex{
@@ -87,7 +88,7 @@ func genNodesMapIteration(g *groupNode.Group) (map[int]*groupNode.Node, error) {
 }
 
 // generate a NodesMap from the Tree
-func genNodesMap(g *groupNode.Group, nm map[int]*groupNode.Node) (map[int]*groupNode.Node, error) {
+func genNodesMap(g *resNodeGroup.Group, nm map[int]*resNode.Node) (map[int]*resNode.Node, error) {
 	var err error
 	if g.Nodes != nil {
 		for _, node := range g.Nodes {

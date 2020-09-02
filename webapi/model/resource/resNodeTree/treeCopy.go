@@ -1,11 +1,14 @@
 package resNodeTree
 
-import "github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
+import (
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeGroup"
+)
 
 func CopyTree(t *Tree) (nt *Tree) {
 	nt = &Tree{
-		RootGroup: *(groupNode.CopyGroup(&(t.RootGroup))),
-		NodesMap:  make(map[int]*groupNode.Node),
+		RootGroup: *(resNodeGroup.CopyGroup(&(t.RootGroup))),
+		NodesMap:  make(map[int]*resNode.Node),
 	}
 
 	for k, v := range t.NodesMap {

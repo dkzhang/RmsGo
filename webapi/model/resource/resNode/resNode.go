@@ -1,17 +1,9 @@
-package groupNode
+package resNode
 
-import "time"
-
-type Group struct {
-	ID             int         `json:"group_id"`
-	Name           string      `json:"group_name"`
-	Status         int         `json:"group_status"`
-	Description    string      `json:"description"`
-	SubGroups      []*Group    `json:"sub_groups"`
-	Nodes          []*Node     `json:"nodes"`
-	NodesNum       int         `json:"nodes_num"`
-	NodesStatusMap map[int]int `json:"nodes_status_map"`
-}
+import (
+	"fmt"
+	"time"
+)
 
 type Node struct {
 	ID            int       `db:"node_id" json:"node_id"`
@@ -34,10 +26,13 @@ var SchemaInfo = `
 		`
 var TableName = "res_node_info"
 
+func GetSchema() string {
+	return fmt.Sprintf(SchemaInfo, TableName)
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 const (
-	StatusUnselected        = 1
-	StatusPartiallySelected = 2
-	StatusSelected          = 4
+	StatusUnselected = 1
+	StatusSelected   = 2
 )

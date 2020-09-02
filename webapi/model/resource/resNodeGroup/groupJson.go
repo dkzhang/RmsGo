@@ -1,4 +1,4 @@
-package groupNode
+package resNodeGroup
 
 import (
 	"encoding/json"

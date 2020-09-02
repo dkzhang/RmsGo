@@ -19,7 +19,6 @@ type MeteringList struct {
 	StorageMeteringList []StorageMeteringItem
 
 	CreatedAt time.Time
-	ArchiveAt time.Time
 }
 
 type CpuNodeMeteringItem struct {

@@ -2,7 +2,7 @@ package resNodeDB
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/webapi/model/resource/resNodeTree/groupNode"
+	"github.com/dkzhang/RmsGo/webapi/model/resource/resNode"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -23,17 +23,17 @@ func (rnpg ResNodePg) Close() {
 	rnpg.TheDB.Close()
 }
 
-func (rnpg ResNodePg) QueryByID(nodeID int) (ni groupNode.Node, err error) {
+func (rnpg ResNodePg) QueryByID(nodeID int) (ni resNode.Node, err error) {
 	queryByID := fmt.Sprintf(`SELECT * FROM %s WHERE node_id=$1`, rnpg.TableName)
 	err = rnpg.TheDB.Get(&ni, queryByID, nodeID)
 	if err != nil {
-		return groupNode.Node{},
+		return resNode.Node{},
 			fmt.Errorf("QueryByID ResNode in TheDB error: %v", err)
 	}
 	return ni, nil
 }
 
-func (rnpg ResNodePg) QueryAll() (nis []groupNode.Node, err error) {
+func (rnpg ResNodePg) QueryAll() (nis []resNode.Node, err error) {
 	queryAll := fmt.Sprintf(`SELECT * FROM %s `, rnpg.TableName)
 	err = rnpg.TheDB.Select(&nis, queryAll)
 	if err != nil {
@@ -43,7 +43,7 @@ func (rnpg ResNodePg) QueryAll() (nis []groupNode.Node, err error) {
 	return nis, nil
 }
 
-func (rnpg ResNodePg) Update(ni groupNode.Node) (err error) {
+func (rnpg ResNodePg) Update(ni resNode.Node) (err error) {
 	execUpdate := fmt.Sprintf(`UPDATE %s SET node_name=:node_name, node_status=:node_status, description=:description, project_id=:project_id, allocated_time=:allocated_time WHERE node_id=:node_id`, rnpg.TableName)
 
 	_, err = rnpg.TheDB.NamedExec(execUpdate, ni)
@@ -53,7 +53,7 @@ func (rnpg ResNodePg) Update(ni groupNode.Node) (err error) {
 	return nil
 }
 
-func (rnpg ResNodePg) Insert(ni groupNode.Node) (err error) {
+func (rnpg ResNodePg) Insert(ni resNode.Node) (err error) {
 	execInsert := fmt.Sprintf(`INSERT INTO %s (
 			node_id, node_name, node_status, description, project_id, allocated_time) 
 			VALUES  ($1, $2, $3, $4, $5, $6)`, rnpg.TableName)
