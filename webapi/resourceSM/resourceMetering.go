@@ -9,7 +9,7 @@ package resourceSM
 (projectStatus==Archived && CreateAt > b && a > UpdatedAt) ||
 (projectStatus!=Archived && CreateAt > b)
 
-(2)将项目的分配记录（时点记录），转换为区间记录（或节点连续记录，更难）
+(2)将项目的分配记录（时点记录），转换为区间记录（或节点连续记录，更难）。
 
 (3)筛选出与给定区间有交集的记录，调整为给定区间内记录
 

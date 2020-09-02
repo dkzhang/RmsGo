@@ -6,6 +6,7 @@ type Record struct {
 	RecordID  int `db:"record_id" json:"record_id"`
 	ProjectID int `db:"project_id" json:"project_id"`
 
+	// BAC * 3 = 9
 	NumBefore          int    `db:"num_before" json:"num_before"`
 	AllocInfoBefore    []int  `db:"alloc_info_before" json:"alloc_info_before"`
 	AllocInfoBeforeStr string `db:"alloc_info_before_str" json:"alloc_info_before_str"`
