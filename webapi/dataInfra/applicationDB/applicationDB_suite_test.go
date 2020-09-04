@@ -1,8 +1,7 @@
 package applicationDB_test
 
 import (
-	"github.com/dkzhang/RmsGo/databaseInit"
-	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
+	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDB"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"os"
@@ -21,8 +20,8 @@ var adb applicationDB.ApplicationDB
 
 var _ = BeforeSuite(func() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
-	db := databaseInit.ConnectToDatabase()
-	pgOps.CreateAllTable(db)
+	db := pgOpsSqlx.ConnectToDatabase()
+	pgOpsSqlx.CreateAllTable(db)
 
 	adb = applicationDB.NewApplicationPg(db, application.TableApp, application.TableAppOps)
 })

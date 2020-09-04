@@ -1,8 +1,7 @@
 package generalFormDraftDB
 
 import (
-	"github.com/dkzhang/RmsGo/databaseInit"
-	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
+	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
 	"github.com/dkzhang/RmsGo/webapi/model/generalFormDraft"
 	. "github.com/smartystreets/goconvey/convey"
 	"os"
@@ -11,8 +10,8 @@ import (
 
 func TestGeneralFormDraftPg_InsertGeneralFormDraft(t *testing.T) {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
-	db := databaseInit.ConnectToDatabase()
-	pgOps.CreateAllTable(db)
+	db := pgOpsSqlx.ConnectToDatabase()
+	pgOpsSqlx.CreateAllTable(db)
 
 	atdm := NewGeneralFormDraftPg(db)
 

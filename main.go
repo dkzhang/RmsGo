@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/databaseInit"
+	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
 	"github.com/dkzhang/RmsGo/webapi"
 	"os"
 )
@@ -15,11 +15,11 @@ func main() {
 
 	switch os.Args[1] {
 	case "create_all":
-		databaseInit.CreateAllTable()
+		pgOpsSqlx.CmdCreateAllTable()
 	case "seed_all":
-		databaseInit.SeedAllTable()
+		pgOpsSqlx.CmdSeedAllTable()
 	case "import_from_file":
-		databaseInit.ImportFromFile("", "")
+		pgOpsSqlx.CmdImportFromFile("", "")
 	case "run":
 		webapi.Serve()
 	}

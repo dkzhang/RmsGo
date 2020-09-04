@@ -1,8 +1,7 @@
 package projectDM_test
 
 import (
-	"github.com/dkzhang/RmsGo/databaseInit"
-	"github.com/dkzhang/RmsGo/databaseInit/pgOps"
+	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
@@ -23,8 +22,8 @@ var pdm projectDM.ProjectDM
 
 var _ = BeforeSuite(func() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
-	db := databaseInit.ConnectToDatabase()
-	pgOps.CreateAllTable(db)
+	db := pgOpsSqlx.ConnectToDatabase()
+	pgOpsSqlx.CreateAllTable(db)
 
 	theLogMap := logMap.NewLogMap(`C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml`)
 

@@ -1,8 +1,9 @@
-package userDB_test
+package resNodeDB_test
 
 import (
+	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDB"
+	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
-	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"os"
 	"testing"
 
@@ -10,21 +11,21 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestUserDB(t *testing.T) {
+func TestResNodeDB(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "UserDB Suite")
+	RunSpecs(t, "ResNodeDB Suite")
 }
 
-var udb userDB.UserInPostgre
+var rndb resNodeDB.ResNodeDB
 
 var _ = BeforeSuite(func() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
 	db := pgOpsSqlx.ConnectToDatabase()
 	pgOpsSqlx.CreateAllTable(db)
 
-	udb = userDB.NewUserInPostgre(db)
+	rndb = resNodeDB.NewResNodePg(db, resNode.TableName)
 })
 
 var _ = AfterSuite(func() {
-	udb.Close()
+	rndb.Close()
 })

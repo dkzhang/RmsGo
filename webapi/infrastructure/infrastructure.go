@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
+	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOpsSqlx"
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
@@ -91,7 +91,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 		}).Fatal("dbConfig.LoadDbSecurity error.")
 	}
 
-	theInfras.TheDb, err = postgreOps.ConnectToDatabase(theInfras.TheDbSecurity.ThePgSecurity)
+	theInfras.TheDb, err = postgreOpsSqlx.ConnectToDatabase(theInfras.TheDbSecurity.ThePgSecurity)
 	if err != nil {
 		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"ThePgSecurity": theInfras.TheDbSecurity.ThePgSecurity,

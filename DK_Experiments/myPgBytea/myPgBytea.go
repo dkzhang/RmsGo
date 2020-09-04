@@ -2,7 +2,7 @@ package myPgBytea
 
 import (
 	"fmt"
-	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOps"
+	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOpsSqlx"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -31,7 +31,7 @@ func ConnectToDatabase(conf string) *sqlx.DB {
 		}).Fatal("dbConfig.LoadDbSecurity error.")
 	}
 
-	theDb, err := postgreOps.ConnectToDatabase(theDbSecurity.ThePgSecurity)
+	theDb, err := postgreOpsSqlx.ConnectToDatabase(theDbSecurity.ThePgSecurity)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"ThePgSecurity": theDbSecurity.ThePgSecurity,
