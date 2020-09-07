@@ -29,7 +29,7 @@ func (rnpg ResAllocPg) Close() {
 func (rnpg ResAllocPg) QueryByID(recordID int) (ra resAlloc.Record, err error) {
 	stmt, err := rnpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s WHERE record_id=$1`, rnpg.TableName))
 	if err != nil {
-		logrus.Fatalf("QueryByID TheDB.Prepare statement error: %v", err)
+		logrus.Fatalf("ResAllocPg QueryByID TheDB.Prepare statement error: %v", err)
 	}
 
 	defer stmt.Close()
@@ -45,7 +45,7 @@ func (rnpg ResAllocPg) QueryByID(recordID int) (ra resAlloc.Record, err error) {
 func (rnpg ResAllocPg) QueryByProjectID(projectID int) (rs []resAlloc.Record, err error) {
 	stmt, err := rnpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1`, rnpg.TableName))
 	if err != nil {
-		logrus.Fatalf("QueryByProjectID TheDB.Prepare statement error: %v", err)
+		logrus.Fatalf("ResAllocPg QueryByProjectID TheDB.Prepare statement error: %v", err)
 	}
 
 	defer stmt.Close()
@@ -74,7 +74,7 @@ func (rnpg ResAllocPg) QueryAll() (rs []resAlloc.Record, err error) {
 
 	stmt, err := rnpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s`, rnpg.TableName))
 	if err != nil {
-		logrus.Fatalf("QueryByProjectID TheDB.Prepare statement error: %v", err)
+		logrus.Fatalf("ResAllocPg QueryAll TheDB.Prepare statement error: %v", err)
 	}
 
 	defer stmt.Close()
@@ -126,7 +126,7 @@ func rowScan(r *sql.Row) (ra resAlloc.Record, err error) {
 		&ra.NumBefore, pq.Array(&(ra.AllocInfoBefore)), &ra.AllocInfoBeforeStr,
 		&ra.NumAfter, pq.Array(&(ra.AllocInfoAfter)), &ra.AllocInfoAfterStr,
 		&ra.NumChange, pq.Array(&(ra.AllocInfoChange)), &ra.AllocInfoAfterStr,
-		&ra.CtrlID, &ra.CtrlChineseName, &ra.CtrlChineseName)
+		&ra.CtrlID, &ra.CtrlChineseName, &ra.CreatedAt)
 	if err != nil {
 		return resAlloc.Record{},
 			fmt.Errorf("rowScan resAlloc.Record error: %v", err)
@@ -138,7 +138,7 @@ func rowsScan(rs *sql.Rows) (ra resAlloc.Record, err error) {
 		&ra.NumBefore, pq.Array(&(ra.AllocInfoBefore)), &ra.AllocInfoBeforeStr,
 		&ra.NumAfter, pq.Array(&(ra.AllocInfoAfter)), &ra.AllocInfoAfterStr,
 		&ra.NumChange, pq.Array(&(ra.AllocInfoChange)), &ra.AllocInfoAfterStr,
-		&ra.CtrlID, &ra.CtrlChineseName, &ra.CtrlChineseName)
+		&ra.CtrlID, &ra.CtrlChineseName, &ra.CreatedAt)
 	if err != nil {
 		return resAlloc.Record{},
 			fmt.Errorf("rowsScan resAlloc.Record error: %v", err)

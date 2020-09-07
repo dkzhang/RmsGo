@@ -1,6 +1,7 @@
 package pgOpsSqlx
 
 import (
+	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOpsSqlx"
@@ -13,21 +14,28 @@ import (
 )
 
 var tableList = map[string]string{
-	"user_info":                 user.SchemaUser,
-	"general_form_draft":        generalFormDraft.SchemaGeneralFormDraft,
-	"application":               application.GetSchemaApp(),
-	"history_application":       application.GetSchemaHistoryApp(),
-	"app_ops_record":            application.GetSchemaAppOps(),
-	"history_app_ops_record":    application.GetSchemaHistoryAppOps(),
-	"project_info":              project.GetSchema(),
-	"history_project_info":      project.GetSchemaHistory(),
-	"res_node_info":             resNode.GetSchema(),
+	"user_info": user.SchemaUser,
+
+	"general_form_draft": generalFormDraft.SchemaGeneralFormDraft,
+
+	"application":            application.GetSchemaApp(),
+	"history_application":    application.GetSchemaHistoryApp(),
+	"app_ops_record":         application.GetSchemaAppOps(),
+	"history_app_ops_record": application.GetSchemaHistoryAppOps(),
+
+	"project_info":         project.GetSchema(),
+	"history_project_info": project.GetSchemaHistory(),
+
+	"res_node_info": resNode.GetSchema(),
+
 	"res_alloc_cpu":             resAlloc.GetSchemaCPU(),
 	"res_alloc_gpu":             resAlloc.GetSchemaGPU(),
 	"res_alloc_storage":         resAlloc.GetSchemaStorage(),
 	"history_res_alloc_cpu":     resAlloc.GetSchemaHistoryCPU(),
 	"history_res_alloc_gpu":     resAlloc.GetSchemaHistoryGPU(),
 	"history_res_alloc_storage": resAlloc.GetSchemaHistoryStorage(),
+
+	"project_res_info": projectRes.GetSchema(),
 }
 
 func CreateAllTable(db *sqlx.DB) {
