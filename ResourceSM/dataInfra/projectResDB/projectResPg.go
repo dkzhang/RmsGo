@@ -130,6 +130,17 @@ func (prpg ProjectResPg) Update(pr projectRes.ResInfo) (err error) {
 	return nil
 }
 
+func (prpg ProjectResPg) Delete(projectID int) (err error) {
+	deleteProjectRes := fmt.Sprintf(`DELETE FROM %s WHERE project_id=$1`, prpg.TableName)
+
+	result, err := prpg.TheDB.Exec(deleteProjectRes, projectID)
+	if err != nil {
+		return fmt.Errorf("db.Exec(deleteProjectRes, projectID), projectID = %d", projectID)
+	}
+	fmt.Printf("Delete ProjectRes success: %v \n", result)
+	return nil
+}
+
 /////////////////////////////////////////////////////////////////////
 func rowScan(r *sql.Row) (pr projectRes.ResInfo, err error) {
 	err = r.Scan(&pr.ProjectID,
