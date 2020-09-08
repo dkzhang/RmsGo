@@ -56,6 +56,14 @@ func (pdm MemoryMap) Insert(pr projectRes.ResInfo) (err error) {
 	pr.CreatedAt = time.Now()
 	pr.UpdatedAt = time.Now()
 
+	// avoid slice to be nil
+	if pr.CpuNodesArray == nil {
+		pr.CpuNodesArray = make([]int64, 0)
+	}
+	if pr.GpuNodesArray == nil {
+		pr.GpuNodesArray = make([]int64, 0)
+	}
+
 	//insert in db
 	err = pdm.theProjectResDB.Insert(pr)
 	if err != nil {
@@ -74,6 +82,13 @@ func (pdm MemoryMap) Update(pr projectRes.ResInfo) (err error) {
 	}
 
 	pr.UpdatedAt = time.Now()
+	// avoid slice to be nil
+	if pr.CpuNodesArray == nil {
+		pr.CpuNodesArray = make([]int64, 0)
+	}
+	if pr.GpuNodesArray == nil {
+		pr.GpuNodesArray = make([]int64, 0)
+	}
 
 	// update in DB
 	err = pdm.theProjectResDB.Update(pr)

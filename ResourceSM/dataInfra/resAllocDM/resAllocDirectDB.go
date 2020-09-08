@@ -27,7 +27,19 @@ func (rad ResAllocDirectDB) QueryAll() ([]resAlloc.Record, error) {
 	return rad.theResAllocDB.QueryAll()
 }
 
-func (rad ResAllocDirectDB) Insert(node resAlloc.Record) (err error) {
-	node.CreatedAt = time.Now()
-	return rad.theResAllocDB.Insert(node)
+func (rad ResAllocDirectDB) Insert(ra resAlloc.Record) (err error) {
+	ra.CreatedAt = time.Now()
+
+	// avoid slice to be nil
+	if ra.AllocInfoBefore == nil {
+		ra.AllocInfoBefore = make([]int64, 0)
+	}
+	if ra.AllocInfoAfter == nil {
+		ra.AllocInfoAfter = make([]int64, 0)
+	}
+	if ra.AllocInfoChange == nil {
+		ra.AllocInfoChange = make([]int64, 0)
+	}
+
+	return rad.theResAllocDB.Insert(ra)
 }
