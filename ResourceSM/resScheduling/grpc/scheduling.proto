@@ -6,7 +6,7 @@ package resScheduling;
 service Scheduling {
   // Scheduling Resource
   rpc SchedulingCGpu (SchedulingCGpuRequest) returns (SchedulingReply) {}
-  rpc SchedulingStorage (SchedulingCGpuRequest) returns (SchedulingReply) {}
+  rpc SchedulingStorage (SchedulingStorageRequest) returns (SchedulingReply) {}
 
   // Query Resource Tree
   rpc QueryCGpuTree (QueryTreeRequest) returns (QueryTreeReply) {}

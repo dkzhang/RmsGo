@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
+	github.com/golang/protobuf v1.4.2
 	github.com/gomodule/redigo v1.8.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jmoiron/sqlx v1.2.0
@@ -29,6 +30,7 @@ require (
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
+	google.golang.org/grpc v1.32.0
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 	gorm.io/driver/postgres v1.0.0

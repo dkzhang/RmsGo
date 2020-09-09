@@ -1,4 +1,4 @@
-package resScheduling
+package resourceScheduling
 
 import (
 	"fmt"
