@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package resScheduling;
+
+// The Resource Scheduling service definition.
+service Scheduling {
+  // Scheduling Resource
+  rpc SchedulingCGpu (SchedulingCGpuRequest) returns (SchedulingReply) {}
+  rpc SchedulingStorage (SchedulingCGpuRequest) returns (SchedulingReply) {}
+
+  // Query Resource Tree
+  rpc QueryCGpuTree (QueryTreeRequest) returns (QueryTreeReply) {}
+  rpc QueryStorage (QueryStorageRequest) returns (QueryStorageReply) {}
+}
+
+///////////////////////////////////////////////////////////
+
+message SchedulingCGpuRequest {
+  int64 projectID = 1;
+  int64 cgpuType = 2;  // CPU=1,GPU=2
+  repeated int64 nodesAfter = 3;
+  int64 ctrlID = 4;
+  string ctrlCN = 5;
+}
+
+message SchedulingStorageRequest {
+  int64 projectID = 1;
+  int64 storageSizeAfter = 2;
+  string storageAllocInfoAfter = 3;
+  int64 ctrlID = 4;
+  string ctrlCN = 5;
+}
+
+message SchedulingReply {
+  string errorMessage = 1;
+}
+
+///////////////////////////////////////////////////////////
+message QueryTreeRequest {
+  int64 projectID = 1;
+  int64 cgpuType = 2;  // CPU=1, GPU=2
+  int64 queryType = 3; // Allocated=1, IdleAndAllocated=2, All=3
+}
+
+message QueryTreeReply {
+  string jsonTree = 1;
+  string errorMessage = 2;
+}
+
+///////////////////////////////////////////////////////////
+message QueryStorageRequest {
+  int64 projectID = 1;
+}
+
+message QueryStorageReply {
+  int64 size = 1;
+  string allocInfo = 2;
+  string errorMessage = 3;
+}
+
+//protoc -I grpc/ grpc/scheduling.proto --go_out=plugins=grpc:grpc/

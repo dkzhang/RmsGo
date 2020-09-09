@@ -5,6 +5,7 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
+	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resTreeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/myUtils/arrayMerge"
@@ -17,16 +18,21 @@ type ResScheduling struct {
 	allocDM   resAllocDM.ResAllocDM
 	cpuNodeDM resNodeDM.ResNodeDM
 	gpuNodeDM resNodeDM.ResNodeDM
+	cpuTreeDM resTreeDM.ResTreeDM
+	gpuTreeDM resTreeDM.ResTreeDM
 }
 
 func NewResScheduling(prdm projectResDM.ProjectResDM,
 	radm resAllocDM.ResAllocDM,
-	cndm resNodeDM.ResNodeDM, gndm resNodeDM.ResNodeDM) ResScheduling {
+	cndm resNodeDM.ResNodeDM, gndm resNodeDM.ResNodeDM,
+	ctdm resTreeDM.ResTreeDM, gtdm resTreeDM.ResTreeDM) ResScheduling {
 	return ResScheduling{
 		prdm:      prdm,
 		allocDM:   radm,
 		cpuNodeDM: cndm,
 		gpuNodeDM: gndm,
+		cpuTreeDM: ctdm,
+		gpuTreeDM: gtdm,
 	}
 }
 
@@ -181,7 +187,7 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 }
 
 func (rs ResScheduling) SchedulingStorage(projectID int,
-	storageSizeAfter int, StorageAllocInfoAfter string, ctrlID int, ctrlCN string) (err error) {
+	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (err error) {
 
 	// TODO
 	return fmt.Errorf("not accomplished")
@@ -190,21 +196,30 @@ func (rs ResScheduling) SchedulingStorage(projectID int,
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 func (rs ResScheduling) QueryCpuTreeAllocated(projectID int) (jsonTree string, err error) {
+	jsonTree, err = rs.cpuTreeDM.QueryTreeAllocated(projectID)
+	if err != nil {
+		return "", fmt.Errorf("rs.cpuTreeDM.QueryTreeAllocated error: %v", err)
+	}
 
-	// TODO
-	return "", fmt.Errorf("not accomplished")
+	return jsonTree, nil
 }
 
 func (rs ResScheduling) QueryCpuTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
+	jsonTree, err = rs.cpuTreeDM.QueryTreeIdleAndAllocated(projectID)
+	if err != nil {
+		return "", fmt.Errorf("rs.cpuTreeDM.QueryTreeIdleAndAllocated error: %v", err)
+	}
 
-	// TODO
-	return "", fmt.Errorf("not accomplished")
+	return jsonTree, nil
 }
 
 func (rs ResScheduling) QueryCpuTreeAll() (jsonTree string, err error) {
+	jsonTree, err = rs.cpuTreeDM.QueryTreeAll()
+	if err != nil {
+		return "", fmt.Errorf("rs.cpuTreeDM.QueryTreeAll error: %v", err)
+	}
 
-	// TODO
-	return "", fmt.Errorf("not accomplished")
+	return jsonTree, nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
