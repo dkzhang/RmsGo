@@ -11,6 +11,9 @@ service Scheduling {
   // Query Resource Tree
   rpc QueryCGpuTree (QueryTreeRequest) returns (QueryTreeReply) {}
   rpc QueryStorage (QueryStorageRequest) returns (QueryStorageReply) {}
+
+  // Query Project Resource
+  rpc QueryProjectRes (QueryProjectResRequest) returns (QueryProjectResReply) {}
 }
 
 ///////////////////////////////////////////////////////////
@@ -32,7 +35,6 @@ message SchedulingStorageRequest {
 }
 
 message SchedulingReply {
-  string errorMessage = 1;
 }
 
 ///////////////////////////////////////////////////////////
@@ -44,7 +46,6 @@ message QueryTreeRequest {
 
 message QueryTreeReply {
   string jsonTree = 1;
-  string errorMessage = 2;
 }
 
 ///////////////////////////////////////////////////////////
@@ -55,7 +56,25 @@ message QueryStorageRequest {
 message QueryStorageReply {
   int64 size = 1;
   string allocInfo = 2;
-  string errorMessage = 3;
+}
+
+///////////////////////////////////////////////////////////
+message QueryProjectResRequest {
+  int64 projectID = 1;
+}
+
+message QueryProjectResReply {
+  int64 projectID = 1;
+  int64 cpuNodesAcquired = 2;
+  int64 gpuNodesAcquired = 3;
+  int64 storageSizeAcquired = 4;
+  repeated int64 cpuNodesArray = 5;
+  string cpuNodesStr = 6;
+  repeated int64 gpuNodesArray = 7;
+  string gpuNodesStr = 8;
+  string storageAllocInfo = 9;
+  string createdAt = 10;
+  string updatedAt = 11;
 }
 
 //protoc -I grpc/ grpc/scheduling.proto --go_out=plugins=grpc:grpc/
