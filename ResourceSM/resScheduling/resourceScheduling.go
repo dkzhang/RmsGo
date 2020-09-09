@@ -180,19 +180,48 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 	return nil
 }
 
-func (rs ResScheduling) QueryTreeAllocated(projectID int) (jsonTree string, err error) {
+func (rs ResScheduling) SchedulingStorage(projectID int,
+	storageSizeAfter int, StorageAllocInfoAfter string, ctrlID int, ctrlCN string) (err error) {
+
+	// TODO
+	return fmt.Errorf("not accomplished")
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+func (rs ResScheduling) QueryCpuTreeAllocated(projectID int) (jsonTree string, err error) {
 
 	// TODO
 	return "", fmt.Errorf("not accomplished")
 }
 
-func (rs ResScheduling) QueryTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
+func (rs ResScheduling) QueryCpuTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
 
 	// TODO
 	return "", fmt.Errorf("not accomplished")
 }
 
-func (rs ResScheduling) QueryTreeAll() (jsonTree string, err error) {
+func (rs ResScheduling) QueryCpuTreeAll() (jsonTree string, err error) {
+
+	// TODO
+	return "", fmt.Errorf("not accomplished")
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+func (rs ResScheduling) QueryGpuTreeAllocated(projectID int) (jsonTree string, err error) {
+
+	// TODO
+	return "", fmt.Errorf("not accomplished")
+}
+
+func (rs ResScheduling) QueryGpuTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
+
+	// TODO
+	return "", fmt.Errorf("not accomplished")
+}
+
+func (rs ResScheduling) QueryGpuTreeAll() (jsonTree string, err error) {
 
 	// TODO
 	return "", fmt.Errorf("not accomplished")

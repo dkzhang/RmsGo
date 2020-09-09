@@ -7,5 +7,5 @@ import (
 
 type Tree struct {
 	RootGroup resNodeGroup.Group
-	NodesMap  map[int]*resNode.Node
+	NodesMap  map[int64]*resNode.Node
 }

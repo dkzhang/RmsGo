@@ -14,7 +14,7 @@ func LoadTreeFromJson(str string) (t Tree, err error) {
 	}
 
 	//GenNodesMap
-	t.NodesMap = make(map[int]*resNode.Node)
+	t.NodesMap = make(map[int64]*resNode.Node)
 	//t.NodesMap, err = genNodesMap(&(t.RootGroup), t.NodesMap)
 	t.NodesMap, err = genNodesMapIteration(&(t.RootGroup))
 	if err != nil {
@@ -42,8 +42,8 @@ type groupAndIndex struct {
 	index int
 }
 
-func genNodesMapIteration(g *resNodeGroup.Group) (map[int]*resNode.Node, error) {
-	nodesMap := make(map[int]*resNode.Node)
+func genNodesMapIteration(g *resNodeGroup.Group) (map[int64]*resNode.Node, error) {
+	nodesMap := make(map[int64]*resNode.Node)
 	giStack := stack.New()
 
 	giStack.Push(groupAndIndex{
@@ -88,7 +88,7 @@ func genNodesMapIteration(g *resNodeGroup.Group) (map[int]*resNode.Node, error) 
 }
 
 // generate a NodesMap from the Tree
-func genNodesMap(g *resNodeGroup.Group, nm map[int]*resNode.Node) (map[int]*resNode.Node, error) {
+func genNodesMap(g *resNodeGroup.Group, nm map[int64]*resNode.Node) (map[int64]*resNode.Node, error) {
 	var err error
 	if g.Nodes != nil {
 		for _, node := range g.Nodes {
