@@ -29,18 +29,16 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 		//CPU
 		err := s.TheResScheduling.SchedulingCPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
 		if err != nil {
-			return &pb.SchedulingReply{
-				ErrorMessage: fmt.Sprintf("SchedulingCPU error: %v", err),
-			}, nil
+			return &pb.SchedulingReply{},
+				status.Errorf(codes.NotFound, "SchedulingCPU error: %v", err)
 		}
 		return &pb.SchedulingReply{}, nil
 	case 2:
 		//GPU
 		err := s.TheResScheduling.SchedulingGPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
 		if err != nil {
-			return &pb.SchedulingReply{
-				ErrorMessage: fmt.Sprintf("SchedulingGPU error: %v", err),
-			}, nil
+			return &pb.SchedulingReply{},
+				status.Errorf(codes.NotFound, "SchedulingGPU error: %v", err)
 		}
 		return &pb.SchedulingReply{}, nil
 	default:
@@ -53,12 +51,14 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 func (s *server) SchedulingStorage(ctx context.Context, in *pb.SchedulingStorageRequest) (*pb.SchedulingReply, error) {
 	err := s.TheResScheduling.SchedulingStorage(int(in.ProjectID), int(in.StorageSizeAfter), in.StorageAllocInfoAfter, int(in.CtrlID), in.CtrlCN)
 	if err != nil {
-		return &pb.SchedulingReply{
-			ErrorMessage: fmt.Sprintf("SchedulingStorage error: %v", err),
-		}, nil
+		return &pb.SchedulingReply{},
+			status.Errorf(codes.NotFound, "SchedulingStorage error: %v", err)
 	}
-	return &pb.SchedulingReply{ErrorMessage: ""}, nil
+	return &pb.SchedulingReply{}, nil
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
 func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*pb.QueryTreeReply, error) {
 	switch in.CgpuType {
 	case 1:
@@ -68,30 +68,24 @@ func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*p
 			// Allocated
 			jsonTree, err := s.TheResScheduling.QueryCpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
-				return &pb.QueryTreeReply{
-					JsonTree:     "",
-					ErrorMessage: fmt.Sprintf("QueryCpuTreeAllocated error: %v", err),
-				}, nil
+				return &pb.QueryTreeReply{},
+					status.Errorf(codes.NotFound, "QueryCpuTreeAllocated error: %v", err)
 			}
 			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 2:
 			// IdleAndAllocated
 			jsonTree, err := s.TheResScheduling.QueryCpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
-				return &pb.QueryTreeReply{
-					JsonTree:     "",
-					ErrorMessage: fmt.Sprintf("QueryCpuTreeIdleAndAllocated error: %v", err),
-				}, nil
+				return &pb.QueryTreeReply{},
+					status.Errorf(codes.NotFound, "QueryCpuTreeIdleAndAllocated error: %v", err)
 			}
 			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 3:
 			// All
 			jsonTree, err := s.TheResScheduling.QueryCpuTreeAll()
 			if err != nil {
-				return &pb.QueryTreeReply{
-					JsonTree:     "",
-					ErrorMessage: fmt.Sprintf("QueryCpuTreeAll error: %v", err),
-				}, nil
+				return &pb.QueryTreeReply{},
+					status.Errorf(codes.NotFound, "QueryCpuTreeAll error: %v", err)
 			}
 			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		default:
@@ -105,30 +99,24 @@ func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*p
 			// Allocated
 			jsonTree, err := s.TheResScheduling.QueryGpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
-				return &pb.QueryTreeReply{
-					JsonTree:     "",
-					ErrorMessage: fmt.Sprintf("QueryGpuTreeAllocated error: %v", err),
-				}, nil
+				return &pb.QueryTreeReply{},
+					status.Errorf(codes.NotFound, "QueryGpuTreeAllocated error: %v", err)
 			}
 			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 2:
 			// IdleAndAllocated
 			jsonTree, err := s.TheResScheduling.QueryGpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
-				return &pb.QueryTreeReply{
-					JsonTree:     "",
-					ErrorMessage: fmt.Sprintf("QueryGpuTreeIdleAndAllocated error: %v", err),
-				}, nil
+				return &pb.QueryTreeReply{},
+					status.Errorf(codes.NotFound, "QueryGpuTreeIdleAndAllocated error: %v", err)
 			}
 			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 3:
 			// All
 			jsonTree, err := s.TheResScheduling.QueryGpuTreeAll()
 			if err != nil {
-				return &pb.QueryTreeReply{
-					JsonTree:     "",
-					ErrorMessage: fmt.Sprintf("QueryGpuTreeAll error: %v", err),
-				}, nil
+				return &pb.QueryTreeReply{},
+					status.Errorf(codes.NotFound, "QueryGpuTreeAll error: %v", err)
 			}
 			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		default:
@@ -143,6 +131,27 @@ func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*p
 }
 func (s *server) QueryStorage(ctx context.Context, in *pb.QueryStorageRequest) (*pb.QueryStorageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryStorage not implemented")
+}
+
+func (s *server) QueryProjectRes(ctx context.Context, in *pb.QueryProjectResRequest) (*pb.QueryProjectResReply, error) {
+	pr, err := s.TheResScheduling.QueryProjectResByID(int(in.ProjectID))
+	if err != nil {
+		return &pb.QueryProjectResReply{},
+			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
+	}
+	return &pb.QueryProjectResReply{
+		ProjectID:           int64(pr.ProjectID),
+		CpuNodesAcquired:    int64(pr.CpuNodesAcquired),
+		GpuNodesAcquired:    int64(pr.GpuNodesAcquired),
+		StorageSizeAcquired: int64(pr.StorageSizeAcquired),
+		CpuNodesArray:       pr.CpuNodesArray,
+		CpuNodesStr:         pr.CpuNodesStr,
+		GpuNodesArray:       pr.GpuNodesArray,
+		GpuNodesStr:         pr.GpuNodesStr,
+		StorageAllocInfo:    pr.StorageAllocInfo,
+		CreatedAt:           pr.CreatedAt.Format(time.RFC3339Nano),
+		UpdatedAt:           pr.UpdatedAt.Format(time.RFC3339Nano),
+	}, nil
 }
 
 func main() {
