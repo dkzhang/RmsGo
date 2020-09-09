@@ -15,25 +15,32 @@ import (
 )
 
 type ResScheduling struct {
-	prdm      projectResDM.ProjectResDM
-	allocDM   resAllocDM.ResAllocDM
+	prdm projectResDM.ProjectResDM
+
+	cpuAllocDM     resAllocDM.ResAllocDM
+	gpuAllocDM     resAllocDM.ResAllocDM
+	storageAllocDM resAllocDM.ResAllocDM
+
 	cpuNodeDM resNodeDM.ResNodeDM
 	gpuNodeDM resNodeDM.ResNodeDM
+
 	cpuTreeDM resTreeDM.ResTreeDM
 	gpuTreeDM resTreeDM.ResTreeDM
 }
 
 func NewResScheduling(prdm projectResDM.ProjectResDM,
-	radm resAllocDM.ResAllocDM,
+	cadm resAllocDM.ResAllocDM, gadm resAllocDM.ResAllocDM, sadm resAllocDM.ResAllocDM,
 	cndm resNodeDM.ResNodeDM, gndm resNodeDM.ResNodeDM,
 	ctdm resTreeDM.ResTreeDM, gtdm resTreeDM.ResTreeDM) ResScheduling {
 	return ResScheduling{
-		prdm:      prdm,
-		allocDM:   radm,
-		cpuNodeDM: cndm,
-		gpuNodeDM: gndm,
-		cpuTreeDM: ctdm,
-		gpuTreeDM: gtdm,
+		prdm:           prdm,
+		cpuAllocDM:     cadm,
+		gpuAllocDM:     gadm,
+		storageAllocDM: sadm,
+		cpuNodeDM:      cndm,
+		gpuNodeDM:      gndm,
+		cpuTreeDM:      ctdm,
+		gpuTreeDM:      gtdm,
 	}
 }
 
@@ -92,7 +99,7 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 
 	// DM DB Ops
 	// (1)
-	err = rs.allocDM.Insert(rar)
+	err = rs.cpuAllocDM.Insert(rar)
 	if err != nil {
 		return fmt.Errorf("allocDM.Insert error: %v", err)
 	}
@@ -167,7 +174,7 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 
 	// DM DB Ops
 	// (1)
-	err = rs.allocDM.Insert(rar)
+	err = rs.gpuAllocDM.Insert(rar)
 	if err != nil {
 		return fmt.Errorf("allocDM.Insert error: %v", err)
 	}
@@ -190,8 +197,50 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 func (rs ResScheduling) SchedulingStorage(projectID int,
 	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (err error) {
 
-	// TODO
-	return fmt.Errorf("not accomplished")
+	pr, err := rs.prdm.QueryByID(projectID)
+	if err != nil {
+		return fmt.Errorf("cannot find ProjectResource info with projectID = %d", projectID)
+	}
+
+	// (1) create the Resource Allocate Record
+
+	rar := resAlloc.Record{
+		ProjectID:          pr.ProjectID,
+		NumBefore:          pr.StorageSizeAcquired,
+		AllocInfoBefore:    nil,
+		AllocInfoBeforeStr: pr.StorageAllocInfo,
+		NumAfter:           storageSizeAfter,
+		AllocInfoAfter:     nil,
+		AllocInfoAfterStr:  storageAllocInfoAfter,
+		NumChange:          storageSizeAfter - pr.StorageSizeAcquired,
+		AllocInfoChange:    nil,
+		AllocInfoChangeStr: fmt.Sprintf("%s => => => %s", pr.StorageAllocInfo, storageAllocInfoAfter),
+		CtrlID:             ctrlID,
+		CtrlChineseName:    ctrlCN,
+	}
+
+	// (2) modify Resource Node alloc info
+
+	// (3) modify Project Resource info
+	pr.StorageSizeAcquired = storageSizeAfter
+	pr.StorageAllocInfo = storageAllocInfoAfter
+
+	// DM DB Ops
+	// (1)
+	err = rs.storageAllocDM.Insert(rar)
+	if err != nil {
+		return fmt.Errorf("allocDM.Insert error: %v", err)
+	}
+
+	// (2)
+
+	// (3)
+	err = rs.prdm.Update(pr)
+	if err != nil {
+		return fmt.Errorf("prdm.Update error: %v", err)
+	}
+
+	return nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

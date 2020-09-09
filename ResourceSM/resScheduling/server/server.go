@@ -129,9 +129,6 @@ func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*p
 			status.Errorf(codes.InvalidArgument, " Unsupported type: %d", in.CgpuType)
 	}
 }
-func (s *server) QueryStorage(ctx context.Context, in *pb.QueryStorageRequest) (*pb.QueryStorageReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryStorage not implemented")
-}
 
 func (s *server) QueryProjectRes(ctx context.Context, in *pb.QueryProjectResRequest) (*pb.QueryProjectResReply, error) {
 	pr, err := s.TheResScheduling.QueryProjectResByID(int(in.ProjectID))
