@@ -9,11 +9,11 @@ import "testing"
 //}
 
 func TestIntArrayToBase64Str(t *testing.T) {
-	int30_59 := make([]int, 30)
+	int30_59 := make([]int64, 30)
 	for i := 0; i < 30; i++ {
-		int30_59[i] = 30 + i
+		int30_59[i] = int64(30 + i)
 	}
-	intArray := append([]int{0, 1, 2, 238, 239, 4095}, int30_59...)
+	intArray := append([]int64{0, 1, 2, 238, 239, 4095}, int30_59...)
 	base64Str := IntArrayToBase64Str(intArray)
 	t.Logf("base64Srt = \n %s\n", base64Str)
 	t.Logf("len(base64Srt) = %d", len(base64Str))

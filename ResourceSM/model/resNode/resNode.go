@@ -6,7 +6,7 @@ import (
 )
 
 type Node struct {
-	ID            int       `db:"node_id" json:"node_id"`
+	ID            int64     `db:"node_id" json:"node_id"`
 	Name          string    `db:"node_name" json:"node_name"`
 	Status        int       `db:"node_status" json:"node_status"`
 	Description   string    `db:"description" json:"description"`

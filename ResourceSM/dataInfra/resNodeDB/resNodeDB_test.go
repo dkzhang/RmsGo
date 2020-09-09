@@ -19,7 +19,7 @@ var _ = Describe("ResNodeDB", func() {
 			num := 256
 			resNodes := make([]resNode.Node, num)
 			for i := 0; i < num; i++ {
-				nodeID := i + 1
+				nodeID := int64(i + 1)
 				resNodes[i] = resNode.Node{
 					ID:            nodeID,
 					Name:          fmt.Sprintf("Node%d", nodeID),
@@ -33,7 +33,7 @@ var _ = Describe("ResNodeDB", func() {
 			}
 
 			for i := 0; i < num; i++ {
-				nodeID := i + 1
+				nodeID := int64(i + 1)
 				node, err := rndb.QueryByID(nodeID)
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(node.ID).Should(Equal(resNodes[i].ID))
@@ -50,7 +50,7 @@ var _ = Describe("ResNodeDB", func() {
 
 		It("Update", func() {
 			for j := 0; j < 100; j++ {
-				nodeID := rand.Intn(100) + 1 // [1, 100]
+				nodeID := rand.Int63n(100) + 1 // [1, 100]
 
 				nodeUpdated := resNode.Node{
 					ID:            nodeID,

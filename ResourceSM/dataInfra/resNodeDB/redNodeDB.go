@@ -11,9 +11,10 @@ type DBInfo struct {
 }
 
 type ResNodeDB interface {
-	QueryByID(nodeID int) (resNode.Node, error)
+	QueryByID(nodeID int64) (resNode.Node, error)
 	QueryAll() ([]resNode.Node, error)
 	Update(node resNode.Node) (err error)
+	UpdateNodes(nodes []resNode.Node) (err error)
 	Insert(node resNode.Node) (err error)
 	Close()
 }

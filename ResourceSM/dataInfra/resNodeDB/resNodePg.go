@@ -23,7 +23,7 @@ func (rnpg ResNodePg) Close() {
 	rnpg.TheDB.Close()
 }
 
-func (rnpg ResNodePg) QueryByID(nodeID int) (ni resNode.Node, err error) {
+func (rnpg ResNodePg) QueryByID(nodeID int64) (ni resNode.Node, err error) {
 	queryByID := fmt.Sprintf(`SELECT * FROM %s WHERE node_id=$1`, rnpg.TableName)
 	err = rnpg.TheDB.Get(&ni, queryByID, nodeID)
 	if err != nil {
@@ -49,6 +49,32 @@ func (rnpg ResNodePg) Update(ni resNode.Node) (err error) {
 	_, err = rnpg.TheDB.NamedExec(execUpdate, ni)
 	if err != nil {
 		return fmt.Errorf(" Update ResNode info in DB error: %v", err)
+	}
+	return nil
+}
+
+func (rnpg ResNodePg) UpdateNodes(nodes []resNode.Node) (err error) {
+	tx, err := rnpg.TheDB.Begin()
+	if err != nil {
+		return fmt.Errorf("db transactions begin error: %v", err)
+	}
+
+	txStmt, err := tx.Prepare(fmt.Sprintf(
+		`UPDATE %s SET node_name=$2, node_status=$3, description=$4, 
+			project_id=$5, allocated_time=$6 WHERE node_id=$1`, rnpg.TableName))
+
+	for _, node := range nodes {
+		_, err = txStmt.Exec(node.ID,
+			node.Name, node.Status, node.Description,
+			node.ProjectID, node.AllocatedTime)
+		if err != nil {
+			_ = tx.Rollback()
+			return fmt.Errorf(" Update node (nodeID=%d) in DB error: %v", node.ID, err)
+		}
+	}
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf(" Update nodes in DB error: %v", err)
 	}
 	return nil
 }
