@@ -6,6 +6,8 @@ import (
 
 func CountTree(t *Tree) {
 	resNodeGroup.CountGroup(&t.RootGroup)
+	t.NodesNum = t.RootGroup.NodesNum
+	t.NodesStatusMap = t.RootGroup.NodesStatusMap
 }
 
 func CountTreeRO(t *Tree) (nodesNum int, nodesStatusMap map[int]int) {

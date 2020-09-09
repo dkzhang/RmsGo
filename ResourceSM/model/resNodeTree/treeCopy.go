@@ -8,7 +8,7 @@ import (
 func CopyTree(t *Tree) (nt *Tree) {
 	nt = &Tree{
 		RootGroup: *(resNodeGroup.CopyGroup(&(t.RootGroup))),
-		NodesMap:  make(map[int]*resNode.Node),
+		NodesMap:  make(map[int64]*resNode.Node),
 	}
 
 	for k, v := range t.NodesMap {

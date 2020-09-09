@@ -101,7 +101,13 @@ var _ = Describe("GroupNode", func() {
 			resNodeGroup.CountGroup(&t1.RootGroup)
 			resNodeTree.CountTree(&t1)
 
-			t2 := resNodeTree.FiltrateTree(&t1, 3)
+			t2 := resNodeTree.FiltrateTree(&t1, func(node resNode.Node) bool {
+				if node.ProjectID == 0 || node.ProjectID == 3 {
+					return true
+				} else {
+					return false
+				}
+			})
 			resNodeTree.CountTree(t2)
 			strJson2, err := resNodeTree.TreeToJsonIndent(*t2)
 			Expect(err).ShouldNot(HaveOccurred())

@@ -8,4 +8,7 @@ import (
 type Tree struct {
 	RootGroup resNodeGroup.Group
 	NodesMap  map[int64]*resNode.Node
+
+	NodesNum       int
+	NodesStatusMap map[int]int
 }

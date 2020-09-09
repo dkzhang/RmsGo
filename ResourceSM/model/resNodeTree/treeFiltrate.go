@@ -6,7 +6,7 @@ import (
 	"github.com/golang-collections/collections/stack"
 )
 
-func FiltrateTree(t *Tree, projectID int) (nt *Tree) {
+func FiltrateTree(t *Tree, filter func(node resNode.Node) bool) (nt *Tree) {
 	nt = CopyTree(t)
 
 	giStack := stack.New()
@@ -27,7 +27,7 @@ func FiltrateTree(t *Tree, projectID int) (nt *Tree) {
 			if gi.group.Nodes != nil {
 				nodes := make([]*resNode.Node, 0, len(gi.group.Nodes))
 				for _, node := range gi.group.Nodes {
-					if node.ProjectID == 0 || node.ProjectID == projectID {
+					if filter(*node) == true {
 						// reserve this node
 						nodes = append(nodes, node)
 					}
