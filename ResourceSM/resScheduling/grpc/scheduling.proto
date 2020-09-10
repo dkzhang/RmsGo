@@ -13,7 +13,7 @@ service Scheduling {
 
   // Query Project Resource
   rpc QueryProjectRes (QueryProjectResRequest) returns (QueryProjectResReply) {}
-  rpc QueryProjectResLite (QueryProjectResRequest) returns (QueryProjectResReplyLite) {}
+  rpc QueryProjectResLite (QueryProjectResRequest) returns (QueryProjectResLiteReply) {}
 }
 
 ///////////////////////////////////////////////////////////
@@ -72,12 +72,11 @@ message QueryProjectResReply {
   string updatedAt = 11;
 }
 
-message QueryProjectResReplyLite {
+message QueryProjectResLiteReply {
   int64 projectID = 1;
   int64 cpuNodesAcquired = 2;
   int64 gpuNodesAcquired = 3;
   int64 storageSizeAcquired = 4;
-  string storageAllocInfo = 5;
 }
 
 //protoc -I grpc/ grpc/scheduling.proto --go_out=plugins=grpc:grpc/

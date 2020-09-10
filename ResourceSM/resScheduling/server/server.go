@@ -32,7 +32,6 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 			return &pb.SchedulingReply{},
 				status.Errorf(codes.NotFound, "SchedulingCPU error: %v", err)
 		}
-		return &pb.SchedulingReply{}, nil
 	case 2:
 		//GPU
 		err := s.TheResScheduling.SchedulingGPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
@@ -40,12 +39,23 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 			return &pb.SchedulingReply{},
 				status.Errorf(codes.NotFound, "SchedulingGPU error: %v", err)
 		}
-		return &pb.SchedulingReply{}, nil
 	default:
 		// Unsupported type
 		return &pb.SchedulingReply{},
 			status.Errorf(codes.InvalidArgument, " Unsupported type: %d", in.CgpuType)
 	}
+
+	prl, err := s.TheResScheduling.QueryProjectResLiteByID(int(in.ProjectID))
+	if err != nil {
+		return &pb.SchedulingReply{},
+			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
+	}
+	return &pb.SchedulingReply{
+		ProjectID:           int64(prl.ProjectID),
+		CpuNodesAcquired:    int64(prl.CpuNodesAcquired),
+		GpuNodesAcquired:    int64(prl.GpuNodesAcquired),
+		StorageSizeAcquired: int64(prl.StorageSizeAcquired),
+	}, nil
 }
 
 func (s *server) SchedulingStorage(ctx context.Context, in *pb.SchedulingStorageRequest) (*pb.SchedulingReply, error) {
@@ -148,6 +158,20 @@ func (s *server) QueryProjectRes(ctx context.Context, in *pb.QueryProjectResRequ
 		StorageAllocInfo:    pr.StorageAllocInfo,
 		CreatedAt:           pr.CreatedAt.Format(time.RFC3339Nano),
 		UpdatedAt:           pr.UpdatedAt.Format(time.RFC3339Nano),
+	}, nil
+}
+
+func (s *server) QueryProjectResLite(ctx context.Context, in *pb.QueryProjectResRequest) (*pb.QueryProjectResReplyLite, error) {
+	pr, err := s.TheResScheduling.QueryProjectResLiteByID(int(in.ProjectID))
+	if err != nil {
+		return &pb.QueryProjectResReplyLite{},
+			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
+	}
+	return &pb.QueryProjectResReplyLite{
+		ProjectID:           int64(pr.ProjectID),
+		CpuNodesAcquired:    int64(pr.CpuNodesAcquired),
+		GpuNodesAcquired:    int64(pr.GpuNodesAcquired),
+		StorageSizeAcquired: int64(pr.StorageSizeAcquired),
 	}, nil
 }
 
