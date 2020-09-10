@@ -45,6 +45,20 @@ func (pdm MemoryMap) QueryByID(projectID int) (projectRes.ResInfo, error) {
 	}
 }
 
+func (pdm MemoryMap) QueryLiteByID(projectID int) (projectRes.ResInfoLite, error) {
+	if psi, ok := pdm.infoMap[projectID]; ok {
+		return projectRes.ResInfoLite{
+			ProjectID:           psi.ProjectID,
+			CpuNodesAcquired:    psi.CpuNodesAcquired,
+			GpuNodesAcquired:    psi.GpuNodesAcquired,
+			StorageSizeAcquired: psi.StorageSizeAcquired,
+		}, nil
+	} else {
+		return projectRes.ResInfoLite{},
+			fmt.Errorf("the project res (id = %d) info does not exist", projectID)
+	}
+}
+
 func (pdm MemoryMap) QueryAll() (pis []projectRes.ResInfo, err error) {
 	for _, pi := range pdm.infoMap {
 		pis = append(pis, *pi)

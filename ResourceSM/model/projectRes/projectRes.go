@@ -23,6 +23,16 @@ type ResInfo struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
+type ResInfoLite struct {
+	// Static 1
+	ProjectID int `db:"project_id" json:"project_id"`
+
+	// Alloc 3
+	CpuNodesAcquired    int `db:"cpu_nodes_acquired" json:"cpu_nodes_acquired"`
+	GpuNodesAcquired    int `db:"gpu_nodes_acquired" json:"gpu_nodes_acquired"`
+	StorageSizeAcquired int `db:"storage_size_acquired" json:"storage_size_acquired"`
+}
+
 var SchemaInfo = `
 		CREATE TABLE %s (
     		project_id int PRIMARY KEY,			

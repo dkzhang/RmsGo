@@ -39,9 +39,6 @@ var _ = Describe("ProjectDB", func() {
 					CpuNodesAcquired:    rand.Intn(100),
 					GpuNodesAcquired:    rand.Intn(100),
 					StorageSizeAcquired: rand.Intn(100),
-					CpuNodesMap:         fmt.Sprintf("CpuNodesMap%d", i+1),
-					GpuNodesMap:         fmt.Sprintf("GpuNodesMap%d", i+1),
-					StorageAllocInfo:    fmt.Sprintf("StorageAllocInfo%d", i+1),
 
 					CreatedAt: time.Now(),
 					UpdatedAt: time.Now(),
@@ -214,10 +211,8 @@ var _ = Describe("ProjectDB", func() {
 				CpuNodesAcquired:    rand.Intn(100),
 				GpuNodesAcquired:    rand.Intn(100),
 				StorageSizeAcquired: rand.Intn(100),
-				CpuNodesMap:         fmt.Sprintf("CpuNodesMap%dUpdated", projectID),
-				GpuNodesMap:         fmt.Sprintf("GpuNodesMap%dUpdated", projectID),
-				StorageAllocInfo:    fmt.Sprintf("StorageAllocInfo%dUpdated", projectID),
-				UpdatedAt:           time.Now(),
+
+				UpdatedAt: time.Now(),
 			}
 
 			err = pdm.UpdateAllocInfo(ali)
@@ -230,18 +225,12 @@ var _ = Describe("ProjectDB", func() {
 			Expect(piUpdated.CpuNodesAcquired).Should(Equal(ali.CpuNodesAcquired))
 			Expect(piUpdated.GpuNodesAcquired).Should(Equal(ali.GpuNodesAcquired))
 			Expect(piUpdated.StorageSizeAcquired).Should(Equal(ali.StorageSizeAcquired))
-			Expect(piUpdated.CpuNodesMap).Should(Equal(ali.CpuNodesMap))
-			Expect(piUpdated.GpuNodesMap).Should(Equal(ali.GpuNodesMap))
-			Expect(piUpdated.StorageAllocInfo).Should(Equal(ali.StorageAllocInfo))
 
 			// check not updated info
 			pi.CpuNodesAcquired = piUpdated.CpuNodesAcquired
 			pi.GpuNodesAcquired = piUpdated.GpuNodesAcquired
 			pi.StorageSizeAcquired = piUpdated.StorageSizeAcquired
-			pi.CpuNodesMap = piUpdated.CpuNodesMap
-			pi.GpuNodesMap = piUpdated.GpuNodesMap
 			pi.StorageSizeExpected = piUpdated.StorageSizeExpected
-			pi.StorageAllocInfo = piUpdated.StorageAllocInfo
 			pi.UpdatedAt = piUpdated.UpdatedAt
 			Expect(piUpdated).Should(Equal(pi))
 		})

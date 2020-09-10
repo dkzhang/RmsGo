@@ -37,8 +37,5 @@ type AllocInfo struct {
 	CpuNodesAcquired    int       `db:"cpu_nodes_acquired" json:"cpu_nodes_acquired"`
 	GpuNodesAcquired    int       `db:"gpu_nodes_acquired" json:"gpu_nodes_acquired"`
 	StorageSizeAcquired int       `db:"storage_size_acquired" json:"storage_size_acquired"`
-	CpuNodesMap         string    `db:"cpu_nodes_map" json:"cpu_nodes_map"`
-	GpuNodesMap         string    `db:"gpu_nodes_map" json:"gpu_nodes_map"`
-	StorageAllocInfo    string    `db:"storage_alloc_info" json:"storage_alloc_info"`
 	UpdatedAt           time.Time `db:"updated_at" json:"updated_at"`
 }

@@ -200,9 +200,6 @@ func (pdm MemoryMap) UpdateAllocInfo(ali project.AllocInfo) (err error) {
 	pdm.infoMap[ali.ProjectID].CpuNodesAcquired = ali.CpuNodesAcquired
 	pdm.infoMap[ali.ProjectID].GpuNodesAcquired = ali.GpuNodesAcquired
 	pdm.infoMap[ali.ProjectID].StorageSizeAcquired = ali.StorageSizeAcquired
-	pdm.infoMap[ali.ProjectID].CpuNodesMap = ali.CpuNodesMap
-	pdm.infoMap[ali.ProjectID].GpuNodesMap = ali.GpuNodesMap
-	pdm.infoMap[ali.ProjectID].StorageAllocInfo = ali.StorageAllocInfo
 
 	pdm.infoMap[ali.ProjectID].UpdatedAt = ali.UpdatedAt
 

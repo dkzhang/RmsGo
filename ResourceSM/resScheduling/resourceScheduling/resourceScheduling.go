@@ -275,3 +275,7 @@ func (rs ResScheduling) QueryGpuTreeAll() (jsonTree string, err error) {
 func (rs ResScheduling) QueryProjectResByID(projectID int) (projectRes.ResInfo, error) {
 	return rs.prdm.QueryByID(projectID)
 }
+
+func (rs ResScheduling) QueryProjectResLiteByID(projectID int) (projectRes.ResInfoLite, error) {
+	return rs.prdm.QueryLiteByID(projectID)
+}
