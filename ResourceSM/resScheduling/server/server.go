@@ -24,17 +24,19 @@ type server struct {
 }
 
 func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuRequest) (*pb.SchedulingReply, error) {
+	var isFirstAlloc bool
+	var err error
 	switch in.CgpuType {
 	case 1:
 		//CPU
-		isFirstAlloc, err := s.TheResScheduling.SchedulingCPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
+		isFirstAlloc, err = s.TheResScheduling.SchedulingCPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
 		if err != nil {
 			return &pb.SchedulingReply{},
 				status.Errorf(codes.NotFound, "SchedulingCPU error: %v", err)
 		}
 	case 2:
 		//GPU
-		isFirstAlloc, err := s.TheResScheduling.SchedulingGPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
+		isFirstAlloc, err = s.TheResScheduling.SchedulingGPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
 		if err != nil {
 			return &pb.SchedulingReply{},
 				status.Errorf(codes.NotFound, "SchedulingGPU error: %v", err)
@@ -51,6 +53,7 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
 	}
 	return &pb.SchedulingReply{
+		IsFirstAlloc:        isFirstAlloc,
 		ProjectID:           int64(prl.ProjectID),
 		CpuNodesAcquired:    int64(prl.CpuNodesAcquired),
 		GpuNodesAcquired:    int64(prl.GpuNodesAcquired),
@@ -59,7 +62,9 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 }
 
 func (s *server) SchedulingStorage(ctx context.Context, in *pb.SchedulingStorageRequest) (*pb.SchedulingReply, error) {
-	isFirstAlloc, err := s.TheResScheduling.SchedulingStorage(int(in.ProjectID), int(in.StorageSizeAfter), in.StorageAllocInfoAfter, int(in.CtrlID), in.CtrlCN)
+	var isFirstAlloc bool
+	var err error
+	isFirstAlloc, err = s.TheResScheduling.SchedulingStorage(int(in.ProjectID), int(in.StorageSizeAfter), in.StorageAllocInfoAfter, int(in.CtrlID), in.CtrlCN)
 	if err != nil {
 		return &pb.SchedulingReply{},
 			status.Errorf(codes.NotFound, "SchedulingStorage error: %v", err)
@@ -71,6 +76,7 @@ func (s *server) SchedulingStorage(ctx context.Context, in *pb.SchedulingStorage
 			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
 	}
 	return &pb.SchedulingReply{
+		IsFirstAlloc:        isFirstAlloc,
 		ProjectID:           int64(prl.ProjectID),
 		CpuNodesAcquired:    int64(prl.CpuNodesAcquired),
 		GpuNodesAcquired:    int64(prl.GpuNodesAcquired),
