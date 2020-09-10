@@ -27,20 +27,20 @@ message SchedulingCGpuRequest {
 }
 
 message SchedulingStorageRequest {
-  bool isFirstAlloc = 1;
-  int64 projectID = 2;
-  int64 storageSizeAfter = 3;
-  string storageAllocInfoAfter = 4;
-  int64 ctrlID = 5;
-  string ctrlCN = 6;
+  int64 projectID = 1;
+  int64 storageSizeAfter = 2;
+  string storageAllocInfoAfter = 3;
+  int64 ctrlID = 4;
+  string ctrlCN = 5;
 }
 
 message SchedulingReply {
-  int64 projectID = 1;
-  int64 cpuNodesAcquired = 2;
-  int64 gpuNodesAcquired = 3;
-  int64 storageSizeAcquired = 4;
-  string storageAllocInfo = 5;
+  bool isFirstAlloc = 1;
+  int64 projectID = 2;
+  int64 cpuNodesAcquired = 3;
+  int64 gpuNodesAcquired = 4;
+  int64 storageSizeAcquired = 5;
+  string storageAllocInfo = 6;
 }
 
 ///////////////////////////////////////////////////////////
