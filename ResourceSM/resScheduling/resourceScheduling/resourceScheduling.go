@@ -44,17 +44,24 @@ func NewResScheduling(prdm projectResDM.ProjectResDM,
 	}
 }
 
-func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID int, ctrlCN string) (err error) {
-
-	pr, err := rs.prdm.QueryByID(projectID)
-	if err != nil {
-		return fmt.Errorf("cannot find ProjectResource info with projectID = %d", projectID)
+func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID int, ctrlCN string) (isFirstAlloc bool, err error) {
+	var pr projectRes.ResInfo
+	isFirstAlloc = rs.prdm.IsExist(projectID)
+	if isFirstAlloc {
+		pr, err = rs.prdm.QueryByID(projectID)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
+		}
+	} else {
+		pr = projectRes.ResInfo{ProjectID: projectID}
 	}
 
 	// (1) create the Resource Allocate Record
 	nodesChange, increased, reduced, err := arrayMerge.ComputeChange(pr.CpuNodesArray, nodesAfter)
 	if err != nil {
-		return fmt.Errorf("arrayMerge.ComputeChange error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("arrayMerge.ComputeChange error: %v", err)
 	}
 
 	rar := resAlloc.Record{
@@ -78,14 +85,16 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 		if ni > 0 {
 			node, err := rs.cpuNodeDM.QueryByID(ni)
 			if err != nil {
-				return fmt.Errorf("cpuNodeDM.QueryByID (nodeID = %d) error: %v", ni, err)
+				return isFirstAlloc,
+					fmt.Errorf("cpuNodeDM.QueryByID (nodeID = %d) error: %v", ni, err)
 			}
 			node.ProjectID = projectID
 			node.AllocatedTime = time.Now()
 		} else {
 			node, err := rs.cpuNodeDM.QueryByID(-ni)
 			if err != nil {
-				return fmt.Errorf("cpuNodeDM.QueryByID (nodeID = %d) error: %v", -ni, err)
+				return isFirstAlloc,
+					fmt.Errorf("cpuNodeDM.QueryByID (nodeID = %d) error: %v", -ni, err)
 			}
 			node.ProjectID = 0
 			node.AllocatedTime = time.Time{}
@@ -101,42 +110,60 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 	// (1)
 	err = rs.cpuAllocDM.Insert(rar)
 	if err != nil {
-		return fmt.Errorf("allocDM.Insert error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("allocDM.Insert error: %v", err)
 	}
 
 	// (2)
 	err = rs.cpuNodeDM.UpdateNodes(nodes)
 	if err != nil {
-		return fmt.Errorf("cpuNodeDM.UpdateNodes error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("cpuNodeDM.UpdateNodes error: %v", err)
 	}
 
 	// (3)
-	err = rs.prdm.Update(pr)
-	if err != nil {
-		return fmt.Errorf("prdm.Update error: %v", err)
+	if isFirstAlloc {
+		err = rs.prdm.Insert(pr)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf("prdm.Update error: %v", err)
+		}
+	} else {
+		err = rs.prdm.Update(pr)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf("prdm.Update error: %v", err)
+		}
 	}
 
-	return nil
+	return isFirstAlloc, nil
 }
 
-func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID int, ctrlCN string) (err error) {
-
-	pr, err := rs.prdm.QueryByID(projectID)
-	if err != nil {
-		return fmt.Errorf("cannot find ProjectResource info with projectID = %d", projectID)
+func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID int, ctrlCN string) (isFirstAlloc bool, err error) {
+	var pr projectRes.ResInfo
+	isFirstAlloc = rs.prdm.IsExist(projectID)
+	if isFirstAlloc {
+		pr, err = rs.prdm.QueryByID(projectID)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
+		}
+	} else {
+		pr = projectRes.ResInfo{ProjectID: projectID}
 	}
 
 	// (1) create the Resource Allocate Record
-	nodesChange, increased, reduced, err := arrayMerge.ComputeChange(pr.CpuNodesArray, nodesAfter)
+	nodesChange, increased, reduced, err := arrayMerge.ComputeChange(pr.GpuNodesArray, nodesAfter)
 	if err != nil {
-		return fmt.Errorf("arrayMerge.ComputeChange error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("arrayMerge.ComputeChange error: %v", err)
 	}
 
 	rar := resAlloc.Record{
 		ProjectID:          pr.ProjectID,
-		NumBefore:          pr.CpuNodesAcquired,
-		AllocInfoBefore:    pr.CpuNodesArray,
-		AllocInfoBeforeStr: nodeEncode.IntArrayToBase64Str(pr.CpuNodesArray),
+		NumBefore:          pr.GpuNodesAcquired,
+		AllocInfoBefore:    pr.GpuNodesArray,
+		AllocInfoBeforeStr: nodeEncode.IntArrayToBase64Str(pr.GpuNodesArray),
 		NumAfter:           len(nodesAfter),
 		AllocInfoAfter:     nodesAfter,
 		AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
@@ -153,14 +180,16 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 		if ni > 0 {
 			node, err := rs.gpuNodeDM.QueryByID(ni)
 			if err != nil {
-				return fmt.Errorf("gpuNodeDM.QueryByID (nodeID = %d) error: %v", ni, err)
+				return isFirstAlloc,
+					fmt.Errorf("gpuNodeDM.QueryByID (nodeID = %d) error: %v", ni, err)
 			}
 			node.ProjectID = projectID
 			node.AllocatedTime = time.Now()
 		} else {
 			node, err := rs.gpuNodeDM.QueryByID(-ni)
 			if err != nil {
-				return fmt.Errorf("gpuNodeDM.QueryByID (nodeID = %d) error: %v", -ni, err)
+				return isFirstAlloc,
+					fmt.Errorf("gpuNodeDM.QueryByID (nodeID = %d) error: %v", -ni, err)
 			}
 			node.ProjectID = 0
 			node.AllocatedTime = time.Time{}
@@ -168,38 +197,56 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 	}
 
 	// (3) modify Project Resource info
-	pr.CpuNodesAcquired = rar.NumAfter
-	pr.CpuNodesArray = rar.AllocInfoAfter
-	pr.CpuNodesStr = rar.AllocInfoAfterStr
+	pr.GpuNodesAcquired = rar.NumAfter
+	pr.GpuNodesArray = rar.AllocInfoAfter
+	pr.GpuNodesStr = rar.AllocInfoAfterStr
 
 	// DM DB Ops
 	// (1)
 	err = rs.gpuAllocDM.Insert(rar)
 	if err != nil {
-		return fmt.Errorf("allocDM.Insert error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("allocDM.Insert error: %v", err)
 	}
 
 	// (2)
 	err = rs.gpuNodeDM.UpdateNodes(nodes)
 	if err != nil {
-		return fmt.Errorf("gpuNodeDM.UpdateNodes error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("gpuNodeDM.UpdateNodes error: %v", err)
 	}
 
 	// (3)
-	err = rs.prdm.Update(pr)
-	if err != nil {
-		return fmt.Errorf("prdm.Update error: %v", err)
+	if isFirstAlloc {
+		err = rs.prdm.Insert(pr)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf("prdm.Update error: %v", err)
+		}
+	} else {
+		err = rs.prdm.Update(pr)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf("prdm.Update error: %v", err)
+		}
 	}
 
-	return nil
+	return isFirstAlloc, nil
 }
 
 func (rs ResScheduling) SchedulingStorage(projectID int,
-	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (err error) {
+	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (isFirstAlloc bool, err error) {
 
-	pr, err := rs.prdm.QueryByID(projectID)
-	if err != nil {
-		return fmt.Errorf("cannot find ProjectResource info with projectID = %d", projectID)
+	var pr projectRes.ResInfo
+	isFirstAlloc = rs.prdm.IsExist(projectID)
+	if isFirstAlloc {
+		pr, err = rs.prdm.QueryByID(projectID)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
+		}
+	} else {
+		pr = projectRes.ResInfo{ProjectID: projectID}
 	}
 
 	// (1) create the Resource Allocate Record
@@ -229,18 +276,28 @@ func (rs ResScheduling) SchedulingStorage(projectID int,
 	// (1)
 	err = rs.storageAllocDM.Insert(rar)
 	if err != nil {
-		return fmt.Errorf("allocDM.Insert error: %v", err)
+		return isFirstAlloc,
+			fmt.Errorf("allocDM.Insert error: %v", err)
 	}
 
 	// (2)
 
 	// (3)
-	err = rs.prdm.Update(pr)
-	if err != nil {
-		return fmt.Errorf("prdm.Update error: %v", err)
+	if isFirstAlloc {
+		err = rs.prdm.Insert(pr)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf("prdm.Update error: %v", err)
+		}
+	} else {
+		err = rs.prdm.Update(pr)
+		if err != nil {
+			return isFirstAlloc,
+				fmt.Errorf("prdm.Update error: %v", err)
+		}
 	}
 
-	return nil
+	return isFirstAlloc, nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

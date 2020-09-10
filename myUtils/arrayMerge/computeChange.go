@@ -8,12 +8,10 @@ import (
 func ComputeChange(before []int64, after []int64) (change []int64, increased int, reduced int, err error) {
 	// nil check
 	if before == nil {
-		return nil, 0, 0,
-			fmt.Errorf("before array could not be nil")
+		before = make([]int64, 0)
 	}
 	if after == nil {
-		return nil, 0, 0,
-			fmt.Errorf("after array could not be nil")
+		after = make([]int64, 0)
 	}
 
 	// sort array

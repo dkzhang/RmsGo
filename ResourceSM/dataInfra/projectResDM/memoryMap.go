@@ -66,6 +66,11 @@ func (pdm MemoryMap) QueryAll() (pis []projectRes.ResInfo, err error) {
 	return pis, nil
 }
 
+func (pdm MemoryMap) IsExist(projectID int) (isExist bool) {
+	_, ok := pdm.infoMap[projectID]
+	return ok
+}
+
 func (pdm MemoryMap) Insert(pr projectRes.ResInfo) (err error) {
 	pr.CreatedAt = time.Now()
 	pr.UpdatedAt = time.Now()

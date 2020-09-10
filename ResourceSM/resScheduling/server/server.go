@@ -27,14 +27,14 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 	switch in.CgpuType {
 	case 1:
 		//CPU
-		err := s.TheResScheduling.SchedulingCPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
+		isFirstAlloc, err := s.TheResScheduling.SchedulingCPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
 		if err != nil {
 			return &pb.SchedulingReply{},
 				status.Errorf(codes.NotFound, "SchedulingCPU error: %v", err)
 		}
 	case 2:
 		//GPU
-		err := s.TheResScheduling.SchedulingGPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
+		isFirstAlloc, err := s.TheResScheduling.SchedulingGPU(int(in.ProjectID), in.NodesAfter, int(in.CtrlID), in.CtrlCN)
 		if err != nil {
 			return &pb.SchedulingReply{},
 				status.Errorf(codes.NotFound, "SchedulingGPU error: %v", err)
@@ -59,45 +59,56 @@ func (s *server) SchedulingCGpu(ctx context.Context, in *pb.SchedulingCGpuReques
 }
 
 func (s *server) SchedulingStorage(ctx context.Context, in *pb.SchedulingStorageRequest) (*pb.SchedulingReply, error) {
-	err := s.TheResScheduling.SchedulingStorage(int(in.ProjectID), int(in.StorageSizeAfter), in.StorageAllocInfoAfter, int(in.CtrlID), in.CtrlCN)
+	isFirstAlloc, err := s.TheResScheduling.SchedulingStorage(int(in.ProjectID), int(in.StorageSizeAfter), in.StorageAllocInfoAfter, int(in.CtrlID), in.CtrlCN)
 	if err != nil {
 		return &pb.SchedulingReply{},
 			status.Errorf(codes.NotFound, "SchedulingStorage error: %v", err)
 	}
-	return &pb.SchedulingReply{}, nil
+
+	prl, err := s.TheResScheduling.QueryProjectResLiteByID(int(in.ProjectID))
+	if err != nil {
+		return &pb.SchedulingReply{},
+			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
+	}
+	return &pb.SchedulingReply{
+		ProjectID:           int64(prl.ProjectID),
+		CpuNodesAcquired:    int64(prl.CpuNodesAcquired),
+		GpuNodesAcquired:    int64(prl.GpuNodesAcquired),
+		StorageSizeAcquired: int64(prl.StorageSizeAcquired),
+	}, nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*pb.QueryTreeReply, error) {
+	var jsonTree string
+	var err error
+
 	switch in.CgpuType {
 	case 1:
 		// CPU
 		switch in.QueryType {
 		case 1:
 			// Allocated
-			jsonTree, err := s.TheResScheduling.QueryCpuTreeAllocated(int(in.ProjectID))
+			jsonTree, err = s.TheResScheduling.QueryCpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeAllocated error: %v", err)
 			}
-			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 2:
 			// IdleAndAllocated
-			jsonTree, err := s.TheResScheduling.QueryCpuTreeIdleAndAllocated(int(in.ProjectID))
+			jsonTree, err = s.TheResScheduling.QueryCpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeIdleAndAllocated error: %v", err)
 			}
-			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 3:
 			// All
-			jsonTree, err := s.TheResScheduling.QueryCpuTreeAll()
+			jsonTree, err = s.TheResScheduling.QueryCpuTreeAll()
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeAll error: %v", err)
 			}
-			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		default:
 			return &pb.QueryTreeReply{},
 				status.Errorf(codes.InvalidArgument, " Unsupported type: %d", in.QueryType)
@@ -107,28 +118,25 @@ func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*p
 		switch in.QueryType {
 		case 1:
 			// Allocated
-			jsonTree, err := s.TheResScheduling.QueryGpuTreeAllocated(int(in.ProjectID))
+			jsonTree, err = s.TheResScheduling.QueryGpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeAllocated error: %v", err)
 			}
-			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 2:
 			// IdleAndAllocated
-			jsonTree, err := s.TheResScheduling.QueryGpuTreeIdleAndAllocated(int(in.ProjectID))
+			jsonTree, err = s.TheResScheduling.QueryGpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeIdleAndAllocated error: %v", err)
 			}
-			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		case 3:
 			// All
-			jsonTree, err := s.TheResScheduling.QueryGpuTreeAll()
+			jsonTree, err = s.TheResScheduling.QueryGpuTreeAll()
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeAll error: %v", err)
 			}
-			return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 		default:
 			return &pb.QueryTreeReply{},
 				status.Errorf(codes.InvalidArgument, " Unsupported type: %d", in.QueryType)
@@ -138,6 +146,7 @@ func (s *server) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*p
 		return &pb.QueryTreeReply{},
 			status.Errorf(codes.InvalidArgument, " Unsupported type: %d", in.CgpuType)
 	}
+	return &pb.QueryTreeReply{JsonTree: jsonTree}, nil
 }
 
 func (s *server) QueryProjectRes(ctx context.Context, in *pb.QueryProjectResRequest) (*pb.QueryProjectResReply, error) {
@@ -161,13 +170,13 @@ func (s *server) QueryProjectRes(ctx context.Context, in *pb.QueryProjectResRequ
 	}, nil
 }
 
-func (s *server) QueryProjectResLite(ctx context.Context, in *pb.QueryProjectResRequest) (*pb.QueryProjectResReplyLite, error) {
+func (s *server) QueryProjectResLite(ctx context.Context, in *pb.QueryProjectResRequest) (*pb.QueryProjectResLiteReply, error) {
 	pr, err := s.TheResScheduling.QueryProjectResLiteByID(int(in.ProjectID))
 	if err != nil {
-		return &pb.QueryProjectResReplyLite{},
+		return &pb.QueryProjectResLiteReply{},
 			status.Errorf(codes.NotFound, "QueryProjectResByID error: %v", err)
 	}
-	return &pb.QueryProjectResReplyLite{
+	return &pb.QueryProjectResLiteReply{
 		ProjectID:           int64(pr.ProjectID),
 		CpuNodesAcquired:    int64(pr.CpuNodesAcquired),
 		GpuNodesAcquired:    int64(pr.GpuNodesAcquired),

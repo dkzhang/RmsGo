@@ -53,5 +53,35 @@ var _ = Describe("ComputeChange", func() {
 			Expect(err).Should(HaveOccurred())
 			By(fmt.Sprintf("change=%v, increased=%d, reduced=%d, err=%v", change, increased, reduced, err))
 		})
+
+		It("before is nil", func() {
+			var before []int64
+			before = nil
+			after := []int64{1, 2, 5, 8, 9}
+			change, increased, reduced, err := arrayMerge.ComputeChange(before, after)
+
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("change=%v, increased=%d, reduced=%d, err=%v", change, increased, reduced, err))
+		})
+
+		It("after is nil", func() {
+			before := []int64{1, 2, 5, 8, 9}
+			var after []int64
+			after = nil
+
+			change, increased, reduced, err := arrayMerge.ComputeChange(before, after)
+
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("change=%v, increased=%d, reduced=%d, err=%v", change, increased, reduced, err))
+		})
+
+		It("before & after is all nil", func() {
+			var before, after []int64
+			before, after = nil, nil
+			change, increased, reduced, err := arrayMerge.ComputeChange(before, after)
+
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("change=%v, increased=%d, reduced=%d, err=%v", change, increased, reduced, err))
+		})
 	})
 })

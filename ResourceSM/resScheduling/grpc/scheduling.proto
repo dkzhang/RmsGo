@@ -27,11 +27,12 @@ message SchedulingCGpuRequest {
 }
 
 message SchedulingStorageRequest {
-  int64 projectID = 1;
-  int64 storageSizeAfter = 2;
-  string storageAllocInfoAfter = 3;
-  int64 ctrlID = 4;
-  string ctrlCN = 5;
+  bool isFirstAlloc = 1;
+  int64 projectID = 2;
+  int64 storageSizeAfter = 3;
+  string storageAllocInfoAfter = 4;
+  int64 ctrlID = 5;
+  string ctrlCN = 6;
 }
 
 message SchedulingReply {
