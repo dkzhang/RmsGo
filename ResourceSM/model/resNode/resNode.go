@@ -24,10 +24,15 @@ var SchemaInfo = `
 			allocated_time TIMESTAMP WITH TIME ZONE
 		);
 		`
-var TableName = "res_node_info"
+var TableNameCPU = "res_node_cpu"
+var TableNameGPU = "res_node_gpu"
 
-func GetSchema() string {
-	return fmt.Sprintf(SchemaInfo, TableName)
+func GetSchemaCPU() string {
+	return fmt.Sprintf(SchemaInfo, TableNameCPU)
+}
+
+func GetSchemaGPU() string {
+	return fmt.Sprintf(SchemaInfo, TableNameGPU)
 }
 
 ///////////////////////////////////////////////////////////////////////////////

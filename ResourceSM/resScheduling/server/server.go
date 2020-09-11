@@ -2,19 +2,11 @@ package main
 
 import (
 	"context"
-	"fmt"
 	pb "github.com/dkzhang/RmsGo/ResourceSM/resScheduling/grpc"
 	"github.com/dkzhang/RmsGo/ResourceSM/resScheduling/resourceScheduling"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"log"
-	"net"
 	"time"
-)
-
-const (
-	port = ":50071"
 )
 
 type server struct {
@@ -188,17 +180,4 @@ func (s *server) QueryProjectResLite(ctx context.Context, in *pb.QueryProjectRes
 		GpuNodesAcquired:    int64(pr.GpuNodesAcquired),
 		StorageSizeAcquired: int64(pr.StorageSizeAcquired),
 	}, nil
-}
-
-func main() {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Printf(" fatal error! failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	pb.RegisterSchedulingServer(s, &server{})
-	fmt.Printf("Begin to serve %v \n", time.Now())
-	if err := s.Serve(lis); err != nil {
-		log.Printf(" fatal error! failed to serve: %v", err)
-	}
 }
