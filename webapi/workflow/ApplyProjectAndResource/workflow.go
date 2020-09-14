@@ -111,9 +111,6 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 		CpuNodesAcquired:    0,
 		GpuNodesAcquired:    0,
 		StorageSizeAcquired: 0,
-		CpuNodesMap:         "",
-		GpuNodesMap:         "",
-		StorageAllocInfo:    "",
 	}
 
 	projectID, err := wf.pdm.Insert(theProject)
