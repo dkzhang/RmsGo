@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDM"
+	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resGTreeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
-	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resTreeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
@@ -24,14 +24,14 @@ type ResScheduling struct {
 	cpuNodeDM resNodeDM.ResNodeDM
 	gpuNodeDM resNodeDM.ResNodeDM
 
-	cpuTreeDM resTreeDM.ResTreeDM
-	gpuTreeDM resTreeDM.ResTreeDM
+	cpuTreeDM resGTreeDM.ResGTreeDM
+	gpuTreeDM resGTreeDM.ResGTreeDM
 }
 
 func NewResScheduling(prdm projectResDM.ProjectResDM,
 	cadm resAllocDM.ResAllocDM, gadm resAllocDM.ResAllocDM, sadm resAllocDM.ResAllocDM,
 	cndm resNodeDM.ResNodeDM, gndm resNodeDM.ResNodeDM,
-	ctdm resTreeDM.ResTreeDM, gtdm resTreeDM.ResTreeDM) ResScheduling {
+	ctdm resGTreeDM.ResGTreeDM, gtdm resGTreeDM.ResGTreeDM) ResScheduling {
 	return ResScheduling{
 		prdm:           prdm,
 		cpuAllocDM:     cadm,

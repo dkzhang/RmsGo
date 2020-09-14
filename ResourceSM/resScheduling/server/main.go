@@ -6,9 +6,9 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDM"
+	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resGTreeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
-	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resTreeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/databaseInit/pgOpsSqlx"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
@@ -37,7 +37,7 @@ func main() {
 	var prdm projectResDM.ProjectResDM
 	var cadm, gadm, sadm resAllocDM.ResAllocDM
 	var cndm, gndm resNodeDM.ResNodeDM
-	var ctdm, gtdm resTreeDM.ResTreeDM
+	var ctdm, gtdm resGTreeDM.ResGTreeDM
 	var err error
 	prdm, err = projectResDM.NewMemoryMap(projectResDB.NewProjectResPg(db, projectRes.TableName), theLogMap)
 	if err != nil {
@@ -57,12 +57,13 @@ func main() {
 		panic(err)
 	}
 
-	var strJson string
-	ctdm, err = resTreeDM.NewResTreeDM(cndm, strJson)
+	// TODO load jsonFileName
+	jsonFilename := ""
+	ctdm, err = resGTreeDM.NewResGTreeDM(cndm, jsonFilename)
 	if err != nil {
 		panic(err)
 	}
-	gtdm, err = resTreeDM.NewResTreeDM(gndm, strJson)
+	gtdm, err = resGTreeDM.NewResGTreeDM(gndm, jsonFilename)
 	if err != nil {
 		panic(err)
 	}
@@ -83,8 +84,3 @@ func main() {
 		log.Printf(" fatal error! failed to serve: %v", err)
 	}
 }
-
-// TODO
-// Connect to DB
-// Init DB
-// Create DM
