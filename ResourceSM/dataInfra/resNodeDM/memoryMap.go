@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
+	"github.com/dkzhang/RmsGo/myUtils/deepCopy"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/sirupsen/logrus"
 )
@@ -49,6 +50,14 @@ func (rnm MemoryMap) QueryAll() (nodes []resNode.Node, err error) {
 		nodes = append(nodes, *pn)
 	}
 	return nodes, nil
+}
+
+func (rnm MemoryMap) QueryAllMap() (nodesMap map[int64]resNode.Node, err error) {
+	err = deepCopy.DeepCopy(nodesMap, rnm.infoMap)
+	if err != nil {
+		return nil, fmt.Errorf("DeepCopy error: %v", err)
+	}
+	return nodesMap, nil
 }
 
 func (rnm MemoryMap) Update(node resNode.Node) (err error) {
