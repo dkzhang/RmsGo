@@ -1,10 +1,21 @@
 package resGNodeTree
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNode"
 	"io/ioutil"
 )
+
+func ToJsonForVue(t Tree) (string, error) {
+	na := []resGNode.ResGNode{t.Root}
+	bj, err := json.Marshal(na)
+	if err != nil {
+		return "", fmt.Errorf("json Marshal ResGNode array for ToJsonForVue error: %v", err)
+	}
+
+	return string(bj), nil
+}
 
 func ToJson(t Tree) (string, error) {
 	return resGNode.ToJson(t.Root)

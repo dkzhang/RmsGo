@@ -75,11 +75,9 @@ func Filtrate(t *Tree, nodesMap map[int64]resNode.Node, filter func(node resNode
 	return nt, nil
 }
 
-// Filtrate the tree and get all unusable node id
-func FiltrateMark(t *Tree, nodesMap map[int64]resNode.Node, filter func(node resNode.Node) bool) (unusable []int64, err error) {
-	unusable = make([]int64, 0)
-
-	nt := Copy(t)
+// Filtrate the tree and mark all unusable node (Disabled=true)
+func FiltrateMark(t *Tree, nodesMap map[int64]resNode.Node, filter func(node resNode.Node) bool) (nt *Tree, err error) {
+	nt = Copy(t)
 
 	giStack := stack.New()
 
@@ -110,12 +108,10 @@ func FiltrateMark(t *Tree, nodesMap map[int64]resNode.Node, filter func(node res
 				})
 			} else {
 				//At the end of Children
-				newChildren := make([]*resGNode.ResGNode, 0, len(gi.gNode.Children))
 
+				mark := true
 				// scan all current gNode children
-				// keep all node children which eligible giving filter func
-				// keep all group children which children is not empty
-				for _, child := range gi.gNode.Children {
+				for index, child := range gi.gNode.Children {
 					if child.ID < resGNode.GroupBase {
 						ni, ok := nodesMap[child.ID]
 						if !ok {
@@ -123,23 +119,17 @@ func FiltrateMark(t *Tree, nodesMap map[int64]resNode.Node, filter func(node res
 								fmt.Errorf("GNode info (id=%d) does not exist in the NodesMap", child.ID)
 						}
 						if filter(ni) == true {
-							// reserve this node
-							newChildren = append(newChildren, child)
+							gi.gNode.Children[index].Disabled = false
 						} else {
-							unusable = append(unusable, child.ID)
-						}
-					} else {
-						if len(child.Children) != 0 {
-							// reserve this type=group node
-							newChildren = append(newChildren, child)
-						} else {
-							unusable = append(unusable, child.ID)
+							// mark this node disabled
+							gi.gNode.Children[index].Disabled = true
 						}
 					}
+					mark = mark && gi.gNode.Children[index].Disabled
 				}
-				gi.gNode.Children = newChildren
+				gi.gNode.Disabled = mark
 			}
 		}
 	}
-	return unusable, nil
+	return nt, nil
 }

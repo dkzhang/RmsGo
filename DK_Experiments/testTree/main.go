@@ -97,6 +97,7 @@ func main() {
 		{
 			hTree.GET("/All", RetrieveAll)
 			hTree.GET("/ProRes/:id", RetrieveProRes)
+			hTree.GET("/ProResD/:id", RetrieveProResD)
 			hTree.POST("/ProRes/:id", SubmitProRes)
 		}
 	}
@@ -105,7 +106,7 @@ func main() {
 }
 
 func RetrieveAll(c *gin.Context) {
-	jsonTree, err := resGNodeTree.ToJson(t)
+	jsonTree, err := resGNodeTree.ToJsonForVue(t)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "tree转json失败",
@@ -114,11 +115,10 @@ func RetrieveAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"tree":        jsonTree,
-		"nodesNum":    resGNodeTree.CountRO(&t),
-		"unfolded":    []int64{1e4, 11e4, 115e4},
-		"selected":    []int64{10, 11, 12, 14, 15},
-		"unavailable": []int64{},
+		"tree":     jsonTree,
+		"nodesNum": resGNodeTree.CountRO(&t),
+		"unfolded": []int64{1e4, 11e4, 115e4},
+		"selected": []int64{10, 11, 12, 14, 15},
 	})
 }
 
@@ -135,7 +135,7 @@ func RetrieveProRes(c *gin.Context) {
 		return node.ProjectID == 0 || node.ProjectID == projectID
 	})
 
-	jsonTree, err := resGNodeTree.ToJson(*nt)
+	jsonTree, err := resGNodeTree.ToJsonForVue(*nt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": "tree转json失败",
@@ -144,11 +144,40 @@ func RetrieveProRes(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"tree":        jsonTree,
-		"nodesNum":    resGNodeTree.CountRO(nt),
-		"unfolded":    []int64{1e4, 11e4},
-		"selected":    []int64{},
-		"unavailable": []int64{},
+		"tree":     jsonTree,
+		"nodesNum": resGNodeTree.CountRO(nt),
+		"unfolded": []int64{1e4, 11e4},
+		"selected": []int64{},
+	})
+	return
+}
+
+func RetrieveProResD(c *gin.Context) {
+	idStr := c.Param("id")
+	projectID, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": fmt.Sprintf("projectID格式错误%s", idStr),
+		})
+		return
+	}
+	nt, err := resGNodeTree.FiltrateMark(&t, nodesMap, func(node resNode.Node) bool {
+		return node.ProjectID == 0 || node.ProjectID == projectID
+	})
+
+	jsonTree, err := resGNodeTree.ToJsonForVue(*nt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "tree转json失败",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"tree":     jsonTree,
+		"nodesNum": resGNodeTree.CountRO(nt),
+		"unfolded": []int64{1e4, 11e4},
+		"selected": []int64{},
 	})
 	return
 }

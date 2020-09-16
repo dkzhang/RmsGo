@@ -4,6 +4,7 @@ func Copy(gn *ResGNode) (ngn *ResGNode) {
 	ngn = &ResGNode{
 		ID:       gn.ID,
 		Label:    gn.Label,
+		Disabled: gn.Disabled,
 		Children: make([]*ResGNode, 0),
 	}
 

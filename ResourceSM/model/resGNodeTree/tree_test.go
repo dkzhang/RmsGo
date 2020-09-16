@@ -108,50 +108,50 @@ var _ = Describe("Tree", func() {
 				}
 			}
 
-			unArray, err := resGNodeTree.FiltrateMark(&t, nodesMap, func(node resNode.Node) bool {
-				return node.ProjectID == 0 || node.ProjectID == 1
-			})
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("unusable array = %v", unArray))
-
-			nt, err := resGNodeTree.Filtrate(&t, nodesMap, func(node resNode.Node) bool {
+			nt1, err := resGNodeTree.Filtrate(&t, nodesMap, func(node resNode.Node) bool {
 				return node.ProjectID == 0 || node.ProjectID == 1
 			})
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("t nodesNum = %d", resGNodeTree.CountRO(&t)))
-			By(fmt.Sprintf("nt nodesNum = %d", resGNodeTree.CountRO(nt)))
+			By(fmt.Sprintf("nt1 nodesNum = %d", resGNodeTree.CountRO(nt1)))
 
-			//str, err := resGNodeTree.ToJsonIndent(*nt)
-			//Expect(err).ShouldNot(HaveOccurred())
-			//By(fmt.Sprintf("Tree to Json = %s", str))
-
-		})
-	})
-
-	Context("Syn Tree", func() {
-		It("Syn Tree", func() {
-			t := resGNodeTree.Tree{
-				Root:     rootGNode,
-				NodesNum: 0,
-			}
-
-			nodesMap := make(map[int64]resNode.Node, 256)
-			for i := int64(0); i < 256; i++ {
-				nodesMap[i] = resNode.Node{
-					ID:            i,
-					Name:          fmt.Sprintf("Node%dNew", i),
-					ProjectID:     0,
-					AllocatedTime: time.Now(),
-				}
-			}
-
-			err := resGNodeTree.SynchronizeNodesInfo(&t, nodesMap)
+			nt2, err := resGNodeTree.FiltrateMark(&t, nodesMap, func(node resNode.Node) bool {
+				return node.ProjectID == 0 || node.ProjectID == 1
+			})
 			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("nt2 nodesNum = %d", resGNodeTree.CountRO(nt2)))
 
-			str, err := resGNodeTree.ToJsonIndent(t)
+			str, err := resGNodeTree.ToJsonIndent(*nt2)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("Tree to Json = %s", str))
 
 		})
 	})
+
+	//Context("Syn Tree", func() {
+	//	It("Syn Tree", func() {
+	//		t := resGNodeTree.Tree{
+	//			Root:     rootGNode,
+	//			NodesNum: 0,
+	//		}
+	//
+	//		nodesMap := make(map[int64]resNode.Node, 256)
+	//		for i := int64(0); i < 256; i++ {
+	//			nodesMap[i] = resNode.Node{
+	//				ID:            i,
+	//				Name:          fmt.Sprintf("Node%dNew", i),
+	//				ProjectID:     0,
+	//				AllocatedTime: time.Now(),
+	//			}
+	//		}
+	//
+	//		err := resGNodeTree.SynchronizeNodesInfo(&t, nodesMap)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//
+	//		str, err := resGNodeTree.ToJsonIndent(t)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		By(fmt.Sprintf("Tree to Json = %s", str))
+	//
+	//	})
+	//})
 })
