@@ -147,7 +147,7 @@ func RetrieveProRes(c *gin.Context) {
 		"tree":     jsonTree,
 		"nodesNum": resGNodeTree.CountRO(nt),
 		"unfolded": []int64{1e4, 11e4},
-		"selected": []int64{},
+		"selected": []int64{10, 11, 12, 14, 15},
 	})
 	return
 }
@@ -177,7 +177,7 @@ func RetrieveProResD(c *gin.Context) {
 		"tree":     jsonTree,
 		"nodesNum": resGNodeTree.CountRO(nt),
 		"unfolded": []int64{1e4, 11e4},
-		"selected": []int64{},
+		"selected": []int64{10, 11, 12, 14, 15},
 	})
 	return
 }
