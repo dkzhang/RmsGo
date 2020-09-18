@@ -31,6 +31,7 @@ func main() {
 	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
 	db := pgOpsSqlx.ConnectToDatabase()
 	pgOpsSqlx.CreateAllTable(db)
+	pgOpsSqlx.SeedAllTable(db)
 
 	theLogMap := logMap.NewLogMap(`C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml`)
 
