@@ -1,9 +1,12 @@
 package projectDM
 
-import "github.com/dkzhang/RmsGo/webapi/model/project"
+import (
+	"github.com/dkzhang/RmsGo/webapi/model/project"
+	"time"
+)
 
 type ProjectDM interface {
-	ProjectHistoryDM
+	ProjectReadOnlyDM
 	///////////////////////////////////////////////////////////////////////////////
 	Insert(project.Info) (projectID int, err error)
 
@@ -16,10 +19,12 @@ type ProjectDM interface {
 	ArchiveProject(projectID int) (err error)
 }
 
-type ProjectHistoryDM interface {
+type ProjectReadOnlyDM interface {
 	QueryByID(projectID int) (project.Info, error)
 	QueryByOwner(userID int) ([]project.Info, error)
 	QueryByDepartmentCode(dc string) ([]project.Info, error)
 	QueryAllInfo() ([]project.Info, error)
 	QueryProjectByFilter(userFilter func(project.Info) bool) ([]project.Info, error)
+
+	QueryIDsByTimeRange(from, to time.Time) ([]int, error)
 }

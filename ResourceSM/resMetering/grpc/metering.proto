@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package resMeteringGRpc;
+
+// The Resource Scheduling service definition.
+service MeteringService {
+  // Query Metering
+  rpc QueryMetering(QmRequest)returns (QmReply) {}
+
+  // Register Cron Metering Task
+  rpc RegisterCronMeteringTask (RegCmtRequest) returns (RegCmtReply) {}
+}
+
+///////////////////////////////////////////////////////////
+
+message QmRequest {
+  int64 projectID = 1;
+  int64 meteringType = 2;
+  string typeInfo = 3;
+}
+
+message QmReply {
+  int64 projectID = 1;
+  int64 meteringType = 2;
+  string typeInfo = 3;
+}
+
+message RegCmtRequest {
+  int64 meteringType = 1;
+}
+
+message RegCmtReply {
+  string msg = 1;
+}
+
+
+
+//protoc -I grpc/ grpc/metering.proto --go_out=plugins=grpc:grpc/

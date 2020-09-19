@@ -1,4 +1,9 @@
-package resMetering
+package cronMeteringTask
+
+import (
+	"fmt"
+	"time"
+)
 
 /*
 月度、季度、年度计量
@@ -18,3 +23,20 @@ package resMetering
 (5)按项目长、部门、All，分别进行汇总
 
 */
+
+type MonthlyMetering struct {
+}
+
+func (mm MonthlyMetering) Run() {
+	// 计算上一个月的计量单
+	now := time.Now()
+	ct := now.AddDate(0, -1, 0)
+	yearMonth := fmt.Sprintf("%d-%d", ct.Year(), ct.Month())
+
+	startDateTime := time.Date(ct.Year(), ct.Month(), 1, 0, 0, 0, 0, ct.Location())
+	endDateTime := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
+
+	//TODO
+
+	fmt.Printf("%v%v%v", yearMonth, startDateTime, endDateTime)
+}

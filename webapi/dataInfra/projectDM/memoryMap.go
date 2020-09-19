@@ -70,6 +70,16 @@ func (pdm MemoryMap) QueryAllInfo() (pis []project.Info, err error) {
 	return pis, nil
 }
 
+func (pdm MemoryMap) QueryIDsByTimeRange(from, to time.Time) (ids []int, err error) {
+	for _, pi := range pdm.infoMap {
+		if (pi.BasicStatus == project.BasicStatusArchived && to.After(pi.CreatedAt) && from.Before(pi.UpdatedAt)) ||
+			(pi.BasicStatus != project.BasicStatusArchived && to.After(pi.CreatedAt)) {
+			ids = append(ids, pi.ProjectID)
+		}
+	}
+	return ids, nil
+}
+
 func (pdm MemoryMap) QueryProjectByFilter(userFilter func(project.Info) bool) (pis []project.Info, err error) {
 	for _, pi := range pdm.infoMap {
 		if userFilter(*pi) == true {

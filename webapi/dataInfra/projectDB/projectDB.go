@@ -11,7 +11,7 @@ type DBInfo struct {
 }
 
 type ProjectDB interface {
-	ProjectHistoryDB
+	ProjectReadOnlyDB
 	///////////////////////////////////////////////////////////////////////////////
 	Insert(project.Info) (projectID int, err error)
 
@@ -25,7 +25,7 @@ type ProjectDB interface {
 	InnerArchiveProject(historyTableName string, projectID int) (err error)
 }
 
-type ProjectHistoryDB interface {
+type ProjectReadOnlyDB interface {
 	QueryByID(projectID int) (project.Info, error)
 	QueryByOwner(userID int) ([]project.Info, error)
 	QueryByDepartmentCode(dc string) ([]project.Info, error)
