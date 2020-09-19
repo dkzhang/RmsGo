@@ -43,7 +43,7 @@ func (rnpg ResAllocPg) QueryByID(recordID int) (ra resAlloc.Record, err error) {
 }
 
 func (rnpg ResAllocPg) QueryByProjectID(projectID int) (rs []resAlloc.Record, err error) {
-	stmt, err := rnpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1`, rnpg.TableName))
+	stmt, err := rnpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1 ORDER BY created_at ASC`, rnpg.TableName))
 	if err != nil {
 		logrus.Fatalf("ResAllocPg QueryByProjectID TheDB.Prepare statement error: %v", err)
 	}

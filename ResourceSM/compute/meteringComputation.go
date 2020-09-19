@@ -1,4 +1,4 @@
-package meteringComputation
+package compute
 
 import (
 	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Compute(records []resAlloc.Record, from, to time.Time) (amountInHours int, mis []metering.MeteringItem) {
+func MeteringCompute(records []resAlloc.Record, from, to time.Time) (amountInHours int, mis []metering.MeteringItem) {
 	if len(records) < 1 {
 		return 0, []metering.MeteringItem{}
 	}
