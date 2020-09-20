@@ -1,11 +1,14 @@
 package meteringDM
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
-	"github.com/dkzhang/RmsGo/ResourceSM/compute"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/meteringDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"
+	"github.com/dkzhang/RmsGo/ResourceSM/resMetering/meteringComputation"
+	"math"
 	"time"
 )
 
@@ -35,9 +38,50 @@ func (dm DirectDbWithCompute) QueryAll(projectID int, mType int) (mss []metering
 	return dm.theDB.QueryAll(projectID, mType)
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+func (dm DirectDbWithCompute) QueryWithCreate(projectID int, mType int, typeInfo string) (ms metering.Statement, err error) {
+	ms, err = dm.theDB.Query(projectID, mType, typeInfo)
+
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// db error
+			return metering.Statement{}, fmt.Errorf("query IsExist in MeteringDB error")
+		}
+	} else {
+		//metering.Statement exist
+		return ms, nil
+	}
+
+	//metering.Statement dose not exist
+	switch mType {
+	case metering.TypeMonthly:
+		return metering.Statement{}, fmt.Errorf("metering Monthly feature is not implemented yet")
+	case metering.TypeQuarterly:
+		return metering.Statement{}, fmt.Errorf("metering Quarterly feature is not implemented yet")
+	case metering.TypeAnnual:
+		return metering.Statement{}, fmt.Errorf("metering Annual feature is not implemented yet")
+	case metering.TypeAnyPeriod:
+		return metering.Statement{}, fmt.Errorf("metering AnyPeriod feature is not implemented yet")
+	case metering.TypeSettlement:
+		ms, err = dm.ComputeSettlement(projectID)
+		if err != nil {
+			return metering.Statement{}, fmt.Errorf("ComputeSettlement error: %v", err)
+		}
+
+		_, _ = dm.theDB.Insert(ms)
+		//ignore db insert metering error
+
+		return ms, nil
+	default:
+		return metering.Statement{}, fmt.Errorf("unsupported metering type: %d", mType)
+	}
+}
+
 func (dm DirectDbWithCompute) ComputeSettlement(projectID int) (ms metering.Statement, err error) {
 	ms = metering.Statement{
 		//MeteringID:           0,
+		ProjectID:            projectID,
 		MeteringType:         metering.TypeSettlement,
 		MeteringTypeInfo:     "",
 		CpuAmountInDays:      0,
@@ -46,38 +90,79 @@ func (dm DirectDbWithCompute) ComputeSettlement(projectID int) (ms metering.Stat
 		CpuAmountInHours:     0,
 		GpuAmountInHours:     0,
 		StorageAmountInHours: 0,
-		CpuNodeMetering:      make([]metering.MeteringItem, 0),
-		GpuNodeMetering:      make([]metering.MeteringItem, 0),
-		StorageMetering:      make([]metering.MeteringItem, 0),
-		CpuNodeMeteringStr:   "",
-		GpuNodeMeteringStr:   "",
-		StorageMeteringStr:   "",
+		CpuNodeMeteringJson:  "",
+		GpuNodeMeteringJson:  "",
+		StorageMeteringJson:  "",
 		CreatedAt:            time.Now(),
 	}
 
-	// TODO
-	return ms, fmt.Errorf("not accomplishment")
+	cpuNodeMetering := make([]metering.MeteringItem, 0)
+	gpuNodeMetering := make([]metering.MeteringItem, 0)
+	storageMetering := make([]metering.MeteringItem, 0)
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	//Compute settlement from ResAllocDM
+	ms.CpuAmountInHours, cpuNodeMetering, err = computeSettlementFromResAllocDM(dm.cpuAllocDM, projectID)
+	if err != nil {
+		return metering.Statement{}, fmt.Errorf("computeSettlement From CPU ResAllocDM error: %v", err)
+	}
+
+	ms.GpuAmountInHours, gpuNodeMetering, err = computeSettlementFromResAllocDM(dm.gpuAllocDM, projectID)
+	if err != nil {
+		return metering.Statement{}, fmt.Errorf("computeSettlement From GPU ResAllocDM error: %v", err)
+	}
+
+	ms.StorageAmountInHours, storageMetering, err = computeSettlementFromResAllocDM(dm.storageAllocDM, projectID)
+	if err != nil {
+		return metering.Statement{}, fmt.Errorf("computeSettlement From Storage ResAllocDM error: %v", err)
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// json Metering details
+	var jsonB []byte
+	jsonB, err = json.Marshal(cpuNodeMetering)
+	if err != nil {
+		return metering.Statement{}, fmt.Errorf("json.Marshal ms.CpuNodeMetering error: %v", err)
+	}
+	ms.CpuNodeMeteringJson = string(jsonB)
+
+	jsonB, err = json.Marshal(gpuNodeMetering)
+	if err != nil {
+		return metering.Statement{}, fmt.Errorf("json.Marshal ms.CpuNodeMetering error: %v", err)
+	}
+	ms.GpuNodeMeteringJson = string(jsonB)
+
+	jsonB, err = json.Marshal(storageMetering)
+	if err != nil {
+		return metering.Statement{}, fmt.Errorf("json.Marshal ms.CpuNodeMetering error: %v", err)
+	}
+	ms.StorageMeteringJson = string(jsonB)
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	// meteringComputation amountInDays
+	ms.CpuAmountInDays = int(math.Round(float64(ms.CpuAmountInHours) / 24))
+	ms.GpuAmountInDays = int(math.Round(float64(ms.GpuAmountInHours) / 24))
+	ms.StorageAmountInDays = int(math.Round(float64(ms.StorageAmountInHours) / 24))
+
+	return ms, nil
 }
 
-func queryAndCompute(radm resAllocDM.ResAllocReadOnlyDM, projectID int) (amountInHours int, mis []metering.MeteringItem, err error) {
+func computeSettlementFromResAllocDM(radm resAllocDM.ResAllocReadOnlyDM, projectID int) (amountInHours int, mis []metering.MeteringItem, err error) {
 	records, err := radm.QueryByProjectID(projectID)
 	if err != nil {
 		return -1, nil, fmt.Errorf("resAllocDM.ResAllocReadOnlyDM QueryByProjectID (projectID=%d) error: %v", projectID, err)
 	}
 
-	if records == nil {
-
-	}
-
-	if len(records) == 1 {
-		//error
+	if records == nil || len(records) == 0 {
+		// empty records is normal
+		return 0, []metering.MeteringItem{}, nil
 	}
 
 	if records[len(records)-1].NumAfter != 0 {
-
+		// the last record in settlement meteringComputation must have NumAfter==0
 	}
 
-	amountInHours, mis = compute.MeteringCompute(records, records[0].CreatedAt, records[len(records)-1].CreatedAt)
+	amountInHours, mis = meteringComputation.MeteringCompute(records, records[0].CreatedAt, records[len(records)-1].CreatedAt)
 
 	return amountInHours, mis, nil
 }

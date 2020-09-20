@@ -7,6 +7,7 @@ import (
 
 type Statement struct {
 	MeteringID       int    `db:"metering_id" json:"metering_id"`
+	ProjectID        int    `db:"project_id" json:"project_id"`
 	MeteringType     int    `db:"metering_type" json:"metering_type"`
 	MeteringTypeInfo string `db:"metering_type_info" json:"metering_type_info"`
 
@@ -17,12 +18,9 @@ type Statement struct {
 	GpuAmountInHours     int `db:"gpu_amount_in_hours" json:"gpu_amount_in_hours"`
 	StorageAmountInHours int `db:"storage_amount_in_hours" json:"storage_amount_in_hours"`
 
-	CpuNodeMetering    []MeteringItem `db:"-" json:"cpu_node_metering"`
-	GpuNodeMetering    []MeteringItem `db:"-" json:"gpu_node_metering"`
-	StorageMetering    []MeteringItem `db:"-" json:"storage_metering"`
-	CpuNodeMeteringStr string         `db:"cpu_node_metering" json:"-"`
-	GpuNodeMeteringStr string         `db:"gpu_node_metering" json:"-"`
-	StorageMeteringStr string         `db:"storage_node_metering" json:"-"`
+	CpuNodeMeteringJson string `db:"cpu_node_metering" json:"cpu_node_metering"`
+	GpuNodeMeteringJson string `db:"gpu_node_metering" json:"gpu_node_metering"`
+	StorageMeteringJson string `db:"storage_node_metering" json:"storage_metering"`
 
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 }
@@ -39,6 +37,7 @@ type MeteringItem struct {
 var SchemaInfo = `
 		CREATE TABLE %s (
     		metering_id SERIAL PRIMARY KEY,
+			project_id int,
 			metering_type int,
 			metering_type_info varchar(256) ,
 			cpu_amount_in_days int,

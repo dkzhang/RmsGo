@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package grpcSchMet;
+
+// The Resource Scheduling service definition.
+service SchedulingService {
+  // Scheduling Resource
+  rpc SchedulingCGpu (SchedulingCGpuRequest) returns (SchedulingReply) {}
+  rpc SchedulingStorage (SchedulingStorageRequest) returns (SchedulingReply) {}
+
+  // Query Resource Tree
+  rpc QueryCGpuTree (QueryTreeRequest) returns (QueryTreeReply) {}
+
+  // Query Project Resource
+  rpc QueryProjectRes (QueryProjectResRequest) returns (QueryProjectResReply) {}
+  rpc QueryProjectResLite (QueryProjectResRequest) returns (QueryProjectResLiteReply) {}
+}
+
+// The Resource Scheduling service definition.
+service MeteringService {
+  // Query Metering
+  rpc QueryMetering(QmRequest)returns (QmReply) {}
+
+  // Register Cron Metering Task
+  rpc RegisterCronMeteringTask (RegCmtRequest) returns (RegCmtReply) {}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+message SchedulingCGpuRequest {
+  int64 projectID = 1;
+  int64 cgpuType = 2;  // CPU=1,GPU=2
+  repeated int64 nodesAfter = 3;
+  int64 ctrlID = 4;
+  string ctrlCN = 5;
+}
+
+message SchedulingStorageRequest {
+  int64 projectID = 1;
+  int64 storageSizeAfter = 2;
+  string storageAllocInfoAfter = 3;
+  int64 ctrlID = 4;
+  string ctrlCN = 5;
+}
+
+message SchedulingReply {
+  bool isFirstAlloc = 1;
+  int64 projectID = 2;
+  int64 cpuNodesAcquired = 3;
+  int64 gpuNodesAcquired = 4;
+  int64 storageSizeAcquired = 5;
+  string storageAllocInfo = 6;
+}
+
+///////////////////////////////////////////////////////////
+message QueryTreeRequest {
+  int64 projectID = 1;
+  int64 cgpuType = 2;  // CPU=1, GPU=2
+  int64 queryType = 3; // Allocated=1, IdleAndAllocated=2, All=3
+}
+
+message QueryTreeReply {
+  string jsonTree = 1;
+}
+
+///////////////////////////////////////////////////////////
+message QueryProjectResRequest {
+  int64 projectID = 1;
+}
+
+message QueryProjectResReply {
+  int64 projectID = 1;
+  int64 cpuNodesAcquired = 2;
+  int64 gpuNodesAcquired = 3;
+  int64 storageSizeAcquired = 4;
+  repeated int64 cpuNodesArray = 5;
+  string cpuNodesStr = 6;
+  repeated int64 gpuNodesArray = 7;
+  string gpuNodesStr = 8;
+  string storageAllocInfo = 9;
+  string createdAt = 10;
+  string updatedAt = 11;
+}
+
+message QueryProjectResLiteReply {
+  int64 projectID = 1;
+  int64 cpuNodesAcquired = 2;
+  int64 gpuNodesAcquired = 3;
+  int64 storageSizeAcquired = 4;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+message QmRequest {
+  int64 projectID = 1;
+  int64 meteringType = 2;
+  string typeInfo = 3;
+}
+
+message QmReply {
+  int64 projectID = 1;
+  int64 meteringType = 2;
+  string MeteringTypeInfo=3;
+
+  int64 CpuAmountInDays      =4;
+  int64 GpuAmountInDays    =5;
+  int64 StorageAmountInDays  =6;
+  int64 CpuAmountInHours     =7;
+  int64 GpuAmountInHours     =8;
+  int64 StorageAmountInHours =9;
+
+  string CpuNodeMeteringJson =10;
+  string GpuNodeMeteringJson  =11;
+  string StorageMeteringJson  =12;
+
+  string CreatedAt  =13;
+}
+
+message RegCmtRequest {
+  int64 meteringType = 1;
+}
+
+message RegCmtReply {
+  string msg = 1;
+}
+
+
+//protoc -I grpc/ grpc/schedulingAndMetering --go_out=plugins=grpc:grpc/

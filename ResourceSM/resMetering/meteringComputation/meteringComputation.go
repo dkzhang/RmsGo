@@ -1,4 +1,4 @@
-package compute
+package meteringComputation
 
 import (
 	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"

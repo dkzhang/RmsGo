@@ -18,7 +18,6 @@ type MeteringDB interface {
 
 type MeteringReadOnlyDB interface {
 	Query(projectID int, mType int, typeInfo string) (ms metering.Statement, err error)
-	IsExist(projectID int, mType int, typeInfo string) (isExist bool, err error)
 	QueryAll(projectID int, mType int) (mss []metering.Statement, err error)
 	Close()
 }
