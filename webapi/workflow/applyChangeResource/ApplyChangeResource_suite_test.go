@@ -1,4 +1,4 @@
-package ApplyChangeResource_test
+package applyChangeResource_test
 
 import (
 	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
@@ -10,7 +10,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
-	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyChangeResource"
+	"github.com/dkzhang/RmsGo/webapi/workflow/applyChangeResource"
 	"os"
 	"testing"
 
@@ -28,7 +28,7 @@ var gwf workflow.GeneralWorkflow
 
 func TestApplyChangeResource(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ApplyChangeResource Suite")
+	RunSpecs(t, "applyChangeResource Suite")
 }
 
 var _ = BeforeSuite(func() {
@@ -44,7 +44,7 @@ var _ = BeforeSuite(func() {
 	pdb := projectDB.NewProjectPg(db, project.TableName)
 	pdm, _ = projectDM.NewMemoryMap(pdb, theLogMap)
 
-	gwf = ApplyChangeResource.NewWorkflow(adm, pdm, theLogMap)
+	gwf = applyChangeResource.NewWorkflow(adm, pdm, theLogMap)
 
 })
 

@@ -1,4 +1,4 @@
-package ApplyChangeResource
+package applyChangeResource
 
 import (
 	"encoding/json"

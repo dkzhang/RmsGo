@@ -1,4 +1,4 @@
-package ApplyChangeResource_test
+package applyChangeResource_test
 
 import (
 	"encoding/json"

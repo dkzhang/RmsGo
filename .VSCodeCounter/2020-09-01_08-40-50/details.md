@@ -166,12 +166,12 @@ Total : 162 files,  9552 codes, 786 comments, 1904 blanks, all 12242 lines
 | [webapi/model/user/user.go](/webapi/model/user/user.go) | Go | 50 | 10 | 16 | 76 |
 | [webapi/model/user/user_test.go](/webapi/model/user/user_test.go) | Go | 1 | 52 | 2 | 55 |
 | [webapi/server.go](/webapi/server.go) | Go | 70 | 2 | 16 | 88 |
-| [webapi/workflow/ApplyChangeResource/ApplyChangeResource_suite_test.go](/webapi/workflow/ApplyChangeResource/ApplyChangeResource_suite_test.go) | Go | 38 | 3 | 14 | 55 |
-| [webapi/workflow/ApplyChangeResource/workflow.go](/webapi/workflow/ApplyChangeResource/workflow.go) | Go | 342 | 44 | 46 | 432 |
-| [webapi/workflow/ApplyChangeResource/workflow_test.go](/webapi/workflow/ApplyChangeResource/workflow_test.go) | Go | 121 | 60 | 17 | 198 |
-| [webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go](/webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go) | Go | 40 | 2 | 14 | 56 |
-| [webapi/workflow/ApplyProjectAndResource/workflow.go](/webapi/workflow/ApplyProjectAndResource/workflow.go) | Go | 364 | 35 | 51 | 450 |
-| [webapi/workflow/ApplyProjectAndResource/workflow_test.go](/webapi/workflow/ApplyProjectAndResource/workflow_test.go) | Go | 164 | 4 | 24 | 192 |
+| [webapi/workflow/ApplyChangeResource/ApplyChangeResource_suite_test.go](/webapi/workflow/applyChangeResource/ApplyChangeResource_suite_test.go) | Go | 38 | 3 | 14 | 55 |
+| [webapi/workflow/ApplyChangeResource/workflow.go](/webapi/workflow/applyChangeResource/workflow.go) | Go | 342 | 44 | 46 | 432 |
+| [webapi/workflow/ApplyChangeResource/workflow_test.go](/webapi/workflow/applyChangeResource/workflow_test.go) | Go | 121 | 60 | 17 | 198 |
+| [webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go](/webapi/workflow/applyProjectAndResource/ApplyProjectAndResource_suite_test.go) | Go | 40 | 2 | 14 | 56 |
+| [webapi/workflow/ApplyProjectAndResource/workflow.go](/webapi/workflow/applyProjectAndResource/workflow.go) | Go | 364 | 35 | 51 | 450 |
+| [webapi/workflow/ApplyProjectAndResource/workflow_test.go](/webapi/workflow/applyProjectAndResource/workflow_test.go) | Go | 164 | 4 | 24 | 192 |
 | [webapi/workflow/generalWorkflow.go](/webapi/workflow/generalWorkflow.go) | Go | 84 | 6 | 17 | 107 |
 
 [summary](results.md)

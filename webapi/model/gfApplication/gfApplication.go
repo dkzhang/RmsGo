@@ -74,10 +74,16 @@ func JsonUnmarshalAppResChange(jsonStr string) (appc AppResChange, err error) {
 }
 
 type AppResComReturn struct {
-	CpuNodesReturnNum int    `json:"cpu_nodes_return_num"`
-	CpuNodesReturnMap string `json:"cpu_nodes_return_map"`
-	GpuNodesReturnNum int    `json:"gpu_nodes_return_num"`
-	GpuNodesReturnMap string `json:"cpu_nodes_return_map"`
+	CGpuType         int     `json:"cgpu_type"` // cpu=1, gpu=2
+	NodesReturnArray []int64 `json:"nodes_return_array"`
+}
+
+func JsonUnmarshalAppResComReturn(jsonStr string) (arcr AppResComReturn, err error) {
+	err = json.Unmarshal([]byte(jsonStr), &arcr)
+	if err != nil {
+		return AppResComReturn{}, fmt.Errorf("json.Unmarshal error: %v", err)
+	}
+	return arcr, nil
 }
 
 //type AppResStoReturn struct {

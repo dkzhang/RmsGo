@@ -142,10 +142,10 @@ Total : 136 files,  7625 codes, 523 comments, 1516 blanks, all 9664 lines
 | [webapi/model/user/user.go](/webapi/model/user/user.go) | Go | 50 | 10 | 16 | 76 |
 | [webapi/model/user/user_test.go](/webapi/model/user/user_test.go) | Go | 1 | 52 | 2 | 55 |
 | [webapi/server.go](/webapi/server.go) | Go | 59 | 2 | 14 | 75 |
-| [webapi/workflow/ApplyChangeResource/apply.go](/webapi/workflow/ApplyChangeResource/apply.go) | Go | 1 | 0 | 1 | 2 |
-| [webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go](/webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go) | Go | 40 | 2 | 14 | 56 |
-| [webapi/workflow/ApplyProjectAndResource/workflow.go](/webapi/workflow/ApplyProjectAndResource/workflow.go) | Go | 390 | 37 | 51 | 478 |
-| [webapi/workflow/ApplyProjectAndResource/workflow_test.go](/webapi/workflow/ApplyProjectAndResource/workflow_test.go) | Go | 127 | 1 | 13 | 141 |
+| [webapi/workflow/ApplyChangeResource/apply.go](/webapi/workflow/applyChangeResource/apply.go) | Go | 1 | 0 | 1 | 2 |
+| [webapi/workflow/ApplyProjectAndResource/ApplyProjectAndResource_suite_test.go](/webapi/workflow/applyProjectAndResource/ApplyProjectAndResource_suite_test.go) | Go | 40 | 2 | 14 | 56 |
+| [webapi/workflow/ApplyProjectAndResource/workflow.go](/webapi/workflow/applyProjectAndResource/workflow.go) | Go | 390 | 37 | 51 | 478 |
+| [webapi/workflow/ApplyProjectAndResource/workflow_test.go](/webapi/workflow/applyProjectAndResource/workflow_test.go) | Go | 127 | 1 | 13 | 141 |
 | [webapi/workflow/generalWorkflow.go](/webapi/workflow/generalWorkflow.go) | Go | 84 | 6 | 17 | 107 |
 
 [summary](results.md)

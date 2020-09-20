@@ -10,7 +10,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
-	"github.com/dkzhang/RmsGo/webapi/workflow/ApplyProjectAndResource"
+	"github.com/dkzhang/RmsGo/webapi/workflow/applyProjectAndResource"
 	"os"
 	"testing"
 
@@ -28,7 +28,7 @@ var gwf workflow.GeneralWorkflow
 
 func TestApplyProjectAndResource(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ApplyProjectAndResource Suite")
+	RunSpecs(t, "applyProjectAndResource Suite")
 }
 
 var _ = BeforeSuite(func() {
