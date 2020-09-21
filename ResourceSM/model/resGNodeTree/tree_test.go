@@ -19,7 +19,7 @@ var _ = Describe("Tree", func() {
 
 		lc := &resGNode.ResGNode{
 			ID:       11e4,
-			Label:    "浪潮云",
+			Label:    "浪潮云 CPU节点",
 			Children: nil,
 		}
 		rootGNode.Children = append(rootGNode.Children, lc)
@@ -32,7 +32,7 @@ var _ = Describe("Tree", func() {
 		for i := int64(1); i <= 256; i++ {
 			p := &resGNode.ResGNode{
 				ID:       i,
-				Label:    fmt.Sprintf("Node%d", i),
+				Label:    fmt.Sprintf("CpuNode%d", i),
 				Children: nil,
 			}
 			tempGroup.Children = append(tempGroup.Children, p)
