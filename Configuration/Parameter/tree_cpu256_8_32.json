@@ -5,7 +5,7 @@
   "children": [
     {
       "id": 110000,
-      "label": "浪潮云",
+      "label": "浪潮云 CPU节点",
       "disabled": false,
       "children": [
         {
@@ -15,162 +15,162 @@
           "children": [
             {
               "id": 1,
-              "label": "Node1",
+              "label": "CpuNode1",
               "disabled": false
             },
             {
               "id": 2,
-              "label": "Node2",
+              "label": "CpuNode2",
               "disabled": false
             },
             {
               "id": 3,
-              "label": "Node3",
+              "label": "CpuNode3",
               "disabled": false
             },
             {
               "id": 4,
-              "label": "Node4",
+              "label": "CpuNode4",
               "disabled": false
             },
             {
               "id": 5,
-              "label": "Node5",
+              "label": "CpuNode5",
               "disabled": false
             },
             {
               "id": 6,
-              "label": "Node6",
+              "label": "CpuNode6",
               "disabled": false
             },
             {
               "id": 7,
-              "label": "Node7",
+              "label": "CpuNode7",
               "disabled": false
             },
             {
               "id": 8,
-              "label": "Node8",
+              "label": "CpuNode8",
               "disabled": false
             },
             {
               "id": 9,
-              "label": "Node9",
+              "label": "CpuNode9",
               "disabled": false
             },
             {
               "id": 10,
-              "label": "Node10",
+              "label": "CpuNode10",
               "disabled": false
             },
             {
               "id": 11,
-              "label": "Node11",
+              "label": "CpuNode11",
               "disabled": false
             },
             {
               "id": 12,
-              "label": "Node12",
+              "label": "CpuNode12",
               "disabled": false
             },
             {
               "id": 13,
-              "label": "Node13",
+              "label": "CpuNode13",
               "disabled": false
             },
             {
               "id": 14,
-              "label": "Node14",
+              "label": "CpuNode14",
               "disabled": false
             },
             {
               "id": 15,
-              "label": "Node15",
+              "label": "CpuNode15",
               "disabled": false
             },
             {
               "id": 16,
-              "label": "Node16",
+              "label": "CpuNode16",
               "disabled": false
             },
             {
               "id": 17,
-              "label": "Node17",
+              "label": "CpuNode17",
               "disabled": false
             },
             {
               "id": 18,
-              "label": "Node18",
+              "label": "CpuNode18",
               "disabled": false
             },
             {
               "id": 19,
-              "label": "Node19",
+              "label": "CpuNode19",
               "disabled": false
             },
             {
               "id": 20,
-              "label": "Node20",
+              "label": "CpuNode20",
               "disabled": false
             },
             {
               "id": 21,
-              "label": "Node21",
+              "label": "CpuNode21",
               "disabled": false
             },
             {
               "id": 22,
-              "label": "Node22",
+              "label": "CpuNode22",
               "disabled": false
             },
             {
               "id": 23,
-              "label": "Node23",
+              "label": "CpuNode23",
               "disabled": false
             },
             {
               "id": 24,
-              "label": "Node24",
+              "label": "CpuNode24",
               "disabled": false
             },
             {
               "id": 25,
-              "label": "Node25",
+              "label": "CpuNode25",
               "disabled": false
             },
             {
               "id": 26,
-              "label": "Node26",
+              "label": "CpuNode26",
               "disabled": false
             },
             {
               "id": 27,
-              "label": "Node27",
+              "label": "CpuNode27",
               "disabled": false
             },
             {
               "id": 28,
-              "label": "Node28",
+              "label": "CpuNode28",
               "disabled": false
             },
             {
               "id": 29,
-              "label": "Node29",
+              "label": "CpuNode29",
               "disabled": false
             },
             {
               "id": 30,
-              "label": "Node30",
+              "label": "CpuNode30",
               "disabled": false
             },
             {
               "id": 31,
-              "label": "Node31",
+              "label": "CpuNode31",
               "disabled": false
             },
             {
               "id": 32,
-              "label": "Node32",
+              "label": "CpuNode32",
               "disabled": false
             }
           ]
@@ -182,162 +182,162 @@
           "children": [
             {
               "id": 33,
-              "label": "Node33",
+              "label": "CpuNode33",
               "disabled": false
             },
             {
               "id": 34,
-              "label": "Node34",
+              "label": "CpuNode34",
               "disabled": false
             },
             {
               "id": 35,
-              "label": "Node35",
+              "label": "CpuNode35",
               "disabled": false
             },
             {
               "id": 36,
-              "label": "Node36",
+              "label": "CpuNode36",
               "disabled": false
             },
             {
               "id": 37,
-              "label": "Node37",
+              "label": "CpuNode37",
               "disabled": false
             },
             {
               "id": 38,
-              "label": "Node38",
+              "label": "CpuNode38",
               "disabled": false
             },
             {
               "id": 39,
-              "label": "Node39",
+              "label": "CpuNode39",
               "disabled": false
             },
             {
               "id": 40,
-              "label": "Node40",
+              "label": "CpuNode40",
               "disabled": false
             },
             {
               "id": 41,
-              "label": "Node41",
+              "label": "CpuNode41",
               "disabled": false
             },
             {
               "id": 42,
-              "label": "Node42",
+              "label": "CpuNode42",
               "disabled": false
             },
             {
               "id": 43,
-              "label": "Node43",
+              "label": "CpuNode43",
               "disabled": false
             },
             {
               "id": 44,
-              "label": "Node44",
+              "label": "CpuNode44",
               "disabled": false
             },
             {
               "id": 45,
-              "label": "Node45",
+              "label": "CpuNode45",
               "disabled": false
             },
             {
               "id": 46,
-              "label": "Node46",
+              "label": "CpuNode46",
               "disabled": false
             },
             {
               "id": 47,
-              "label": "Node47",
+              "label": "CpuNode47",
               "disabled": false
             },
             {
               "id": 48,
-              "label": "Node48",
+              "label": "CpuNode48",
               "disabled": false
             },
             {
               "id": 49,
-              "label": "Node49",
+              "label": "CpuNode49",
               "disabled": false
             },
             {
               "id": 50,
-              "label": "Node50",
+              "label": "CpuNode50",
               "disabled": false
             },
             {
               "id": 51,
-              "label": "Node51",
+              "label": "CpuNode51",
               "disabled": false
             },
             {
               "id": 52,
-              "label": "Node52",
+              "label": "CpuNode52",
               "disabled": false
             },
             {
               "id": 53,
-              "label": "Node53",
+              "label": "CpuNode53",
               "disabled": false
             },
             {
               "id": 54,
-              "label": "Node54",
+              "label": "CpuNode54",
               "disabled": false
             },
             {
               "id": 55,
-              "label": "Node55",
+              "label": "CpuNode55",
               "disabled": false
             },
             {
               "id": 56,
-              "label": "Node56",
+              "label": "CpuNode56",
               "disabled": false
             },
             {
               "id": 57,
-              "label": "Node57",
+              "label": "CpuNode57",
               "disabled": false
             },
             {
               "id": 58,
-              "label": "Node58",
+              "label": "CpuNode58",
               "disabled": false
             },
             {
               "id": 59,
-              "label": "Node59",
+              "label": "CpuNode59",
               "disabled": false
             },
             {
               "id": 60,
-              "label": "Node60",
+              "label": "CpuNode60",
               "disabled": false
             },
             {
               "id": 61,
-              "label": "Node61",
+              "label": "CpuNode61",
               "disabled": false
             },
             {
               "id": 62,
-              "label": "Node62",
+              "label": "CpuNode62",
               "disabled": false
             },
             {
               "id": 63,
-              "label": "Node63",
+              "label": "CpuNode63",
               "disabled": false
             },
             {
               "id": 64,
-              "label": "Node64",
+              "label": "CpuNode64",
               "disabled": false
             }
           ]
@@ -349,162 +349,162 @@
           "children": [
             {
               "id": 65,
-              "label": "Node65",
+              "label": "CpuNode65",
               "disabled": false
             },
             {
               "id": 66,
-              "label": "Node66",
+              "label": "CpuNode66",
               "disabled": false
             },
             {
               "id": 67,
-              "label": "Node67",
+              "label": "CpuNode67",
               "disabled": false
             },
             {
               "id": 68,
-              "label": "Node68",
+              "label": "CpuNode68",
               "disabled": false
             },
             {
               "id": 69,
-              "label": "Node69",
+              "label": "CpuNode69",
               "disabled": false
             },
             {
               "id": 70,
-              "label": "Node70",
+              "label": "CpuNode70",
               "disabled": false
             },
             {
               "id": 71,
-              "label": "Node71",
+              "label": "CpuNode71",
               "disabled": false
             },
             {
               "id": 72,
-              "label": "Node72",
+              "label": "CpuNode72",
               "disabled": false
             },
             {
               "id": 73,
-              "label": "Node73",
+              "label": "CpuNode73",
               "disabled": false
             },
             {
               "id": 74,
-              "label": "Node74",
+              "label": "CpuNode74",
               "disabled": false
             },
             {
               "id": 75,
-              "label": "Node75",
+              "label": "CpuNode75",
               "disabled": false
             },
             {
               "id": 76,
-              "label": "Node76",
+              "label": "CpuNode76",
               "disabled": false
             },
             {
               "id": 77,
-              "label": "Node77",
+              "label": "CpuNode77",
               "disabled": false
             },
             {
               "id": 78,
-              "label": "Node78",
+              "label": "CpuNode78",
               "disabled": false
             },
             {
               "id": 79,
-              "label": "Node79",
+              "label": "CpuNode79",
               "disabled": false
             },
             {
               "id": 80,
-              "label": "Node80",
+              "label": "CpuNode80",
               "disabled": false
             },
             {
               "id": 81,
-              "label": "Node81",
+              "label": "CpuNode81",
               "disabled": false
             },
             {
               "id": 82,
-              "label": "Node82",
+              "label": "CpuNode82",
               "disabled": false
             },
             {
               "id": 83,
-              "label": "Node83",
+              "label": "CpuNode83",
               "disabled": false
             },
             {
               "id": 84,
-              "label": "Node84",
+              "label": "CpuNode84",
               "disabled": false
             },
             {
               "id": 85,
-              "label": "Node85",
+              "label": "CpuNode85",
               "disabled": false
             },
             {
               "id": 86,
-              "label": "Node86",
+              "label": "CpuNode86",
               "disabled": false
             },
             {
               "id": 87,
-              "label": "Node87",
+              "label": "CpuNode87",
               "disabled": false
             },
             {
               "id": 88,
-              "label": "Node88",
+              "label": "CpuNode88",
               "disabled": false
             },
             {
               "id": 89,
-              "label": "Node89",
+              "label": "CpuNode89",
               "disabled": false
             },
             {
               "id": 90,
-              "label": "Node90",
+              "label": "CpuNode90",
               "disabled": false
             },
             {
               "id": 91,
-              "label": "Node91",
+              "label": "CpuNode91",
               "disabled": false
             },
             {
               "id": 92,
-              "label": "Node92",
+              "label": "CpuNode92",
               "disabled": false
             },
             {
               "id": 93,
-              "label": "Node93",
+              "label": "CpuNode93",
               "disabled": false
             },
             {
               "id": 94,
-              "label": "Node94",
+              "label": "CpuNode94",
               "disabled": false
             },
             {
               "id": 95,
-              "label": "Node95",
+              "label": "CpuNode95",
               "disabled": false
             },
             {
               "id": 96,
-              "label": "Node96",
+              "label": "CpuNode96",
               "disabled": false
             }
           ]
@@ -516,162 +516,162 @@
           "children": [
             {
               "id": 97,
-              "label": "Node97",
+              "label": "CpuNode97",
               "disabled": false
             },
             {
               "id": 98,
-              "label": "Node98",
+              "label": "CpuNode98",
               "disabled": false
             },
             {
               "id": 99,
-              "label": "Node99",
+              "label": "CpuNode99",
               "disabled": false
             },
             {
               "id": 100,
-              "label": "Node100",
+              "label": "CpuNode100",
               "disabled": false
             },
             {
               "id": 101,
-              "label": "Node101",
+              "label": "CpuNode101",
               "disabled": false
             },
             {
               "id": 102,
-              "label": "Node102",
+              "label": "CpuNode102",
               "disabled": false
             },
             {
               "id": 103,
-              "label": "Node103",
+              "label": "CpuNode103",
               "disabled": false
             },
             {
               "id": 104,
-              "label": "Node104",
+              "label": "CpuNode104",
               "disabled": false
             },
             {
               "id": 105,
-              "label": "Node105",
+              "label": "CpuNode105",
               "disabled": false
             },
             {
               "id": 106,
-              "label": "Node106",
+              "label": "CpuNode106",
               "disabled": false
             },
             {
               "id": 107,
-              "label": "Node107",
+              "label": "CpuNode107",
               "disabled": false
             },
             {
               "id": 108,
-              "label": "Node108",
+              "label": "CpuNode108",
               "disabled": false
             },
             {
               "id": 109,
-              "label": "Node109",
+              "label": "CpuNode109",
               "disabled": false
             },
             {
               "id": 110,
-              "label": "Node110",
+              "label": "CpuNode110",
               "disabled": false
             },
             {
               "id": 111,
-              "label": "Node111",
+              "label": "CpuNode111",
               "disabled": false
             },
             {
               "id": 112,
-              "label": "Node112",
+              "label": "CpuNode112",
               "disabled": false
             },
             {
               "id": 113,
-              "label": "Node113",
+              "label": "CpuNode113",
               "disabled": false
             },
             {
               "id": 114,
-              "label": "Node114",
+              "label": "CpuNode114",
               "disabled": false
             },
             {
               "id": 115,
-              "label": "Node115",
+              "label": "CpuNode115",
               "disabled": false
             },
             {
               "id": 116,
-              "label": "Node116",
+              "label": "CpuNode116",
               "disabled": false
             },
             {
               "id": 117,
-              "label": "Node117",
+              "label": "CpuNode117",
               "disabled": false
             },
             {
               "id": 118,
-              "label": "Node118",
+              "label": "CpuNode118",
               "disabled": false
             },
             {
               "id": 119,
-              "label": "Node119",
+              "label": "CpuNode119",
               "disabled": false
             },
             {
               "id": 120,
-              "label": "Node120",
+              "label": "CpuNode120",
               "disabled": false
             },
             {
               "id": 121,
-              "label": "Node121",
+              "label": "CpuNode121",
               "disabled": false
             },
             {
               "id": 122,
-              "label": "Node122",
+              "label": "CpuNode122",
               "disabled": false
             },
             {
               "id": 123,
-              "label": "Node123",
+              "label": "CpuNode123",
               "disabled": false
             },
             {
               "id": 124,
-              "label": "Node124",
+              "label": "CpuNode124",
               "disabled": false
             },
             {
               "id": 125,
-              "label": "Node125",
+              "label": "CpuNode125",
               "disabled": false
             },
             {
               "id": 126,
-              "label": "Node126",
+              "label": "CpuNode126",
               "disabled": false
             },
             {
               "id": 127,
-              "label": "Node127",
+              "label": "CpuNode127",
               "disabled": false
             },
             {
               "id": 128,
-              "label": "Node128",
+              "label": "CpuNode128",
               "disabled": false
             }
           ]
@@ -683,162 +683,162 @@
           "children": [
             {
               "id": 129,
-              "label": "Node129",
+              "label": "CpuNode129",
               "disabled": false
             },
             {
               "id": 130,
-              "label": "Node130",
+              "label": "CpuNode130",
               "disabled": false
             },
             {
               "id": 131,
-              "label": "Node131",
+              "label": "CpuNode131",
               "disabled": false
             },
             {
               "id": 132,
-              "label": "Node132",
+              "label": "CpuNode132",
               "disabled": false
             },
             {
               "id": 133,
-              "label": "Node133",
+              "label": "CpuNode133",
               "disabled": false
             },
             {
               "id": 134,
-              "label": "Node134",
+              "label": "CpuNode134",
               "disabled": false
             },
             {
               "id": 135,
-              "label": "Node135",
+              "label": "CpuNode135",
               "disabled": false
             },
             {
               "id": 136,
-              "label": "Node136",
+              "label": "CpuNode136",
               "disabled": false
             },
             {
               "id": 137,
-              "label": "Node137",
+              "label": "CpuNode137",
               "disabled": false
             },
             {
               "id": 138,
-              "label": "Node138",
+              "label": "CpuNode138",
               "disabled": false
             },
             {
               "id": 139,
-              "label": "Node139",
+              "label": "CpuNode139",
               "disabled": false
             },
             {
               "id": 140,
-              "label": "Node140",
+              "label": "CpuNode140",
               "disabled": false
             },
             {
               "id": 141,
-              "label": "Node141",
+              "label": "CpuNode141",
               "disabled": false
             },
             {
               "id": 142,
-              "label": "Node142",
+              "label": "CpuNode142",
               "disabled": false
             },
             {
               "id": 143,
-              "label": "Node143",
+              "label": "CpuNode143",
               "disabled": false
             },
             {
               "id": 144,
-              "label": "Node144",
+              "label": "CpuNode144",
               "disabled": false
             },
             {
               "id": 145,
-              "label": "Node145",
+              "label": "CpuNode145",
               "disabled": false
             },
             {
               "id": 146,
-              "label": "Node146",
+              "label": "CpuNode146",
               "disabled": false
             },
             {
               "id": 147,
-              "label": "Node147",
+              "label": "CpuNode147",
               "disabled": false
             },
             {
               "id": 148,
-              "label": "Node148",
+              "label": "CpuNode148",
               "disabled": false
             },
             {
               "id": 149,
-              "label": "Node149",
+              "label": "CpuNode149",
               "disabled": false
             },
             {
               "id": 150,
-              "label": "Node150",
+              "label": "CpuNode150",
               "disabled": false
             },
             {
               "id": 151,
-              "label": "Node151",
+              "label": "CpuNode151",
               "disabled": false
             },
             {
               "id": 152,
-              "label": "Node152",
+              "label": "CpuNode152",
               "disabled": false
             },
             {
               "id": 153,
-              "label": "Node153",
+              "label": "CpuNode153",
               "disabled": false
             },
             {
               "id": 154,
-              "label": "Node154",
+              "label": "CpuNode154",
               "disabled": false
             },
             {
               "id": 155,
-              "label": "Node155",
+              "label": "CpuNode155",
               "disabled": false
             },
             {
               "id": 156,
-              "label": "Node156",
+              "label": "CpuNode156",
               "disabled": false
             },
             {
               "id": 157,
-              "label": "Node157",
+              "label": "CpuNode157",
               "disabled": false
             },
             {
               "id": 158,
-              "label": "Node158",
+              "label": "CpuNode158",
               "disabled": false
             },
             {
               "id": 159,
-              "label": "Node159",
+              "label": "CpuNode159",
               "disabled": false
             },
             {
               "id": 160,
-              "label": "Node160",
+              "label": "CpuNode160",
               "disabled": false
             }
           ]
@@ -850,162 +850,162 @@
           "children": [
             {
               "id": 161,
-              "label": "Node161",
+              "label": "CpuNode161",
               "disabled": false
             },
             {
               "id": 162,
-              "label": "Node162",
+              "label": "CpuNode162",
               "disabled": false
             },
             {
               "id": 163,
-              "label": "Node163",
+              "label": "CpuNode163",
               "disabled": false
             },
             {
               "id": 164,
-              "label": "Node164",
+              "label": "CpuNode164",
               "disabled": false
             },
             {
               "id": 165,
-              "label": "Node165",
+              "label": "CpuNode165",
               "disabled": false
             },
             {
               "id": 166,
-              "label": "Node166",
+              "label": "CpuNode166",
               "disabled": false
             },
             {
               "id": 167,
-              "label": "Node167",
+              "label": "CpuNode167",
               "disabled": false
             },
             {
               "id": 168,
-              "label": "Node168",
+              "label": "CpuNode168",
               "disabled": false
             },
             {
               "id": 169,
-              "label": "Node169",
+              "label": "CpuNode169",
               "disabled": false
             },
             {
               "id": 170,
-              "label": "Node170",
+              "label": "CpuNode170",
               "disabled": false
             },
             {
               "id": 171,
-              "label": "Node171",
+              "label": "CpuNode171",
               "disabled": false
             },
             {
               "id": 172,
-              "label": "Node172",
+              "label": "CpuNode172",
               "disabled": false
             },
             {
               "id": 173,
-              "label": "Node173",
+              "label": "CpuNode173",
               "disabled": false
             },
             {
               "id": 174,
-              "label": "Node174",
+              "label": "CpuNode174",
               "disabled": false
             },
             {
               "id": 175,
-              "label": "Node175",
+              "label": "CpuNode175",
               "disabled": false
             },
             {
               "id": 176,
-              "label": "Node176",
+              "label": "CpuNode176",
               "disabled": false
             },
             {
               "id": 177,
-              "label": "Node177",
+              "label": "CpuNode177",
               "disabled": false
             },
             {
               "id": 178,
-              "label": "Node178",
+              "label": "CpuNode178",
               "disabled": false
             },
             {
               "id": 179,
-              "label": "Node179",
+              "label": "CpuNode179",
               "disabled": false
             },
             {
               "id": 180,
-              "label": "Node180",
+              "label": "CpuNode180",
               "disabled": false
             },
             {
               "id": 181,
-              "label": "Node181",
+              "label": "CpuNode181",
               "disabled": false
             },
             {
               "id": 182,
-              "label": "Node182",
+              "label": "CpuNode182",
               "disabled": false
             },
             {
               "id": 183,
-              "label": "Node183",
+              "label": "CpuNode183",
               "disabled": false
             },
             {
               "id": 184,
-              "label": "Node184",
+              "label": "CpuNode184",
               "disabled": false
             },
             {
               "id": 185,
-              "label": "Node185",
+              "label": "CpuNode185",
               "disabled": false
             },
             {
               "id": 186,
-              "label": "Node186",
+              "label": "CpuNode186",
               "disabled": false
             },
             {
               "id": 187,
-              "label": "Node187",
+              "label": "CpuNode187",
               "disabled": false
             },
             {
               "id": 188,
-              "label": "Node188",
+              "label": "CpuNode188",
               "disabled": false
             },
             {
               "id": 189,
-              "label": "Node189",
+              "label": "CpuNode189",
               "disabled": false
             },
             {
               "id": 190,
-              "label": "Node190",
+              "label": "CpuNode190",
               "disabled": false
             },
             {
               "id": 191,
-              "label": "Node191",
+              "label": "CpuNode191",
               "disabled": false
             },
             {
               "id": 192,
-              "label": "Node192",
+              "label": "CpuNode192",
               "disabled": false
             }
           ]
@@ -1017,162 +1017,162 @@
           "children": [
             {
               "id": 193,
-              "label": "Node193",
+              "label": "CpuNode193",
               "disabled": false
             },
             {
               "id": 194,
-              "label": "Node194",
+              "label": "CpuNode194",
               "disabled": false
             },
             {
               "id": 195,
-              "label": "Node195",
+              "label": "CpuNode195",
               "disabled": false
             },
             {
               "id": 196,
-              "label": "Node196",
+              "label": "CpuNode196",
               "disabled": false
             },
             {
               "id": 197,
-              "label": "Node197",
+              "label": "CpuNode197",
               "disabled": false
             },
             {
               "id": 198,
-              "label": "Node198",
+              "label": "CpuNode198",
               "disabled": false
             },
             {
               "id": 199,
-              "label": "Node199",
+              "label": "CpuNode199",
               "disabled": false
             },
             {
               "id": 200,
-              "label": "Node200",
+              "label": "CpuNode200",
               "disabled": false
             },
             {
               "id": 201,
-              "label": "Node201",
+              "label": "CpuNode201",
               "disabled": false
             },
             {
               "id": 202,
-              "label": "Node202",
+              "label": "CpuNode202",
               "disabled": false
             },
             {
               "id": 203,
-              "label": "Node203",
+              "label": "CpuNode203",
               "disabled": false
             },
             {
               "id": 204,
-              "label": "Node204",
+              "label": "CpuNode204",
               "disabled": false
             },
             {
               "id": 205,
-              "label": "Node205",
+              "label": "CpuNode205",
               "disabled": false
             },
             {
               "id": 206,
-              "label": "Node206",
+              "label": "CpuNode206",
               "disabled": false
             },
             {
               "id": 207,
-              "label": "Node207",
+              "label": "CpuNode207",
               "disabled": false
             },
             {
               "id": 208,
-              "label": "Node208",
+              "label": "CpuNode208",
               "disabled": false
             },
             {
               "id": 209,
-              "label": "Node209",
+              "label": "CpuNode209",
               "disabled": false
             },
             {
               "id": 210,
-              "label": "Node210",
+              "label": "CpuNode210",
               "disabled": false
             },
             {
               "id": 211,
-              "label": "Node211",
+              "label": "CpuNode211",
               "disabled": false
             },
             {
               "id": 212,
-              "label": "Node212",
+              "label": "CpuNode212",
               "disabled": false
             },
             {
               "id": 213,
-              "label": "Node213",
+              "label": "CpuNode213",
               "disabled": false
             },
             {
               "id": 214,
-              "label": "Node214",
+              "label": "CpuNode214",
               "disabled": false
             },
             {
               "id": 215,
-              "label": "Node215",
+              "label": "CpuNode215",
               "disabled": false
             },
             {
               "id": 216,
-              "label": "Node216",
+              "label": "CpuNode216",
               "disabled": false
             },
             {
               "id": 217,
-              "label": "Node217",
+              "label": "CpuNode217",
               "disabled": false
             },
             {
               "id": 218,
-              "label": "Node218",
+              "label": "CpuNode218",
               "disabled": false
             },
             {
               "id": 219,
-              "label": "Node219",
+              "label": "CpuNode219",
               "disabled": false
             },
             {
               "id": 220,
-              "label": "Node220",
+              "label": "CpuNode220",
               "disabled": false
             },
             {
               "id": 221,
-              "label": "Node221",
+              "label": "CpuNode221",
               "disabled": false
             },
             {
               "id": 222,
-              "label": "Node222",
+              "label": "CpuNode222",
               "disabled": false
             },
             {
               "id": 223,
-              "label": "Node223",
+              "label": "CpuNode223",
               "disabled": false
             },
             {
               "id": 224,
-              "label": "Node224",
+              "label": "CpuNode224",
               "disabled": false
             }
           ]
@@ -1184,162 +1184,162 @@
           "children": [
             {
               "id": 225,
-              "label": "Node225",
+              "label": "CpuNode225",
               "disabled": false
             },
             {
               "id": 226,
-              "label": "Node226",
+              "label": "CpuNode226",
               "disabled": false
             },
             {
               "id": 227,
-              "label": "Node227",
+              "label": "CpuNode227",
               "disabled": false
             },
             {
               "id": 228,
-              "label": "Node228",
+              "label": "CpuNode228",
               "disabled": false
             },
             {
               "id": 229,
-              "label": "Node229",
+              "label": "CpuNode229",
               "disabled": false
             },
             {
               "id": 230,
-              "label": "Node230",
+              "label": "CpuNode230",
               "disabled": false
             },
             {
               "id": 231,
-              "label": "Node231",
+              "label": "CpuNode231",
               "disabled": false
             },
             {
               "id": 232,
-              "label": "Node232",
+              "label": "CpuNode232",
               "disabled": false
             },
             {
               "id": 233,
-              "label": "Node233",
+              "label": "CpuNode233",
               "disabled": false
             },
             {
               "id": 234,
-              "label": "Node234",
+              "label": "CpuNode234",
               "disabled": false
             },
             {
               "id": 235,
-              "label": "Node235",
+              "label": "CpuNode235",
               "disabled": false
             },
             {
               "id": 236,
-              "label": "Node236",
+              "label": "CpuNode236",
               "disabled": false
             },
             {
               "id": 237,
-              "label": "Node237",
+              "label": "CpuNode237",
               "disabled": false
             },
             {
               "id": 238,
-              "label": "Node238",
+              "label": "CpuNode238",
               "disabled": false
             },
             {
               "id": 239,
-              "label": "Node239",
+              "label": "CpuNode239",
               "disabled": false
             },
             {
               "id": 240,
-              "label": "Node240",
+              "label": "CpuNode240",
               "disabled": false
             },
             {
               "id": 241,
-              "label": "Node241",
+              "label": "CpuNode241",
               "disabled": false
             },
             {
               "id": 242,
-              "label": "Node242",
+              "label": "CpuNode242",
               "disabled": false
             },
             {
               "id": 243,
-              "label": "Node243",
+              "label": "CpuNode243",
               "disabled": false
             },
             {
               "id": 244,
-              "label": "Node244",
+              "label": "CpuNode244",
               "disabled": false
             },
             {
               "id": 245,
-              "label": "Node245",
+              "label": "CpuNode245",
               "disabled": false
             },
             {
               "id": 246,
-              "label": "Node246",
+              "label": "CpuNode246",
               "disabled": false
             },
             {
               "id": 247,
-              "label": "Node247",
+              "label": "CpuNode247",
               "disabled": false
             },
             {
               "id": 248,
-              "label": "Node248",
+              "label": "CpuNode248",
               "disabled": false
             },
             {
               "id": 249,
-              "label": "Node249",
+              "label": "CpuNode249",
               "disabled": false
             },
             {
               "id": 250,
-              "label": "Node250",
+              "label": "CpuNode250",
               "disabled": false
             },
             {
               "id": 251,
-              "label": "Node251",
+              "label": "CpuNode251",
               "disabled": false
             },
             {
               "id": 252,
-              "label": "Node252",
+              "label": "CpuNode252",
               "disabled": false
             },
             {
               "id": 253,
-              "label": "Node253",
+              "label": "CpuNode253",
               "disabled": false
             },
             {
               "id": 254,
-              "label": "Node254",
+              "label": "CpuNode254",
               "disabled": false
             },
             {
               "id": 255,
-              "label": "Node255",
+              "label": "CpuNode255",
               "disabled": false
             },
             {
               "id": 256,
-              "label": "Node256",
+              "label": "CpuNode256",
               "disabled": false
             }
           ]

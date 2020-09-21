@@ -61,13 +61,13 @@ func main() {
 		panic(err)
 	}
 
-	os.Setenv("TreeJsonCPU", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree_cpu_256_8_32.json`)
+	os.Setenv("TreeJsonCPU", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree_cpu256_8_32.json`)
 	ctdm, err = resGTreeDM.NewResGTreeDM(cndm, os.Getenv("TreeJsonCPU"))
 	if err != nil {
 		panic(err)
 	}
 
-	os.Setenv("TreeJsonGPU", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree_gpu_66_2_33.json`)
+	os.Setenv("TreeJsonGPU", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree_gpu66_2_33.json`)
 	gtdm, err = resGTreeDM.NewResGTreeDM(gndm, os.Getenv("TreeJsonGPU"))
 	if err != nil {
 		panic(err)
