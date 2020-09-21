@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNode"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNodeTree"
-	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"time"
 )
 
 var _ = Describe("Tree", func() {
@@ -31,7 +29,7 @@ var _ = Describe("Tree", func() {
 			Label:    "Group1-1",
 			Children: nil,
 		}
-		for i := int64(0); i < 256; i++ {
+		for i := int64(1); i <= 256; i++ {
 			p := &resGNode.ResGNode{
 				ID:       i,
 				Label:    fmt.Sprintf("Node%d", i),
@@ -39,11 +37,11 @@ var _ = Describe("Tree", func() {
 			}
 			tempGroup.Children = append(tempGroup.Children, p)
 
-			if i%32 == 31 {
+			if i%32 == 0 {
 
 				lc.Children = append(lc.Children, tempGroup)
 
-				groupID := (i+1)/32 + 1
+				groupID := i/32 + 1
 				tempGroup = &resGNode.ResGNode{
 					ID:       110e4 + groupID*1e4,
 					Label:    fmt.Sprintf("Group1-%d", groupID),
@@ -60,73 +58,73 @@ var _ = Describe("Tree", func() {
 				NodesNum: 0,
 			}
 
-			_, err := resGNodeTree.ToJsonIndent(t)
-			Expect(err).ShouldNot(HaveOccurred())
-			//By(fmt.Sprintf("Tree to Json = %s", str))
-		})
-	})
-
-	Context("Load Tree from Json", func() {
-		It("Load Tree from Json", func() {
-			t, err := resGNodeTree.LoadFromJsonFile("./tree256.json")
-			Expect(err).ShouldNot(HaveOccurred())
-			nodesNum := resGNodeTree.CountRO(&t)
-			By(fmt.Sprintf("Count Tree Load from file = %d", nodesNum))
-			resGNodeTree.Count(&t)
-			Expect(t.NodesNum).Should(Equal(nodesNum))
-		})
-	})
-
-	Context("Filtrate Tree", func() {
-		It("Filtrate Tree", func() {
-			t := resGNodeTree.Tree{
-				Root:     rootGNode,
-				NodesNum: 0,
-			}
-
-			nodesMap := make(map[int64]resNode.Node, 256)
-			for i := int64(0); i < 256; i++ {
-				nodesMap[i] = resNode.Node{
-					ID:            i,
-					ProjectID:     0,
-					AllocatedTime: time.Now(),
-				}
-			}
-			for j := int64(50); j < 100; j++ {
-				nodesMap[j] = resNode.Node{
-					ID:            j,
-					ProjectID:     1,
-					AllocatedTime: time.Now(),
-				}
-			}
-
-			for j := int64(100); j < 200; j++ {
-				nodesMap[j] = resNode.Node{
-					ID:            j,
-					ProjectID:     2,
-					AllocatedTime: time.Now(),
-				}
-			}
-
-			nt1, err := resGNodeTree.Filtrate(&t, nodesMap, func(node resNode.Node) bool {
-				return node.ProjectID == 0 || node.ProjectID == 1
-			})
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("t nodesNum = %d", resGNodeTree.CountRO(&t)))
-			By(fmt.Sprintf("nt1 nodesNum = %d", resGNodeTree.CountRO(nt1)))
-
-			nt2, err := resGNodeTree.FiltrateMark(&t, nodesMap, func(node resNode.Node) bool {
-				return node.ProjectID == 0 || node.ProjectID == 1
-			})
-			Expect(err).ShouldNot(HaveOccurred())
-			By(fmt.Sprintf("nt2 nodesNum = %d", resGNodeTree.CountRO(nt2)))
-
-			str, err := resGNodeTree.ToJsonIndent(*nt2)
+			str, err := resGNodeTree.ToJsonIndent(t)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("Tree to Json = %s", str))
-
 		})
 	})
+
+	//Context("Load Tree from Json", func() {
+	//	It("Load Tree from Json", func() {
+	//		t, err := resGNodeTree.LoadFromJsonFile("./tree256.json")
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		nodesNum := resGNodeTree.CountRO(&t)
+	//		By(fmt.Sprintf("Count Tree Load from file = %d", nodesNum))
+	//		resGNodeTree.Count(&t)
+	//		Expect(t.NodesNum).Should(Equal(nodesNum))
+	//	})
+	//})
+	//
+	//Context("Filtrate Tree", func() {
+	//	It("Filtrate Tree", func() {
+	//		t := resGNodeTree.Tree{
+	//			Root:     rootGNode,
+	//			NodesNum: 0,
+	//		}
+	//
+	//		nodesMap := make(map[int64]resNode.Node, 256)
+	//		for i := int64(0); i < 256; i++ {
+	//			nodesMap[i] = resNode.Node{
+	//				ID:            i,
+	//				ProjectID:     0,
+	//				AllocatedTime: time.Now(),
+	//			}
+	//		}
+	//		for j := int64(50); j < 100; j++ {
+	//			nodesMap[j] = resNode.Node{
+	//				ID:            j,
+	//				ProjectID:     1,
+	//				AllocatedTime: time.Now(),
+	//			}
+	//		}
+	//
+	//		for j := int64(100); j < 200; j++ {
+	//			nodesMap[j] = resNode.Node{
+	//				ID:            j,
+	//				ProjectID:     2,
+	//				AllocatedTime: time.Now(),
+	//			}
+	//		}
+	//
+	//		nt1, err := resGNodeTree.Filtrate(&t, nodesMap, func(node resNode.Node) bool {
+	//			return node.ProjectID == 0 || node.ProjectID == 1
+	//		})
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		By(fmt.Sprintf("t nodesNum = %d", resGNodeTree.CountRO(&t)))
+	//		By(fmt.Sprintf("nt1 nodesNum = %d", resGNodeTree.CountRO(nt1)))
+	//
+	//		nt2, err := resGNodeTree.FiltrateMark(&t, nodesMap, func(node resNode.Node) bool {
+	//			return node.ProjectID == 0 || node.ProjectID == 1
+	//		})
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		By(fmt.Sprintf("nt2 nodesNum = %d", resGNodeTree.CountRO(nt2)))
+	//
+	//		str, err := resGNodeTree.ToJsonIndent(*nt2)
+	//		Expect(err).ShouldNot(HaveOccurred())
+	//		By(fmt.Sprintf("Tree to Json = %s", str))
+	//
+	//	})
+	//})
 
 	//Context("Syn Tree", func() {
 	//	It("Syn Tree", func() {
