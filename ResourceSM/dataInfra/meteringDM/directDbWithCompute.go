@@ -40,7 +40,7 @@ func (dm DirectDbWithCompute) QueryAll(projectID int, mType int) (mss []metering
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-func (dm DirectDbWithCompute) QueryWithCreate(projectID int, mType int, typeInfo string) (ms metering.Statement, err error) {
+func (dm DirectDbWithCompute) QueryWithCI(projectID int, mType int, typeInfo string) (ms metering.Statement, err error) {
 	ms, err = dm.theDB.Query(projectID, mType, typeInfo)
 
 	if err != nil {

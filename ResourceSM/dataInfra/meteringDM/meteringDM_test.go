@@ -14,7 +14,7 @@ var _ = Describe("MeteringDM", func() {
 
 	})
 
-	Describe("ComputeSettlement", func() {
+	Describe("QueryWithCI", func() {
 		It("Compute CPU ", func() {
 			projectID := 1
 
@@ -48,7 +48,7 @@ var _ = Describe("MeteringDM", func() {
 				CreatedAt: time.Date(2020, 2, 1, 0, 0, 0, 0, time.Now().Location()),
 			})
 
-			ms, err := mdm.QueryWithCreate(projectID, metering.TypeSettlement, "")
+			ms, err := mdm.QueryWithCI(projectID, metering.TypeSettlement, "")
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(ms.CpuAmountInHours).Should(Equal(14880))
 			Expect(ms.CpuAmountInDays).Should(Equal(620))
@@ -89,7 +89,7 @@ var _ = Describe("MeteringDM", func() {
 				CreatedAt: time.Date(2021, 2, 1, 0, 0, 0, 0, time.Now().Location()),
 			})
 
-			ms, err := mdm.QueryWithCreate(projectID, metering.TypeSettlement, "")
+			ms, err := mdm.QueryWithCI(projectID, metering.TypeSettlement, "")
 			Expect(err).ShouldNot(HaveOccurred())
 			//Expect(ms.GpuAmountInHours).Should(Equal(158640))
 			//Expect(ms.GpuAmountInDays).Should(Equal(6610))

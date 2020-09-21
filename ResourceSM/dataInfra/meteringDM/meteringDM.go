@@ -5,7 +5,8 @@ import "github.com/dkzhang/RmsGo/ResourceSM/model/metering"
 type MeteringDM interface {
 	MeteringReadOnlyDM
 
-	QueryWithCreate(projectID int, mType int, typeInfo string) (ms metering.Statement, err error)
+	// if not found, Compute and Insert into db.
+	QueryWithCI(projectID int, mType int, typeInfo string) (ms metering.Statement, err error)
 
 	//ComputeMonthly()
 	//ComputeQuarterly()
