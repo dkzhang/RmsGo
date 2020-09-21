@@ -61,7 +61,6 @@ func main() {
 		panic(err)
 	}
 
-	// TODO load jsonFileName
 	os.Setenv("TreeJson", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree256_8_32.json`)
 	jsonFilename := os.Getenv("TreeJson")
 	ctdm, err = resGTreeDM.NewResGTreeDM(cndm, jsonFilename)
