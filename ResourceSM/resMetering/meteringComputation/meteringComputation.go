@@ -45,6 +45,12 @@ func MeteringCompute(records []resAlloc.Record, from, to time.Time) (amountInHou
 		mi.AmountInHours = mi.Number * mi.TheHours
 		mis = append(mis, mi)
 		amountInHours += mi.AmountInHours
+
+		//logrus.Infof("records[i]: ProjectID=%d, RecordID=%d, NumAfter=%d, CreatedAt=%v",
+		//	records[i].ProjectID, records[i].RecordID, records[i].NumAfter, records[i].CreatedAt)
+		//logrus.Infof("records[i+1]: ProjectID=%d, RecordID=%d, NumAfter=%d, CreatedAt=%v",
+		//	records[i+1].ProjectID, records[i+1].RecordID, records[i+1].NumAfter, records[i+1].CreatedAt)
+		//logrus.Infof("mi=%v", records[i],records[i+1], mi)
 	}
 
 	// process index n-1

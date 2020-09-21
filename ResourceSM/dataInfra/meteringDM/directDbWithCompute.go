@@ -46,7 +46,8 @@ func (dm DirectDbWithCompute) QueryWithCreate(projectID int, mType int, typeInfo
 	if err != nil {
 		if err != sql.ErrNoRows {
 			// db error
-			return metering.Statement{}, fmt.Errorf("query IsExist in MeteringDB error")
+			return metering.Statement{},
+				fmt.Errorf("query IsExist in MeteringDB error: %v", err)
 		}
 	} else {
 		//metering.Statement exist

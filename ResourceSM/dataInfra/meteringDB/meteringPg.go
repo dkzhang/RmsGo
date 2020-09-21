@@ -26,11 +26,7 @@ func (mpg MeteringPg) Close() {
 func (mpg MeteringPg) Query(projectID int, mType int, typeInfo string) (ms metering.Statement, err error) {
 	queryOne := fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1 AND metering_type=$2 AND metering_type_info=$3`, mpg.TableName)
 	err = mpg.TheDB.Get(&ms, queryOne, projectID, mType, typeInfo)
-	if err != nil {
-		return metering.Statement{},
-			fmt.Errorf("query One metering.Statement in TheDB error: %v", err)
-	}
-	return ms, nil
+	return ms, err
 }
 
 func (mpg MeteringPg) QueryAll(projectID int, mType int) (mss []metering.Statement, err error) {

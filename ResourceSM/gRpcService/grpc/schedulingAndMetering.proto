@@ -44,12 +44,11 @@ message SchedulingStorageRequest {
 }
 
 message SchedulingReply {
-  bool isFirstAlloc = 1;
-  int64 projectID = 2;
-  int64 cpuNodesAcquired = 3;
-  int64 gpuNodesAcquired = 4;
-  int64 storageSizeAcquired = 5;
-  string storageAllocInfo = 6;
+  int64 projectID = 1;
+  int64 cpuNodesAcquired = 2;
+  int64 gpuNodesAcquired = 3;
+  int64 storageSizeAcquired = 4;
+  string msg = 5;
 }
 
 ///////////////////////////////////////////////////////////
