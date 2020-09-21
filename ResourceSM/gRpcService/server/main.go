@@ -62,7 +62,7 @@ func main() {
 	}
 
 	// TODO load jsonFileName
-	jsonFilename := ""
+	jsonFilename := os.Getenv("TreeJson")
 	ctdm, err = resGTreeDM.NewResGTreeDM(cndm, jsonFilename)
 	if err != nil {
 		panic(err)
