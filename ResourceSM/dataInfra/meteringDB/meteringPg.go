@@ -24,7 +24,7 @@ func (mpg MeteringPg) Close() {
 }
 
 func (mpg MeteringPg) Query(projectID int, mType int, typeInfo string) (ms metering.Statement, err error) {
-	queryOne := fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1 && metering_type=$2 && metering_type_info=$3`, mpg.TableName)
+	queryOne := fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1 AND metering_type=$2 AND metering_type_info=$3`, mpg.TableName)
 	err = mpg.TheDB.Get(&ms, queryOne, projectID, mType, typeInfo)
 	if err != nil {
 		return metering.Statement{},
@@ -34,10 +34,10 @@ func (mpg MeteringPg) Query(projectID int, mType int, typeInfo string) (ms meter
 }
 
 func (mpg MeteringPg) QueryAll(projectID int, mType int) (mss []metering.Statement, err error) {
-	query := fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1 && metering_type & $2 != 0`, mpg.TableName)
+	query := fmt.Sprintf(`SELECT * FROM %s WHERE project_id=$1 AND metering_type & $2 != 0`, mpg.TableName)
 	err = mpg.TheDB.Select(&mss, query, projectID, mType)
 	if err != nil {
-		return nil, fmt.Errorf("query all metering statement(projectID=%d && type=%d) from TheDB error: %v", projectID, mType, err)
+		return nil, fmt.Errorf("query all metering statement(projectID=%d AND type=%d) from TheDB error: %v", projectID, mType, err)
 	}
 	return mss, nil
 }
@@ -52,9 +52,9 @@ func (mpg MeteringPg) Insert(ms metering.Statement) (mid int, err error) {
 			$4, $5, $6, $7, $8, $9, 
 			$10, $11, $12,
 			$13) 
-			RETURNING application_id`, mpg.TableName)
+			RETURNING metering_id`, mpg.TableName)
 	err = mpg.TheDB.Get(&mid, execInsert,
-		ms.MeteringType, ms.MeteringTypeInfo,
+		ms.ProjectID, ms.MeteringType, ms.MeteringTypeInfo,
 		ms.CpuAmountInDays, ms.GpuAmountInDays, ms.StorageAmountInDays, ms.CpuAmountInHours, ms.GpuAmountInHours, ms.StorageAmountInHours,
 		ms.CpuNodeMeteringJson, ms.GpuNodeMeteringJson, ms.StorageMeteringJson,
 		ms.CreatedAt)

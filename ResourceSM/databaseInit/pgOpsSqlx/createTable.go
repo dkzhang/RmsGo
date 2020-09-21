@@ -1,6 +1,7 @@
 package pgOpsSqlx
 
 import (
+	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
@@ -21,6 +22,9 @@ var tableList = map[string]string{
 	"history_res_alloc_storage": resAlloc.GetSchemaHistoryStorage(),
 
 	"project_res_info": projectRes.GetSchema(),
+
+	"metering_statement":         metering.GetSchema(),
+	"history_metering_statement": metering.GetSchemaHistory(),
 }
 
 func CreateAllTable(db *sqlx.DB) {

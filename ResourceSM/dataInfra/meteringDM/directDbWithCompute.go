@@ -8,7 +8,7 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"
 	"github.com/dkzhang/RmsGo/ResourceSM/resMetering/meteringComputation"
-	"math"
+	"github.com/dkzhang/RmsGo/myUtils/timeParse"
 	"time"
 )
 
@@ -140,9 +140,9 @@ func (dm DirectDbWithCompute) ComputeSettlement(projectID int) (ms metering.Stat
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// meteringComputation amountInDays
-	ms.CpuAmountInDays = int(math.Round(float64(ms.CpuAmountInHours) / 24))
-	ms.GpuAmountInDays = int(math.Round(float64(ms.GpuAmountInHours) / 24))
-	ms.StorageAmountInDays = int(math.Round(float64(ms.StorageAmountInHours) / 24))
+	ms.CpuAmountInDays = timeParse.HoursToDays(ms.CpuAmountInHours)
+	ms.GpuAmountInDays = timeParse.HoursToDays(ms.GpuAmountInHours)
+	ms.StorageAmountInDays = timeParse.HoursToDays(ms.StorageAmountInHours)
 
 	return ms, nil
 }
