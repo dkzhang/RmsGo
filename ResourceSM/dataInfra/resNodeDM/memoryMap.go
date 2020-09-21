@@ -53,7 +53,7 @@ func (rnm MemoryMap) QueryAll() (nodes []resNode.Node, err error) {
 }
 
 func (rnm MemoryMap) QueryAllMap() (nodesMap map[int64]resNode.Node, err error) {
-	err = deepCopy.DeepCopy(nodesMap, rnm.infoMap)
+	err = deepCopy.DeepCopy(&nodesMap, &(rnm.infoMap))
 	if err != nil {
 		return nil, fmt.Errorf("DeepCopy error: %v", err)
 	}
