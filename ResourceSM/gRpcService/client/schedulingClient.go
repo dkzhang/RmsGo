@@ -4,11 +4,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
-	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"time"
 
-	pb "github.com/dkzhang/RmsGo/ResourceSM/resScheduling/grpc"
+	pb "github.com/dkzhang/RmsGo/ResourceSM/gRpcService/grpc"
 	"google.golang.org/grpc"
 )
 
@@ -16,29 +15,28 @@ type ResSchedulingClient struct {
 	host    string
 	port    int
 	address string
-	pdm     projectDM.ProjectDM
 }
 
-func NewResSchedulingClient(host string, port int, pdm projectDM.ProjectDM) ResSchedulingClient {
+func NewResSchedulingClient(host string, port int) ResSchedulingClient {
 	return ResSchedulingClient{
 		host:    host,
 		port:    port,
 		address: fmt.Sprintf("%s:%d", host, port),
-		pdm:     pdm,
 	}
 }
 
 func (rsc ResSchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodesAfter []int64,
-	ctrlID int, ctrlCN string) (err error) {
+	ctrlID int, ctrlCN string) (allocInfo project.AllocInfo, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
 	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		return fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
+		return project.AllocInfo{},
+			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
 	}
 	defer conn.Close()
 
-	c := pb.NewSchedulingClient(conn)
+	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
@@ -53,39 +51,32 @@ func (rsc ResSchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodes
 		CtrlCN:     ctrlCN,
 	})
 	if err != nil {
-		return fmt.Errorf("grpc call SchedulingCGpu error: %v", err)
+		return project.AllocInfo{},
+			fmt.Errorf("grpc call SchedulingCGpu error: %v", err)
 	}
 
-	// Update project info by reply
-	if reply.IsFirstAlloc {
-		// update project status info
-		rsc.pdm.UpdateStatusInfo(project.StatusInfo{
-			ProjectID:   projectID,
-			BasicStatus: project.BasicStatusRunning,
-		})
-	}
-
-	rsc.pdm.UpdateAllocInfo(project.AllocInfo{
+	allocInfo = project.AllocInfo{
 		ProjectID:           projectID,
 		CpuNodesAcquired:    int(reply.CpuNodesAcquired),
 		GpuNodesAcquired:    int(reply.GpuNodesAcquired),
 		StorageSizeAcquired: int(reply.StorageSizeAcquired),
-	})
+	}
 
-	return nil
+	return allocInfo, nil
 }
 
 func (rsc ResSchedulingClient) SchedulingStorage(projectID int,
-	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (err error) {
+	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (allocInfo project.AllocInfo, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
 	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		return fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
+		return project.AllocInfo{},
+			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
 	}
 	defer conn.Close()
 
-	c := pb.NewSchedulingClient(conn)
+	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
@@ -99,25 +90,18 @@ func (rsc ResSchedulingClient) SchedulingStorage(projectID int,
 		CtrlCN:                ctrlCN,
 	})
 	if err != nil {
-		return fmt.Errorf("grpc call SchedulingStorage error: %v", err)
+		return project.AllocInfo{},
+			fmt.Errorf("grpc call SchedulingStorage error: %v", err)
 	}
 
-	// Update project info by reply
-	if reply.IsFirstAlloc {
-		// update project status info
-		rsc.pdm.UpdateStatusInfo(project.StatusInfo{
-			ProjectID:   projectID,
-			BasicStatus: project.BasicStatusRunning,
-		})
-	}
-
-	rsc.pdm.UpdateAllocInfo(project.AllocInfo{
+	allocInfo = project.AllocInfo{
 		ProjectID:           projectID,
 		CpuNodesAcquired:    int(reply.CpuNodesAcquired),
 		GpuNodesAcquired:    int(reply.GpuNodesAcquired),
 		StorageSizeAcquired: int(reply.StorageSizeAcquired),
-	})
-	return nil
+	}
+
+	return allocInfo, nil
 }
 
 func (rsc ResSchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryType int) (jsonTree string, err error) {
@@ -125,11 +109,12 @@ func (rsc ResSchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryT
 	// Common Operation
 	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		return "", fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
+		return "",
+			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
 	}
 	defer conn.Close()
 
-	c := pb.NewSchedulingClient(conn)
+	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
@@ -158,7 +143,7 @@ func (rsc ResSchedulingClient) QueryProjectRes(projectID int) (pr projectRes.Res
 	}
 	defer conn.Close()
 
-	c := pb.NewSchedulingClient(conn)
+	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
@@ -205,7 +190,7 @@ func (rsc ResSchedulingClient) QueryProjectResLite(projectID int) (prl projectRe
 	}
 	defer conn.Close()
 
-	c := pb.NewSchedulingClient(conn)
+	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()

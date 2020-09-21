@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/meteringDB"
+	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/meteringDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDB"
@@ -10,11 +12,12 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/databaseInit/pgOpsSqlx"
+	pb "github.com/dkzhang/RmsGo/ResourceSM/gRpcService/grpc"
+	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
-	pb "github.com/dkzhang/RmsGo/ResourceSM/resScheduling/grpc"
-	"github.com/dkzhang/RmsGo/ResourceSM/resScheduling/resourceScheduling"
+	"github.com/dkzhang/RmsGo/ResourceSM/resScheduling"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"google.golang.org/grpc"
 	"log"
@@ -69,8 +72,15 @@ func main() {
 		panic(err)
 	}
 
-	theServer := server{
-		TheResScheduling: resourceScheduling.NewResScheduling(prdm, cadm, gadm, sadm, cndm, gndm, ctdm, gtdm),
+	schServer := SchedulingServer{
+		TheResScheduling: resScheduling.NewResScheduling(prdm, cadm, gadm, sadm, cndm, gndm, ctdm, gtdm),
+	}
+	//////////////////////////////////////////////////////////////////////////////
+
+	mdb := meteringDB.NewMeteringPg(db, metering.TableName)
+	mdm := meteringDM.NewResAllocDirectDB(mdb, cadm, gadm, sadm)
+	metServer := MeteringServer{
+		TheMeteringDM: mdm,
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -79,7 +89,8 @@ func main() {
 		log.Printf(" fatal error! failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterSchedulingServer(s, &theServer)
+	pb.RegisterSchedulingServiceServer(s, &schServer)
+	pb.RegisterMeteringServiceServer(s, &metServer)
 	fmt.Printf("Begin to serve %v \n", time.Now())
 	if err := s.Serve(lis); err != nil {
 		log.Printf(" fatal error! failed to serve: %v", err)
