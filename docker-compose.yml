@@ -26,7 +26,7 @@ services:
     build:
       context: ./
       dockerfile: ResourceSM/Dockerfile
-    command: ./rmsSchMet run
+    command: ResourceSM/rmsSchMet run
     ports:
       - 50071:50071
     networks:

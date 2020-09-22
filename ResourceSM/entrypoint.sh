@@ -11,6 +11,6 @@ then
     echo "PostgreSQL started"
 fi
 
-./rmsSchMet seed_all
+ResourceSM/rmsSchMet seed_all
 
 exec "$@"
