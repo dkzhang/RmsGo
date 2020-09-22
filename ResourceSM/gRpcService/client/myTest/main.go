@@ -7,12 +7,12 @@ import (
 )
 
 func main() {
-	var resSchedulingClient client.ResSchedulingClient
+	var resSchedulingClient client.SchedulingClient
 	const (
-		host = "localhost"
+		host = "192.168.10.41"
 		port = 50071
 	)
-	resSchedulingClient = client.NewResSchedulingClient(host, port)
+	resSchedulingClient = client.NewSchedulingClient(host, port)
 
 	///////////////////////////////////////////////////////
 	projectID := 1

@@ -11,25 +11,25 @@ import (
 	"google.golang.org/grpc"
 )
 
-type ResSchedulingClient struct {
+type SchedulingClient struct {
 	host    string
 	port    int
 	address string
 }
 
-func NewResSchedulingClient(host string, port int) ResSchedulingClient {
-	return ResSchedulingClient{
+func NewSchedulingClient(host string, port int) SchedulingClient {
+	return SchedulingClient{
 		host:    host,
 		port:    port,
 		address: fmt.Sprintf("%s:%d", host, port),
 	}
 }
 
-func (rsc ResSchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodesAfter []int64,
+func (sc SchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodesAfter []int64,
 	ctrlID int, ctrlCN string) (allocInfo project.AllocInfo, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
-	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		return project.AllocInfo{},
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
@@ -65,11 +65,11 @@ func (rsc ResSchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodes
 	return allocInfo, nil
 }
 
-func (rsc ResSchedulingClient) SchedulingStorage(projectID int,
+func (sc SchedulingClient) SchedulingStorage(projectID int,
 	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (allocInfo project.AllocInfo, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
-	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		return project.AllocInfo{},
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
@@ -104,10 +104,10 @@ func (rsc ResSchedulingClient) SchedulingStorage(projectID int,
 	return allocInfo, nil
 }
 
-func (rsc ResSchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryType int) (jsonTree string, err error) {
+func (sc SchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryType int) (jsonTree string, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
-	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		return "",
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
@@ -133,10 +133,10 @@ func (rsc ResSchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryT
 	return reply.JsonTree, nil
 }
 
-func (rsc ResSchedulingClient) QueryProjectRes(projectID int) (pr projectRes.ResInfo, err error) {
+func (sc SchedulingClient) QueryProjectRes(projectID int) (pr projectRes.ResInfo, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
-	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		return projectRes.ResInfo{},
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
@@ -180,10 +180,10 @@ func (rsc ResSchedulingClient) QueryProjectRes(projectID int) (pr projectRes.Res
 	return pr, nil
 }
 
-func (rsc ResSchedulingClient) QueryProjectResLite(projectID int) (prl projectRes.ResInfoLite, err error) {
+func (sc SchedulingClient) QueryProjectResLite(projectID int) (prl projectRes.ResInfoLite, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
-	conn, err := grpc.Dial(rsc.address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		return projectRes.ResInfoLite{},
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
