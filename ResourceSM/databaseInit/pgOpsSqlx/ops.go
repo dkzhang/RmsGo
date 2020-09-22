@@ -15,6 +15,20 @@ func CmdCreateAllTable() {
 	CreateAllTable(db)
 }
 
+func CmdSeedAllTable() {
+	fmt.Printf("用测试数据初始化所有数据库表")
+	db := ConnectToDatabase()
+	CreateAllTable(db)
+	SeedAllTable(db)
+}
+
+func CmdImportFromFile(tableName, fileName string) {
+	fmt.Printf("表名，文件名：读取指定csv文件并将数据导入至指定数据表")
+	db := ConnectToDatabase()
+	CreateAllTable(db)
+	ImportFromFile(db)
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 
 func ConnectToDatabase() (db *sqlx.DB) {
