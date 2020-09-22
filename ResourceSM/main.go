@@ -1,4 +1,4 @@
-package ResourceSM
+package main
 
 import (
 	"fmt"
