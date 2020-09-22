@@ -21,6 +21,26 @@ services:
     depends_on:
       - db
       - redis
+      - schmet
+  schmet:
+    build:
+      context: ./
+      dockerfile: ResourceSM/Dockerfile
+    command: ./rmsSchMet run
+    ports:
+      - 50071:50071
+    networks:
+      - backend
+    env_file:
+      - ResourceSM/.env.dev
+    volumes:
+      - ./Configuration/Parameter:/rmsConfig:ro
+      - ./RmsSchMetLog:/rmsSchMetLog
+    secrets:
+      - DbSE
+    depends_on:
+      - db
+      - redis
   db:
     image: postgres:13
     volumes:

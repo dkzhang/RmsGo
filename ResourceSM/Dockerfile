@@ -9,9 +9,9 @@ ENV DKZ $GOPATH/src/github.com/dkzhang
 WORKDIR $DKZ
 RUN git clone https://github.com/dkzhang/RmsGo.git #20200922-1016
 
-WORKDIR $DKZ/RmsGo
-RUN go build -o rms && \
-    chmod +x $DKZ/RmsGo/rms
+WORKDIR $DKZ/RmsGo/ResourceSM
+RUN go build -o rmsSchMet && \
+    chmod +x $DKZ/RmsGo/ResourceSM/rmsSchMet
 
 RUN chmod +x $DKZ/RmsGo/ResourceSM/entrypoint.sh
 
