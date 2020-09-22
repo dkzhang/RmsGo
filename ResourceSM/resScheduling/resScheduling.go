@@ -46,15 +46,16 @@ func NewResScheduling(prdm projectResDM.ProjectResDM,
 
 func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID int, ctrlCN string) (isFirstAlloc bool, err error) {
 	var pr projectRes.ResInfo
-	isFirstAlloc = rs.prdm.IsExist(projectID)
+	isFirstAlloc = !(rs.prdm.IsExist(projectID))
+
 	if isFirstAlloc {
+		pr = projectRes.ResInfo{ProjectID: projectID}
+	} else {
 		pr, err = rs.prdm.QueryByID(projectID)
 		if err != nil {
 			return isFirstAlloc,
 				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
 		}
-	} else {
-		pr = projectRes.ResInfo{ProjectID: projectID}
 	}
 
 	// (1) create the Resource Allocate Record
@@ -74,7 +75,7 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 		AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
 		NumChange:          increased - reduced,
 		AllocInfoChange:    nodesChange,
-		AllocInfoChangeStr: nodeEncode.IntArrayToBase64Str(nodesChange),
+		AllocInfoChangeStr: fmt.Sprintf("%v", nodesChange),
 		CtrlID:             ctrlID,
 		CtrlChineseName:    ctrlCN,
 	}
@@ -141,15 +142,15 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 
 func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID int, ctrlCN string) (isFirstAlloc bool, err error) {
 	var pr projectRes.ResInfo
-	isFirstAlloc = rs.prdm.IsExist(projectID)
+	isFirstAlloc = !(rs.prdm.IsExist(projectID))
 	if isFirstAlloc {
+		pr = projectRes.ResInfo{ProjectID: projectID}
+	} else {
 		pr, err = rs.prdm.QueryByID(projectID)
 		if err != nil {
 			return isFirstAlloc,
 				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
 		}
-	} else {
-		pr = projectRes.ResInfo{ProjectID: projectID}
 	}
 
 	// (1) create the Resource Allocate Record
@@ -169,7 +170,7 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 		AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
 		NumChange:          increased - reduced,
 		AllocInfoChange:    nodesChange,
-		AllocInfoChangeStr: nodeEncode.IntArrayToBase64Str(nodesChange),
+		AllocInfoChangeStr: fmt.Sprintf("%v", nodesChange),
 		CtrlID:             ctrlID,
 		CtrlChineseName:    ctrlCN,
 	}
@@ -238,15 +239,15 @@ func (rs ResScheduling) SchedulingStorage(projectID int,
 	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (isFirstAlloc bool, err error) {
 
 	var pr projectRes.ResInfo
-	isFirstAlloc = rs.prdm.IsExist(projectID)
+	isFirstAlloc = !(rs.prdm.IsExist(projectID))
 	if isFirstAlloc {
+		pr = projectRes.ResInfo{ProjectID: projectID}
+	} else {
 		pr, err = rs.prdm.QueryByID(projectID)
 		if err != nil {
 			return isFirstAlloc,
 				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
 		}
-	} else {
-		pr = projectRes.ResInfo{ProjectID: projectID}
 	}
 
 	// (1) create the Resource Allocate Record

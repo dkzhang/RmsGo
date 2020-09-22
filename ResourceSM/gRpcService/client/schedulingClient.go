@@ -38,7 +38,7 @@ func (rsc ResSchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodes
 
 	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ func (rsc ResSchedulingClient) SchedulingStorage(projectID int,
 
 	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -116,7 +116,7 @@ func (rsc ResSchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryT
 
 	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ func (rsc ResSchedulingClient) QueryProjectRes(projectID int) (pr projectRes.Res
 
 	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ func (rsc ResSchedulingClient) QueryProjectResLite(projectID int) (prl projectRe
 
 	c := pb.NewSchedulingServiceClient(conn)
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	//////////////////////////////////////////////////////////////////////////////
