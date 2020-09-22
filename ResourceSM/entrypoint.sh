@@ -11,8 +11,6 @@ then
     echo "PostgreSQL started"
 fi
 
-ls
-
 ./schmet seed_all
 
 exec "$@"
