@@ -26,6 +26,9 @@ func Create(infra *infrastructure.Infrastructure, c *gin.Context) {
 			"userLoginID": userLoginInfo.UserID,
 			"error":       err,
 		}).Error("c.BindJSON(&GeneralFormDraftCreated) error.")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "无法解析GeneralFormDraft结构",
+		})
 		return
 	}
 

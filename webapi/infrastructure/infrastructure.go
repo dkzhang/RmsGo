@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"github.com/dkzhang/RmsGo/ResourceSM/gRpcService/client"
 	"github.com/dkzhang/RmsGo/datebaseCommon/postgreOpsSqlx"
 	"github.com/dkzhang/RmsGo/datebaseCommon/redisOps"
 	databaseSecurity "github.com/dkzhang/RmsGo/datebaseCommon/security"
@@ -11,6 +12,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/generalFormDraftDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDB"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/userTempDM"
@@ -23,6 +25,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/workflow/applyProjectAndResource"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 type Infrastructure struct {
@@ -48,6 +51,8 @@ type Infrastructure struct {
 
 	TheProjectDB projectDB.ProjectDB
 	TheProjectDM projectDM.ProjectDM
+
+	TheProjectResDM projectResDM.ProjectResDM
 
 	TheLogMap logMap.LogMap
 
@@ -157,6 +162,11 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 			"error": err,
 		}).Fatal("projectDM.NewMemoryMap error.")
 	}
+
+	/////////////////////////////////////////////////////////
+	// ProjectRes  DM
+	sc := client.NewSchedulingClient(os.Getenv("gRPC_SchMet_HOST"), os.Getenv("gRPC_SchMet_PORT"))
+	theInfras.TheProjectResDM = projectResDM.NewProjectResGRpc(theInfras.TheProjectDM, sc)
 
 	/////////////////////////////////////////////////////////
 	// Extractor

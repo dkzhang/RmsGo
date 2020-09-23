@@ -5,6 +5,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/handle/handleGeneralFormDraft"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleLogin"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleProject"
+	"github.com/dkzhang/RmsGo/webapi/handle/handleProjectRes"
 	"github.com/dkzhang/RmsGo/webapi/handle/handleUser"
 	"github.com/dkzhang/RmsGo/webapi/infrastructure"
 	"github.com/dkzhang/RmsGo/webapi/middleware"
@@ -79,6 +80,27 @@ func Serve() {
 		hProject := webAPIv1.Group("/Project")
 		{
 			hProject.GET("/", middleware.TokenAuth(infra), theHandleProject.RetrieveByUserLogin)
+		}
+
+		theHandleProjectRes := handleProjectRes.NewHandleProjectRes(infra.TheProjectResDM,
+			infra.TheProjectDM, infra.TheExtractor, infra.TheLogMap)
+		hProjectRes := webAPIv1.Group("/ProjectRes")
+		{
+			hProjectRes.GET("/Tree/CpuOccupied/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.QueryCpuTreeOccupied)
+			hProjectRes.GET("/Tree/CpuAvailable/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.QueryCpuTreeAvailable)
+			hProjectRes.GET("/Tree/GpuOccupied/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.QueryGpuTreeOccupied)
+			hProjectRes.GET("/Tree/GpuAvailable/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.QueryGpuTreeAvailable)
+
+			hProjectRes.POST("/Schedule/CPU/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.SchedulingCpu)
+			hProjectRes.POST("/Schedule/GPU/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.SchedulingGpu)
+			hProjectRes.POST("/Schedule/Storage/:id", middleware.TokenAuth(infra),
+				theHandleProjectRes.SchedulingStorage)
 		}
 	}
 

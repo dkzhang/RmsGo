@@ -154,7 +154,7 @@ func (h HandleProject) extractAccessedProject(c *gin.Context) (pi project.Info, 
 		}).Error("ProjectDM.QueryByID (using pid from gin.Context) failed.")
 
 		c.JSON(http.StatusNotFound, gin.H{
-			"msg": "无法找到该申请表单",
+			"msg": "无法找到该项目",
 		})
 		return project.Info{},
 			fmt.Errorf("ProjectDM.QueryByID (using pid from gin.Context) error: %v", err)

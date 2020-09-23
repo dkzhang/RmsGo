@@ -10,7 +10,7 @@ func main() {
 	var resSchedulingClient client.SchedulingClient
 	const (
 		host = "192.168.10.41"
-		port = 50071
+		port = "50071"
 	)
 	resSchedulingClient = client.NewSchedulingClient(host, port)
 
