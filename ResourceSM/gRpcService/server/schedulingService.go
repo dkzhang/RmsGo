@@ -79,24 +79,24 @@ func (s *SchedulingServer) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRe
 	var err error
 
 	switch in.CgpuType {
-	case 1:
+	case typeCPU:
 		// CPU
 		switch in.QueryType {
-		case 1:
+		case typeOccupied:
 			// Allocated
 			jsonTree, err = s.TheResScheduling.QueryCpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeAllocated error: %v", err)
 			}
-		case 2:
+		case typeAvailable:
 			// IdleAndAllocated
 			jsonTree, err = s.TheResScheduling.QueryCpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeIdleAndAllocated error: %v", err)
 			}
-		case 3:
+		case typeAll:
 			// All
 			jsonTree, err = s.TheResScheduling.QueryCpuTreeAll()
 			if err != nil {
@@ -107,24 +107,24 @@ func (s *SchedulingServer) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRe
 			return &pb.QueryTreeReply{},
 				status.Errorf(codes.InvalidArgument, " Unsupported type: %d", in.QueryType)
 		}
-	case 2:
+	case typeGPU:
 		// GPU
 		switch in.QueryType {
-		case 1:
+		case typeOccupied:
 			// Allocated
 			jsonTree, err = s.TheResScheduling.QueryGpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeAllocated error: %v", err)
 			}
-		case 2:
+		case typeAvailable:
 			// IdleAndAllocated
 			jsonTree, err = s.TheResScheduling.QueryGpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeIdleAndAllocated error: %v", err)
 			}
-		case 3:
+		case typeAll:
 			// All
 			jsonTree, err = s.TheResScheduling.QueryGpuTreeAll()
 			if err != nil {
@@ -177,3 +177,14 @@ func (s *SchedulingServer) QueryProjectResLite(ctx context.Context, in *pb.Query
 		StorageSizeAcquired: int64(pr.StorageSizeAcquired),
 	}, nil
 }
+
+const (
+	typeCPU = 1
+	typeGPU = 2
+)
+
+const (
+	typeOccupied  = 1
+	typeAvailable = 2
+	typeAll       = 3
+)
