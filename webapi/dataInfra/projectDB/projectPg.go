@@ -129,13 +129,13 @@ func (ppg ProjectPg) UpdateApplyInfo(ai project.ApplyInfo) (err error) {
 	return nil
 }
 
-func (ppg ProjectPg) UpdateAllocInfo(ali project.AllocInfo) (err error) {
+func (ppg ProjectPg) UpdateAllocInfo(ali project.AllocNum) (err error) {
 	execUpdate := fmt.Sprintf(`UPDATE %s SET cpu_nodes_acquired=:cpu_nodes_acquired, gpu_nodes_acquired=:gpu_nodes_acquired, storage_size_acquired=:storage_size_acquired, 
 							updated_at=:updated_at WHERE project_id=:project_id`, ppg.TableName)
 
 	_, err = ppg.TheDB.NamedExec(execUpdate, ali)
 	if err != nil {
-		return fmt.Errorf("UpdateAllocInfo error: %v", err)
+		return fmt.Errorf("UpdateAllocNum error: %v", err)
 	}
 	return nil
 }

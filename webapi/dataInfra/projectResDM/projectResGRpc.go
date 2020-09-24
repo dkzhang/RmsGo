@@ -49,9 +49,9 @@ func (prg ProjectResGRpc) SchedulingCpu(projectID int, nodesAfter []int64, ctrlU
 			projectID, nodesAfter, err)
 	}
 
-	err = prg.pdm.UpdateAllocInfo(allocInfo)
+	err = prg.pdm.UpdateAllocNum(allocInfo)
 	if err != nil {
-		return fmt.Errorf("ProjectDM.UpdateAllocInfo (%v) error: %v", allocInfo, err)
+		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)
 	}
 
 	return nil
@@ -64,9 +64,9 @@ func (prg ProjectResGRpc) SchedulingGpu(projectID int, nodesAfter []int64, ctrlU
 			projectID, nodesAfter, err)
 	}
 
-	err = prg.pdm.UpdateAllocInfo(allocInfo)
+	err = prg.pdm.UpdateAllocNum(allocInfo)
 	if err != nil {
-		return fmt.Errorf("ProjectDM.UpdateAllocInfo (%v) error: %v", allocInfo, err)
+		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)
 	}
 
 	return nil
@@ -80,9 +80,9 @@ func (prg ProjectResGRpc) SchedulingStorage(projectID int,
 			projectID, storageSizeAfter, err)
 	}
 
-	err = prg.pdm.UpdateAllocInfo(allocInfo)
+	err = prg.pdm.UpdateAllocNum(allocInfo)
 	if err != nil {
-		return fmt.Errorf("ProjectDM.UpdateAllocInfo (%v) error: %v", allocInfo, err)
+		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)
 	}
 
 	return nil

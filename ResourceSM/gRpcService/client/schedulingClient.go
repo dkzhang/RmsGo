@@ -26,12 +26,12 @@ func NewSchedulingClient(host string, port string) SchedulingClient {
 }
 
 func (sc SchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodesAfter []int64,
-	ctrlID int, ctrlCN string) (allocInfo project.AllocInfo, err error) {
+	ctrlID int, ctrlCN string) (allocInfo project.AllocNum, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
 	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		return project.AllocInfo{},
+		return project.AllocNum{},
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
 	}
 	defer conn.Close()
@@ -51,11 +51,11 @@ func (sc SchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodesAfte
 		CtrlCN:     ctrlCN,
 	})
 	if err != nil {
-		return project.AllocInfo{},
+		return project.AllocNum{},
 			fmt.Errorf("grpc call SchedulingCGpu error: %v", err)
 	}
 
-	allocInfo = project.AllocInfo{
+	allocInfo = project.AllocNum{
 		ProjectID:           projectID,
 		CpuNodesAcquired:    int(reply.CpuNodesAcquired),
 		GpuNodesAcquired:    int(reply.GpuNodesAcquired),
@@ -66,12 +66,12 @@ func (sc SchedulingClient) SchedulingCGpu(projectID int, cgpuType int, nodesAfte
 }
 
 func (sc SchedulingClient) SchedulingStorage(projectID int,
-	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (allocInfo project.AllocInfo, err error) {
+	storageSizeAfter int, storageAllocInfoAfter string, ctrlID int, ctrlCN string) (allocInfo project.AllocNum, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
 	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		return project.AllocInfo{},
+		return project.AllocNum{},
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
 	}
 	defer conn.Close()
@@ -90,11 +90,11 @@ func (sc SchedulingClient) SchedulingStorage(projectID int,
 		CtrlCN:                ctrlCN,
 	})
 	if err != nil {
-		return project.AllocInfo{},
+		return project.AllocNum{},
 			fmt.Errorf("grpc call SchedulingStorage error: %v", err)
 	}
 
-	allocInfo = project.AllocInfo{
+	allocInfo = project.AllocNum{
 		ProjectID:           projectID,
 		CpuNodesAcquired:    int(reply.CpuNodesAcquired),
 		GpuNodesAcquired:    int(reply.GpuNodesAcquired),

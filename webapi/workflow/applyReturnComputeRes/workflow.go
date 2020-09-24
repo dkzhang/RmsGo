@@ -1,7 +1,6 @@
 package applyReturnComputeRes
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"github.com/dkzhang/RmsGo/myUtils/webapiError"
@@ -144,6 +143,7 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 
 	// (4) Check return operation by gRPC client
 	//TODO
+	fmt.Printf("app=%v", app)
 
 	//TODO
 	return appID, webapiError.WaErr(webapiError.TypeServerInternalError,

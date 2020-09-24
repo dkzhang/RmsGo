@@ -206,7 +206,7 @@ var _ = Describe("ProjectDB", func() {
 			pi, err := pdm.QueryByID(projectID)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
 
-			ali := project.AllocInfo{
+			ali := project.AllocNum{
 				ProjectID:           projectID,
 				CpuNodesAcquired:    rand.Intn(100),
 				GpuNodesAcquired:    rand.Intn(100),
@@ -215,7 +215,7 @@ var _ = Describe("ProjectDB", func() {
 				UpdatedAt: time.Now(),
 			}
 
-			err = pdm.UpdateAllocInfo(ali)
+			err = pdm.UpdateAllocNum(ali)
 			Expect(err).ShouldNot(HaveOccurred())
 
 			piUpdated, err := pdm.QueryByID(projectID)

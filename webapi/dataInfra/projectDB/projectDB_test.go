@@ -206,7 +206,7 @@ var _ = Describe("ProjectDB", func() {
 			pi, err := pdb.QueryByID(projectID)
 			Expect(err).ShouldNot(HaveOccurred(), "QueryInfoByID %d error: %v", projectID, err)
 
-			ali := project.AllocInfo{
+			ali := project.AllocNum{
 				ProjectID:           projectID,
 				CpuNodesAcquired:    rand.Intn(100),
 				GpuNodesAcquired:    rand.Intn(100),

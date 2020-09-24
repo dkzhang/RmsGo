@@ -14,7 +14,10 @@ type ProjectDM interface {
 	UpdateCodeInfo(pc project.CodeInfo) (err error)
 	UpdateStatusInfo(si project.StatusInfo) (err error)
 	UpdateApplyInfo(ai project.ApplyInfo) (err error)
-	UpdateAllocInfo(ali project.AllocInfo) (err error)
+	UpdateAllocNum(ali project.AllocNum) (err error)
+
+	//TODO
+	//UpdateAllocInfo(ali project.AllocInfo) (err error)
 
 	ArchiveProject(projectID int) (err error)
 }
