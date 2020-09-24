@@ -27,8 +27,8 @@ func NewMemoryMap(rndb resNodeDB.ResNodeDB, theLogMap logMap.LogMap) (nmm Memory
 		"len(Info Array)": len(nodes),
 	}).Info("NewMemoryMap ResNodeDB.QueryAll success.")
 
-	for _, node := range nodes {
-		nmm.infoMap[node.ID] = &node
+	for i := range nodes {
+		nmm.infoMap[nodes[i].ID] = &nodes[i]
 	}
 
 	theLogMap.Log(logMap.NORMAL).Info("NewMemoryMap load data to map success.")

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNode"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
+	"github.com/sirupsen/logrus"
 )
 
 func synNodesInfo(node *resGNode.ResGNode, nodesMap map[int64]resNode.Node) (err error) {
@@ -13,6 +14,7 @@ func synNodesInfo(node *resGNode.ResGNode, nodesMap map[int64]resNode.Node) (err
 			return fmt.Errorf("GNode info (id=%d) does not exist in the NodesMap", node.ID)
 		} else {
 			node.Label = nodesMap[node.ID].Name
+			logrus.Infof("node(id=%d) Label=%s", node.ID, node.Label)
 		}
 	}
 
