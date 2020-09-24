@@ -80,6 +80,7 @@ func Serve() {
 		hProject := webAPIv1.Group("/Project")
 		{
 			hProject.GET("/", middleware.TokenAuth(infra), theHandleProject.RetrieveByUserLogin)
+			hProject.PUT("/AllocInfo/:id", middleware.TokenAuth(infra), theHandleProject.UpdateAllocInfo)
 		}
 
 		theHandleProjectRes := handleProjectRes.NewHandleProjectRes(infra.TheProjectResDM,
@@ -103,6 +104,10 @@ func Serve() {
 				theHandleProjectRes.SchedulingStorage)
 		}
 	}
+
+	r.POST("/JustForTest/ResetALL", func(c *gin.Context) {
+		ResetALL(infra.TheDb)
+	})
 
 	/////////////////////////////////////////////////////////////
 	r.Run(":8083")
