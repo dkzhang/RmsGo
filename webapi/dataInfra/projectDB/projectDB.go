@@ -19,7 +19,8 @@ type ProjectDB interface {
 	UpdateCodeInfo(pc project.CodeInfo) (err error)
 	UpdateStatusInfo(si project.StatusInfo) (err error)
 	UpdateApplyInfo(ai project.ApplyInfo) (err error)
-	UpdateAllocInfo(ali project.AllocNum) (err error)
+	UpdateAllocNum(ali project.AllocNum) (err error)
+	UpdateAllocInfo(ali project.AllocInfo) (err error)
 
 	// 同一数据库内归档
 	InnerArchiveProject(historyTableName string, projectID int) (err error)

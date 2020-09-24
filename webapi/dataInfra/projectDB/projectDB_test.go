@@ -214,7 +214,7 @@ var _ = Describe("ProjectDB", func() {
 				UpdatedAt:           time.Now(),
 			}
 
-			err = pdb.UpdateAllocInfo(ali)
+			err = pdb.UpdateAllocNum(ali)
 			Expect(err).ShouldNot(HaveOccurred())
 
 			piUpdated, err := pdb.QueryByID(projectID)

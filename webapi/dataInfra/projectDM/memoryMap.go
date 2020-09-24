@@ -193,7 +193,30 @@ func (pdm MemoryMap) UpdateApplyInfo(ai project.ApplyInfo) (err error) {
 	return nil
 }
 
-func (pdm MemoryMap) UpdateAllocNum(ali project.AllocNum) (err error) {
+func (pdm MemoryMap) UpdateAllocNum(aln project.AllocNum) (err error) {
+	if _, ok := pdm.infoMap[aln.ProjectID]; !ok {
+		return fmt.Errorf("the project (id = %d) info does not exist", aln.ProjectID)
+	}
+
+	aln.UpdatedAt = time.Now()
+
+	// update in DB
+	err = pdm.theProjectDB.UpdateAllocNum(aln)
+	if err != nil {
+		return fmt.Errorf(" ProjectDB.UpdateAllocNum error: %v", err)
+	}
+
+	// update in MemoryMap
+	pdm.infoMap[aln.ProjectID].CpuNodesAcquired = aln.CpuNodesAcquired
+	pdm.infoMap[aln.ProjectID].GpuNodesAcquired = aln.GpuNodesAcquired
+	pdm.infoMap[aln.ProjectID].StorageSizeAcquired = aln.StorageSizeAcquired
+
+	pdm.infoMap[aln.ProjectID].UpdatedAt = aln.UpdatedAt
+
+	return nil
+}
+
+func (pdm MemoryMap) UpdateAllocInfo(ali project.AllocInfo) (err error) {
 	if _, ok := pdm.infoMap[ali.ProjectID]; !ok {
 		return fmt.Errorf("the project (id = %d) info does not exist", ali.ProjectID)
 	}
@@ -207,9 +230,8 @@ func (pdm MemoryMap) UpdateAllocNum(ali project.AllocNum) (err error) {
 	}
 
 	// update in MemoryMap
-	pdm.infoMap[ali.ProjectID].CpuNodesAcquired = ali.CpuNodesAcquired
-	pdm.infoMap[ali.ProjectID].GpuNodesAcquired = ali.GpuNodesAcquired
-	pdm.infoMap[ali.ProjectID].StorageSizeAcquired = ali.StorageSizeAcquired
+	pdm.infoMap[ali.ProjectID].AccountAllocInfo = ali.AccountAllocInfo
+	pdm.infoMap[ali.ProjectID].StorageAllocInfo = ali.StorageAllocInfo
 
 	pdm.infoMap[ali.ProjectID].UpdatedAt = ali.UpdatedAt
 

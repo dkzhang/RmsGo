@@ -65,20 +65,22 @@ func (ppg ProjectPg) QueryAllInfo() (pis []project.Info, err error) {
 func (ppg ProjectPg) Insert(pi project.Info) (projectID int, err error) {
 	execInsert := fmt.Sprintf(`INSERT INTO %s (
 			project_name, project_code, department_code, department, chief_id, chief_cn_name, extra_info, 
-			basic_status, 
-			start_date, total_days_apply, end_reminder_at, cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, 
+			basic_status, start_date, total_days_apply, end_reminder_at, 
+			cpu_nodes_expected, gpu_nodes_expected, storage_size_expected, 
 			cpu_nodes_acquired, gpu_nodes_acquired, storage_size_acquired, 
+			account_alloc_info, storage_alloc_info,
 			created_at, updated_at) 
 			VALUES  ($1, $2, $3, $4, $5, $6, $7, 
-					$8, 
-					$9, $10, $11, $12, $13, $14, 
+					$8, $9, $10, $11, 
+					$12, $13, $14, 
 					$15, $16, $17, 
-					$18, $19) RETURNING project_id`, ppg.TableName)
+					$18, $19,
+					$20, $21) RETURNING project_id`, ppg.TableName)
 	err = ppg.TheDB.Get(&projectID, execInsert,
 		pi.ProjectName, pi.ProjectCode, pi.DepartmentCode, pi.Department, pi.ChiefID, pi.ChiefChineseName, pi.ExtraInfo,
 		pi.BasicStatus,
 		pi.StartDate, pi.TotalDaysApply, pi.EndReminderAt, pi.CpuNodesExpected, pi.GpuNodesExpected, pi.StorageSizeExpected,
-		pi.CpuNodesAcquired, pi.GpuNodesAcquired, pi.StorageSizeAcquired,
+		pi.CpuNodesAcquired, pi.GpuNodesAcquired, pi.StorageSizeAcquired, pi.AccountAllocInfo, pi.StorageAllocInfo,
 		pi.CreatedAt, pi.UpdatedAt)
 	if err != nil {
 		return -1,
@@ -129,8 +131,19 @@ func (ppg ProjectPg) UpdateApplyInfo(ai project.ApplyInfo) (err error) {
 	return nil
 }
 
-func (ppg ProjectPg) UpdateAllocInfo(ali project.AllocNum) (err error) {
+func (ppg ProjectPg) UpdateAllocNum(ali project.AllocNum) (err error) {
 	execUpdate := fmt.Sprintf(`UPDATE %s SET cpu_nodes_acquired=:cpu_nodes_acquired, gpu_nodes_acquired=:gpu_nodes_acquired, storage_size_acquired=:storage_size_acquired, 
+							updated_at=:updated_at WHERE project_id=:project_id`, ppg.TableName)
+
+	_, err = ppg.TheDB.NamedExec(execUpdate, ali)
+	if err != nil {
+		return fmt.Errorf("UpdateAllocNum error: %v", err)
+	}
+	return nil
+}
+
+func (ppg ProjectPg) UpdateAllocInfo(ali project.AllocInfo) (err error) {
+	execUpdate := fmt.Sprintf(`UPDATE %s SET account_alloc_info=:account_alloc_info, storage_alloc_info=:storage_alloc_info, 
 							updated_at=:updated_at WHERE project_id=:project_id`, ppg.TableName)
 
 	_, err = ppg.TheDB.NamedExec(execUpdate, ali)

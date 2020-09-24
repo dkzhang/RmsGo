@@ -42,7 +42,7 @@ type AllocNum struct {
 
 type AllocInfo struct {
 	ProjectID        int       `db:"project_id" json:"project_id"`
-	AccountAllocInfo int       `db:"account_alloc_info" json:"account_alloc_info"`
-	StorageAllocInfo int       `db:"storage_alloc_info" json:"storage_alloc_info"`
+	AccountAllocInfo string    `db:"account_alloc_info" json:"account_alloc_info"`
+	StorageAllocInfo string    `db:"storage_alloc_info" json:"storage_alloc_info"`
 	UpdatedAt        time.Time `db:"updated_at" json:"updated_at"`
 }
