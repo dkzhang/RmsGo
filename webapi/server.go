@@ -105,10 +105,6 @@ func Serve() {
 		}
 	}
 
-	r.POST("/JustForTest/ResetALL", func(c *gin.Context) {
-		ResetALL(infra.TheDb)
-	})
-
 	/////////////////////////////////////////////////////////////
 	r.Run(":8083")
 }
