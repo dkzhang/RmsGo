@@ -51,11 +51,11 @@ func Serve() {
 	gadm = resAllocDM.NewResAllocDirectDB(resAllocDB.NewResAllocPg(db, resAlloc.TableNameGPU))
 	sadm = resAllocDM.NewResAllocDirectDB(resAllocDB.NewResAllocPg(db, resAlloc.TableNameStorage))
 
-	cndm, err = resNodeDM.NewMemoryMap(resNodeDB.NewResNodePg(db, resNode.TableNameCPU), theLogMap)
+	cndm, err = resNodeDM.NewMemoryMap(resNodeDB.NewResNodePg(db, resNode.TableNameCPU))
 	if err != nil {
 		panic(err)
 	}
-	gndm, err = resNodeDM.NewMemoryMap(resNodeDB.NewResNodePg(db, resNode.TableNameGPU), theLogMap)
+	gndm, err = resNodeDM.NewMemoryMap(resNodeDB.NewResNodePg(db, resNode.TableNameGPU))
 	if err != nil {
 		panic(err)
 	}

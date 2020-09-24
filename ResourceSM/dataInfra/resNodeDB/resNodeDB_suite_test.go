@@ -23,7 +23,7 @@ var _ = BeforeSuite(func() {
 	db := pgOpsSqlx.ConnectToDatabase()
 	pgOpsSqlx.CreateAllTable(db)
 
-	rndb = resNodeDB.NewResNodePg(db, resNode.TableName)
+	rndb = resNodeDB.NewResNodePg(db, resNode.TableNameCPU)
 })
 
 var _ = AfterSuite(func() {

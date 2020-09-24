@@ -27,8 +27,8 @@ func NewMemoryMap(adb applicationDB.ApplicationDB, theLogMap logMap.LogMap) (nmm
 		"len(apps)": len(apps),
 	}).Info("NewMemoryMap ApplicationDB.GetAllArray success.")
 
-	for _, app := range apps {
-		nmm.theAppMap[app.ApplicationID] = &app
+	for i := range apps {
+		nmm.theAppMap[apps[i].ApplicationID] = &apps[i]
 	}
 
 	theLogMap.Log(logMap.NORMAL).Info("NewMemoryMap load data to map success.")

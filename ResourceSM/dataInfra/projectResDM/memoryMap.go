@@ -27,8 +27,8 @@ func NewMemoryMap(pdb projectResDB.ProjectResDB, theLogMap logMap.LogMap) (nmm M
 		"len(Info Array)": len(prs),
 	}).Info("NewMemoryMap ProjectResDB.GetAllArray success.")
 
-	for _, pi := range prs {
-		nmm.infoMap[pi.ProjectID] = &pi
+	for i := range prs {
+		nmm.infoMap[prs[i].ProjectID] = &prs[i]
 	}
 
 	theLogMap.Log(logMap.NORMAL).Info("NewMemoryMap load data to map success.")

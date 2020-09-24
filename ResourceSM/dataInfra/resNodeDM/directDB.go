@@ -10,7 +10,7 @@ type DirectDB struct {
 	nodeDB resNodeDB.ResNodeDB
 }
 
-func NewMemoryMap(rndb resNodeDB.ResNodeDB) (nmm DirectDB, err error) {
+func NewDirectDB(rndb resNodeDB.ResNodeDB) (nmm DirectDB, err error) {
 	nmm.nodeDB = rndb
 	return nmm, nil
 }
