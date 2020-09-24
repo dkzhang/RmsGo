@@ -13,7 +13,7 @@ type gNodeAndIndex struct {
 	index int
 }
 
-func Filtrate(t *Tree, nodesMap map[int64]resNode.Node, filter func(node resNode.Node) bool) (nt *Tree, err error) {
+func Filtrate(t *Tree, nodesMap map[int64]*resNode.Node, filter func(node resNode.Node) bool) (nt *Tree, err error) {
 	nt = Copy(t)
 
 	giStack := stack.New()
@@ -57,7 +57,7 @@ func Filtrate(t *Tree, nodesMap map[int64]resNode.Node, filter func(node resNode
 							return nil,
 								fmt.Errorf("GNode info (id=%d) does not exist in the NodesMap", child.ID)
 						}
-						if filter(ni) == true {
+						if filter(*ni) == true {
 							// reserve this node
 							newChildren = append(newChildren, child)
 						}

@@ -23,12 +23,7 @@ func NewResGTreeDM(ndm resNodeDM.ResNodeDM, jsonFilename string) (ResGTreeDM, er
 		return ResGTreeDM{}, fmt.Errorf("resGNodeTree.LoadFromJsonFile error: %v", err)
 	}
 
-	nodesMap, err := rtdm.nodeDM.QueryAllMap()
-	if err != nil {
-		return ResGTreeDM{}, fmt.Errorf("nodeDM.QueryAll error: %v", err)
-	}
-
-	err = resGNodeTree.SynchronizeNodesInfo(&tree, nodesMap)
+	err = resGNodeTree.SynchronizeNodesInfo(&tree, rtdm.nodeDM.QueryAllMap())
 	if err != nil {
 		return ResGTreeDM{}, fmt.Errorf("SynchronizeNodesInfo error: %v", err)
 	}
@@ -40,23 +35,13 @@ func NewResGTreeDM(ndm resNodeDM.ResNodeDM, jsonFilename string) (ResGTreeDM, er
 }
 
 func (rtdm ResGTreeDM) QueryTree(nodeFilter func(node resNode.Node) bool) (jsonTree string, err error) {
-	nodesMap, err := rtdm.nodeDM.QueryAllMap()
-	if err != nil {
-		return "", fmt.Errorf("nodeDM.QueryAll error: %v", err)
-	}
-
-	err = resGNodeTree.SynchronizeNodesInfo(&rtdm.TheTree, nodesMap)
-	if err != nil {
-		return "", fmt.Errorf("SynchronizeNodesInfo error: %v", err)
-	}
-
-	treeF, err := resGNodeTree.Filtrate(&rtdm.TheTree, nodesMap, nodeFilter)
+	treeF, err := resGNodeTree.Filtrate(&rtdm.TheTree, rtdm.nodeDM.QueryAllMap(), nodeFilter)
 
 	resGNodeTree.Count(treeF)
 
-	jsonTree, err = resGNodeTree.ToJson(*treeF)
+	jsonTree, err = resGNodeTree.ToJsonForVue(*treeF)
 	if err != nil {
-		return "", fmt.Errorf("resGNodeTree.ToJson error: %v", err)
+		return "", fmt.Errorf("resGNodeTree.ToJsonForVue error: %v", err)
 	}
 
 	return jsonTree, nil
