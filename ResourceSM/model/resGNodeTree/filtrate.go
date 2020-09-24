@@ -76,7 +76,7 @@ func Filtrate(t *Tree, nodesMap map[int64]*resNode.Node, filter func(node resNod
 }
 
 // Filtrate the tree and mark all unusable node (Disabled=true)
-func FiltrateMark(t *Tree, nodesMap map[int64]resNode.Node, filter func(node resNode.Node) bool) (nt *Tree, err error) {
+func FiltrateMark(t *Tree, nodesMap map[int64]*resNode.Node, filter func(node resNode.Node) bool) (nt *Tree, err error) {
 	nt = Copy(t)
 
 	giStack := stack.New()
@@ -118,7 +118,7 @@ func FiltrateMark(t *Tree, nodesMap map[int64]resNode.Node, filter func(node res
 							return nil,
 								fmt.Errorf("GNode info (id=%d) does not exist in the NodesMap", child.ID)
 						}
-						if filter(ni) == true {
+						if filter(*ni) == true {
 							gi.gNode.Children[index].Disabled = false
 						} else {
 							// mark this node disabled

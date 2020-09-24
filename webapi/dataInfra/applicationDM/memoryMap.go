@@ -21,11 +21,11 @@ func NewMemoryMap(adb applicationDB.ApplicationDB, theLogMap logMap.LogMap) (nmm
 	apps, err := nmm.theDB.QueryAll(application.AppTypeALL, application.AppStatusALL)
 	if err != nil {
 		return MemoryMap{},
-			fmt.Errorf("generate new MemoryMap failed since ApplicationDB.QueryAll error: %v", err)
+			fmt.Errorf("generate new MemoryMap failed since ApplicationDB.GetAllArray error: %v", err)
 	}
 	theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"len(apps)": len(apps),
-	}).Info("NewMemoryMap ApplicationDB.QueryAll success.")
+	}).Info("NewMemoryMap ApplicationDB.GetAllArray success.")
 
 	for _, app := range apps {
 		nmm.theAppMap[app.ApplicationID] = &app

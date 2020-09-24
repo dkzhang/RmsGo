@@ -8,6 +8,7 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
+	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNodeTree"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/myUtils/arrayMerge"
 	"github.com/dkzhang/RmsGo/myUtils/nodeEncode"
@@ -303,30 +304,98 @@ func (rs ResScheduling) SchedulingStorage(projectID int,
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-func (rs ResScheduling) QueryCpuTreeAllocated(projectID int) (jsonTree string, err error) {
-	return rs.cpuTreeDM.QueryTreeAllocated(projectID)
+func (rs ResScheduling) QueryCpuTreeAllocated(projectID int, treeFormat int) (t *resGNodeTree.Tree, selected []int64, err error) {
+	t, err = rs.cpuTreeDM.QueryTree(treeFormat, func(node resNode.Node) bool {
+		return node.ProjectID == projectID
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("cpuTreeDM.QueryTree error: %v", err)
+	}
+
+	nodes, err := rs.cpuNodeDM.GetAllArray()
+	if err != nil {
+		return nil, nil, fmt.Errorf("cpuNodeDM.GetAllArray error: %v", err)
+	}
+
+	for _, node := range nodes {
+		if node.ProjectID == projectID {
+			selected = append(selected, node.ID)
+		}
+	}
+	return t, selected, nil
 }
 
-func (rs ResScheduling) QueryCpuTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
-	return rs.cpuTreeDM.QueryTreeIdleAndAllocated(projectID)
+func (rs ResScheduling) QueryCpuTreeIdleAndAllocated(projectID int, treeFormat int) (t *resGNodeTree.Tree, selected []int64, err error) {
+	t, err = rs.cpuTreeDM.QueryTree(treeFormat, func(node resNode.Node) bool {
+		return node.ProjectID == projectID || node.ProjectID == 0
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("cpuTreeDM.QueryTree error: %v", err)
+	}
+
+	nodes, err := rs.cpuNodeDM.GetAllArray()
+	if err != nil {
+		return nil, nil, fmt.Errorf("cpuNodeDM.GetAllArray error: %v", err)
+	}
+
+	for _, node := range nodes {
+		if node.ProjectID == projectID {
+			selected = append(selected, node.ID)
+		}
+	}
+	return t, selected, nil
 }
 
-func (rs ResScheduling) QueryCpuTreeAll() (jsonTree string, err error) {
-	return rs.cpuTreeDM.QueryTreeAll()
+func (rs ResScheduling) QueryCpuTreeAll() (t *resGNodeTree.Tree, selected []int64, err error) {
+	return rs.cpuTreeDM.QueryTreeAll(), []int64{}, nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-func (rs ResScheduling) QueryGpuTreeAllocated(projectID int) (jsonTree string, err error) {
-	return rs.gpuTreeDM.QueryTreeAllocated(projectID)
+func (rs ResScheduling) QueryGpuTreeAllocated(projectID int, treeFormat int) (t *resGNodeTree.Tree, selected []int64, err error) {
+	t, err = rs.gpuTreeDM.QueryTree(treeFormat, func(node resNode.Node) bool {
+		return node.ProjectID == projectID
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("gpuTreeDM.QueryTree error: %v", err)
+	}
+
+	nodes, err := rs.gpuNodeDM.GetAllArray()
+	if err != nil {
+		return nil, nil, fmt.Errorf("gpuNodeDM.GetAllArray error: %v", err)
+	}
+
+	for _, node := range nodes {
+		if node.ProjectID == projectID {
+			selected = append(selected, node.ID)
+		}
+	}
+	return t, selected, nil
 }
 
-func (rs ResScheduling) QueryGpuTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
-	return rs.gpuTreeDM.QueryTreeIdleAndAllocated(projectID)
+func (rs ResScheduling) QueryGpuTreeIdleAndAllocated(projectID int, treeFormat int) (t *resGNodeTree.Tree, selected []int64, err error) {
+	t, err = rs.gpuTreeDM.QueryTree(treeFormat, func(node resNode.Node) bool {
+		return node.ProjectID == projectID || node.ProjectID == 0
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("gpuTreeDM.QueryTree error: %v", err)
+	}
+
+	nodes, err := rs.gpuNodeDM.GetAllArray()
+	if err != nil {
+		return nil, nil, fmt.Errorf("gpuNodeDM.GetAllArray error: %v", err)
+	}
+
+	for _, node := range nodes {
+		if node.ProjectID == projectID {
+			selected = append(selected, node.ID)
+		}
+	}
+	return t, selected, nil
 }
 
-func (rs ResScheduling) QueryGpuTreeAll() (jsonTree string, err error) {
-	return rs.gpuTreeDM.QueryTreeAll()
+func (rs ResScheduling) QueryGpuTreeAll() (t *resGNodeTree.Tree, selected []int64, err error) {
+	return rs.gpuTreeDM.QueryTreeAll(), []int64{}, nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

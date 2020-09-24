@@ -21,11 +21,11 @@ func NewMemoryMap(pdb projectResDB.ProjectResDB, theLogMap logMap.LogMap) (nmm M
 	prs, err := nmm.theProjectResDB.QueryAll()
 	if err != nil {
 		return MemoryMap{},
-			fmt.Errorf("generate new MemoryMap failed since ProjectResDB.QueryAll error: %v", err)
+			fmt.Errorf("generate new MemoryMap failed since ProjectResDB.GetAllArray error: %v", err)
 	}
 	theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
 		"len(Info Array)": len(prs),
-	}).Info("NewMemoryMap ProjectResDB.QueryAll success.")
+	}).Info("NewMemoryMap ProjectResDB.GetAllArray success.")
 
 	for _, pi := range prs {
 		nmm.infoMap[pi.ProjectID] = &pi

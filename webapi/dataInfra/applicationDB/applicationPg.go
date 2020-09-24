@@ -56,7 +56,7 @@ func (apg ApplicationPg) QueryAll(appType int, appStatus int) (apps []applicatio
 	queryALL := fmt.Sprintf(`SELECT * FROM %s WHERE application_type & $1 != 0 AND status & $2 != 0`, apg.AppTableName)
 	err = apg.TheDB.Select(&apps, queryALL, appType, appStatus)
 	if err != nil {
-		return nil, fmt.Errorf("QueryAll (appType=%d AND appStatus=%d) from TheDB error: %v", err, appType, appStatus)
+		return nil, fmt.Errorf("GetAllArray (appType=%d AND appStatus=%d) from TheDB error: %v", err, appType, appStatus)
 	}
 	return apps, nil
 }

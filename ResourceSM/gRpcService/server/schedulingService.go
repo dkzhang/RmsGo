@@ -77,6 +77,7 @@ func (s *SchedulingServer) SchedulingStorage(ctx context.Context, in *pb.Schedul
 func (s *SchedulingServer) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRequest) (*pb.QueryTreeReply, error) {
 	var jsonTree string
 	var err error
+	var selected []int64
 
 	switch in.CgpuType {
 	case typeCPU:
@@ -84,21 +85,21 @@ func (s *SchedulingServer) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRe
 		switch in.QueryType {
 		case typeOccupied:
 			// Allocated
-			jsonTree, err = s.TheResScheduling.QueryCpuTreeAllocated(int(in.ProjectID))
+			jsonTree, selected, err = s.TheResScheduling.QueryCpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeAllocated error: %v", err)
 			}
 		case typeAvailable:
 			// IdleAndAllocated
-			jsonTree, err = s.TheResScheduling.QueryCpuTreeIdleAndAllocated(int(in.ProjectID))
+			jsonTree, selected, err = s.TheResScheduling.QueryCpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeIdleAndAllocated error: %v", err)
 			}
 		case typeAll:
 			// All
-			jsonTree, err = s.TheResScheduling.QueryCpuTreeAll()
+			jsonTree, selected, err = s.TheResScheduling.QueryCpuTreeAll()
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryCpuTreeAll error: %v", err)
@@ -112,21 +113,21 @@ func (s *SchedulingServer) QueryCGpuTree(ctx context.Context, in *pb.QueryTreeRe
 		switch in.QueryType {
 		case typeOccupied:
 			// Allocated
-			jsonTree, err = s.TheResScheduling.QueryGpuTreeAllocated(int(in.ProjectID))
+			jsonTree, selected, err = s.TheResScheduling.QueryGpuTreeAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeAllocated error: %v", err)
 			}
 		case typeAvailable:
 			// IdleAndAllocated
-			jsonTree, err = s.TheResScheduling.QueryGpuTreeIdleAndAllocated(int(in.ProjectID))
+			jsonTree, selected, err = s.TheResScheduling.QueryGpuTreeIdleAndAllocated(int(in.ProjectID))
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeIdleAndAllocated error: %v", err)
 			}
 		case typeAll:
 			// All
-			jsonTree, err = s.TheResScheduling.QueryGpuTreeAll()
+			jsonTree, selected, err = s.TheResScheduling.QueryGpuTreeAll()
 			if err != nil {
 				return &pb.QueryTreeReply{},
 					status.Errorf(codes.NotFound, "QueryGpuTreeAll error: %v", err)

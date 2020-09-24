@@ -46,7 +46,7 @@ func (prpg ProjectResPg) QueryAll() (prs []projectRes.ResInfo, err error) {
 
 	stmt, err := prpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s`, prpg.TableName))
 	if err != nil {
-		logrus.Fatalf("ProjectResPg QueryAll TheDB.Prepare statement error: %v", err)
+		logrus.Fatalf("ProjectResPg GetAllArray TheDB.Prepare statement error: %v", err)
 	}
 
 	defer stmt.Close()

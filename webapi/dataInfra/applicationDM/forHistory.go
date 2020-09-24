@@ -47,7 +47,7 @@ func (fhis ForHistory) QueryByDepartmentCode(dc string, appType int, appStatus i
 func (fhis ForHistory) QueryAll(appType int, appStatus int) (apps []application.Application, err error) {
 	apps, err = fhis.theDB.QueryAll(appType, appStatus)
 	if err != nil {
-		return nil, fmt.Errorf("QueryAll in db error: %v", err)
+		return nil, fmt.Errorf("GetAllArray in db error: %v", err)
 	}
 
 	return apps, nil
@@ -55,7 +55,7 @@ func (fhis ForHistory) QueryAll(appType int, appStatus int) (apps []application.
 func (fhis ForHistory) QueryByFilter(appFilter func(application.Application) bool) (apps []application.Application, err error) {
 	appsALL, err := fhis.theDB.QueryAll(application.AppTypeALL, application.AppStatusALL)
 	if err != nil {
-		return nil, fmt.Errorf("QueryAll in db error: %v", err)
+		return nil, fmt.Errorf("GetAllArray in db error: %v", err)
 	}
 
 	for _, app := range appsALL {

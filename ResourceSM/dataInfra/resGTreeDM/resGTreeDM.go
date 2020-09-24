@@ -8,13 +8,13 @@ import (
 )
 
 type ResGTreeDM struct {
-	TheTree resGNodeTree.Tree
+	theTree resGNodeTree.Tree
 	nodeDM  resNodeDM.ResNodeDM
 }
 
 func NewResGTreeDM(ndm resNodeDM.ResNodeDM, jsonFilename string) (ResGTreeDM, error) {
 	rtdm := ResGTreeDM{
-		TheTree: resGNodeTree.Tree{},
+		theTree: resGNodeTree.Tree{},
 		nodeDM:  ndm,
 	}
 
@@ -23,44 +23,52 @@ func NewResGTreeDM(ndm resNodeDM.ResNodeDM, jsonFilename string) (ResGTreeDM, er
 		return ResGTreeDM{}, fmt.Errorf("resGNodeTree.LoadFromJsonFile error: %v", err)
 	}
 
-	err = resGNodeTree.SynchronizeNodesInfo(&tree, rtdm.nodeDM.QueryAllMap())
+	nodesMap, err := rtdm.nodeDM.GetAllMap()
+	if err != nil {
+		return ResGTreeDM{}, fmt.Errorf("nodeDM.GetAllMap error: %v", err)
+	}
+
+	err = resGNodeTree.SynchronizeNodesInfo(&tree, nodesMap)
 	if err != nil {
 		return ResGTreeDM{}, fmt.Errorf("SynchronizeNodesInfo error: %v", err)
 	}
 
 	resGNodeTree.Count(&tree)
 
-	rtdm.TheTree = tree
+	rtdm.theTree = tree
 	return rtdm, nil
 }
 
-func (rtdm ResGTreeDM) QueryTree(nodeFilter func(node resNode.Node) bool) (jsonTree string, err error) {
-	treeF, err := resGNodeTree.Filtrate(&rtdm.TheTree, rtdm.nodeDM.QueryAllMap(), nodeFilter)
-
-	resGNodeTree.Count(treeF)
-
-	jsonTree, err = resGNodeTree.ToJsonForVue(*treeF)
+func (rtdm ResGTreeDM) QueryTree(treeFormat int, nodeFilter func(node resNode.Node) bool) (t *resGNodeTree.Tree, err error) {
+	nodesMap, err := rtdm.nodeDM.GetAllMap()
 	if err != nil {
-		return "", fmt.Errorf("resGNodeTree.ToJsonForVue error: %v", err)
+		return nil, fmt.Errorf("nodeDM.GetAllMap error: %v", err)
 	}
 
-	return jsonTree, nil
+	switch treeFormat {
+	case typeCutOut:
+		t, err = resGNodeTree.Filtrate(&rtdm.theTree, nodesMap, nodeFilter)
+		if err != nil {
+			return nil, fmt.Errorf("filtrate tree typeCutOut error: %v", err)
+		}
+	case typeDisable:
+		t, err = resGNodeTree.FiltrateMark(&rtdm.theTree, nodesMap, nodeFilter)
+		if err != nil {
+			return nil, fmt.Errorf("filtrate tree typeDisable error: %v", err)
+		}
+	default:
+		return nil, fmt.Errorf("unsupported tree format: %d", treeFormat)
+	}
+	resGNodeTree.Count(t)
+
+	return t, nil
 }
 
-func (rtdm ResGTreeDM) QueryTreeAllocated(projectID int) (jsonTree string, err error) {
-	return rtdm.QueryTree(func(node resNode.Node) bool {
-		return node.ProjectID == projectID
-	})
+func (rtdm ResGTreeDM) QueryTreeAll() (t *resGNodeTree.Tree) {
+	return &rtdm.theTree
 }
 
-func (rtdm ResGTreeDM) QueryTreeIdleAndAllocated(projectID int) (jsonTree string, err error) {
-	return rtdm.QueryTree(func(node resNode.Node) bool {
-		return node.ProjectID == 0 || node.ProjectID == projectID
-	})
-}
-
-func (rtdm ResGTreeDM) QueryTreeAll() (jsonTree string, err error) {
-	return rtdm.QueryTree(func(node resNode.Node) bool {
-		return true
-	})
-}
+const (
+	typeCutOut  = 1
+	typeDisable = 2
+)

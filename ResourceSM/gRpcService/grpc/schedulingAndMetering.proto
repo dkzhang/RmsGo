@@ -57,10 +57,13 @@ message QueryTreeRequest {
   int64 projectID = 1;
   int64 cgpuType = 2;  // CPU=1, GPU=2
   int64 queryType = 3; // Allocated=1, IdleAndAllocated=2, All=3
+  int64 treeFormat = 4; // CutOut=1, Disable=2
 }
 
 message QueryTreeReply {
   string jsonTree = 1;
+  string nodesNum = 2;
+  repeated int64 selected = 3;
 }
 
 ///////////////////////////////////////////////////////////

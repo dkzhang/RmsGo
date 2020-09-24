@@ -23,9 +23,9 @@ func NewResTreeDM(ndm resNodeDM.ResNodeDM, strJson string) (ResTreeDM, error) {
 		return ResTreeDM{}, fmt.Errorf("resNodeTree.LoadTreeFromJson error: %v", err)
 	}
 
-	nodes, err := rtdm.nodeDM.QueryAll()
+	nodes, err := rtdm.nodeDM.GetAllArray()
 	if err != nil {
-		return ResTreeDM{}, fmt.Errorf("nodeDM.QueryAll error: %v", err)
+		return ResTreeDM{}, fmt.Errorf("nodeDM.GetAllArray error: %v", err)
 	}
 
 	err = resNodeTree.SynchronizeNodesInfo(&tree, nodes)
@@ -40,9 +40,9 @@ func NewResTreeDM(ndm resNodeDM.ResNodeDM, strJson string) (ResTreeDM, error) {
 }
 
 func (rtdm ResTreeDM) QueryTree(nodeFilter func(node resNode.Node) bool) (jsonTree string, err error) {
-	nodes, err := rtdm.nodeDM.QueryAll()
+	nodes, err := rtdm.nodeDM.GetAllArray()
 	if err != nil {
-		return "", fmt.Errorf("nodeDM.QueryAll error: %v", err)
+		return "", fmt.Errorf("nodeDM.GetAllArray error: %v", err)
 	}
 
 	err = resNodeTree.SynchronizeNodesInfo(&rtdm.TheTree, nodes)

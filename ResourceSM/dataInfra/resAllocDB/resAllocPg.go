@@ -74,7 +74,7 @@ func (rnpg ResAllocPg) QueryAll() (rs []resAlloc.Record, err error) {
 
 	stmt, err := rnpg.TheDB.Prepare(fmt.Sprintf(`SELECT * FROM %s`, rnpg.TableName))
 	if err != nil {
-		logrus.Fatalf("ResAllocPg QueryAll TheDB.Prepare statement error: %v", err)
+		logrus.Fatalf("ResAllocPg GetAllArray TheDB.Prepare statement error: %v", err)
 	}
 
 	defer stmt.Close()
