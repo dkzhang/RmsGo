@@ -84,8 +84,9 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 	// (2) modify Resource Node alloc info
 	nodes := make([]resNode.Node, 0)
 	for _, ni := range nodesChange {
+		var node resNode.Node
 		if ni > 0 {
-			node, err := rs.cpuNodeDM.QueryByID(ni)
+			node, err = rs.cpuNodeDM.QueryByID(ni)
 			if err != nil {
 				return isFirstAlloc,
 					fmt.Errorf("cpuNodeDM.QueryByID (nodeID = %d) error: %v", ni, err)
@@ -93,7 +94,7 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 			node.ProjectID = projectID
 			node.AllocatedTime = time.Now()
 		} else {
-			node, err := rs.cpuNodeDM.QueryByID(-ni)
+			node, err = rs.cpuNodeDM.QueryByID(-ni)
 			if err != nil {
 				return isFirstAlloc,
 					fmt.Errorf("cpuNodeDM.QueryByID (nodeID = %d) error: %v", -ni, err)
@@ -101,6 +102,7 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 			node.ProjectID = 0
 			node.AllocatedTime = time.Time{}
 		}
+		nodes = append(nodes, node)
 	}
 
 	// (3) modify Project Resource info

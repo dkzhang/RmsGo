@@ -5,7 +5,6 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/databaseInit/pgOpsSqlx"
-	"github.com/dkzhang/RmsGo/myUtils/logMap"
 	"os"
 	"testing"
 
@@ -26,12 +25,10 @@ var _ = BeforeSuite(func() {
 	db := pgOpsSqlx.ConnectToDatabase()
 	pgOpsSqlx.CreateAllTable(db)
 
-	theLogMap := logMap.NewLogMap(`C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\logmap.yaml`)
-
 	prdb1 = projectResDB.NewProjectResPg(db, projectRes.TableName)
 
 	var err error
-	prdm, err = projectResDM.NewMemoryMap(prdb1, theLogMap)
+	prdm, err = projectResDM.NewMemoryMap(prdb1)
 	if err != nil {
 		panic(err)
 	}

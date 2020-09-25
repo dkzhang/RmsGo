@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
+	"github.com/dkzhang/RmsGo/myUtils/deepCopy"
 )
 
 type MemoryMap struct {
@@ -45,7 +46,11 @@ func (rnm MemoryMap) GetAllArray() (nodes []resNode.Node, err error) {
 }
 
 func (rnm MemoryMap) GetAllMap() (nodesMap map[int64]*resNode.Node, err error) {
-	return rnm.infoMap, nil
+	err = deepCopy.DeepCopy(&nodesMap, &rnm.infoMap)
+	if err != nil {
+		return nil, fmt.Errorf("DeepCopy error=%v", err)
+	}
+	return nodesMap, nil
 }
 
 func (rnm MemoryMap) Update(node resNode.Node) (err error) {

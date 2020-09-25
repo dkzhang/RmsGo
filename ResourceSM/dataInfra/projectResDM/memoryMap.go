@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
-	"github.com/dkzhang/RmsGo/myUtils/logMap"
-	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -14,7 +12,7 @@ type MemoryMap struct {
 	theProjectResDB projectResDB.ProjectResDB
 }
 
-func NewMemoryMap(pdb projectResDB.ProjectResDB, theLogMap logMap.LogMap) (nmm MemoryMap, err error) {
+func NewMemoryMap(pdb projectResDB.ProjectResDB) (nmm MemoryMap, err error) {
 	nmm.theProjectResDB = pdb
 	nmm.infoMap = make(map[int]*projectRes.ResInfo)
 
@@ -23,15 +21,10 @@ func NewMemoryMap(pdb projectResDB.ProjectResDB, theLogMap logMap.LogMap) (nmm M
 		return MemoryMap{},
 			fmt.Errorf("generate new MemoryMap failed since ProjectResDB.GetAllArray error: %v", err)
 	}
-	theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-		"len(Info Array)": len(prs),
-	}).Info("NewMemoryMap ProjectResDB.GetAllArray success.")
 
 	for i := range prs {
 		nmm.infoMap[prs[i].ProjectID] = &prs[i]
 	}
-
-	theLogMap.Log(logMap.NORMAL).Info("NewMemoryMap load data to map success.")
 
 	return nmm, nil
 }

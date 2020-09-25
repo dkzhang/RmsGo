@@ -1,9 +1,6 @@
-package server
+package resScheduling_test
 
 import (
-	"fmt"
-	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/meteringDB"
-	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/meteringDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resAllocDB"
@@ -12,32 +9,35 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDB"
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/databaseInit/pgOpsSqlx"
-	pb "github.com/dkzhang/RmsGo/ResourceSM/gRpcService/grpc"
-	"github.com/dkzhang/RmsGo/ResourceSM/model/metering"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/ResourceSM/resScheduling"
-	"google.golang.org/grpc"
-	"log"
-	"net"
 	"os"
-	"time"
+	"testing"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-const (
-	port = ":50071"
-)
+func TestResScheduling(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "ResScheduling Suite")
+}
 
-func Serve() {
+var prdm projectResDM.ProjectResDM
+var cadm, gadm, sadm resAllocDM.ResAllocDM
+var cndm, gndm resNodeDM.ResNodeDM
+var ctdm, gtdm resGTreeDM.ResGTreeDM
+
+var theResScheduling resScheduling.ResScheduling
+
+var _ = BeforeSuite(func() {
+	os.Setenv("DbSE", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Security\db41.yaml`)
 	db := pgOpsSqlx.ConnectToDatabase()
 	pgOpsSqlx.CreateAllTable(db)
 	pgOpsSqlx.SeedAllTable(db)
 
-	var prdm projectResDM.ProjectResDM
-	var cadm, gadm, sadm resAllocDM.ResAllocDM
-	var cndm, gndm resNodeDM.ResNodeDM
-	var ctdm, gtdm resGTreeDM.ResGTreeDM
 	var err error
 	prdm, err = projectResDM.NewMemoryMap(projectResDB.NewProjectResPg(db, projectRes.TableName))
 	if err != nil {
@@ -57,6 +57,8 @@ func Serve() {
 		panic(err)
 	}
 
+	os.Setenv("TreeJsonCPU", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree_cpu256_8_32.json`)
+	os.Setenv("TreeJsonGPU", `C:\Users\dkzhang\go\src\github.com\dkzhang\RmsGo\Configuration\Parameter\tree_gpu66_2_33.json`)
 	ctdm, err = resGTreeDM.NewResGTreeDM(cndm, os.Getenv("TreeJsonCPU"))
 	if err != nil {
 		panic(err)
@@ -67,27 +69,9 @@ func Serve() {
 		panic(err)
 	}
 
-	schServer := SchedulingServer{
-		TheResScheduling: resScheduling.NewResScheduling(prdm, cadm, gadm, sadm, cndm, gndm, ctdm, gtdm),
-	}
-	//////////////////////////////////////////////////////////////////////////////
+	theResScheduling = resScheduling.NewResScheduling(prdm, cadm, gadm, sadm, cndm, gndm, ctdm, gtdm)
+})
 
-	mdb := meteringDB.NewMeteringPg(db, metering.TableName)
-	mdm := meteringDM.NewResAllocDirectDB(mdb, cadm, gadm, sadm)
-	metServer := MeteringServer{
-		TheMeteringDM: mdm,
-	}
+var _ = AfterSuite(func() {
 
-	//////////////////////////////////////////////////////////////////////////////
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Printf(" fatal error! failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	pb.RegisterSchedulingServiceServer(s, &schServer)
-	pb.RegisterMeteringServiceServer(s, &metServer)
-	fmt.Printf("Begin to serve %v \n", time.Now())
-	if err := s.Serve(lis); err != nil {
-		log.Printf(" fatal error! failed to serve: %v", err)
-	}
-}
+})
