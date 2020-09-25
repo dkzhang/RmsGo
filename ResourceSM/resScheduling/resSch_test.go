@@ -48,5 +48,40 @@ var _ = Describe("ResSch", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("cpuTree.NodesNum=%d", cpuTree2.NodesNum))
 		})
+
+		It("SchedulingGPU", func() {
+			projectID := 1
+			nodes := make([]int64, 33)
+			for i := 0; i < 33; i++ {
+				nodes[i] = int64(i + 1)
+			}
+			ctrlID := 1
+			ctrlCN := "zhang"
+
+			_, err := theResScheduling.SchedulingGPU(projectID, nodes, ctrlID, ctrlCN)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			gpuAllocRecords, err := gadm.QueryAll()
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(gpuAllocRecords)).Should(Equal(1))
+
+			gpuNodesMap, err := gndm.GetAllMap()
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(len(gpuNodesMap)).Should(Equal(66))
+			for i := int64(0); i < 33; i++ {
+				Expect(gpuNodesMap[i+1].ProjectID).Should(Equal(projectID))
+			}
+
+			gpuTree, selected, err := theResScheduling.QueryGpuTreeIdleAndAllocated(projectID+1, 1)
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("gpuTree.NodesNum=%d", gpuTree.NodesNum))
+			By(fmt.Sprintf("selected=%v", selected))
+
+			gpuTree2, err := gtdm.QueryTree(1, func(node resNode.Node) bool {
+				return node.ProjectID == projectID
+			})
+			Expect(err).ShouldNot(HaveOccurred())
+			By(fmt.Sprintf("gpuTree.NodesNum=%d", gpuTree2.NodesNum))
+		})
 	})
 })

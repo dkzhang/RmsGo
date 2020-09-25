@@ -12,6 +12,7 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/myUtils/arrayMerge"
 	"github.com/dkzhang/RmsGo/myUtils/nodeEncode"
+	"sort"
 	"time"
 )
 
@@ -181,8 +182,9 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 	// (2) modify Resource Node alloc info
 	nodes := make([]resNode.Node, 0)
 	for _, ni := range nodesChange {
+		var node resNode.Node
 		if ni > 0 {
-			node, err := rs.gpuNodeDM.QueryByID(ni)
+			node, err = rs.gpuNodeDM.QueryByID(ni)
 			if err != nil {
 				return isFirstAlloc,
 					fmt.Errorf("gpuNodeDM.QueryByID (nodeID = %d) error: %v", ni, err)
@@ -190,7 +192,7 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 			node.ProjectID = projectID
 			node.AllocatedTime = time.Now()
 		} else {
-			node, err := rs.gpuNodeDM.QueryByID(-ni)
+			node, err = rs.gpuNodeDM.QueryByID(-ni)
 			if err != nil {
 				return isFirstAlloc,
 					fmt.Errorf("gpuNodeDM.QueryByID (nodeID = %d) error: %v", -ni, err)
@@ -198,6 +200,7 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 			node.ProjectID = 0
 			node.AllocatedTime = time.Time{}
 		}
+		nodes = append(nodes, node)
 	}
 
 	// (3) modify Project Resource info
@@ -324,6 +327,7 @@ func (rs ResScheduling) QueryCpuTreeAllocated(projectID int, treeFormat int) (t 
 			selected = append(selected, node.ID)
 		}
 	}
+	sort.Sort(arrayMerge.Int64Slice(selected))
 	return t, selected, nil
 }
 
@@ -345,6 +349,7 @@ func (rs ResScheduling) QueryCpuTreeIdleAndAllocated(projectID int, treeFormat i
 			selected = append(selected, node.ID)
 		}
 	}
+	sort.Sort(arrayMerge.Int64Slice(selected))
 	return t, selected, nil
 }
 
@@ -372,6 +377,8 @@ func (rs ResScheduling) QueryGpuTreeAllocated(projectID int, treeFormat int) (t 
 			selected = append(selected, node.ID)
 		}
 	}
+
+	sort.Sort(arrayMerge.Int64Slice(selected))
 	return t, selected, nil
 }
 
@@ -393,6 +400,7 @@ func (rs ResScheduling) QueryGpuTreeIdleAndAllocated(projectID int, treeFormat i
 			selected = append(selected, node.ID)
 		}
 	}
+	sort.Sort(arrayMerge.Int64Slice(selected))
 	return t, selected, nil
 }
 
