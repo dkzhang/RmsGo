@@ -171,7 +171,7 @@ type SchCGpuNodes struct {
 }
 
 type SchStorage struct {
-	StorageSizeAfter      int    `json:"nodes_after"`
+	StorageSizeAfter      int    `json:"storage_size_after"`
 	StorageAllocInfoAfter string `json:"storage_alloc_info_after"`
 }
 
