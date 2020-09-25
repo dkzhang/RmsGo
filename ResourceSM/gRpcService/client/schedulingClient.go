@@ -104,12 +104,13 @@ func (sc SchedulingClient) SchedulingStorage(projectID int,
 	return allocInfo, nil
 }
 
-func (sc SchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryType int) (jsonTree string, err error) {
+func (sc SchedulingClient) QueryCGpuTree(projectID int, cgpuType int64, QueryType int64, treeFormat int64) (
+	jsonTree string, selected []int64, NodesNum int64, err error) {
 	//////////////////////////////////////////////////////////////////////////////
 	// Common Operation
 	conn, err := grpc.Dial(sc.address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		return "",
+		return "", nil, 0,
 			fmt.Errorf("fatal error! grpc.Dial cannot connect: %v", err)
 	}
 	defer conn.Close()
@@ -121,16 +122,18 @@ func (sc SchedulingClient) QueryCGpuTree(projectID int, cgpuType int, QueryType 
 
 	//////////////////////////////////////////////////////////////////////////////
 	reply, err := c.QueryCGpuTree(ctx, &pb.QueryTreeRequest{
-		ProjectID: int64(projectID),
-		CgpuType:  int64(cgpuType),
-		QueryType: int64(QueryType),
+		ProjectID:  int64(projectID),
+		CgpuType:   cgpuType,
+		QueryType:  QueryType,
+		TreeFormat: treeFormat,
 	})
 
 	if err != nil {
-		return "", fmt.Errorf("grpc call QueryCGpuTree error: %v", err)
+		return "", nil, 0,
+			fmt.Errorf("grpc call QueryCGpuTree error: %v", err)
 	}
 
-	return reply.JsonTree, nil
+	return reply.JsonTree, reply.Selected, reply.NodesNum, nil
 }
 
 func (sc SchedulingClient) QueryProjectRes(projectID int) (pr projectRes.ResInfo, err error) {

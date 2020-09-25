@@ -15,10 +15,10 @@ type ProjectResDM interface {
 }
 
 type ProjectResReadOnlyDM interface {
-	QueryCpuTreeOccupied(projectID int) (jsonTree string, err error)
-	QueryCpuTreeAvailable(projectID int) (jsonTree string, err error)
-	QueryGpuTreeOccupied(projectID int) (jsonTree string, err error)
-	QueryGpuTreeAvailable(projectID int) (jsonTree string, err error)
+	QueryCpuTreeOccupied(projectID int, treeFormat int64) (jsonTree string, selected []int64, nodesNum int64, err error)
+	QueryCpuTreeAvailable(projectID int, treeFormat int64) (jsonTree string, selected []int64, nodesNum int64, err error)
+	QueryGpuTreeOccupied(projectID int, treeFormat int64) (jsonTree string, selected []int64, nodesNum int64, err error)
+	QueryGpuTreeAvailable(projectID int, treeFormat int64) (jsonTree string, selected []int64, nodesNum int64, err error)
 
 	QueryProjectRes(projectID int) (pr projectRes.ResInfo, err error)
 	QueryProjectResLite(projectID int) (prl projectRes.ResInfoLite, err error)

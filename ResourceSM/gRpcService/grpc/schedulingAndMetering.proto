@@ -62,7 +62,7 @@ message QueryTreeRequest {
 
 message QueryTreeReply {
   string jsonTree = 1;
-  string nodesNum = 2;
+  int64 nodesNum = 2;
   repeated int64 selected = 3;
 }
 

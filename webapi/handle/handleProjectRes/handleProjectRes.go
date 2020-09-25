@@ -176,7 +176,8 @@ type SchStorage struct {
 }
 
 ///////////////////////////////////////////////////////////
-func (h HandleProjectRes) queryTree(c *gin.Context, funcQuery func(projectID int) (jsonTree string, err error)) {
+func (h HandleProjectRes) queryTree(c *gin.Context,
+	funcQuery func(projectID int, treeFormat int64) (jsonTree string, selected []int64, nodesNum int64, err error)) {
 	userLoginInfo, err := h.theExtractor.Extract(c)
 	if err != nil {
 		return
@@ -187,31 +188,45 @@ func (h HandleProjectRes) queryTree(c *gin.Context, funcQuery func(projectID int
 		return
 	}
 
-	permission := authProject.AuthorityCheck(h.theLogMap, userLoginInfo, pi, authApplication.OPS_RETRIEVE)
-	if permission == true {
-		treeJson, err := funcQuery(pi.ProjectID)
-		if err != nil {
-			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
-				"err":         err,
-				"projectInfo": pi,
-			}).Error("ProjectResDM Query Tree(using pid from gin.Context) failed.")
+	treeFormat, err := strconv.ParseInt(c.DefaultQuery("treeFormat", "1"), 10, 64)
+	if err != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"err": err,
+		}).Error("Parse treeFormat from URL error")
 
-			c.JSON(http.StatusNotFound, gin.H{
-				"msg": "查询失败",
-			})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{
-			"tree": treeJson,
-			"msg":  "查询成功",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "treeFormat参数无效",
 		})
 		return
-	} else {
+	}
+
+	permission := authProject.AuthorityCheck(h.theLogMap, userLoginInfo, pi, authApplication.OPS_RETRIEVE)
+	if permission == false {
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "无权访问",
 		})
 		return
 	}
+
+	treeJson, selected, nodesNum, err := funcQuery(pi.ProjectID, treeFormat)
+	if err != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"err":         err,
+			"projectInfo": pi,
+		}).Error("ProjectResDM Query Tree(using pid from gin.Context) failed.")
+
+		c.JSON(http.StatusNotFound, gin.H{
+			"msg": "查询失败",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"tree":     treeJson,
+		"selected": selected,
+		"nodesNum": nodesNum,
+		"msg":      "查询成功",
+	})
+	return
 }
 
 func (h HandleProjectRes) extractAccessedProject(c *gin.Context) (pi project.Info, err error) {

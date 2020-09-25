@@ -20,18 +20,22 @@ func NewProjectResGRpc(pdm projectDM.ProjectDM, sc client.SchedulingClient) Proj
 	}
 }
 
-func (prg ProjectResGRpc) QueryCpuTreeOccupied(projectID int) (jsonTree string, err error) {
-	return prg.sClient.QueryCGpuTree(projectID, typeCPU, typeOccupied)
+func (prg ProjectResGRpc) QueryCpuTreeOccupied(projectID int, treeFormat int64) (
+	jsonTree string, selected []int64, nodesNum int64, err error) {
+	return prg.sClient.QueryCGpuTree(projectID, typeCPU, typeOccupied, treeFormat)
 }
 
-func (prg ProjectResGRpc) QueryCpuTreeAvailable(projectID int) (jsonTree string, err error) {
-	return prg.sClient.QueryCGpuTree(projectID, typeCPU, typeAvailable)
+func (prg ProjectResGRpc) QueryCpuTreeAvailable(projectID int, treeFormat int64) (
+	jsonTree string, selected []int64, nodesNum int64, err error) {
+	return prg.sClient.QueryCGpuTree(projectID, typeCPU, typeAvailable, treeFormat)
 }
-func (prg ProjectResGRpc) QueryGpuTreeOccupied(projectID int) (jsonTree string, err error) {
-	return prg.sClient.QueryCGpuTree(projectID, typeGPU, typeOccupied)
+func (prg ProjectResGRpc) QueryGpuTreeOccupied(projectID int, treeFormat int64) (
+	jsonTree string, selected []int64, nodesNum int64, err error) {
+	return prg.sClient.QueryCGpuTree(projectID, typeGPU, typeOccupied, treeFormat)
 }
-func (prg ProjectResGRpc) QueryGpuTreeAvailable(projectID int) (jsonTree string, err error) {
-	return prg.sClient.QueryCGpuTree(projectID, typeGPU, typeAvailable)
+func (prg ProjectResGRpc) QueryGpuTreeAvailable(projectID int, treeFormat int64) (
+	jsonTree string, selected []int64, nodesNum int64, err error) {
+	return prg.sClient.QueryCGpuTree(projectID, typeGPU, typeAvailable, treeFormat)
 }
 
 func (prg ProjectResGRpc) QueryProjectRes(projectID int) (pr projectRes.ResInfo, err error) {
