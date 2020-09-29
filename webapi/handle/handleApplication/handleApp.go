@@ -393,6 +393,11 @@ func (h HandleApp) RetrieveAppOpsByAppId(c *gin.Context) {
 		return
 	}
 
+	// format the time to be compatible with front-end
+	for i := range appOpsRecords {
+		appOpsRecords[i].CreatedAtStr = appOpsRecords[i].CreatedAt.Format("2006-01-02")
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"records": appOpsRecords,
 		"msg":     "查询成功",

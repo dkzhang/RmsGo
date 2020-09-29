@@ -129,6 +129,7 @@ func (adm MemoryMap) Update(appInfo application.Application) (err error) {
 }
 
 func (adm MemoryMap) InsertAppOps(record application.AppOpsRecord) (recordID int, err error) {
+	record.CreatedAt = time.Now()
 	recordID, err = adm.theDB.InsertAppOps(record)
 	if err != nil {
 		return -1, fmt.Errorf("InsertAppOps in db error: %v", err)

@@ -31,7 +31,8 @@ type AppOpsRecord struct {
 	ActionStr          string    `db:"action_str" json:"action_str"`
 	BasicInfo          string    `db:"basic_info" json:"basic_info"`
 	ExtraInfo          string    `db:"extra_info" json:"extra_info"`
-	CreatedAt          time.Time `db:"created_at" json:"created_at"`
+	CreatedAt          time.Time `db:"created_at" json:"-"`
+	CreatedAtStr       string    `db:"-" json:"created_at"`
 }
 
 var schemaApp = `
