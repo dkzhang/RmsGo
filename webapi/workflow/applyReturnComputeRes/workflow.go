@@ -40,13 +40,13 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm lo
 		Action:    application.AppActionSubmit,
 	}] = wf.ProjectChiefApply
 
-	//// 项目长重新提交
-	//processMap[workflow.KeyTSRA{
-	//	AppType:   application.AppTypeReturnCompute,
-	//	AppStatus: application.AppStatusProjectChief,
-	//	UserRole:  user.RoleProjectChief,
-	//	Action:    application.AppActionSubmit,
-	//}] = wf.ProjectChiefProcessResubmit
+	// 项目长重新提交
+	processMap[workflow.KeyTSRA{
+		AppType:   application.AppTypeReturnCompute,
+		AppStatus: application.AppStatusProjectChief,
+		UserRole:  user.RoleProjectChief,
+		Action:    application.AppActionSubmit,
+	}] = wf.ProjectChiefProcessResubmit
 	//
 	//// 调度员通过
 	//processMap[workflow.KeyTSRA{
@@ -68,7 +68,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm lo
 }
 
 func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
-	app, err := gfApplication.JsonUnmarshalAppResComReturn(form.BasicContent)
+	_, err := gfApplication.JsonUnmarshalAppResComReturn(form.BasicContent)
 	if err != nil {
 		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
 			fmt.Sprintf("json Unmarshal to AppResComReturn error: %v", err),
@@ -142,11 +142,87 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 	}
 
 	// (4) Check return operation by gRPC client
-	//TODO
-	fmt.Printf("app=%v", app)
+	// Skip check
 
-	//TODO
-	return appID, webapiError.WaErr(webapiError.TypeServerInternalError,
-		fmt.Sprintf("not accomplished"),
-		"此功能尚未开发完成")
+	return appID, nil
+}
+
+func (wf Workflow) ProjectChiefProcessResubmit(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
+	_, err := gfApplication.JsonUnmarshalAppResComReturn(form.BasicContent)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to AppResComReturn error: %v", err),
+			"无法解析申请表单的BasicContent的json结构")
+	}
+	// (1) Query Project Info from DM and Check auth permission
+	pi, err := wf.pdm.QueryByID(form.ProjectID)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeNotFound,
+			fmt.Sprintf("Query Project Info ByID (id=%d)  error: %v", form.ProjectID, err),
+			"查询项目信息失败")
+	}
+
+	// ask permission for update project.
+	permission := authProject.AuthorityCheck(wf.theLogMap, userInfo, pi, authApplication.OPS_UPDATE)
+	//test
+	logrus.Infof("permission = %v, basic status = %d", permission, pi.BasicStatus)
+	logrus.Infof("project info = %v", pi)
+
+	if permission == false {
+		return -1, webapiError.WaErr(webapiError.TypeAuthorityError,
+			fmt.Sprintf("AuthorityCheck reject"),
+			"当前用户无权访问该项目")
+	}
+
+	// check project basic status
+	if pi.BasicStatus != project.BasicStatusRunning {
+		return -1, webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("project BasicStatus check failed: expect to be running but got %d", pi.BasicStatus),
+			"当前项目未处于running状态，无法回收资源")
+	}
+
+	// (2) Insert New Application
+	theApplication := application.Application{
+		//ApplicationID:            0,
+		ProjectID:                form.ProjectID,
+		Type:                     form.Type,
+		Status:                   application.AppStatusController,
+		ApplicantUserID:          userInfo.UserID,
+		ApplicantUserChineseName: userInfo.ChineseName,
+		DepartmentCode:           userInfo.DepartmentCode,
+		BasicContent:             form.BasicContent,
+		ExtraContent:             form.ExtraContent,
+	}
+
+	appID, err = wf.adm.Insert(theApplication)
+	if err != nil {
+		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation Insert error: %v", err),
+			"在数据库中新建申请单记录失败")
+	}
+
+	// (3) Insert New ApplicationOps
+	theAppOpsRecord := application.AppOpsRecord{
+		//RecordID:           0,
+		ProjectID:          form.ProjectID,
+		ApplicationID:      appID,
+		OpsUserID:          userInfo.UserID,
+		OpsUserChineseName: userInfo.ChineseName,
+		Action:             form.Action,
+		ActionStr:          "首次提交",
+		BasicInfo:          form.BasicContent,
+		ExtraInfo:          form.ExtraContent,
+	}
+
+	_, err = wf.adm.InsertAppOps(theAppOpsRecord)
+	if err != nil {
+		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation InsertApplicationOps error: %v", err),
+			"在数据库中新建申请单操作记录失败")
+	}
+
+	// (4) Check return operation by gRPC client
+	// Skip check
+
+	return appID, nil
 }

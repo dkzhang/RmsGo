@@ -65,7 +65,7 @@ func init() {
 		},
 		Operation:   OPS_RETRIEVE,
 		Permission:  true,
-		Description: "Allow RoleProjectChief RETRIEVE Project",
+		Description: "Allow RoleApprover RETRIEVE Project in his department",
 	})
 
 	theProjectAuthorityTable = append(theProjectAuthorityTable, projectAuthority{
@@ -78,7 +78,7 @@ func init() {
 		},
 		Operation:   OPS_RETRIEVE | OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleProjectChief RETRIEVE and Project",
+		Description: "Allow RoleController RETRIEVE Project",
 	})
 }
 
