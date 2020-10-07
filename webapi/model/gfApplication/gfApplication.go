@@ -90,6 +90,10 @@ func JsonUnmarshalAppResComReturn(jsonStr string) (arcr AppResComReturn, err err
 //	// nothing
 //}
 
+type CtrlApprovalInfoWithProjectCode struct {
+	ProjectCode string `json:"project_code"`
+	Comment     string `json:"comment"`
+}
 type CtrlApprovalInfo struct {
 	ProjectCode string `json:"project_code"`
 	Comment     string `json:"comment"`

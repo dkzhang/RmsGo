@@ -246,7 +246,7 @@ var _ = Describe("ApplicationDM", func() {
 			Expect(app.Status).Should(Equal(application.AppStatusController))
 			By(fmt.Sprintf("QueryByID success, got application = %v", app))
 
-			bcs := gfApplication.CtrlApprovalInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", projectID)}
+			bcs := gfApplication.CtrlApprovalInfoWithProjectCode{ProjectCode: fmt.Sprintf("ProjectCode%d", projectID)}
 			bcb, _ := json.Marshal(bcs)
 			appOps := application.AppOpsRecord{
 				ProjectID:          projectID,

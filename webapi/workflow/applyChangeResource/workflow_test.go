@@ -163,7 +163,7 @@ var _ = Describe("Workflow", func() {
 	//		Expect(err).ShouldNot(HaveOccurred())
 	//		By(fmt.Sprintf("QueryByID 1 = %v", app1))
 	//
-	//		bcs := gfApplication.CtrlApprovalInfo{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
+	//		bcs := gfApplication.CtrlApprovalInfoWithProjectCode{ProjectCode: fmt.Sprintf("ProjectCode%d", app1.ProjectID)}
 	//		bcb, _ := json.Marshal(bcs)
 	//
 	//		waErr := gwf.Process(generalForm.GeneralForm{
