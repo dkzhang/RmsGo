@@ -75,7 +75,7 @@ func JsonUnmarshalAppResChange(jsonStr string) (appc AppResChange, err error) {
 
 type AppResComReturn struct {
 	CGpuType         int     `json:"cgpu_type"` // cpu=1, gpu=2
-	NodesReturnArray []int64 `json:"nodes_return_array"`
+	NodesAfterReturn []int64 `json:"nodes_return_array"`
 }
 
 func JsonUnmarshalAppResComReturn(jsonStr string) (arcr AppResComReturn, err error) {
@@ -86,9 +86,17 @@ func JsonUnmarshalAppResComReturn(jsonStr string) (arcr AppResComReturn, err err
 	return arcr, nil
 }
 
-//type AppResStoReturn struct {
-//	// nothing
-//}
+type AppResStoReturn struct {
+	SizeAfter int `json:"size_after"`
+}
+
+func JsonUnmarshalAppResStoReturn(jsonStr string) (arsr AppResStoReturn, err error) {
+	err = json.Unmarshal([]byte(jsonStr), &arsr)
+	if err != nil {
+		return AppResStoReturn{}, fmt.Errorf("json.Unmarshal error: %v", err)
+	}
+	return arsr, nil
+}
 
 type CtrlApprovalInfoWithProjectCode struct {
 	ProjectCode string `json:"project_code"`

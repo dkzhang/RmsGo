@@ -9,6 +9,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/authority/authProject"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/applicationDM"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
+	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectResDM"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/generalForm"
 	"github.com/dkzhang/RmsGo/webapi/model/gfApplication"
@@ -21,13 +22,16 @@ import (
 type Workflow struct {
 	adm       applicationDM.ApplicationDM
 	pdm       projectDM.ProjectDM
+	prdm      projectResDM.ProjectResDM
 	theLogMap logMap.LogMap
 }
 
-func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm logMap.LogMap) workflow.GeneralWorkflow {
+func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM,
+	prdm projectResDM.ProjectResDM, lm logMap.LogMap) workflow.GeneralWorkflow {
 	wf := Workflow{
 		adm:       adm,
 		pdm:       pdm,
+		prdm:      prdm,
 		theLogMap: lm,
 	}
 	applyMap := make(map[workflow.KeyTSRA]workflow.ApplyFunc)
@@ -49,14 +53,13 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm lo
 		Action:    application.AppActionSubmit,
 	}] = wf.ProjectChiefProcessResubmit
 
-	//TODO
-	//// 调度员通过
-	//processMap[workflow.KeyTSRA{
-	//	AppType:   application.AppTypeReturnCompute,
-	//	AppStatus: application.AppStatusController,
-	//	UserRole:  user.RoleController,
-	//	Action:    application.AppActionPass,
-	//}] = wf.ControllerProcessPass
+	// 调度员通过
+	processMap[workflow.KeyTSRA{
+		AppType:   application.AppTypeReturnCompute,
+		AppStatus: application.AppStatusController,
+		UserRole:  user.RoleController,
+		Action:    application.AppActionPass,
+	}] = wf.ControllerProcessPass
 
 	// 调度员拒绝
 	processMap[workflow.KeyTSRA{
@@ -261,6 +264,86 @@ func (wf Workflow) ControllerProcessReject(form generalForm.GeneralForm, app app
 
 	// Update Application
 	app.Status = application.AppStatusProjectChief
+	err = wf.adm.Update(app)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("Update for Controller error: %v", err),
+			"无法为调度员在数据库中更新Application")
+	}
+
+	return nil
+}
+
+func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryByID error: %v", err),
+			"在数据库中查询项目信息失败")
+	}
+
+	var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
+	err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to CtrlApprovalInfoWithProjectCode error: %v", err),
+			"无法解析form.BasicContent的结构")
+	}
+
+	//extract applyReturnComputeRes info
+	returnResInfo, err := gfApplication.JsonUnmarshalAppResComReturn(app.BasicContent)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to AppResComReturn error: %v", err),
+			"无法解析申请表单的BasicContent的json结构")
+	}
+
+	// Insert New ApplicationOps
+	theAppOpsRecord := application.AppOpsRecord{
+		//RecordID:           0,
+		ProjectID:          theProject.ProjectID,
+		ApplicationID:      app.ApplicationID,
+		OpsUserID:          userInfo.UserID,
+		OpsUserChineseName: userInfo.ChineseName,
+		Action:             form.Action,
+		ActionStr:          "是",
+		BasicInfo:          form.BasicContent,
+		ExtraInfo:          form.ExtraContent,
+	}
+	_, err = wf.adm.InsertAppOps(theAppOpsRecord)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation InsertApplicationOps for Controller error: %v", err),
+			"无法为调度员在数据库中新建申请单操作记录")
+	}
+
+	// Schedule Project Res
+	switch returnResInfo.CGpuType {
+	case 1:
+		err = wf.prdm.SchedulingCpu(theProject.ProjectID, returnResInfo.NodesAfterReturn, userInfo)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("ProjectResDM SchedulingCpu error: %v", err),
+				"归还资源错误")
+		}
+	case 2:
+		err = wf.prdm.SchedulingGpu(theProject.ProjectID, returnResInfo.NodesAfterReturn, userInfo)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("ProjectResDM SchedulingGpu error: %v", err),
+				"归还资源错误")
+		}
+	default:
+		// unsupported cgpu type
+		wf.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"UserLoginInfo": userInfo,
+			"returnResInfo": returnResInfo,
+		}).Error("unsupported cgpu type")
+		// do nothing but archive the application
+	}
+
+	// Update Application
+	app.Status = application.AppStatusArchived
 	err = wf.adm.Update(app)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,

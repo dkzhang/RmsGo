@@ -12,6 +12,8 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/workflow/applyChangeResource"
 	"github.com/dkzhang/RmsGo/webapi/workflow/applyProjectAndResource"
+	"github.com/dkzhang/RmsGo/webapi/workflow/applyReturnComputeRes"
+	"github.com/dkzhang/RmsGo/webapi/workflow/applyReturnStorageRes"
 	"github.com/gin-gonic/gin"
 	"os"
 )
@@ -34,6 +36,10 @@ func Serve() {
 		ApplyProjectAndResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM))
 	theHandleApp.RegisterWorkflow(application.AppTypeChange,
 		applyChangeResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheLogMap))
+	theHandleApp.RegisterWorkflow(application.AppTypeReturnCompute,
+		applyReturnComputeRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM, infra.TheLogMap))
+	theHandleApp.RegisterWorkflow(application.AppTypeChange,
+		applyReturnStorageRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM, infra.TheLogMap))
 
 	theHandleProject := handleProject.NewHandleProject(infra.TheProjectDM,
 		infra.TheExtractor, infra.TheLogMap)

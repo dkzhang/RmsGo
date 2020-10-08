@@ -22,7 +22,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
-	"github.com/dkzhang/RmsGo/webapi/workflow/applyProjectAndResource"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -174,7 +173,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	/////////////////////////////////////////////////////////
 	// Workflow
-	theInfras.TheApplyProjectAndResourceWorkflow = ApplyProjectAndResource.NewWorkflow(theInfras.TheApplicationDM, theInfras.TheProjectDM)
+	//theInfras.TheApplyProjectAndResourceWorkflow = ApplyProjectAndResource.NewWorkflow(theInfras.TheApplicationDM, theInfras.TheProjectDM)
 
 	return &theInfras
 }
