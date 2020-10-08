@@ -38,7 +38,7 @@ func Serve() {
 		applyChangeResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheLogMap))
 	theHandleApp.RegisterWorkflow(application.AppTypeReturnCompute,
 		applyReturnComputeRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM, infra.TheLogMap))
-	theHandleApp.RegisterWorkflow(application.AppTypeChange,
+	theHandleApp.RegisterWorkflow(application.AppTypeReturnStorage,
 		applyReturnStorageRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM, infra.TheLogMap))
 
 	theHandleProject := handleProject.NewHandleProject(infra.TheProjectDM,
