@@ -86,6 +86,7 @@ func Serve() {
 		hProject := webAPIv1.Group("/Project")
 		{
 			hProject.GET("/", middleware.TokenAuth(infra), theHandleProject.RetrieveByUserLogin)
+			hProject.GET("/:id", middleware.TokenAuth(infra), theHandleProject.RetrieveByID)
 			hProject.PUT("/AllocInfo/:id", middleware.TokenAuth(infra), theHandleProject.UpdateAllocInfo)
 		}
 
