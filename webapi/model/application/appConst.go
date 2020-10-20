@@ -17,6 +17,8 @@ const (
 	AppTypeReturnCompute
 	AppTypeReturnStorage
 
+	AppTypeBrowseMetering
+
 	AppTypeALL = -1
 )
 

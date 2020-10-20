@@ -102,11 +102,6 @@ type CtrlApprovalInfoWithProjectCode struct {
 	ProjectCode string `json:"project_code"`
 	Comment     string `json:"comment"`
 }
-type CtrlApprovalInfo struct {
-	ProjectCode string `json:"project_code"`
-	Comment     string `json:"comment"`
-}
-
-type ApprApprovalInfo struct {
+type ApprovalInfo struct {
 	Comment string `json:"comment"`
 }

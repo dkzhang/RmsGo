@@ -253,7 +253,7 @@ func (wf Workflow) ControllerProcessReject(form generalForm.GeneralForm, app app
 			"在数据库中查询项目信息失败")
 	}
 
-	var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
+	var appCtrlProjectInfo gfApplication.ApprovalInfo
 	err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
@@ -303,7 +303,7 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"在数据库中查询项目信息失败")
 	}
 
-	var appCtrlProjectInfo gfApplication.CtrlApprovalInfo
+	var appCtrlProjectInfo gfApplication.ApprovalInfo
 	err = json.Unmarshal([]byte(form.BasicContent), &appCtrlProjectInfo)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeBadRequest,
@@ -356,10 +356,18 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"在数据库中查询项目信息失败")
 	}
 	if theProject.StorageSizeAcquired == 0 {
-		wf.pdm.UpdateStatusInfo(project.StatusInfo{
+		err = wf.pdm.UpdateStatusInfo(project.StatusInfo{
 			ProjectID:   theProject.ProjectID,
-			BasicStatus: project.BasicStatusArchived,
+			BasicStatus: project.BasicStatusSettlement,
 		})
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("database operation UpdateStatusInfo project.BasicStatusArchived error: %v", err),
+				"无法在数据库中将项目状态置为待结算")
+		}
+
+		//TODO
+		//发起计量单传阅流程
 	}
 
 	// Update Application

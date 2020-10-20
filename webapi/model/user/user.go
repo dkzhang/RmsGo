@@ -45,6 +45,7 @@ const (
 	RoleProjectChief = 1
 	RoleApprover     = 2
 	RoleController   = 8
+	RoleSystem       = 1024
 )
 
 const (
