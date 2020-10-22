@@ -16,6 +16,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
+	"github.com/dkzhang/RmsGo/webapi/workflow/browseMetering"
 	"github.com/sirupsen/logrus"
 )
 
@@ -23,15 +24,18 @@ type Workflow struct {
 	adm       applicationDM.ApplicationDM
 	pdm       projectDM.ProjectDM
 	prdm      projectResDM.ProjectResDM
+	bmwf      browseMetering.Workflow
 	theLogMap logMap.LogMap
 }
 
 func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM,
-	prdm projectResDM.ProjectResDM, lm logMap.LogMap) workflow.GeneralWorkflow {
+	prdm projectResDM.ProjectResDM, bmwf browseMetering.Workflow,
+	lm logMap.LogMap) workflow.GeneralWorkflow {
 	wf := Workflow{
 		adm:       adm,
 		pdm:       pdm,
 		prdm:      prdm,
+		bmwf:      bmwf,
 		theLogMap: lm,
 	}
 	applyMap := make(map[workflow.KeyTSRA]workflow.ApplyFunc)
@@ -366,8 +370,13 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 				"无法在数据库中将项目状态置为待结算")
 		}
 
-		//TODO
 		//发起计量单传阅流程
+		_, err = wf.bmwf.SystemApply(theProject.ProjectID)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("System Apply BrowseMeteringWorkflow error: %v", err),
+				"无法启动计量单传阅工作流")
+		}
 	}
 
 	// Update Application

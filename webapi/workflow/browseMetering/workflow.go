@@ -60,7 +60,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 	return workflow.NewGeneralWorkflow(applyMap, processMap)
 }
 
-func (wf Workflow) SystemApply(m metering.Statement, projectID int) (appID int, waErr webapiError.Err) {
+func (wf Workflow) SystemApply(projectID int) (appID int, waErr webapiError.Err) {
 	// (1) Query Project Metering Info from gRpc client
 	ms, err := wf.mc.QueryMetering(projectID, metering.TypeSettlement, "")
 	if err != nil {
