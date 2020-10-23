@@ -14,6 +14,7 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/workflow/applyProjectAndResource"
 	"github.com/dkzhang/RmsGo/webapi/workflow/applyReturnComputeRes"
 	"github.com/dkzhang/RmsGo/webapi/workflow/applyReturnStorageRes"
+	"github.com/dkzhang/RmsGo/webapi/workflow/browseMetering"
 	"github.com/gin-gonic/gin"
 	"os"
 )
@@ -38,8 +39,12 @@ func Serve() {
 		applyChangeResource.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheLogMap))
 	theHandleApp.RegisterWorkflow(application.AppTypeReturnCompute,
 		applyReturnComputeRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM, infra.TheLogMap))
+
+	bmwf := browseMetering.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.MetClient)
+	theHandleApp.RegisterWorkflow(application.AppTypeBrowseMetering, bmwf)
 	theHandleApp.RegisterWorkflow(application.AppTypeReturnStorage,
-		applyReturnStorageRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM, infra.TheLogMap))
+		applyReturnStorageRes.NewWorkflow(infra.TheApplicationDM, infra.TheProjectDM, infra.TheProjectResDM,
+			bmwf, infra.TheLogMap))
 
 	theHandleProject := handleProject.NewHandleProject(infra.TheProjectDM,
 		infra.TheExtractor, infra.TheLogMap)

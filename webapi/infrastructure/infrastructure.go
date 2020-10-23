@@ -21,7 +21,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/handle/extractLoginUserInfo"
 	"github.com/dkzhang/RmsGo/webapi/model/application"
 	"github.com/dkzhang/RmsGo/webapi/model/project"
-	"github.com/dkzhang/RmsGo/webapi/workflow"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -55,7 +54,8 @@ type Infrastructure struct {
 
 	TheLogMap logMap.LogMap
 
-	TheApplyProjectAndResourceWorkflow workflow.GeneralWorkflow
+	SchClient client.SchedulingClient
+	MetClient client.MeteringClient
 }
 
 type InfraConfigFile struct {
@@ -164,8 +164,9 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 
 	/////////////////////////////////////////////////////////
 	// ProjectRes  DM
-	sc := client.NewSchedulingClient(os.Getenv("gRPC_SchMet_HOST"), os.Getenv("gRPC_SchMet_PORT"))
-	theInfras.TheProjectResDM = projectResDM.NewProjectResGRpc(theInfras.TheProjectDM, sc)
+	theInfras.SchClient = client.NewSchedulingClient(os.Getenv("gRPC_SchMet_HOST"), os.Getenv("gRPC_SchMet_PORT"))
+	theInfras.TheProjectResDM = projectResDM.NewProjectResGRpc(theInfras.TheProjectDM, theInfras.SchClient)
+	theInfras.MetClient = client.NewMeteringClient(os.Getenv("gRPC_SchMet_HOST"), os.Getenv("gRPC_SchMet_PORT"))
 
 	/////////////////////////////////////////////////////////
 	// Extractor

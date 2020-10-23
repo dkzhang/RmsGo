@@ -16,7 +16,6 @@ import (
 	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 	"github.com/dkzhang/RmsGo/webapi/workflow"
-	"github.com/dkzhang/RmsGo/webapi/workflow/browseMetering"
 	"github.com/sirupsen/logrus"
 )
 
@@ -24,12 +23,12 @@ type Workflow struct {
 	adm       applicationDM.ApplicationDM
 	pdm       projectDM.ProjectDM
 	prdm      projectResDM.ProjectResDM
-	bmwf      browseMetering.Workflow
+	bmwf      workflow.GeneralWorkflow
 	theLogMap logMap.LogMap
 }
 
 func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM,
-	prdm projectResDM.ProjectResDM, bmwf browseMetering.Workflow,
+	prdm projectResDM.ProjectResDM, bmwf workflow.GeneralWorkflow,
 	lm logMap.LogMap) workflow.GeneralWorkflow {
 	wf := Workflow{
 		adm:       adm,
@@ -371,7 +370,16 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 		}
 
 		//发起计量单传阅流程
-		_, err = wf.bmwf.SystemApply(theProject.ProjectID)
+		_, err = wf.bmwf.Apply(generalForm.GeneralForm{
+			ProjectID:    theProject.ProjectID,
+			FormID:       0,
+			Type:         application.AppTypeBrowseMetering,
+			Action:       application.AppActionSubmit,
+			BasicContent: "",
+			ExtraContent: "",
+		},
+			user.SystemUserAuto)
+
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,
 				fmt.Sprintf("System Apply BrowseMeteringWorkflow error: %v", err),

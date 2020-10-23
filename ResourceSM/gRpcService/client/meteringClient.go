@@ -11,15 +11,15 @@ import (
 
 type MeteringClient struct {
 	host    string
-	port    int
+	port    string
 	address string
 }
 
-func NewMeteringClient(host string, port int) MeteringClient {
+func NewMeteringClient(host string, port string) MeteringClient {
 	return MeteringClient{
 		host:    host,
 		port:    port,
-		address: fmt.Sprintf("%s:%d", host, port),
+		address: fmt.Sprintf("%s:%s", host, port),
 	}
 }
 

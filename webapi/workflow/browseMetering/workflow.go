@@ -32,18 +32,24 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 	processMap := make(map[workflow.KeyTSRA]workflow.ProcessFunc)
 
 	// 系统自动发起
+	applyMap[workflow.KeyTSRA{
+		AppType:   application.AppTypeBrowseMetering,
+		AppStatus: 0,
+		UserRole:  user.RoleSystem,
+		Action:    application.AppActionSubmit,
+	}] = wf.SystemApply
 
 	// 项目长通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeChange,
-		AppStatus: 0,
+		AppType:   application.AppTypeBrowseMetering,
+		AppStatus: application.AppStatusProjectChief,
 		UserRole:  user.RoleProjectChief,
 		Action:    application.AppActionPass,
 	}] = wf.ProjectChiefProcessPass
 
 	// 审批人通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeChange,
+		AppType:   application.AppTypeBrowseMetering,
 		AppStatus: application.AppStatusApprover,
 		UserRole:  user.RoleApprover,
 		Action:    application.AppActionPass,
@@ -51,7 +57,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 
 	// 调度员通过
 	processMap[workflow.KeyTSRA{
-		AppType:   application.AppTypeChange,
+		AppType:   application.AppTypeBrowseMetering,
 		AppStatus: application.AppStatusController,
 		UserRole:  user.RoleController,
 		Action:    application.AppActionPass,
@@ -60,7 +66,8 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 	return workflow.NewGeneralWorkflow(applyMap, processMap)
 }
 
-func (wf Workflow) SystemApply(projectID int) (appID int, waErr webapiError.Err) {
+func (wf Workflow) SystemApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
+	projectID := form.ProjectID
 	// (1) Query Project Metering Info from gRpc client
 	ms, err := wf.mc.QueryMetering(projectID, metering.TypeSettlement, "")
 	if err != nil {
