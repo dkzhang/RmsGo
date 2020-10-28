@@ -75,7 +75,7 @@ func JsonUnmarshalAppResChange(jsonStr string) (appc AppResChange, err error) {
 
 type AppResComReturn struct {
 	CGpuType         int     `json:"cgpu_type"` // cpu=1, gpu=2
-	NodesAfterReturn []int64 `json:"nodes_return_array"`
+	NodesAfterReturn []int64 `json:"nodes_after_return"`
 }
 
 func JsonUnmarshalAppResComReturn(jsonStr string) (arcr AppResComReturn, err error) {
