@@ -351,5 +351,28 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"无法为调度员在数据库中更新Application")
 	}
 
+	// Update project apply info
+	piAfter, err := wf.pdm.QueryByID(app.ProjectID)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryByID error: %v", err),
+			"在数据库中查询项目信息失败")
+	}
+
+	err = wf.pdm.UpdateApplyInfo(project.ApplyInfo{
+		ProjectID:           piAfter.ProjectID,
+		StartDate:           piAfter.StartDate,
+		TotalDaysApply:      piAfter.TotalDaysApply,
+		EndReminderAt:       piAfter.EndReminderAt,
+		CpuNodesExpected:    piAfter.CpuNodesExpected + (piAfter.CpuNodesAcquired - theProject.CpuNodesAcquired),
+		GpuNodesExpected:    piAfter.GpuNodesExpected + (piAfter.GpuNodesAcquired - theProject.GpuNodesAcquired),
+		StorageSizeExpected: piAfter.StorageSizeExpected,
+	})
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation pdm.UpdateApplyInfo error: %v", err),
+			"在数据库中项目更新ApplyInfo失败")
+	}
+
 	return nil
 }

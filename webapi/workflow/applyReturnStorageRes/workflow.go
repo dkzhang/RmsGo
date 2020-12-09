@@ -350,15 +350,25 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"归还存储资源错误")
 	}
 
-	// check project storage remained
-	// archive project if storage remained is ZERO
-	theProject, err = wf.pdm.QueryByID(app.ProjectID)
+	// update project apply info
+	err = wf.pdm.UpdateApplyInfo(project.ApplyInfo{
+		ProjectID:           theProject.ProjectID,
+		StartDate:           theProject.StartDate,
+		TotalDaysApply:      theProject.TotalDaysApply,
+		EndReminderAt:       theProject.EndReminderAt,
+		CpuNodesExpected:    theProject.CpuNodesExpected,
+		GpuNodesExpected:    theProject.GpuNodesExpected,
+		StorageSizeExpected: theProject.StorageSizeExpected + (returnResInfo.SizeAfter - theProject.StorageSizeAcquired),
+	})
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
-			fmt.Sprintf("database operation QueryByID error: %v", err),
-			"在数据库中查询项目信息失败")
+			fmt.Sprintf("database operation pdm.UpdateApplyInfo error: %v", err),
+			"在数据库中更新项目ApplyInfo失败")
 	}
-	if theProject.StorageSizeAcquired == 0 {
+
+	// check project storage remained
+	// archive project if storage remained is ZERO
+	if returnResInfo.SizeAfter == 0 {
 		err = wf.pdm.UpdateStatusInfo(project.StatusInfo{
 			ProjectID:   theProject.ProjectID,
 			BasicStatus: project.BasicStatusSettlement,

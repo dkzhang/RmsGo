@@ -53,6 +53,7 @@ func (prg ProjectResGRpc) SchedulingCpu(projectID int, nodesAfter []int64, ctrlU
 			projectID, nodesAfter, err)
 	}
 
+	// update project alloc info
 	err = prg.pdm.UpdateAllocNum(allocInfo)
 	if err != nil {
 		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)

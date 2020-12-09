@@ -415,7 +415,7 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"无法为调度员在数据库中更新Application")
 	}
 
-	// Update Project
+	// Update Project CodeInfo
 	ci := project.CodeInfo{
 		ProjectID:   theProject.ProjectID,
 		ProjectCode: appCtrlProjectInfo.ProjectCode,
@@ -427,6 +427,32 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			"无法为调度员在数据库中更新Project项目编码信息")
 	}
 
+	// Update Project ApplyInfo
+	appRC, err := gfApplication.JsonUnmarshalAppNewProRes(app.BasicContent)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to AppNewProRes error: %v", err),
+			"无法解析申请表单的BasicContent的json结构")
+	}
+
+	ai := project.ApplyInfo{
+		ProjectID:           theProject.ProjectID,
+		StartDate:           theProject.StartDate,
+		TotalDaysApply:      theProject.TotalDaysApply + int(appRC.EndDate.Sub(theProject.EndReminderAt).Hours()/24),
+		EndReminderAt:       appRC.EndDate,
+		CpuNodesExpected:    appRC.CpuNodes,
+		GpuNodesExpected:    appRC.GpuNodes,
+		StorageSizeExpected: appRC.StorageSize,
+	}
+
+	err = wf.pdm.UpdateApplyInfo(ai)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("Update for Controller error: %v", err),
+			"无法为调度员在数据库中更新Project项目变更信息")
+	}
+
+	// Update Status Info
 	si := project.StatusInfo{
 		ProjectID:   theProject.ProjectID,
 		BasicStatus: project.BasicStatusWaiting,
