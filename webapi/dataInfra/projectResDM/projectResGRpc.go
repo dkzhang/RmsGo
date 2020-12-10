@@ -5,6 +5,7 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/gRpcService/client"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/webapi/dataInfra/projectDM"
+	"github.com/dkzhang/RmsGo/webapi/model/project"
 	"github.com/dkzhang/RmsGo/webapi/model/user"
 )
 
@@ -59,6 +60,21 @@ func (prg ProjectResGRpc) SchedulingCpu(projectID int, nodesAfter []int64, ctrlU
 		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)
 	}
 
+	// update project status
+	pi, err := prg.pdm.QueryByID(projectID)
+	if err != nil {
+		return fmt.Errorf("pdm.QueryByID error: %v", err)
+	}
+	if pi.BasicStatus == project.BasicStatusWaiting {
+		err = prg.pdm.UpdateStatusInfo(project.StatusInfo{
+			ProjectID:   projectID,
+			BasicStatus: project.BasicStatusRunning,
+		})
+		if err != nil {
+			return fmt.Errorf("pdm.UpdateStatusInfo error: %v", err)
+		}
+	}
+
 	return nil
 }
 
@@ -72,6 +88,21 @@ func (prg ProjectResGRpc) SchedulingGpu(projectID int, nodesAfter []int64, ctrlU
 	err = prg.pdm.UpdateAllocNum(allocInfo)
 	if err != nil {
 		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)
+	}
+
+	// update project status
+	pi, err := prg.pdm.QueryByID(projectID)
+	if err != nil {
+		return fmt.Errorf("pdm.QueryByID error: %v", err)
+	}
+	if pi.BasicStatus == project.BasicStatusWaiting {
+		err = prg.pdm.UpdateStatusInfo(project.StatusInfo{
+			ProjectID:   projectID,
+			BasicStatus: project.BasicStatusRunning,
+		})
+		if err != nil {
+			return fmt.Errorf("pdm.UpdateStatusInfo error: %v", err)
+		}
 	}
 
 	return nil
@@ -88,6 +119,21 @@ func (prg ProjectResGRpc) SchedulingStorage(projectID int,
 	err = prg.pdm.UpdateAllocNum(allocInfo)
 	if err != nil {
 		return fmt.Errorf("ProjectDM.UpdateAllocNum (%v) error: %v", allocInfo, err)
+	}
+
+	// update project status
+	pi, err := prg.pdm.QueryByID(projectID)
+	if err != nil {
+		return fmt.Errorf("pdm.QueryByID error: %v", err)
+	}
+	if pi.BasicStatus == project.BasicStatusWaiting {
+		err = prg.pdm.UpdateStatusInfo(project.StatusInfo{
+			ProjectID:   projectID,
+			BasicStatus: project.BasicStatusRunning,
+		})
+		if err != nil {
+			return fmt.Errorf("pdm.UpdateStatusInfo error: %v", err)
+		}
 	}
 
 	return nil
