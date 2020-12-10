@@ -38,6 +38,19 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 		return
 	}
 
+	piStatus, err := strconv.Atoi(c.DefaultQuery("status", "-1"))
+
+	if err != nil {
+		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+			"errS": err,
+		}).Error("Parse project status from URL error")
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "status参数无效",
+		})
+		return
+	}
+
 	switch userLoginInfo.Role {
 	case user.RoleProjectChief:
 		pros, err := h.theProjectDM.QueryByOwner(userLoginInfo.UserID)
@@ -53,7 +66,7 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"projects": pros,
+			"projects": projectFilterByStatus(pros, piStatus),
 			"msg":      "查询项目长相关申请单成功",
 		})
 	case user.RoleApprover:
@@ -70,8 +83,8 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"projects": pros,
-			"msg":      "查询项目长相关申请单成功",
+			"projects": projectFilterByStatus(pros, piStatus),
+			"msg":      "查询审批人相关申请单成功",
 		})
 	case user.RoleController:
 		pros, err := h.theProjectDM.QueryAllInfo()
@@ -87,7 +100,7 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"projects": pros,
+			"projects": projectFilterByStatus(pros, piStatus),
 			"msg":      "查询项目长相关申请单成功",
 		})
 	default:
@@ -102,6 +115,15 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 		})
 		return
 	}
+}
+
+func projectFilterByStatus(pros []project.Info, qStatus int) (prosF []project.Info) {
+	for _, pi := range pros {
+		if pi.BasicStatus&qStatus != 0 {
+			prosF = append(prosF, pi)
+		}
+	}
+	return prosF
 }
 
 func (h HandleProject) RetrieveByID(c *gin.Context) {
