@@ -380,6 +380,7 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 		}
 
 		//发起计量单传阅流程
+		// fix a bug: remove systemUserAuto. System can only user ProjectChief to apply
 		_, err = wf.bmwf.Apply(generalForm.GeneralForm{
 			ProjectID:    theProject.ProjectID,
 			FormID:       0,
@@ -388,7 +389,12 @@ func (wf Workflow) ControllerProcessPass(form generalForm.GeneralForm, app appli
 			BasicContent: "",
 			ExtraContent: "",
 		},
-			user.SystemUserAuto)
+			user.UserInfo{
+				UserID:         theProject.ChiefID,
+				ChineseName:    theProject.ChiefChineseName,
+				DepartmentCode: theProject.DepartmentCode,
+				Role:           user.RoleSystem,
+			})
 
 		if err != nil {
 			return webapiError.WaErr(webapiError.TypeDatabaseError,

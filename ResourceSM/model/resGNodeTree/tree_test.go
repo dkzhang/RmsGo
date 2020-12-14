@@ -1,11 +1,13 @@
 package resGNodeTree_test
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNode"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNodeTree"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"os"
 )
 
 var _ = Describe("Tree", func() {
@@ -61,6 +63,24 @@ var _ = Describe("Tree", func() {
 			str, err := resGNodeTree.ToJsonIndent(t)
 			Expect(err).ShouldNot(HaveOccurred())
 			By(fmt.Sprintf("Tree to Json = %s", str))
+
+			// write json text file
+			filePath := "tree.json"
+			file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			//及时关闭
+			defer file.Close()
+			//写入内容
+
+			//写入时，使用带缓存的 *Writer
+			writer := bufio.NewWriter(file)
+			for i := 0; i < 3; i++ {
+				writer.WriteString(str)
+			}
+			//因为 writer 是带缓存的，因此在调用 WriterString 方法时，内容是先写入缓存的
+			//所以要调用 flush方法，将缓存的数据真正写入到文件中。
+			writer.Flush()
 		})
 	})
 
