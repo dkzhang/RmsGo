@@ -34,7 +34,7 @@ func (rnm MemoryMap) QueryByID(nodeID int64) (resNode.Node, error) {
 		return *node, nil
 	} else {
 		return resNode.Node{},
-			fmt.Errorf("the project res (id = %d) info does not exist", nodeID)
+			fmt.Errorf("resNodeDM QueryByID error, resNode (id = %d) info does not exist", nodeID)
 	}
 }
 

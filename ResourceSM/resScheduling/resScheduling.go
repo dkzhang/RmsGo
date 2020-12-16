@@ -8,6 +8,7 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/dataInfra/resNodeDM"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/projectRes"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resAlloc"
+	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNode"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNodeTree"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/myUtils/arrayMerge"
@@ -59,6 +60,16 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 				fmt.Errorf(" QueryByID ProjectResourceInfo (projectID=%d) error: %v", projectID, err)
 		}
 	}
+
+	// remove group node in nodesAfter
+	j := 0
+	for i := 0; i < len(nodesAfter); i++ {
+		if nodesAfter[i] < resGNode.GroupBase {
+			nodesAfter[j] = nodesAfter[i]
+			j++
+		}
+	}
+	nodesAfter = nodesAfter[:j]
 
 	// (1) create the Resource Allocate Record
 	nodesChange, increased, reduced, err := arrayMerge.ComputeChange(pr.CpuNodesArray, nodesAfter)
