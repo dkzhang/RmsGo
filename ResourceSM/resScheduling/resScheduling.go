@@ -168,6 +168,16 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 		}
 	}
 
+	// remove group node in nodesAfter
+	j := 0
+	for i := 0; i < len(nodesAfter); i++ {
+		if nodesAfter[i] < resGNode.GroupBase {
+			nodesAfter[j] = nodesAfter[i]
+			j++
+		}
+	}
+	nodesAfter = nodesAfter[:j]
+
 	// (1) create the Resource Allocate Record
 	nodesChange, increased, reduced, err := arrayMerge.ComputeChange(pr.GpuNodesArray, nodesAfter)
 	if err != nil {
