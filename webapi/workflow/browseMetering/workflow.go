@@ -68,6 +68,15 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 
 func (wf Workflow) SystemApply(form generalForm.GeneralForm, userInfo user.UserInfo) (appID int, waErr webapiError.Err) {
 	projectID := form.ProjectID
+
+	pi, err := wf.pdm.QueryByID(projectID)
+	if err != nil {
+		return -1, webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryByID error: %v", err),
+			"在数据库中查询项目信息失败")
+	}
+	piJson, _ := json.Marshal(pi)
+
 	// (1) Query Project Metering Info from gRpc client
 	ms, err := wf.mc.QueryMetering(projectID, metering.TypeSettlement, "")
 	if err != nil {
@@ -93,7 +102,7 @@ func (wf Workflow) SystemApply(form generalForm.GeneralForm, userInfo user.UserI
 		ApplicantUserChineseName: userInfo.ChineseName,
 		DepartmentCode:           userInfo.DepartmentCode,
 		BasicContent:             string(msJson),
-		ExtraContent:             "",
+		ExtraContent:             string(piJson),
 	}
 
 	appID, err = wf.adm.Insert(theApplication)
