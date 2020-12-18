@@ -10,48 +10,46 @@ import (
 	"os"
 )
 
-var _ = Describe("Tree", func() {
+var _ = Describe("GPU Tree", func() {
 	var rootGNode resGNode.ResGNode
 	BeforeEach(func() {
 		rootGNode = resGNode.ResGNode{
-			ID:       1e4,
-			Label:    "偏移云",
+			ID:       2 * resGNode.GroupBase,
+			Label:    "偏移云GPU",
 			Children: nil,
 		}
 
-		lc := &resGNode.ResGNode{
-			ID:       11e4,
-			Label:    "浪潮云 CPU节点",
+		var pGroup *resGNode.ResGNode
+		///////////////////////////////////////////////////////////////////////
+		lc1 := &resGNode.ResGNode{
+			ID:       21 * resGNode.GroupBase,
+			Label:    "浪潮云GPU 1组",
 			Children: nil,
 		}
-		rootGNode.Children = append(rootGNode.Children, lc)
 
-		tempGroup := &resGNode.ResGNode{
-			ID:       111e4,
-			Label:    "Group1-1",
-			Children: nil,
-		}
-		for i := int64(1); i <= 256; i++ {
-			p := &resGNode.ResGNode{
-				ID:       i,
-				Label:    fmt.Sprintf("CpuNode%d", i),
+		nodeID := int64(1)
+		groupID := int64(1)
+
+		for ig := 283; ig <= 286; ig++ {
+			pGroup = &resGNode.ResGNode{
+				ID:       (2100 + groupID) * resGNode.GroupBase,
+				Label:    fmt.Sprintf("F%d", ig),
 				Children: nil,
 			}
-			tempGroup.Children = append(tempGroup.Children, p)
-
-			if i%32 == 0 {
-
-				lc.Children = append(lc.Children, tempGroup)
-
-				groupID := i/32 + 1
-				tempGroup = &resGNode.ResGNode{
-					ID:       110e4 + groupID*1e4,
-					Label:    fmt.Sprintf("Group1-%d", groupID),
+			for in := 1; in <= 16; in++ {
+				pNode := &resGNode.ResGNode{
+					ID:       nodeID,
+					Label:    fmt.Sprintf("G%d", in),
 					Children: nil,
 				}
+				pGroup.Children = append(pGroup.Children, pNode)
+				nodeID++
 			}
+			lc1.Children = append(lc1.Children, pGroup)
+			groupID++
 		}
 
+		rootGNode.Children = append(rootGNode.Children, lc1)
 	})
 	Context("Tree to Json", func() {
 		It("Tree to Json", func() {
@@ -65,7 +63,7 @@ var _ = Describe("Tree", func() {
 			By(fmt.Sprintf("Tree to Json = %s", str))
 
 			// write json text file
-			filePath := "tree.json"
+			filePath := "tree_gpu.json"
 			file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 			Expect(err).ShouldNot(HaveOccurred())
 
@@ -75,9 +73,8 @@ var _ = Describe("Tree", func() {
 
 			//写入时，使用带缓存的 *Writer
 			writer := bufio.NewWriter(file)
-			for i := 0; i < 3; i++ {
-				writer.WriteString(str)
-			}
+			writer.WriteString(str)
+
 			//因为 writer 是带缓存的，因此在调用 WriterString 方法时，内容是先写入缓存的
 			//所以要调用 flush方法，将缓存的数据真正写入到文件中。
 			writer.Flush()

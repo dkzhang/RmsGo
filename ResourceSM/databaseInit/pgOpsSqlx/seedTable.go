@@ -16,7 +16,7 @@ func SeedAllTable(db *sqlx.DB) {
 func seedNodeTable(db *sqlx.DB) {
 	// CPU Node DB
 	rndbC := resNodeDB.NewResNodePg(db, resNode.TableNameCPU)
-	for i := int64(1); i <= 256; i++ {
+	for i := int64(1); i <= 504; i++ {
 		ni := resNode.Node{
 			ID:            i,
 			Name:          fmt.Sprintf("CpuNode%d", i),
@@ -33,7 +33,7 @@ func seedNodeTable(db *sqlx.DB) {
 
 	// GPU Node DB
 	rndbG := resNodeDB.NewResNodePg(db, resNode.TableNameGPU)
-	for i := int64(1); i <= 66; i++ {
+	for i := int64(1); i <= 64; i++ {
 		ni := resNode.Node{
 			ID:            i,
 			Name:          fmt.Sprintf("GpuNode%d", i),

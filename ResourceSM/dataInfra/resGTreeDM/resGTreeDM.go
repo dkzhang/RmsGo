@@ -23,15 +23,16 @@ func NewResGTreeDM(ndm resNodeDM.ResNodeDM, jsonFilename string) (ResGTreeDM, er
 		return ResGTreeDM{}, fmt.Errorf("resGNodeTree.LoadFromJsonFile error: %v", err)
 	}
 
-	nodesMap, err := rtdm.nodeDM.GetAllMap()
-	if err != nil {
-		return ResGTreeDM{}, fmt.Errorf("nodeDM.GetAllMap error: %v", err)
-	}
+	// Temporarily not synchronize Node Label/Name
+	//nodesMap, err := rtdm.nodeDM.GetAllMap()
+	//if err != nil {
+	//	return ResGTreeDM{}, fmt.Errorf("nodeDM.GetAllMap error: %v", err)
+	//}
 
-	err = resGNodeTree.SynchronizeNodesInfo(&tree, nodesMap)
-	if err != nil {
-		return ResGTreeDM{}, fmt.Errorf("SynchronizeNodesInfo error: %v", err)
-	}
+	//err = resGNodeTree.SynchronizeNodesInfo(&tree, nodesMap)
+	//if err != nil {
+	//	return ResGTreeDM{}, fmt.Errorf("SynchronizeNodesInfo error: %v", err)
+	//}
 
 	resGNodeTree.Count(&tree)
 

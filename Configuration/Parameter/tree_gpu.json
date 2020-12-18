@@ -1,0 +1,362 @@
+{
+    "id": 20000,
+    "label": "偏移云GPU",
+    "disabled": false,
+    "children": [
+        {
+            "id": 210000,
+            "label": "浪潮云GPU 1组",
+            "disabled": false,
+            "children": [
+                {
+                    "id": 21010000,
+                    "label": "F283",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1,
+                            "label": "G1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 2,
+                            "label": "G2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 3,
+                            "label": "G3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 4,
+                            "label": "G4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 5,
+                            "label": "G5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 6,
+                            "label": "G6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 7,
+                            "label": "G7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 8,
+                            "label": "G8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 9,
+                            "label": "G9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 10,
+                            "label": "G10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 11,
+                            "label": "G11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 12,
+                            "label": "G12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 13,
+                            "label": "G13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 14,
+                            "label": "G14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 15,
+                            "label": "G15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 16,
+                            "label": "G16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 21020000,
+                    "label": "F284",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 17,
+                            "label": "G1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 18,
+                            "label": "G2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 19,
+                            "label": "G3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 20,
+                            "label": "G4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 21,
+                            "label": "G5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 22,
+                            "label": "G6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 23,
+                            "label": "G7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 24,
+                            "label": "G8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 25,
+                            "label": "G9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 26,
+                            "label": "G10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 27,
+                            "label": "G11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 28,
+                            "label": "G12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 29,
+                            "label": "G13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 30,
+                            "label": "G14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 31,
+                            "label": "G15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 32,
+                            "label": "G16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 21030000,
+                    "label": "F285",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 33,
+                            "label": "G1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 34,
+                            "label": "G2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 35,
+                            "label": "G3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 36,
+                            "label": "G4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 37,
+                            "label": "G5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 38,
+                            "label": "G6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 39,
+                            "label": "G7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 40,
+                            "label": "G8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 41,
+                            "label": "G9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 42,
+                            "label": "G10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 43,
+                            "label": "G11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 44,
+                            "label": "G12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 45,
+                            "label": "G13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 46,
+                            "label": "G14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 47,
+                            "label": "G15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 48,
+                            "label": "G16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 21040000,
+                    "label": "F286",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 49,
+                            "label": "G1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 50,
+                            "label": "G2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 51,
+                            "label": "G3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 52,
+                            "label": "G4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 53,
+                            "label": "G5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 54,
+                            "label": "G6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 55,
+                            "label": "G7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 56,
+                            "label": "G8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 57,
+                            "label": "G9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 58,
+                            "label": "G10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 59,
+                            "label": "G11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 60,
+                            "label": "G12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 61,
+                            "label": "G13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 62,
+                            "label": "G14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 63,
+                            "label": "G15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 64,
+                            "label": "G16",
+                            "disabled": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

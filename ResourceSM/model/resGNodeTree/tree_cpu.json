@@ -1,0 +1,2765 @@
+{
+    "id": 10000,
+    "label": "偏移云",
+    "disabled": false,
+    "children": [
+        {
+            "id": 110000,
+            "label": "浪潮云CPU 1组",
+            "disabled": false,
+            "children": [
+                {
+                    "id": 11010000,
+                    "label": "F287",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 2,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 3,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 4,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 5,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 6,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 7,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 8,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 9,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 10,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 11,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 12,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 13,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 14,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 15,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 16,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11020000,
+                    "label": "F288",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 17,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 18,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 19,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 20,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 21,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 22,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 23,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 24,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 25,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 26,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 27,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 28,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 29,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 30,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 31,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 32,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11030000,
+                    "label": "F289",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 33,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 34,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 35,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 36,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 37,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 38,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 39,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 40,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 41,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 42,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 43,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 44,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 45,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 46,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 47,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 48,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11040000,
+                    "label": "F290",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 49,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 50,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 51,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 52,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 53,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 54,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 55,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 56,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 57,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 58,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 59,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 60,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 61,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 62,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 63,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 64,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11050000,
+                    "label": "F291",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 65,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 66,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 67,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 68,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 69,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 70,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 71,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 72,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 73,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 74,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 75,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 76,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 77,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 78,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 79,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 80,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11060000,
+                    "label": "F292",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 81,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 82,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 83,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 84,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 85,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 86,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 87,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 88,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 89,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 90,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 91,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 92,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 93,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 94,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 95,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 96,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11070000,
+                    "label": "F293",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 97,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 98,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 99,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 100,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 101,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 102,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 103,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 104,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 105,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 106,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 107,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 108,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 109,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 110,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 111,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 112,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11080000,
+                    "label": "F294",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 113,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 114,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 115,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 116,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 117,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 118,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 119,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 120,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 121,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 122,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 123,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 124,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 125,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 126,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 127,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 128,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11090000,
+                    "label": "F295",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 129,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 130,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 131,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 132,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 133,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 134,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 135,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 136,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 137,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 138,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 139,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 140,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 141,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 142,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 143,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 144,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11100000,
+                    "label": "F296",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 145,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 146,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 147,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 148,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 149,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 150,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 151,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 152,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 153,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 154,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 155,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 156,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 157,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 158,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 159,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 160,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11110000,
+                    "label": "F297",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 161,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 162,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 163,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 164,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 165,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 166,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 167,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 168,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 169,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 170,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 171,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 172,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 173,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 174,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 175,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 176,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11120000,
+                    "label": "F298",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 177,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 178,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 179,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 180,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 181,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 182,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 183,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 184,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 185,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 186,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 187,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 188,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 189,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 190,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 191,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 192,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11130000,
+                    "label": "F299",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 193,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 194,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 195,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 196,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 197,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 198,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 199,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 200,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 201,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 202,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 203,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 204,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 205,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 206,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 207,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 208,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11140000,
+                    "label": "F300",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 209,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 210,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 211,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 212,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 213,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 214,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 215,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 216,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 217,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 218,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 219,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 220,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 221,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 222,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 223,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 224,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11150000,
+                    "label": "F301",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 225,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 226,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 227,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 228,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 229,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 230,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 231,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 232,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 233,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 234,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 235,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 236,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 237,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 238,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 239,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 240,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 11160000,
+                    "label": "F302",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 241,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 242,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 243,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 244,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 245,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 246,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 247,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 248,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 249,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 250,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 251,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 252,
+                            "label": "C12",
+                            "disabled": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 120000,
+            "label": "浪潮云CPU 2组",
+            "disabled": false,
+            "children": [
+                {
+                    "id": 12010000,
+                    "label": "F303",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1253,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1254,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1255,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1256,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1257,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1258,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1259,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1260,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1261,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1262,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1263,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1264,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1265,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1266,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1267,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1268,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12020000,
+                    "label": "F304",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1269,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1270,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1271,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1272,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1273,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1274,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1275,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1276,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1277,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1278,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1279,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1280,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1281,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1282,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1283,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1284,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12030000,
+                    "label": "F305",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1285,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1286,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1287,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1288,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1289,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1290,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1291,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1292,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1293,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1294,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1295,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1296,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1297,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1298,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1299,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1300,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12040000,
+                    "label": "F306",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1301,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1302,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1303,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1304,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1305,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1306,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1307,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1308,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1309,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1310,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1311,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1312,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1313,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1314,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1315,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1316,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12050000,
+                    "label": "F307",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1317,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1318,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1319,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1320,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1321,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1322,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1323,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1324,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1325,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1326,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1327,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1328,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1329,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1330,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1331,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1332,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12060000,
+                    "label": "F308",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1333,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1334,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1335,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1336,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1337,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1338,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1339,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1340,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1341,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1342,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1343,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1344,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1345,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1346,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1347,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1348,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12070000,
+                    "label": "F309",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1349,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1350,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1351,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1352,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1353,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1354,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1355,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1356,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1357,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1358,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1359,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1360,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1361,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1362,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1363,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1364,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12080000,
+                    "label": "F310",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1365,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1366,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1367,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1368,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1369,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1370,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1371,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1372,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1373,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1374,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1375,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1376,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1377,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1378,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1379,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1380,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12090000,
+                    "label": "F311",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1381,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1382,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1383,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1384,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1385,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1386,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1387,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1388,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1389,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1390,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1391,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1392,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1393,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1394,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1395,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1396,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12100000,
+                    "label": "F312",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1397,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1398,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1399,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1400,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1401,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1402,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1403,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1404,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1405,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1406,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1407,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1408,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1409,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1410,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1411,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1412,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12110000,
+                    "label": "F313",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1413,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1414,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1415,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1416,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1417,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1418,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1419,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1420,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1421,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1422,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1423,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1424,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1425,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1426,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1427,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1428,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12120000,
+                    "label": "F314",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1429,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1430,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1431,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1432,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1433,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1434,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1435,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1436,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1437,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1438,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1439,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1440,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1441,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1442,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1443,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1444,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12130000,
+                    "label": "F315",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1445,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1446,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1447,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1448,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1449,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1450,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1451,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1452,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1453,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1454,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1455,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1456,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1457,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1458,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1459,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1460,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12140000,
+                    "label": "F316",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1461,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1462,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1463,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1464,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1465,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1466,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1467,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1468,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1469,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1470,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1471,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1472,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1473,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1474,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1475,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1476,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12150000,
+                    "label": "F317",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 1477,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1478,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1479,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1480,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1481,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1482,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1483,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1484,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1485,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1486,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1487,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1488,
+                            "label": "C12",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1489,
+                            "label": "C13",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1490,
+                            "label": "C14",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1491,
+                            "label": "C15",
+                            "disabled": false
+                        },
+                        {
+                            "id": 1492,
+                            "label": "C16",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": 12160000,
+                    "label": "F318",
+                    "disabled": false,
+                    "children": [
+                        {
+                            "id": 493,
+                            "label": "C1",
+                            "disabled": false
+                        },
+                        {
+                            "id": 494,
+                            "label": "C2",
+                            "disabled": false
+                        },
+                        {
+                            "id": 495,
+                            "label": "C3",
+                            "disabled": false
+                        },
+                        {
+                            "id": 496,
+                            "label": "C4",
+                            "disabled": false
+                        },
+                        {
+                            "id": 497,
+                            "label": "C5",
+                            "disabled": false
+                        },
+                        {
+                            "id": 498,
+                            "label": "C6",
+                            "disabled": false
+                        },
+                        {
+                            "id": 499,
+                            "label": "C7",
+                            "disabled": false
+                        },
+                        {
+                            "id": 500,
+                            "label": "C8",
+                            "disabled": false
+                        },
+                        {
+                            "id": 501,
+                            "label": "C9",
+                            "disabled": false
+                        },
+                        {
+                            "id": 502,
+                            "label": "C10",
+                            "disabled": false
+                        },
+                        {
+                            "id": 503,
+                            "label": "C11",
+                            "disabled": false
+                        },
+                        {
+                            "id": 504,
+                            "label": "C12",
+                            "disabled": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
