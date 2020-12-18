@@ -88,7 +88,7 @@ var _ = Describe("CPU Tree", func() {
 			}
 			for in := 1; in <= 16; in++ {
 				pNode := &resGNode.ResGNode{
-					ID:       nodeID + 1e3,
+					ID:       nodeID,
 					Label:    fmt.Sprintf("C%d", in),
 					Children: nil,
 				}
