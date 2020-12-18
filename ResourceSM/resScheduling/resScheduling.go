@@ -12,7 +12,6 @@ import (
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resGNodeTree"
 	"github.com/dkzhang/RmsGo/ResourceSM/model/resNode"
 	"github.com/dkzhang/RmsGo/myUtils/arrayMerge"
-	"github.com/dkzhang/RmsGo/myUtils/nodeEncode"
 	"sort"
 	"time"
 )
@@ -79,13 +78,15 @@ func (rs ResScheduling) SchedulingCPU(projectID int, nodesAfter []int64, ctrlID 
 	}
 
 	rar := resAlloc.Record{
-		ProjectID:          pr.ProjectID,
-		NumBefore:          pr.CpuNodesAcquired,
-		AllocInfoBefore:    pr.CpuNodesArray,
-		AllocInfoBeforeStr: nodeEncode.IntArrayToBase64Str(pr.CpuNodesArray),
+		ProjectID:       pr.ProjectID,
+		NumBefore:       pr.CpuNodesAcquired,
+		AllocInfoBefore: pr.CpuNodesArray,
+		//AllocInfoBeforeStr: nodeEncode.IntArrayToBase64Str(pr.CpuNodesArray),
+		AllocInfoBeforeStr: fmt.Sprintf("%v", pr.CpuNodesArray),
 		NumAfter:           len(nodesAfter),
 		AllocInfoAfter:     nodesAfter,
-		AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
+		//AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
+		AllocInfoAfterStr:  fmt.Sprintf("%v", nodesAfter),
 		NumChange:          increased - reduced,
 		AllocInfoChange:    nodesChange,
 		AllocInfoChangeStr: fmt.Sprintf("%v", nodesChange),
@@ -186,13 +187,15 @@ func (rs ResScheduling) SchedulingGPU(projectID int, nodesAfter []int64, ctrlID 
 	}
 
 	rar := resAlloc.Record{
-		ProjectID:          pr.ProjectID,
-		NumBefore:          pr.GpuNodesAcquired,
-		AllocInfoBefore:    pr.GpuNodesArray,
-		AllocInfoBeforeStr: nodeEncode.IntArrayToBase64Str(pr.GpuNodesArray),
+		ProjectID:       pr.ProjectID,
+		NumBefore:       pr.GpuNodesAcquired,
+		AllocInfoBefore: pr.GpuNodesArray,
+		//AllocInfoBeforeStr: nodeEncode.IntArrayToBase64Str(pr.GpuNodesArray),
+		AllocInfoBeforeStr: fmt.Sprintf("%v", pr.GpuNodesArray),
 		NumAfter:           len(nodesAfter),
 		AllocInfoAfter:     nodesAfter,
-		AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
+		//AllocInfoAfterStr:  nodeEncode.IntArrayToBase64Str(nodesAfter),
+		AllocInfoAfterStr:  fmt.Sprintf("%v", nodesAfter),
 		NumChange:          increased - reduced,
 		AllocInfoChange:    nodesChange,
 		AllocInfoChangeStr: fmt.Sprintf("%v", nodesChange),

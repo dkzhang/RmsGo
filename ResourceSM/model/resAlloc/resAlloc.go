@@ -32,18 +32,20 @@ var SchemaRecord = `
     		project_id int,			
 			num_before int,
 			alloc_info_before integer ARRAY,
-			alloc_info_before_str varchar(1024),
+			alloc_info_before_str varchar(32768),
 			num_after int,
 			alloc_info_after integer ARRAY,
-			alloc_info_after_str varchar(1024),			
+			alloc_info_after_str varchar(32768),			
 			num_change int,
 			alloc_info_change integer ARRAY,
-			alloc_info_change_str varchar(1024),			
+			alloc_info_change_str varchar(32768),			
 			ctrl_id	 int,
 			ctrl_cn_name varchar(32),
 			created_at TIMESTAMP WITH TIME ZONE
 		);
 		`
+
+// 32K = 1024 * 32 = 32768
 
 var TableNameCPU = "res_alloc_cpu"
 var TableNameGPU = "res_alloc_gpu"

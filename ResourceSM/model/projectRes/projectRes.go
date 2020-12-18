@@ -41,15 +41,17 @@ var SchemaInfo = `
 			gpu_nodes_acquired int,
 			storage_size_acquired int,	
 			cpu_nodes_array integer ARRAY,
-			cpu_nodes_str varchar(1024),
+			cpu_nodes_str varchar(32768),
 			gpu_nodes_array integer ARRAY,
-			gpu_nodes_str varchar(1024),
-			storage_alloc_info varchar(1024),
+			gpu_nodes_str varchar(32768),
+			storage_alloc_info varchar(32768),
 
 			created_at TIMESTAMP WITH TIME ZONE,
 			updated_at TIMESTAMP WITH TIME ZONE
 		);
 `
+
+// 32K = 1024 * 32 = 32768
 
 // no history table, delete res info after project archived.
 var TableName = "project_res_info"
