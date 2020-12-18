@@ -27,46 +27,39 @@ var _ = Describe("CPU Tree", func() {
 			Children: nil,
 		}
 
-		nodeID := int64(1)
-		groupID := int64(1)
-
 		for ig := 287; ig <= 301; ig++ {
 			pGroup = &resGNode.ResGNode{
-				ID:       (1100 + groupID) * resGNode.GroupBase,
+				ID:       int64((1000 + ig) * resGNode.GroupBase),
 				Label:    fmt.Sprintf("F%d", ig),
 				Children: nil,
 			}
 			for in := 1; in <= 16; in++ {
 				pNode := &resGNode.ResGNode{
-					ID:       nodeID,
+					ID:       int64(ig*100 + in),
 					Label:    fmt.Sprintf("C%d", in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
-				nodeID++
 			}
 			lc1.Children = append(lc1.Children, pGroup)
-			groupID++
 		}
 
 		{
 			ig := 302
 			pGroup = &resGNode.ResGNode{
-				ID:       (1100 + groupID) * resGNode.GroupBase,
+				ID:       int64((1000 + ig) * resGNode.GroupBase),
 				Label:    fmt.Sprintf("F%d", ig),
 				Children: nil,
 			}
 			for in := 1; in <= 12; in++ {
 				pNode := &resGNode.ResGNode{
-					ID:       nodeID,
+					ID:       int64(ig*100 + in),
 					Label:    fmt.Sprintf("C%d", in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
-				nodeID++
 			}
 			lc1.Children = append(lc1.Children, pGroup)
-			groupID++
 		}
 
 		rootGNode.Children = append(rootGNode.Children, lc1)
@@ -78,45 +71,39 @@ var _ = Describe("CPU Tree", func() {
 			Children: nil,
 		}
 
-		groupID = int64(1)
-
 		for ig := 303; ig <= 317; ig++ {
 			pGroup = &resGNode.ResGNode{
-				ID:       (1200 + groupID) * resGNode.GroupBase,
+				ID:       int64((1000 + ig) * resGNode.GroupBase),
 				Label:    fmt.Sprintf("F%d", ig),
 				Children: nil,
 			}
 			for in := 1; in <= 16; in++ {
 				pNode := &resGNode.ResGNode{
-					ID:       nodeID,
+					ID:       int64(ig*100 + in),
 					Label:    fmt.Sprintf("C%d", in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
-				nodeID++
 			}
 			lc2.Children = append(lc2.Children, pGroup)
-			groupID++
 		}
 
 		{
 			ig := 318
 			pGroup = &resGNode.ResGNode{
-				ID:       (1200 + groupID) * resGNode.GroupBase,
+				ID:       int64((1000 + ig) * resGNode.GroupBase),
 				Label:    fmt.Sprintf("F%d", ig),
 				Children: nil,
 			}
 			for in := 1; in <= 12; in++ {
 				pNode := &resGNode.ResGNode{
-					ID:       nodeID,
+					ID:       int64(ig*100 + in),
 					Label:    fmt.Sprintf("C%d", in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
-				nodeID++
 			}
 			lc2.Children = append(lc2.Children, pGroup)
-			groupID++
 		}
 
 		rootGNode.Children = append(rootGNode.Children, lc2)

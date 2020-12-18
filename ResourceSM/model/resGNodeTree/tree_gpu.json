@@ -1,356 +1,356 @@
 {
-    "id": 20000,
+    "id": 200000,
     "label": "偏移云GPU",
     "disabled": false,
     "children": [
         {
-            "id": 210000,
+            "id": 2100000,
             "label": "浪潮云GPU 1组",
             "disabled": false,
             "children": [
                 {
-                    "id": 21010000,
+                    "id": 228300000,
                     "label": "F283",
                     "disabled": false,
                     "children": [
                         {
-                            "id": 1,
+                            "id": 28301,
                             "label": "G1",
                             "disabled": false
                         },
                         {
-                            "id": 2,
+                            "id": 28302,
                             "label": "G2",
                             "disabled": false
                         },
                         {
-                            "id": 3,
+                            "id": 28303,
                             "label": "G3",
                             "disabled": false
                         },
                         {
-                            "id": 4,
+                            "id": 28304,
                             "label": "G4",
                             "disabled": false
                         },
                         {
-                            "id": 5,
+                            "id": 28305,
                             "label": "G5",
                             "disabled": false
                         },
                         {
-                            "id": 6,
+                            "id": 28306,
                             "label": "G6",
                             "disabled": false
                         },
                         {
-                            "id": 7,
+                            "id": 28307,
                             "label": "G7",
                             "disabled": false
                         },
                         {
-                            "id": 8,
+                            "id": 28308,
                             "label": "G8",
                             "disabled": false
                         },
                         {
-                            "id": 9,
+                            "id": 28309,
                             "label": "G9",
                             "disabled": false
                         },
                         {
-                            "id": 10,
+                            "id": 28310,
                             "label": "G10",
                             "disabled": false
                         },
                         {
-                            "id": 11,
+                            "id": 28311,
                             "label": "G11",
                             "disabled": false
                         },
                         {
-                            "id": 12,
+                            "id": 28312,
                             "label": "G12",
                             "disabled": false
                         },
                         {
-                            "id": 13,
+                            "id": 28313,
                             "label": "G13",
                             "disabled": false
                         },
                         {
-                            "id": 14,
+                            "id": 28314,
                             "label": "G14",
                             "disabled": false
                         },
                         {
-                            "id": 15,
+                            "id": 28315,
                             "label": "G15",
                             "disabled": false
                         },
                         {
-                            "id": 16,
+                            "id": 28316,
                             "label": "G16",
                             "disabled": false
                         }
                     ]
                 },
                 {
-                    "id": 21020000,
+                    "id": 228400000,
                     "label": "F284",
                     "disabled": false,
                     "children": [
                         {
-                            "id": 17,
+                            "id": 28401,
                             "label": "G1",
                             "disabled": false
                         },
                         {
-                            "id": 18,
+                            "id": 28402,
                             "label": "G2",
                             "disabled": false
                         },
                         {
-                            "id": 19,
+                            "id": 28403,
                             "label": "G3",
                             "disabled": false
                         },
                         {
-                            "id": 20,
+                            "id": 28404,
                             "label": "G4",
                             "disabled": false
                         },
                         {
-                            "id": 21,
+                            "id": 28405,
                             "label": "G5",
                             "disabled": false
                         },
                         {
-                            "id": 22,
+                            "id": 28406,
                             "label": "G6",
                             "disabled": false
                         },
                         {
-                            "id": 23,
+                            "id": 28407,
                             "label": "G7",
                             "disabled": false
                         },
                         {
-                            "id": 24,
+                            "id": 28408,
                             "label": "G8",
                             "disabled": false
                         },
                         {
-                            "id": 25,
+                            "id": 28409,
                             "label": "G9",
                             "disabled": false
                         },
                         {
-                            "id": 26,
+                            "id": 28410,
                             "label": "G10",
                             "disabled": false
                         },
                         {
-                            "id": 27,
+                            "id": 28411,
                             "label": "G11",
                             "disabled": false
                         },
                         {
-                            "id": 28,
+                            "id": 28412,
                             "label": "G12",
                             "disabled": false
                         },
                         {
-                            "id": 29,
+                            "id": 28413,
                             "label": "G13",
                             "disabled": false
                         },
                         {
-                            "id": 30,
+                            "id": 28414,
                             "label": "G14",
                             "disabled": false
                         },
                         {
-                            "id": 31,
+                            "id": 28415,
                             "label": "G15",
                             "disabled": false
                         },
                         {
-                            "id": 32,
+                            "id": 28416,
                             "label": "G16",
                             "disabled": false
                         }
                     ]
                 },
                 {
-                    "id": 21030000,
+                    "id": 228500000,
                     "label": "F285",
                     "disabled": false,
                     "children": [
                         {
-                            "id": 33,
+                            "id": 28501,
                             "label": "G1",
                             "disabled": false
                         },
                         {
-                            "id": 34,
+                            "id": 28502,
                             "label": "G2",
                             "disabled": false
                         },
                         {
-                            "id": 35,
+                            "id": 28503,
                             "label": "G3",
                             "disabled": false
                         },
                         {
-                            "id": 36,
+                            "id": 28504,
                             "label": "G4",
                             "disabled": false
                         },
                         {
-                            "id": 37,
+                            "id": 28505,
                             "label": "G5",
                             "disabled": false
                         },
                         {
-                            "id": 38,
+                            "id": 28506,
                             "label": "G6",
                             "disabled": false
                         },
                         {
-                            "id": 39,
+                            "id": 28507,
                             "label": "G7",
                             "disabled": false
                         },
                         {
-                            "id": 40,
+                            "id": 28508,
                             "label": "G8",
                             "disabled": false
                         },
                         {
-                            "id": 41,
+                            "id": 28509,
                             "label": "G9",
                             "disabled": false
                         },
                         {
-                            "id": 42,
+                            "id": 28510,
                             "label": "G10",
                             "disabled": false
                         },
                         {
-                            "id": 43,
+                            "id": 28511,
                             "label": "G11",
                             "disabled": false
                         },
                         {
-                            "id": 44,
+                            "id": 28512,
                             "label": "G12",
                             "disabled": false
                         },
                         {
-                            "id": 45,
+                            "id": 28513,
                             "label": "G13",
                             "disabled": false
                         },
                         {
-                            "id": 46,
+                            "id": 28514,
                             "label": "G14",
                             "disabled": false
                         },
                         {
-                            "id": 47,
+                            "id": 28515,
                             "label": "G15",
                             "disabled": false
                         },
                         {
-                            "id": 48,
+                            "id": 28516,
                             "label": "G16",
                             "disabled": false
                         }
                     ]
                 },
                 {
-                    "id": 21040000,
+                    "id": 228600000,
                     "label": "F286",
                     "disabled": false,
                     "children": [
                         {
-                            "id": 49,
+                            "id": 28601,
                             "label": "G1",
                             "disabled": false
                         },
                         {
-                            "id": 50,
+                            "id": 28602,
                             "label": "G2",
                             "disabled": false
                         },
                         {
-                            "id": 51,
+                            "id": 28603,
                             "label": "G3",
                             "disabled": false
                         },
                         {
-                            "id": 52,
+                            "id": 28604,
                             "label": "G4",
                             "disabled": false
                         },
                         {
-                            "id": 53,
+                            "id": 28605,
                             "label": "G5",
                             "disabled": false
                         },
                         {
-                            "id": 54,
+                            "id": 28606,
                             "label": "G6",
                             "disabled": false
                         },
                         {
-                            "id": 55,
+                            "id": 28607,
                             "label": "G7",
                             "disabled": false
                         },
                         {
-                            "id": 56,
+                            "id": 28608,
                             "label": "G8",
                             "disabled": false
                         },
                         {
-                            "id": 57,
+                            "id": 28609,
                             "label": "G9",
                             "disabled": false
                         },
                         {
-                            "id": 58,
+                            "id": 28610,
                             "label": "G10",
                             "disabled": false
                         },
                         {
-                            "id": 59,
+                            "id": 28611,
                             "label": "G11",
                             "disabled": false
                         },
                         {
-                            "id": 60,
+                            "id": 28612,
                             "label": "G12",
                             "disabled": false
                         },
                         {
-                            "id": 61,
+                            "id": 28613,
                             "label": "G13",
                             "disabled": false
                         },
                         {
-                            "id": 62,
+                            "id": 28614,
                             "label": "G14",
                             "disabled": false
                         },
                         {
-                            "id": 63,
+                            "id": 28615,
                             "label": "G15",
                             "disabled": false
                         },
                         {
-                            "id": 64,
+                            "id": 28616,
                             "label": "G16",
                             "disabled": false
                         }

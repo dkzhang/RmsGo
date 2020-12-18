@@ -1,6 +1,6 @@
 package resGNode
 
-const GroupBase = 1e4
+const GroupBase = 1e5
 
 func CountRO(gn *ResGNode) (nodesNum int) {
 	nodesNum = 0
