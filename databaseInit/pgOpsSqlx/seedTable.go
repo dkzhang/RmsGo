@@ -92,38 +92,26 @@ func seedUserTable(db *sqlx.DB) {
 	//////////////////////////////////////////////////////
 
 	theUserDB.InsertUser(user.UserInfo{
-		UserName:       "ctrl-lhs",
-		ChineseName:    "李华松调度",
+		UserName:       "ctrl-jy",
+		ChineseName:    "贾琰",
 		Department:     "调度小组",
 		DepartmentCode: "ctrl",
-		Section:        "测试RoleController",
-		Mobile:         "18617772241",
+		Section:        "RoleController",
+		Mobile:         "15230464216",
 		Role:           user.RoleController,
 		Status:         user.StatusNormal,
-		Remarks:        "测试用调度员",
+		Remarks:        "调度员",
 	})
 
 	theUserDB.InsertUser(user.UserInfo{
-		UserName:       "app-lhs",
-		ChineseName:    "李华松审批人",
-		Department:     "计服中心3",
-		DepartmentCode: "jf3",
-		Section:        "测试RoleApprover",
-		Mobile:         "18617772241",
-		Role:           user.RoleApprover,
+		UserName:       "ctrl-zym",
+		ChineseName:    "赵玉梅",
+		Department:     "调度小组",
+		DepartmentCode: "ctrl",
+		Section:        "RoleController",
+		Mobile:         "15930217912",
+		Role:           user.RoleController,
 		Status:         user.StatusNormal,
-		Remarks:        "测试用审批人",
-	})
-
-	theUserDB.InsertUser(user.UserInfo{
-		UserName:       "pc-lhs",
-		ChineseName:    "李华松项目长",
-		Department:     "计服中心3",
-		DepartmentCode: "jf3",
-		Section:        "测试RoleProjectChief",
-		Mobile:         "18617772241",
-		Role:           user.RoleProjectChief,
-		Status:         user.StatusNormal,
-		Remarks:        "测试用项目长",
+		Remarks:        "调度员",
 	})
 }
