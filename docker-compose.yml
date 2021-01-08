@@ -18,6 +18,7 @@ services:
     secrets:
       - SmsSE
       - DbSE
+      - LoginSE
     depends_on:
       - db
       - redis
@@ -66,6 +67,8 @@ secrets:
     file: ./Configuration/Security/sms.yaml
   DbSE:
     file: ./Configuration/Security/database.yaml
+  LoginSE:
+    file: ./Configuration/Security/loginSec.yaml
 
 networks:
 #  frontend:

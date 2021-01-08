@@ -63,6 +63,7 @@ type InfraConfigFile struct {
 	SmsSE      string
 	DbSE       string
 	LoginConf  string
+	LoginSec   string
 }
 
 func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
@@ -118,7 +119,7 @@ func NewInfrastructure(icf InfraConfigFile) *Infrastructure {
 		}).Fatal("userConfig.LoadLoginSecurity error.")
 	}
 
-	theInfras.TheLoginSecurity, err = userSecurity.LoadLoginSecurity()
+	theInfras.TheLoginSecurity, err = userSecurity.LoadLoginSecurity(icf.LoginSec)
 	if err != nil {
 		theInfras.TheLogMap.Log(logMap.DEFAULT).WithFields(logrus.Fields{
 			"error": err,

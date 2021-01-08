@@ -28,14 +28,14 @@ type RedisSecurity struct {
 	//Password string `yaml:"password"`
 }
 
-func LoadDbSecurity(filepath string) (theDbConfig DbSecurity, err error) {
-	dbConfFile, err := ioutil.ReadFile(filepath)
+func LoadDbSecurity(filepath string) (dbSec DbSecurity, err error) {
+	dbSecFile, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		return DbSecurity{}, fmt.Errorf("LoadDbSecurity ioutil.ReadFile error: %v", err)
 	}
-	err = yaml.Unmarshal(dbConfFile, &theDbConfig)
+	err = yaml.Unmarshal(dbSecFile, &dbSec)
 	if err != nil {
 		return DbSecurity{}, fmt.Errorf("LoadDbSecurity yaml.Unmarshal error: %v", err)
 	}
-	return theDbConfig, nil
+	return dbSec, nil
 }

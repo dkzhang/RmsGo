@@ -25,6 +25,7 @@ func Serve() {
 		SmsSE:      os.Getenv("SmsSE"),
 		DbSE:       os.Getenv("DbSE"),
 		LoginConf:  os.Getenv("LoginConf"),
+		LoginSec:   os.Getenv("LoginSec"),
 	})
 
 	r := gin.Default()
