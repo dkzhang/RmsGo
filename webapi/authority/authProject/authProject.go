@@ -70,6 +70,19 @@ func init() {
 
 	theProjectAuthorityTable = append(theProjectAuthorityTable, projectAuthority{
 		RelationShipBetween: func(userLoginInfo user.UserInfo, projectAccessed project.Info) bool {
+			if userLoginInfo.Role == user.RoleApprover2 {
+				return true
+			} else {
+				return false
+			}
+		},
+		Operation:   OPS_RETRIEVE,
+		Permission:  true,
+		Description: "Allow RoleApprover2 RETRIEVE Project (ALL)",
+	})
+
+	theProjectAuthorityTable = append(theProjectAuthorityTable, projectAuthority{
+		RelationShipBetween: func(userLoginInfo user.UserInfo, projectAccessed project.Info) bool {
 			if userLoginInfo.Role == user.RoleController {
 				return true
 			} else {
@@ -78,7 +91,7 @@ func init() {
 		},
 		Operation:   OPS_RETRIEVE | OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleController RETRIEVE Project",
+		Description: "Allow RoleController RETRIEVE & UPDATE Project (ALL)",
 	})
 }
 

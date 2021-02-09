@@ -62,7 +62,20 @@ func init() {
 		},
 		Operation:   OPS_RETRIEVE | OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleProjectChief RETRIEVE and UPDATE Application",
+		Description: "Allow RoleApprover RETRIEVE and UPDATE Application from his department",
+	})
+
+	theApplicationAuthorityTable = append(theApplicationAuthorityTable, applicationAuthority{
+		RelationShipBetween: func(userLoginInfo user.UserInfo, applicationAccessed application.Application) bool {
+			if userLoginInfo.Role == user.RoleApprover2 {
+				return true
+			} else {
+				return false
+			}
+		},
+		Operation:   OPS_RETRIEVE | OPS_UPDATE,
+		Permission:  true,
+		Description: "Allow RoleApprover RETRIEVE and UPDATE Application (ALL)",
 	})
 
 	theApplicationAuthorityTable = append(theApplicationAuthorityTable, applicationAuthority{
@@ -75,7 +88,7 @@ func init() {
 		},
 		Operation:   OPS_RETRIEVE | OPS_UPDATE,
 		Permission:  true,
-		Description: "Allow RoleProjectChief RETRIEVE and UPDATE Application",
+		Description: "Allow RoleProjectChief RETRIEVE and UPDATE Application (ALL)",
 	})
 }
 

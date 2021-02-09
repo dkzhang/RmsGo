@@ -5,8 +5,9 @@ import "github.com/dkzhang/RmsGo/webapi/model/user"
 const (
 	AppStatusProjectChief = user.RoleProjectChief
 	AppStatusApprover     = user.RoleApprover
+	AppStatusApprover2    = user.RoleApprover2
 	AppStatusController   = user.RoleController
-	AppStatusArchived     = 16
+	AppStatusArchived     = user.RoleSystemArchiver
 
 	AppStatusALL = -1
 )

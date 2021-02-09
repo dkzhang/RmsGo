@@ -9,7 +9,9 @@ type UserInfo struct {
 	UserID int `db:"user_id" json:"user_id"`
 
 	//登录名，含所属单位前缀，唯一
-	UserName string `db:"user_name" json:"user_name"`
+	UserName         string `db:"user_name" json:"user_name"`
+	UserCryptoSalt   string `db:"user_crypto_salt" json:"user_crypto_salt"`
+	UserCryptoPasswd string `db:"user_crypto_passwd" json:"user_crypto_passwd"`
 
 	ChineseName string `db:"chinese_name" json:"chinese_name"`
 
@@ -30,6 +32,8 @@ var SchemaUser = `
 		CREATE TABLE user_info (
     		user_id SERIAL PRIMARY KEY,
 			user_name varchar(32) UNIQUE,
+			user_crypto_salt varchar(1024),
+			user_crypto_passwd varchar(1024),
 			chinese_name varchar(256), 
 			department varchar(256),
 			department_code varchar(32),
@@ -42,10 +46,13 @@ var SchemaUser = `
 		`
 
 const (
-	RoleProjectChief = 1
-	RoleApprover     = 2
-	RoleController   = 8
-	RoleSystem       = 1024
+	RoleProjectChief   = 1
+	RoleApprover       = 2
+	RoleApprover2      = 4
+	RoleObserver       = 1 << 20
+	RoleController     = 1 << 21
+	RoleSystemArchiver = 1 << 30
+	RoleSystem         = 1 << 31
 )
 
 const (

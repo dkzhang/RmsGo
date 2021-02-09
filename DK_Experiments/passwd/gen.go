@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"golang.org/x/crypto/scrypt"
 	"io"
@@ -21,7 +22,13 @@ func main() {
 		log.Fatal(err)
 	} else {
 		fmt.Printf("salt=%v\n", salt)
-		fmt.Printf("salt=%x\n", salt)
+		saltHex := hex.EncodeToString(salt)
+		fmt.Printf("saltHex=%s\n", saltHex)
+		saltByte, err := hex.DecodeString(saltHex)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("saltHex=%v\n", saltByte)
 	}
 
 	hash, err := scrypt.Key([]byte(PASS_WORD), salt, 1<<15, 8, 1, PW_HASH_BYTES)
