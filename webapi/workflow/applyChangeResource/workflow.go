@@ -57,6 +57,22 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, lm lo
 		Action:    application.AppActionReject,
 	}] = wf.ApproverProcessPassOrReject
 
+	// 审批人2通过
+	processMap[workflow.KeyTSRA{
+		AppType:   application.AppTypeChange,
+		AppStatus: application.AppStatusApprover2,
+		UserRole:  user.RoleApprover2,
+		Action:    application.AppActionPass,
+	}] = wf.Approver2ProcessPassOrReject
+
+	// 审批人2拒绝
+	processMap[workflow.KeyTSRA{
+		AppType:   application.AppTypeChange,
+		AppStatus: application.AppStatusApprover2,
+		UserRole:  user.RoleApprover2,
+		Action:    application.AppActionReject,
+	}] = wf.Approver2ProcessPassOrReject
+
 	// 项目长重新提交
 	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeChange,
@@ -162,6 +178,82 @@ func (wf Workflow) ProjectChiefApply(form generalForm.GeneralForm, userInfo user
 }
 
 func (wf Workflow) ApproverProcessPassOrReject(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryByID error: %v", err),
+			"在数据库中查询项目信息失败")
+	}
+
+	// Check Action value
+	switch form.Action {
+	case 1:
+		// Insert New ApplicationOps
+		theAppOpsRecord := application.AppOpsRecord{
+			//RecordID:           0,
+			ProjectID:          theProject.ProjectID,
+			ApplicationID:      app.ApplicationID,
+			OpsUserID:          userInfo.UserID,
+			OpsUserChineseName: userInfo.ChineseName,
+			Action:             form.Action,
+			ActionStr:          "是",
+			BasicInfo:          form.BasicContent,
+			ExtraInfo:          form.ExtraContent,
+		}
+		_, err := wf.adm.InsertAppOps(theAppOpsRecord)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
+				"无法为审批人在数据库中新建申请单操作记录")
+		}
+
+		// Update Application
+		app.Status = application.AppStatusApprover2
+		err = wf.adm.Update(app)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("Update for Approver error: %v", err),
+				"无法为审批人在数据库中更新Application")
+		}
+	case -1:
+		// Insert New ApplicationOps
+		theAppOpsRecord := application.AppOpsRecord{
+			//RecordID:           0,
+			ProjectID:          theProject.ProjectID,
+			ApplicationID:      app.ApplicationID,
+			OpsUserID:          userInfo.UserID,
+			OpsUserChineseName: userInfo.ChineseName,
+			Action:             form.Action,
+			ActionStr:          "否",
+			BasicInfo:          form.BasicContent,
+			ExtraInfo:          form.ExtraContent,
+		}
+		_, err := wf.adm.InsertAppOps(theAppOpsRecord)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
+				"无法为审批人在数据库中新建申请单操作记录")
+		}
+
+		// Update Application
+		app.Status = application.AppStatusProjectChief
+		err = wf.adm.Update(app)
+		if err != nil {
+			return webapiError.WaErr(webapiError.TypeDatabaseError,
+				fmt.Sprintf("Update for Approver error: %v", err),
+				"无法为审批人在数据库中更新Application")
+		}
+
+	default:
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("unsupported action value: %d", form.Action),
+			"不支持此action值")
+	}
+
+	return nil
+}
+
+func (wf Workflow) Approver2ProcessPassOrReject(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
 	theProject, err := wf.pdm.QueryByID(app.ProjectID)
 	if err != nil {
 		return webapiError.WaErr(webapiError.TypeDatabaseError,
