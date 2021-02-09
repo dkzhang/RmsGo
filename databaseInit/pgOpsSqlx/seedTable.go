@@ -92,7 +92,7 @@ func seedUserTable(db *sqlx.DB) {
 	//////////////////////////////////////////////////////
 
 	theUserDB.InsertUser(user.UserInfo{
-		UserName:       "app-emd",
+		UserName:       "emd",
 		ChineseName:    "设备物资部审核",
 		Department:     "设备物资部",
 		DepartmentCode: "EMD",
