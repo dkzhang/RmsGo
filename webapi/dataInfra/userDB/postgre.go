@@ -77,7 +77,7 @@ func (upg UserInPostgre) UpdateUserDepartment(oldDepCode string, newDep string, 
 }
 
 func (upg UserInPostgre) InsertUser(ui user.UserInfo) (err error) {
-	insertUser := `INSERT INTO user_info (user_name, chinese_name, department, department_code, section, mobile, role, status,remarks) VALUES (:user_name, :chinese_name, :department, :department_code, :section, :mobile, :role, :status, :remarks)`
+	insertUser := `INSERT INTO user_info (user_name, user_crypto_salt, user_crypto_passwd, chinese_name, department, department_code, section, mobile, role, status,remarks) VALUES (:user_name, :user_crypto_salt,:user_crypto_passwd,:chinese_name, :department, :department_code, :section, :mobile, :role, :status, :remarks)`
 	result, err := upg.db.NamedExec(insertUser, ui)
 	if err != nil {
 		return fmt.Errorf("db.NamedExec(insertUser, ui), UserName = %s, UserInfo = %v :%v", ui.UserName, ui, err)
