@@ -61,13 +61,13 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			}).Error("Query Project By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询项目长相关项目信息失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关项目信息失败", user.RoleStrProjectChief),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"projects": projectFilterByStatus(pros, piStatus),
-			"msg":      "查询项目长相关申请单成功",
+			"msg":      fmt.Sprintf("查询%s相关项目信息成功", user.RoleStrProjectChief),
 		})
 	case user.RoleApprover:
 		pros, err := h.theProjectDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode)
@@ -78,13 +78,30 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			}).Error("Query Project By DC error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询审批人相关项目信息失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关项目信息失败", user.RoleStrApprover),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"projects": projectFilterByStatus(pros, piStatus),
-			"msg":      "查询审批人相关申请单成功",
+			"msg":      fmt.Sprintf("查询%s相关项目信息成功", user.RoleStrApprover),
+		})
+	case user.RoleApprover2:
+		pros, err := h.theProjectDM.QueryAllInfo()
+		if err != nil {
+			h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{
+				"userID": userLoginInfo.UserID,
+				"error":  err,
+			}).Error("Query Project All error")
+
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": fmt.Sprintf("数据库中查询%s相关项目信息失败", user.RoleStrApprover2),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"projects": projectFilterByStatus(pros, piStatus),
+			"msg":      fmt.Sprintf("查询%s相关项目信息成功", user.RoleStrApprover2),
 		})
 	case user.RoleController:
 		pros, err := h.theProjectDM.QueryAllInfo()
@@ -95,13 +112,13 @@ func (h HandleProject) RetrieveByUserLogin(c *gin.Context) {
 			}).Error("Query Project All error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询调度员相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关项目信息失败", user.RoleStrController),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"projects": projectFilterByStatus(pros, piStatus),
-			"msg":      "查询项目长相关申请单成功",
+			"msg":      fmt.Sprintf("查询%s相关项目信息成功", user.RoleStrController),
 		})
 	default:
 		h.theLogMap.Log(logMap.NORMAL, logMap.LOGIN).WithFields(logrus.Fields{

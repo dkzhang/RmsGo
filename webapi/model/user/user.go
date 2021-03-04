@@ -56,6 +56,16 @@ const (
 )
 
 const (
+	RoleStrProjectChief   = "项目长"
+	RoleStrApprover       = "审批人"
+	RoleStrApprover2      = "云资源运营中心"
+	RoleStrObserver       = "观察员"
+	RoleStrController     = "调度员"
+	RoleStrSystemArchiver = "SystemArchiver"
+	RoleStrSystem         = "System"
+)
+
+const (
 	StatusNormal  = 1
 	StatusDisable = 2
 	StatusDelete  = 4

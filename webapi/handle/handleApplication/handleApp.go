@@ -208,13 +208,13 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			}).Error("Query Application By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询项目长相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrProjectChief),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"apps": apps,
-			"msg":  "查询项目长相关申请单成功",
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrProjectChief),
 		})
 	case user.RoleApprover:
 		apps, err := h.theAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, appType, appStatus)
@@ -225,13 +225,30 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			}).Error("Query Application By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询审批人相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrApprover),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"apps": apps,
-			"msg":  "查询项目长相关申请单成功",
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrApprover),
+		})
+	case user.RoleApprover2:
+		apps, err := h.theAppDM.QueryAll(appType, appStatus)
+		if err != nil {
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+				"userID": userLoginInfo.UserID,
+				"error":  err,
+			}).Error("Query Application By Owner error")
+
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrApprover2),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"apps": apps,
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrApprover2),
 		})
 	case user.RoleController:
 		apps, err := h.theAppDM.QueryAll(appType, appStatus)
@@ -242,13 +259,13 @@ func (h HandleApp) RetrieveByUserLogin(c *gin.Context) {
 			}).Error("Query Application By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询调度员相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrController),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"apps": apps,
-			"msg":  "查询项目长相关申请单成功",
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrController),
 		})
 	default:
 		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
@@ -280,13 +297,13 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 			}).Error("Query Application By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询项目长相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrProjectChief),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"apps": apps,
-			"msg":  "查询项目长相关申请单成功",
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrProjectChief),
 		})
 	case user.RoleApprover:
 		apps, err := h.theAppDM.QueryByDepartmentCode(userLoginInfo.DepartmentCode, application.AppTypeALL, application.AppStatusApprover)
@@ -297,13 +314,30 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 			}).Error("Query Application By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询审批人相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrApprover),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"apps": apps,
-			"msg":  "查询项目长相关申请单成功",
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrApprover),
+		})
+	case user.RoleApprover2:
+		apps, err := h.theAppDM.QueryAll(application.AppTypeALL, application.AppStatusApprover2)
+		if err != nil {
+			h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
+				"userID": userLoginInfo.UserID,
+				"error":  err,
+			}).Error("Query Application By Owner error")
+
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrApprover2),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"apps": apps,
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrApprover2),
 		})
 	case user.RoleController:
 		apps, err := h.theAppDM.QueryAll(application.AppTypeALL, application.AppStatusController)
@@ -314,13 +348,13 @@ func (h HandleApp) RetrieveJTBD(c *gin.Context) {
 			}).Error("Query Application By Owner error")
 
 			c.JSON(http.StatusBadRequest, gin.H{
-				"msg": "数据库中查询调度员相关申请单失败",
+				"msg": fmt.Sprintf("数据库中查询%s相关申请单失败", user.RoleStrController),
 			})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"apps": apps,
-			"msg":  "查询项目长相关申请单成功",
+			"msg":  fmt.Sprintf("查询%s相关申请单成功", user.RoleStrController),
 		})
 	default:
 		h.theLogMap.Log(logMap.NORMAL).WithFields(logrus.Fields{
