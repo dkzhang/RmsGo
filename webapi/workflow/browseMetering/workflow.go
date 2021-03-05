@@ -55,6 +55,14 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 		Action:    application.AppActionPass,
 	}] = wf.ApproverProcessPass
 
+	// 2级审批人通过
+	processMap[workflow.KeyTSRA{
+		AppType:   application.AppTypeBrowseMetering,
+		AppStatus: application.AppStatusApprover2,
+		UserRole:  user.RoleApprover2,
+		Action:    application.AppActionPass,
+	}] = wf.ApproverProcessPass
+
 	// 调度员通过
 	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeBrowseMetering,
@@ -183,6 +191,54 @@ func (wf Workflow) ProjectChiefProcessPass(form generalForm.GeneralForm, app app
 }
 
 func (wf Workflow) ApproverProcessPass(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
+
+	theProject, err := wf.pdm.QueryByID(app.ProjectID)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation QueryByID error: %v", err),
+			"在数据库中查询项目信息失败")
+	}
+
+	var approvalInfo gfApplication.ApprovalInfo
+	err = json.Unmarshal([]byte(form.BasicContent), &approvalInfo)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeBadRequest,
+			fmt.Sprintf("json Unmarshal to ApprovalInfo error: %v", err),
+			"无法解析form.BasicContent的结构")
+	}
+
+	// Insert New ApplicationOps
+	theAppOpsRecord := application.AppOpsRecord{
+		//RecordID:           0,
+		ProjectID:          theProject.ProjectID,
+		ApplicationID:      app.ApplicationID,
+		OpsUserID:          userInfo.UserID,
+		OpsUserChineseName: userInfo.ChineseName,
+		Action:             form.Action,
+		ActionStr:          "是",
+		BasicInfo:          form.BasicContent,
+		ExtraInfo:          form.ExtraContent,
+	}
+	_, err = wf.adm.InsertAppOps(theAppOpsRecord)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("database operation InsertApplicationOps for Approver error: %v", err),
+			"无法为审批人在数据库中新建申请单操作记录")
+	}
+
+	// Update Application
+	app.Status = application.AppStatusApprover2
+	err = wf.adm.Update(app)
+	if err != nil {
+		return webapiError.WaErr(webapiError.TypeDatabaseError,
+			fmt.Sprintf("Update for Approver error: %v", err),
+			"无法为审批人在数据库中更新Application")
+	}
+
+	return nil
+}
+
+func (wf Workflow) Approver2ProcessPass(form generalForm.GeneralForm, app application.Application, userInfo user.UserInfo) (waErr webapiError.Err) {
 
 	theProject, err := wf.pdm.QueryByID(app.ProjectID)
 	if err != nil {

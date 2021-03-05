@@ -13,3 +13,5 @@ Redis:
 
 #  docker run --name rmsdb -e POSTGRES_USER=rmsu -e POSTGRES_PASSWORD=rmsp -e POSTGRES_DB=rms_db -d -p 5432:5432 postgres
 # docker run -p 6379:6379 -v redis.conf:/usr/local/etc/redis/redis.conf --name myredis -d --rm redis redis-server /usr/local/etc/redis/redis.conf
+
+#  docker run -it --rm --network rmsgo_backend postgres psql -h rmsgo_db_1 -U rmsu
