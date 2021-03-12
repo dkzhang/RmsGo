@@ -11,6 +11,6 @@ then
     echo "PostgreSQL started"
 fi
 
-#./rms seed_all
+./rms seed_all
 
 exec "$@"

@@ -36,7 +36,7 @@ var _ = Describe("CPU Tree", func() {
 			for in := 1; in <= 16; in++ {
 				pNode := &resGNode.ResGNode{
 					ID:       int64(ig*100 + in),
-					Label:    fmt.Sprintf("C%d", in),
+					Label:    fmt.Sprintf("f%dn%02df", ig, in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
@@ -54,7 +54,7 @@ var _ = Describe("CPU Tree", func() {
 			for in := 1; in <= 12; in++ {
 				pNode := &resGNode.ResGNode{
 					ID:       int64(ig*100 + in),
-					Label:    fmt.Sprintf("C%d", in),
+					Label:    fmt.Sprintf("f%dn%02df", ig, in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
@@ -80,7 +80,7 @@ var _ = Describe("CPU Tree", func() {
 			for in := 1; in <= 16; in++ {
 				pNode := &resGNode.ResGNode{
 					ID:       int64(ig*100 + in),
-					Label:    fmt.Sprintf("C%d", in),
+					Label:    fmt.Sprintf("f%dn%02df", ig, in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
@@ -98,7 +98,7 @@ var _ = Describe("CPU Tree", func() {
 			for in := 1; in <= 12; in++ {
 				pNode := &resGNode.ResGNode{
 					ID:       int64(ig*100 + in),
-					Label:    fmt.Sprintf("C%d", in),
+					Label:    fmt.Sprintf("f%dn%02df", ig, in),
 					Children: nil,
 				}
 				pGroup.Children = append(pGroup.Children, pNode)
