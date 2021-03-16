@@ -61,7 +61,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM, mc cl
 		AppStatus: application.AppStatusApprover2,
 		UserRole:  user.RoleApprover2,
 		Action:    application.AppActionPass,
-	}] = wf.ApproverProcessPass
+	}] = wf.Approver2ProcessPass
 
 	// 调度员通过
 	processMap[workflow.KeyTSRA{
