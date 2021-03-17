@@ -41,6 +41,18 @@ func seedUserTable(db *sqlx.DB) {
 	})
 
 	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "roc-zhj",
+		ChineseName:    "张俊二级审批人",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
+		Section:        "RoleApprover2",
+		Mobile:         "15383026353",
+		Role:           user.RoleApprover2,
+		Status:         user.StatusNormal,
+		Remarks:        "资源运营中心测试用审批人",
+	})
+
+	theUserDB.InsertUser(user.UserInfo{
 		UserName:       "pc-zhj",
 		ChineseName:    "张俊项目长",
 		Department:     "计服中心1",
@@ -79,6 +91,18 @@ func seedUserTable(db *sqlx.DB) {
 	})
 
 	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "roc-zxq",
+		ChineseName:    "翟修齐二级审批人",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
+		Section:        "RoleApprover2",
+		Mobile:         "18699622740",
+		Role:           user.RoleApprover2,
+		Status:         user.StatusNormal,
+		Remarks:        "资源运营中心测试用审批人",
+	})
+
+	theUserDB.InsertUser(user.UserInfo{
 		UserName:       "pc-zxq",
 		ChineseName:    "翟修齐项目长",
 		Department:     "计服中心2",
@@ -92,15 +116,63 @@ func seedUserTable(db *sqlx.DB) {
 	//////////////////////////////////////////////////////
 
 	theUserDB.InsertUser(user.UserInfo{
-		UserName:       "emd",
-		ChineseName:    "设备物资部审核",
-		Department:     "设备物资部",
-		DepartmentCode: "EMD",
+		UserName:       "roc-w",
+		ChineseName:    "温铁民",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
 		Section:        "RoleApprover2",
-		Mobile:         "18699622740",
+		Mobile:         "13833221445",
 		Role:           user.RoleApprover2,
 		Status:         user.StatusNormal,
-		Remarks:        "设备物资部审核",
+		Remarks:        "资源运营中心审核",
+	})
+
+	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "roc-xu",
+		ChineseName:    "徐卫明",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
+		Section:        "RoleApprover2",
+		Mobile:         "13933223322",
+		Role:           user.RoleApprover2,
+		Status:         user.StatusNormal,
+		Remarks:        "资源运营中心审核",
+	})
+
+	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "roc-xj",
+		ChineseName:    "熊健",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
+		Section:        "RoleApprover2",
+		Mobile:         "13933223435",
+		Role:           user.RoleApprover2,
+		Status:         user.StatusNormal,
+		Remarks:        "资源运营中心审核",
+	})
+
+	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "roc-zym",
+		ChineseName:    "赵玉梅",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
+		Section:        "RoleApprover2",
+		Mobile:         "15930217912",
+		Role:           user.RoleApprover2,
+		Status:         user.StatusNormal,
+		Remarks:        "资源运营中心助理审核",
+	})
+
+	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "roc-jy",
+		ChineseName:    "贾琰",
+		Department:     "资源运营中心",
+		DepartmentCode: "ROC",
+		Section:        "RoleApprover2",
+		Mobile:         "15230464216",
+		Role:           user.RoleApprover2,
+		Status:         user.StatusNormal,
+		Remarks:        "资源运营中心助理审核",
 	})
 
 	//////////////////////////////////////////////////////
