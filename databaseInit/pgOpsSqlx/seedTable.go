@@ -200,4 +200,16 @@ func seedUserTable(db *sqlx.DB) {
 		Status:         user.StatusNormal,
 		Remarks:        "调度员",
 	})
+
+	theUserDB.InsertUser(user.UserInfo{
+		UserName:       "ctrl-zwh",
+		ChineseName:    "张卫华",
+		Department:     "调度小组",
+		DepartmentCode: "ctrl",
+		Section:        "RoleController",
+		Mobile:         "13930296721",
+		Role:           user.RoleController,
+		Status:         user.StatusNormal,
+		Remarks:        "调度员",
+	})
 }
