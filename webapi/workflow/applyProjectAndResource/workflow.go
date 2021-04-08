@@ -62,7 +62,7 @@ func NewWorkflow(adm applicationDM.ApplicationDM, pdm projectDM.ProjectDM) workf
 	// 审批人2拒绝
 	processMap[workflow.KeyTSRA{
 		AppType:   application.AppTypeNew,
-		AppStatus: application.AppStatusApprover,
+		AppStatus: application.AppStatusApprover2,
 		UserRole:  user.RoleApprover2,
 		Action:    application.AppActionReject,
 	}] = wf.Approver2ProcessPassOrReject
