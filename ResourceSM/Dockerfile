@@ -7,7 +7,7 @@ ENV GOPROXY https://goproxy.cn
 ENV DKZ $GOPATH/src/gitee.com/dkzhang
 
 WORKDIR $DKZ
-RUN git clone https://gitee.com/dkzhang007/RmsGo.git #20210407-1545
+RUN git clone https://gitee.com/dkzhang007/RmsGo.git #20210413-1509
 
 WORKDIR $DKZ/RmsGo/ResourceSM
 RUN go build -o schmet && \

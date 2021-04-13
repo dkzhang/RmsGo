@@ -10,7 +10,8 @@ import (
 )
 
 func SeedAllTable(db *sqlx.DB) {
-	seedNodeTable(db)
+	//seedNodeTable(db)
+	addNodeTable(db)
 }
 
 func seedNodeTable(db *sqlx.DB) {
@@ -94,6 +95,29 @@ func seedNodeTable(db *sqlx.DB) {
 	rndbG := resNodeDB.NewResNodePg(db, resNode.TableNameGPU)
 
 	for ig := 283; ig <= 286; ig++ {
+		for in := 1; in <= 16; in++ {
+			gNode := resNode.Node{
+				ID:            int64(ig*100 + in),
+				Name:          fmt.Sprintf("G%d", in),
+				Status:        0,
+				Description:   "",
+				ProjectID:     0,
+				AllocatedTime: time.Time{},
+			}
+			err := rndbG.Insert(gNode)
+			if err != nil {
+				logrus.Fatalf("Insert GpuNode (id=%d) error: %v", err)
+			}
+		}
+	}
+}
+
+func addNodeTable(db *sqlx.DB) {
+
+	// GPU Node DB
+	rndbG := resNodeDB.NewResNodePg(db, resNode.TableNameGPU)
+
+	for ig := 319; ig <= 322; ig++ {
 		for in := 1; in <= 16; in++ {
 			gNode := resNode.Node{
 				ID:            int64(ig*100 + in),

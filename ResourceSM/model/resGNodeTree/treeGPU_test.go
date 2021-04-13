@@ -44,6 +44,23 @@ var _ = Describe("GPU Tree", func() {
 			lc1.Children = append(lc1.Children, pGroup)
 		}
 
+		for ig := 319; ig <= 322; ig++ {
+			pGroup = &resGNode.ResGNode{
+				ID:       int64((2000 + ig) * resGNode.GroupBase),
+				Label:    fmt.Sprintf("F%d", ig),
+				Children: nil,
+			}
+			for in := 1; in <= 16; in++ {
+				pNode := &resGNode.ResGNode{
+					ID:       int64(ig*100 + in),
+					Label:    fmt.Sprintf("f%dn%02df", ig, in),
+					Children: nil,
+				}
+				pGroup.Children = append(pGroup.Children, pNode)
+			}
+			lc1.Children = append(lc1.Children, pGroup)
+		}
+
 		rootGNode.Children = append(rootGNode.Children, lc1)
 	})
 	Context("Tree to Json", func() {
