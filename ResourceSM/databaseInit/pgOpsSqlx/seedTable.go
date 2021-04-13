@@ -10,8 +10,8 @@ import (
 )
 
 func SeedAllTable(db *sqlx.DB) {
-	//seedNodeTable(db)
-	addNodeTable(db)
+	seedNodeTable(db)
+
 }
 
 func seedNodeTable(db *sqlx.DB) {
@@ -110,12 +110,6 @@ func seedNodeTable(db *sqlx.DB) {
 			}
 		}
 	}
-}
-
-func addNodeTable(db *sqlx.DB) {
-
-	// GPU Node DB
-	rndbG := resNodeDB.NewResNodePg(db, resNode.TableNameGPU)
 
 	for ig := 319; ig <= 322; ig++ {
 		for in := 1; in <= 16; in++ {
